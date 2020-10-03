@@ -6,6 +6,8 @@ import 'SettingsScreen/Login.dart';
 import 'SettingsScreen/SamplingInterval.dart';
 import 'SettingsScreen/CollecDatatInterval.dart';
 
+//asdasd
+
 class SettingsScreen extends StatefulWidget {
   String _name = 'Settings';
   get name {

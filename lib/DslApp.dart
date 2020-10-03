@@ -52,11 +52,11 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
     return Scaffold(
       appBar: AppBar(title: Text(_screenList[_screenIndex].name)),
       body: _screenList[_screenIndex],
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => doSome(),
-        child: Text('++'),
-        hoverColor: Colors.amber[100],
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () => doSome(),
+      //   child: Text('++'),
+      //   hoverColor: Colors.amber[100],
+      // ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _screenIndex,
         onTap: selectScreen,

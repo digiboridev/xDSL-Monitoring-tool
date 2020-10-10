@@ -2,14 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/DataProvider.dart';
 
-class CollectDataInterval extends StatefulWidget {
-  CollectDataInterval({Key key}) : super(key: key);
-
-  @override
-  _CollectDataIntervalState createState() => _CollectDataIntervalState();
-}
-
-class _CollectDataIntervalState extends State<CollectDataInterval> {
+class CollectDataInterval extends StatelessWidget {
   double _currentSliderValue = 60;
 
   @override
@@ -24,16 +17,13 @@ class _CollectDataIntervalState extends State<CollectDataInterval> {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
           Slider(
-            value: _currentSliderValue,
+            value: context.watch<DataProvider>().getCollectInterval.toDouble(),
             min: 10,
             max: 60,
             divisions: 5,
-            label: _currentSliderValue.floor().toString(),
+            label: context.watch<DataProvider>().getCollectInterval.toString(),
             onChanged: (double value) {
-              double asd = value.floor().toDouble();
-              setState(() {
-                _currentSliderValue = asd;
-              });
+              context.read<DataProvider>().setCollectInterval = value.floor();
             },
           ),
         ],

@@ -43,10 +43,6 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
     });
   }
 
-  void doSome() {
-    Provider.of<DataProvider>(context, listen: false).increaseCounter();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

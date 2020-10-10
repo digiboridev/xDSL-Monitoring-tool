@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:isolate';
 
 import 'package:dslstats/screens/SettingsScreen/HostAdress.dart';
+import 'package:dslstats/screens/SettingsScreen/SamplingInterval.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_foreground_plugin/flutter_foreground_plugin.dart';
 import 'package:flutter/services.dart';
@@ -14,14 +15,14 @@ import 'modemClients/Client_HG530.dart';
 class IsolateParameters {
   Client client;
   SendPort sendPort;
+  int samplingInterval;
 
-  IsolateParameters(this.client, this.sendPort);
+  IsolateParameters(this.client, this.sendPort, this.samplingInterval);
 }
 
 enum ModemTypes { Huawei_HG532e, Dlink_2640u, ZTE_h108n, Tebda_D301 }
 
 class DataProvider extends ChangeNotifier {
-  int counter = 0;
   Isolate isolate;
   ReceivePort receivePort = ReceivePort();
   static const platform = const MethodChannel('getsome');
@@ -30,6 +31,12 @@ class DataProvider extends ChangeNotifier {
   String _hostAdress = '192.168.1.10';
   String _login = 'admin';
   String _password = 'admin';
+  int _samplingInterval = 1;
+  int _collectInterval = 60;
+
+  bool isCounting = false;
+
+  //Global settings
 
   set setPassword(value) {
     _password = value;
@@ -67,51 +74,55 @@ class DataProvider extends ChangeNotifier {
     return _modemType;
   }
 
-  void doNative() async {
-    String value;
-    try {
-      value = await platform.invokeMethod('getty');
-    } catch (e) {
-      print(e);
-    }
-    print(value);
-  }
-
-  get getCounter {
-    return counter.toString();
-  }
-
-  set setCounter(c) {
-    counter = c;
+  set setSamplingInterval(s) {
+    _samplingInterval = s;
     notifyListeners();
+    print(s);
   }
 
-  void increaseCounter() {
-    counter++;
+  get getSamplingInterval {
+    return _samplingInterval;
+  }
+
+  set setCollectInterval(m) {
+    _collectInterval = m;
     notifyListeners();
-    print(counter);
+    print(m);
   }
 
+  get getCollectInterval {
+    return _collectInterval;
+  }
+
+// Methods
   void startCounter() {
-    setIsolatedTimer();
-    startForegroundService();
-    startWakelock();
+    if (isCounting) {
+      print('Started');
+    } else {
+      isCounting = true;
+      setIsolatedTimer();
+      startForegroundService();
+      startWakelock();
+    }
   }
 
   void stopCounter() {
-    isolate.kill();
-    isolate = null;
-    receivePort.close();
-    stopWakelock();
-    FlutterForegroundPlugin.stopForegroundService();
+    if (!isCounting) {
+      print('Stopped');
+    } else {
+      isCounting = false;
+      isolate.kill();
+      isolate = null;
+      receivePort.close();
+      stopWakelock();
+      FlutterForegroundPlugin.stopForegroundService();
+    }
   }
 
   static void isolateFunc(params) {
-    int counter = 0;
-
     void tick() async {
       params.sendPort.send(await params.client.getData);
-      Timer(new Duration(seconds: 1), tick);
+      Timer(new Duration(seconds: params.samplingInterval), tick);
     }
 
     tick();
@@ -129,8 +140,8 @@ class DataProvider extends ChangeNotifier {
       }
     }
 
-    IsolateParameters params =
-        new IsolateParameters(client(), receivePort.sendPort);
+    IsolateParameters params = new IsolateParameters(
+        client(), receivePort.sendPort, _samplingInterval);
 
     isolate = await Isolate.spawn(
       isolateFunc,

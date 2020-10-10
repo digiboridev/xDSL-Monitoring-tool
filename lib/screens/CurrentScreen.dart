@@ -16,7 +16,6 @@ class CurrentScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(context.watch<DataProvider>().getCounter),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

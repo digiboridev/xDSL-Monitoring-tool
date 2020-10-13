@@ -1,20 +1,41 @@
+import 'package:hive/hive.dart';
+
+part 'LineStatsCollection.g.dart';
+
+@HiveType(typeId: 30)
 class LineStatsCollection {
   final bool isErrored;
+  @HiveField(0)
   final bool isConnectionUp;
+  @HiveField(1)
   final String status;
+  @HiveField(2)
   final String connectionType;
+  @HiveField(3)
   final int upMaxRate;
+  @HiveField(4)
   final int downMaxRate;
+  @HiveField(5)
   final int upRate;
+  @HiveField(6)
   final int downRate;
+  @HiveField(7)
   final double upMargin;
+  @HiveField(8)
   final double downMargin;
+  @HiveField(9)
   final double upAttenuation;
+  @HiveField(10)
   final double downAttenuation;
+  @HiveField(11)
   final int upCRC;
+  @HiveField(12)
   final int downCRC;
+  @HiveField(13)
   final int upFEC;
+  @HiveField(14)
   final int downFEC;
+  @HiveField(15)
   final dateTime = DateTime.now();
 
   Map get getAsMap {

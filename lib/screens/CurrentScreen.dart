@@ -16,6 +16,17 @@ class CurrentScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              FlatButton(
+                  onPressed: context.watch<DataProvider>().createCollection,
+                  child: Text('Create collectiion')),
+              FlatButton(
+                  onPressed: context.watch<DataProvider>().updateCollections,
+                  child: Text('update')),
+              FlatButton(
+                  onPressed: context.watch<DataProvider>().printCollections,
+                  child: Text('print'))
+            ]),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

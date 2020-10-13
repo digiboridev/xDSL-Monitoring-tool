@@ -3,8 +3,6 @@ import 'package:provider/provider.dart';
 import '../../models/DataProvider.dart';
 
 class CollectDataInterval extends StatelessWidget {
-  double _currentSliderValue = 60;
-
   @override
   Widget build(BuildContext context) {
     return Container(

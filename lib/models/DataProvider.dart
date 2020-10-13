@@ -6,11 +6,14 @@ import 'package:dslstats/screens/SettingsScreen/SamplingInterval.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_foreground_plugin/flutter_foreground_plugin.dart';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
 
 import 'modemClients/Client.dart';
 import 'modemClients/LineStatsCollection.dart';
 import 'modemClients/Client_Simulator.dart';
 import 'modemClients/Client_HG530.dart';
+
+import 'package:dslstats/models/modemClients/Contact.dart';
 
 class IsolateParameters {
   Client client;
@@ -34,7 +37,55 @@ class DataProvider extends ChangeNotifier {
   int _samplingInterval = 1;
   int _collectInterval = 60;
 
+  List _collectionKeys = [];
+  Map _collections = {};
+
   bool isCounting = false;
+
+  get collectionsCount {
+    return _collectionKeys.length;
+  }
+
+  get getCollectionsKeys {
+    return _collectionKeys;
+  }
+
+  get getCollections {
+    return _collections;
+  }
+
+  void updateCollections() async {
+    var collectionKeys = await Hive.openBox('collectionKeys');
+    _collectionKeys = collectionKeys.values.toList();
+
+    Map collections = {};
+
+    _collectionKeys.forEach((element) async {
+      var collection = await Hive.openBox(element);
+      collections[element] = collection.values;
+    });
+
+    _collections = collections;
+  }
+
+  void createCollection() async {
+    String time = DateTime.now().toString();
+    var collectionKeys = await Hive.openBox('collectionKeys');
+    collectionKeys.add(time);
+    Hive.openBox(time);
+
+    updateCollections();
+  }
+
+  void addToLast(data) async {
+    var collection = await Hive.openBox(_collectionKeys.last);
+    collection.add(data);
+  }
+
+  void printCollections() async {
+    // print(_collectionKeys);
+    print(_collections[_collectionKeys.last].elementAt(0));
+  }
 
   //Global settings
 
@@ -149,6 +200,7 @@ class DataProvider extends ChangeNotifier {
     );
     receivePort.listen((data) {
       print(data.getAsMap);
+      addToLast(data);
       // setCounter = data;
     });
   }

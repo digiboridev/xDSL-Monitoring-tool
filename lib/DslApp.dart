@@ -44,6 +44,14 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    context.read<DataProvider>().updateCollections();
+    context.read<DataProvider>().updateSettings();
+    print('init');
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(_screenList[_screenIndex].name)),

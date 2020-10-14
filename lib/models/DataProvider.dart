@@ -1,35 +1,19 @@
 import 'dart:async';
 import 'dart:isolate';
 
-import 'package:dslstats/screens/SettingsScreen/HostAdress.dart';
-import 'package:dslstats/screens/SettingsScreen/SamplingInterval.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_foreground_plugin/flutter_foreground_plugin.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 
 import 'modemClients/Client.dart';
-import 'modemClients/LineStatsCollection.dart';
 import 'modemClients/Client_Simulator.dart';
 import 'modemClients/Client_HG530.dart';
-
-import 'package:dslstats/models/modemClients/Contact.dart';
-
-class IsolateParameters {
-  Client client;
-  SendPort sendPort;
-  int samplingInterval;
-
-  IsolateParameters(this.client, this.sendPort, this.samplingInterval);
-}
-
-enum ModemTypes { Huawei_HG532e, Dlink_2640u, ZTE_h108n, Tebda_D301 }
+import 'ModemTypes.dart';
+import 'IsolateParameters.dart';
 
 class DataProvider extends ChangeNotifier {
-  Isolate isolate;
-  ReceivePort receivePort = ReceivePort();
-  static const platform = const MethodChannel('getsome');
-
+  //Initialize global settings
   ModemTypes _modemType = ModemTypes.Dlink_2640u;
   String _hostAdress = '192.168.1.10';
   String _login = 'admin';
@@ -37,59 +21,136 @@ class DataProvider extends ChangeNotifier {
   int _samplingInterval = 1;
   int _collectInterval = 60;
 
-  List _collectionKeys = [];
-  Map _collections = {};
+  //Set vars for isolate
+  Isolate isolate;
+  ReceivePort receivePort = ReceivePort();
 
+  //Initialize method channel for native operations
+  static const platform = const MethodChannel('getsome');
+
+  //Init map for stats collectios
+  Map _collectionMap = {};
+
+  //Hive saving optimizations
+  int saveCollectionCounter = 0;
+
+  //Shows main counter status
   bool isCounting = false;
 
+  //Length of collections in collection map
   get collectionsCount {
-    return _collectionKeys.length;
+    return _collectionMap.length;
   }
 
+  //Collection keys reversed by nearest time
   get getCollectionsKeys {
-    return _collectionKeys;
+    return _collectionMap.keys.toList().reversed;
   }
 
+  //Get collection map instanse
   get getCollections {
-    return _collections;
+    return _collectionMap;
   }
 
+  //Update all collection from storage
   void updateCollections() async {
-    var collectionKeys = await Hive.openBox('collectionKeys');
-    _collectionKeys = collectionKeys.values.toList();
-
-    Map collections = {};
-
-    _collectionKeys.forEach((element) async {
-      var collection = await Hive.openBox(element);
-      collections[element] = collection.values;
-    });
-
-    _collections = collections;
+    var collectionMap = await Hive.openBox('collectionMap');
+    _collectionMap = collectionMap.toMap();
+    notifyListeners();
   }
 
-  void createCollection() async {
-    String time = DateTime.now().toString();
-    var collectionKeys = await Hive.openBox('collectionKeys');
-    collectionKeys.add(time);
-    Hive.openBox(time);
+  //Makes new collection
+  void createCollection() {
+    //Create cuttent time string
+    String time = DateTime.now().toLocal().toString().substring(0, 19);
 
+    //Add new collection named by time
+    var collectionMap = Hive.box('collectionMap');
+    collectionMap.put(time, []);
+
+    //Clear counter
+    saveCollectionCounter = 0;
+
+    //Update to state
     updateCollections();
   }
 
-  void addToLast(data) async {
-    var collection = await Hive.openBox(_collectionKeys.last);
-    collection.add(data);
+  //Deleting collection by key
+  void deleteCollection(ckey) {
+    var collectionMap = Hive.box('collectionMap');
+    collectionMap.delete(ckey);
+    updateCollections();
+  }
+
+  //Adding sample to last collection
+  void addToLast(data) {
+    //add to provider state
+    _collectionMap[_collectionMap.keys.last].add(data);
+
+    //add to hive storage
+    //adding every 50 samples for better perfomance
+    if (saveCollectionCounter++ % 50 == 0) {
+      print(saveCollectionCounter);
+      saveLastCollection();
+    }
+
+    //Renew collection when reached collection time interval
+    var cTime = DateTime.parse(_collectionMap.keys.last);
+    var dif = DateTime.now().difference(cTime);
+    if (dif >= Duration(minutes: _collectInterval)) {
+      renewCollection();
+    }
+
+    notifyListeners();
+  }
+
+  //Save last collection map to hive storage
+  void saveLastCollection() {
+    var collectionMap = Hive.box('collectionMap');
+    collectionMap.put(
+        _collectionMap.keys.last, _collectionMap[_collectionMap.keys.last]);
+  }
+
+  //Save last collection and create new
+  void renewCollection() {
+    saveLastCollection();
+    createCollection();
+    print('renewed collection');
   }
 
   void printCollections() async {
-    // print(_collectionKeys);
-    print(_collections[_collectionKeys.last].elementAt(0));
+    var cTime = DateTime.parse(_collectionMap.keys.last);
+    var dif = DateTime.now().difference(cTime);
+    print(dif >= Duration(minutes: 10));
   }
 
   //Global settings
 
+  //Update settings from storage
+  void updateSettings() async {
+    var box = await Hive.openBox('settings');
+    _modemType = box.get('modem') == null ? _modemType : box.get('modem');
+    _hostAdress =
+        box.get('hostAdress') == null ? _hostAdress : box.get('hostAdress');
+    _login = box.get('login') == null ? _login : box.get('login');
+    _password = box.get('password') == null ? _password : box.get('password');
+    _samplingInterval = box.get('samplingInterval') == null
+        ? _samplingInterval
+        : box.get('samplingInterval');
+    _collectInterval = box.get('collectInterval') == null
+        ? _collectInterval
+        : box.get('collectInterval');
+  }
+
+  //Settings setters and getters
   set setPassword(value) {
+    void setToHive() async {
+      var box = await Hive.openBox('settings');
+      box.put('password', value);
+    }
+
+    setToHive();
+
     _password = value;
     notifyListeners();
   }
@@ -99,6 +160,13 @@ class DataProvider extends ChangeNotifier {
   }
 
   set setLogin(value) {
+    void setToHive() async {
+      var box = await Hive.openBox('settings');
+      box.put('login', value);
+    }
+
+    setToHive();
+
     _login = value;
     notifyListeners();
   }
@@ -108,6 +176,13 @@ class DataProvider extends ChangeNotifier {
   }
 
   set setHostAdress(value) {
+    void setToHive() async {
+      var box = await Hive.openBox('settings');
+      box.put('hostAdress', value);
+    }
+
+    setToHive();
+
     _hostAdress = value;
     notifyListeners();
   }
@@ -117,6 +192,12 @@ class DataProvider extends ChangeNotifier {
   }
 
   set setModemtype(ModemTypes type) {
+    void setToHive() async {
+      var box = await Hive.openBox('settings');
+      box.put('modem', type);
+    }
+
+    setToHive();
     _modemType = type;
     notifyListeners();
   }
@@ -126,6 +207,13 @@ class DataProvider extends ChangeNotifier {
   }
 
   set setSamplingInterval(s) {
+    void setToHive() async {
+      var box = await Hive.openBox('settings');
+      box.put('samplingInterval', s);
+    }
+
+    setToHive();
+
     _samplingInterval = s;
     notifyListeners();
     print(s);
@@ -136,6 +224,12 @@ class DataProvider extends ChangeNotifier {
   }
 
   set setCollectInterval(m) {
+    void setToHive() async {
+      var box = await Hive.openBox('settings');
+      box.put('collectInterval', m);
+    }
+
+    setToHive();
     _collectInterval = m;
     notifyListeners();
     print(m);
@@ -146,30 +240,58 @@ class DataProvider extends ChangeNotifier {
   }
 
 // Methods
+
+//Starts global sampling
   void startCounter() {
     if (isCounting) {
       print('Started');
     } else {
+      //Mark sampling as started
       isCounting = true;
+
+      //Create new collection
+      createCollection();
+
+      //Start isolate with inner timer
       setIsolatedTimer();
+
+      //Start foreground notification
       startForegroundService();
+
+      //Start native partial wakelock
       startWakelock();
     }
   }
 
+//stops global sampling
   void stopCounter() {
     if (!isCounting) {
       print('Stopped');
     } else {
+      //Mark sampling as stopped
       isCounting = false;
+
+      //Killing isolate
       isolate.kill();
+
+      //Clear link
       isolate = null;
+
+      //Close receiver port
       receivePort.close();
+
+      //Stop native partial wakelock
       stopWakelock();
+
+      //Remove foreground notification
       FlutterForegroundPlugin.stopForegroundService();
+
+      //Save last local collection to storage
+      saveLastCollection();
     }
   }
 
+//Isolate
   static void isolateFunc(params) {
     void tick() async {
       params.sendPort.send(await params.client.getData);
@@ -179,6 +301,7 @@ class DataProvider extends ChangeNotifier {
     tick();
   }
 
+//Start isolate and receiver port
   void setIsolatedTimer() async {
     ReceivePort receivePort = ReceivePort();
 
@@ -205,6 +328,7 @@ class DataProvider extends ChangeNotifier {
     });
   }
 
+//Start partial wakelock by native message
   void startWakelock() async {
     String value;
     try {
@@ -215,6 +339,7 @@ class DataProvider extends ChangeNotifier {
     print(value);
   }
 
+//Stop partial wakelock by native message
   void stopWakelock() async {
     String value;
     try {
@@ -225,6 +350,7 @@ class DataProvider extends ChangeNotifier {
     print(value);
   }
 
+//Show notify message
   static void foregroundServiceFunc() {
     debugPrint("Foreground service tick ${DateTime.now()}");
   }

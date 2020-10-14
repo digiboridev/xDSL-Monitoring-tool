@@ -12,11 +12,16 @@ class SavedDataScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(10),
       child: ListView.builder(
+          padding: EdgeInsets.all(10),
           itemBuilder: (context, index) {
             return CollectionTile(
-                cKey: context.watch<DataProvider>().getCollectionsKeys[index]);
+              cKey: context
+                  .watch<DataProvider>()
+                  .getCollectionsKeys
+                  .elementAt(index),
+              index: index,
+            );
           },
           itemCount: context.watch<DataProvider>().collectionsCount),
     );

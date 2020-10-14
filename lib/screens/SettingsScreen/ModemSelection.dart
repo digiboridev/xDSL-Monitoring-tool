@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/DataProvider.dart';
+import '../../models/ModemTypes.dart';
 
 class ModemSelection extends StatefulWidget {
   const ModemSelection({Key key}) : super(key: key);

@@ -79,6 +79,7 @@ class Client_HG530e implements Client {
       downCRC: int.parse(decodedString[17]),
       upFEC: int.parse(decodedString[20]),
       downFEC: int.parse(decodedString[19]),
+      dateTime: DateTime.now(),
     );
   }
 
@@ -98,7 +99,10 @@ class Client_HG530e implements Client {
 
       return _parser(response.body);
     } catch (e) {
-      return LineStatsCollection(isErrored: true, status: 'Connection failed');
+      return LineStatsCollection(
+          isErrored: true,
+          status: 'Connection failed',
+          dateTime: DateTime.now());
     }
   }
 }

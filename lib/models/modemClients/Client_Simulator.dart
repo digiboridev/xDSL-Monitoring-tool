@@ -40,19 +40,23 @@ class Client_Simulator implements Client {
         throw ('');
       }
 
-      int rnd = Random().nextInt(100);
+      int rndd = Random().nextInt(100);
+      int rndu = Random().nextInt(100);
+      int rndChance = Random().nextInt(100);
 
-      if (rnd <= 10) {
-        mrU = mrU + (rnd - 50) / 100;
-        mrD = mrD + (rnd - 50) / 100;
-        attU = attU + (rnd - 50) / 100;
-        attD = attD + (rnd - 50) / 100;
-        fecU = fecU + rnd * 13;
-        fecD = fecD + rnd * 20;
-        crcU = crcU + rnd * 6;
-        crcD = crcD + rnd * 9;
+      if (rndChance <= 10) {
+        mrD = mrD + (rndd - 50) / 100;
+        attD = attD + (rndd - 50) / 100;
+        fecD = fecD + rndd * 20;
+        crcD = crcD + rndd * 9;
       }
 
+      if (rndChance <= 10) {
+        mrU = mrU + (rndu - 50) / 100;
+        attU = attU + (rndu - 50) / 100;
+        fecU = fecU + rndu * 13;
+        crcU = crcU + rndu * 6;
+      }
       return LineStatsCollection(
         isErrored: false,
         isConnectionUp: true,
@@ -70,9 +74,13 @@ class Client_Simulator implements Client {
         downCRC: crcD,
         upFEC: fecU,
         downFEC: fecD,
+        dateTime: DateTime.now(),
       );
     } catch (e) {
-      return LineStatsCollection(isErrored: true, status: 'Connection failed');
+      return LineStatsCollection(
+          isErrored: true,
+          status: 'Connection failed',
+          dateTime: DateTime.now());
     }
   }
 }

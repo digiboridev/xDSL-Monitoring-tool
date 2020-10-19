@@ -35,8 +35,8 @@ class LineStatsCollection {
   final int upFEC;
   @HiveField(14)
   final int downFEC;
-  @HiveField(15)
-  final dateTime = DateTime.now();
+  @HiveField(17)
+  final DateTime dateTime;
 
   Map get getAsMap {
     return {
@@ -76,5 +76,6 @@ class LineStatsCollection {
       this.upCRC,
       this.downCRC,
       this.upFEC,
-      this.downFEC});
+      this.downFEC,
+      this.dateTime});
 }

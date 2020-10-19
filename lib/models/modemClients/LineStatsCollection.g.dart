@@ -32,6 +32,7 @@ class LineStatsCollectionAdapter extends TypeAdapter<LineStatsCollection> {
       downCRC: fields[12] as int,
       upFEC: fields[13] as int,
       downFEC: fields[14] as int,
+      dateTime: fields[17] as DateTime,
     );
   }
 
@@ -69,7 +70,7 @@ class LineStatsCollectionAdapter extends TypeAdapter<LineStatsCollection> {
       ..write(obj.upFEC)
       ..writeByte(14)
       ..write(obj.downFEC)
-      ..writeByte(15)
+      ..writeByte(17)
       ..write(obj.dateTime);
   }
 

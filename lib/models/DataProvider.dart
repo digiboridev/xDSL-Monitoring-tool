@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:isolate';
 
+import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_foreground_plugin/flutter_foreground_plugin.dart';
 import 'package:flutter/services.dart';
@@ -50,6 +52,14 @@ class DataProvider extends ChangeNotifier {
   //Get collection map instanse
   get getCollections {
     return _collectionMap;
+  }
+
+  //Get single collection by id
+  //Cast list values type as LineStatsCollection
+  List getCollectionByKey(cKey) {
+    List<dynamic> raw = _collectionMap[cKey];
+    List<LineStatsCollection> typed = raw.cast<LineStatsCollection>();
+    return typed;
   }
 
   //Update all collection from storage

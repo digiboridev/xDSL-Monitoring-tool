@@ -28,7 +28,7 @@ dependencies:
   crypto: ^2.1.5
   hive: ^1.4.4+1
   hive_flutter: ^0.3.1
-  flutter_native_timezone: ^1.0.4
+  syncfusion_flutter_charts: ^18.3.40
   flutter:
     sdk: flutter
 

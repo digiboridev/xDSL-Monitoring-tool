@@ -15,7 +15,7 @@ class DslApp extends StatelessWidget {
       create: (context) => DataProvider(),
       child: MaterialApp(
         title: 'DslStats',
-        theme: ThemeData(primarySwatch: Colors.cyan),
+        theme: ThemeData(primarySwatch: Colors.blueGrey),
         home: ButtonDisplaySelection(),
       ),
     );
@@ -54,7 +54,10 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(_screenList[_screenIndex].name)),
+      appBar: AppBar(
+        title: Text(_screenList[_screenIndex].name),
+        backgroundColor: Colors.blueGrey[900],
+      ),
       body: _screenList[_screenIndex],
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () => doSome(),

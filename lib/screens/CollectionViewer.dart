@@ -1,8 +1,17 @@
 import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:intl/intl.dart';
-import 'dart:math';
+import 'package:intl/intl.dart' as intl;
+import 'package:mp_chart/mp/chart/line_chart.dart';
+import 'package:mp_chart/mp/controller/line_chart_controller.dart';
+import 'package:mp_chart/mp/core/data/line_data.dart';
+import 'package:mp_chart/mp/core/data_set/line_data_set.dart';
+import 'package:mp_chart/mp/core/description.dart';
+import 'package:mp_chart/mp/core/entry/entry.dart';
+import 'package:mp_chart/mp/core/enums/mode.dart';
+import 'package:mp_chart/mp/core/utils/color_utils.dart';
+import 'package:mp_chart/mp/core/value_formatter/value_formatter.dart';
+import 'package:mp_chart/mp_chart.dart';
 
 class CollectionViewer extends StatelessWidget {
   int index;
@@ -10,117 +19,6 @@ class CollectionViewer extends StatelessWidget {
   List<LineStatsCollection> collection;
 
   CollectionViewer({this.index, this.cKey, this.collection});
-
-  Widget SNRM(BuildContext context) {
-    return SfCartesianChart(
-
-        //Enables trackball
-        trackballBehavior: TrackballBehavior(
-          enable: true,
-          tooltipSettings: InteractiveTooltip(
-              enable: true,
-              color: Colors.yellow,
-              textStyle: TextStyle(color: Colors.brown[800])),
-        ),
-
-        //Enables zoom by time
-        zoomPanBehavior: ZoomPanBehavior(
-            enablePinching: true, enablePanning: true, zoomMode: ZoomMode.x),
-
-        //Axis setup
-        primaryXAxis: DateTimeAxis(),
-        primaryYAxis: NumericAxis(minimum: 0, maximum: 30),
-
-        //Chart title
-        title: ChartTitle(text: 'SNR Margin'),
-
-        //Chart legend
-        legend: Legend(isVisible: true, position: LegendPosition.bottom),
-
-        //Series
-        series: <ChartSeries<LineStatsCollection, DateTime>>[
-          FastLineSeries<LineStatsCollection, DateTime>(
-              color: Colors.blueGrey[500],
-              name: 'Download SNRM',
-              dataSource: collection,
-              xValueMapper: (LineStatsCollection sales, _) => sales.dateTime,
-              yValueMapper: (LineStatsCollection sales, _) => sales.downMargin,
-              // Enable data label
-              dataLabelSettings: DataLabelSettings(isVisible: false)),
-          FastLineSeries<LineStatsCollection, DateTime>(
-              color: Colors.yellow[400],
-              name: 'Upload SNRM',
-              dataSource: collection,
-              xValueMapper: (LineStatsCollection sales, _) => sales.dateTime,
-              yValueMapper: (LineStatsCollection sales, _) => sales.upMargin,
-              // Enable data label
-              dataLabelSettings: DataLabelSettings(isVisible: false)),
-        ]);
-  }
-
-  Widget FEC(BuildContext context) {
-    List calcdif() {
-      List<List> calcdif = [];
-      for (var i = 1; i < collection.length; i++) {
-        DateTime timeCurr = collection[i].dateTime;
-
-        int dFecCurr = collection[i].downFEC ?? 0;
-        int dFecPrev = collection[i - 1].downFEC ?? 0;
-        int dFecDiff = (dFecCurr - dFecPrev).abs();
-
-        int uFecCurr = collection[i].upFEC ?? 0;
-        int uFecPrev = collection[i - 1].upFEC ?? 0;
-        int uFecDiff = (uFecCurr - uFecPrev).abs();
-
-        calcdif.add([timeCurr, uFecDiff, dFecDiff]);
-      }
-      return calcdif;
-    }
-
-    return SfCartesianChart(
-
-        //Enables trackball
-        trackballBehavior: TrackballBehavior(
-          enable: true,
-          tooltipSettings: InteractiveTooltip(
-              enable: true,
-              color: Colors.yellow,
-              textStyle: TextStyle(color: Colors.brown[800])),
-        ),
-
-        //Enables zoom by time
-        zoomPanBehavior: ZoomPanBehavior(
-            enablePinching: true, enablePanning: true, zoomMode: ZoomMode.x),
-
-        //Axis setup
-        primaryXAxis: DateTimeAxis(),
-
-        //Chart title
-        title: ChartTitle(text: 'Forward error correction / RS Corr'),
-
-        //Chart legend
-        legend: Legend(isVisible: true, position: LegendPosition.bottom),
-
-        //Series
-        series: <ChartSeries<List, DateTime>>[
-          FastLineSeries<List, DateTime>(
-              color: Colors.blueGrey[400],
-              name: 'Download FEC',
-              dataSource: calcdif(),
-              xValueMapper: (List sales, _) => sales[0],
-              yValueMapper: (List sales, _) => sales[2],
-              // Enable data label
-              dataLabelSettings: DataLabelSettings(isVisible: false)),
-          FastLineSeries<List, DateTime>(
-              color: Colors.yellow[400],
-              name: 'Upload FEC',
-              dataSource: calcdif(),
-              xValueMapper: (List sales, _) => sales[0],
-              yValueMapper: (List sales, _) => sales[1],
-              // Enable data label
-              dataLabelSettings: DataLabelSettings(isVisible: false)),
-        ]);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -135,14 +33,133 @@ class CollectionViewer extends StatelessWidget {
         children: [
           Container(
             height: 200,
-            child: SNRM(context),
-          ),
-          Container(
-            height: 200,
-            child: FEC(context),
+            child: MPchart(
+              collection: collection,
+            ),
           ),
         ],
       ),
     );
+  }
+}
+
+class MPchart extends StatefulWidget {
+  List<LineStatsCollection> collection;
+
+  MPchart({this.collection});
+
+  @override
+  _MPchartState createState() => _MPchartState();
+}
+
+class _MPchartState extends State<MPchart> {
+  LineChartController _controller;
+
+  void initState() {
+    _initController();
+    _initLineData(widget.collection);
+  }
+
+  void _initController() {
+    var desc = Description()..enabled = false;
+    _controller = LineChartController(
+        axisLeftSettingFunction: (axisLeft, controller) {
+          axisLeft.drawGridLines = (false);
+        },
+        axisRightSettingFunction: (axisRight, controller) {
+          axisRight.enabled = (false);
+        },
+        legendSettingFunction: (legend, controller) {
+          legend.enabled = (false);
+        },
+        xAxisSettingFunction: (xAxis, controller) {
+          xAxis
+            ..drawGridLines = (true)
+            ..drawAxisLine = (false)
+            ..setValueFormatter(Formater());
+        },
+        drawGridBackground: true,
+        dragXEnabled: true,
+        dragYEnabled: true,
+        scaleXEnabled: true,
+        scaleYEnabled: true,
+        pinchZoomEnabled: false,
+        description: desc);
+  }
+
+  static LineDataSet prepareDownMargin(List<LineStatsCollection> collection) {
+    List<Entry> values = List();
+
+    collection.forEach((element) {
+      values.add(new Entry(
+          x: element.dateTime.millisecondsSinceEpoch.toDouble(),
+          y: element.downMargin ?? 0));
+    });
+
+    // create a dataset and give it a type
+    LineDataSet set = new LineDataSet(values, "DataSet 1");
+    return set;
+  }
+
+  static LineDataSet prepareUpMargin(List<LineStatsCollection> collection) {
+    List<Entry> values = List();
+
+    collection.forEach((element) {
+      values.add(new Entry(
+          x: element.dateTime.millisecondsSinceEpoch.toDouble(),
+          y: element.upMargin ?? 0));
+    });
+
+    // create a dataset and give it a type
+    LineDataSet set = new LineDataSet(values, "DataSet 1");
+    return set;
+  }
+
+  void _initLineData(List<LineStatsCollection> collection) {
+    Future<LineDataSet> downMarginSet = compute(prepareDownMargin, collection);
+    Future<LineDataSet> upMarginSet = compute(prepareUpMargin, collection);
+
+    downMarginSet.then((downMarginSet) => {
+          downMarginSet
+            ..setColor1(Colors.blueGrey[600])
+            ..setLineWidth(1)
+            ..setDrawValues(false)
+            ..setDrawCircles(false)
+            ..setMode(Mode.LINEAR),
+          _controller.data == null
+              ? _controller.data = LineData.fromList(List()..add(downMarginSet))
+              : _controller.data.addDataSet(downMarginSet),
+          _controller.state?.setStateIfNotDispose()
+        });
+
+    upMarginSet.then((upMarginSet) => {
+          upMarginSet
+            ..setColor1(Colors.yellow[600])
+            ..setLineWidth(1)
+            ..setDrawValues(false)
+            ..setDrawCircles(false)
+            ..setMode(Mode.LINEAR),
+          _controller.data == null
+              ? _controller.data = LineData.fromList(List()..add(upMarginSet))
+              : _controller.data.addDataSet(upMarginSet),
+          _controller.state?.setStateIfNotDispose()
+        });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print('render viewer');
+    return Container(
+      child: LineChart(_controller),
+    );
+  }
+}
+
+class Formater extends ValueFormatter {
+  final intl.DateFormat mFormat = intl.DateFormat("HH:mm");
+
+  @override
+  String getFormattedValue1(double value) {
+    return mFormat.format(DateTime.fromMillisecondsSinceEpoch(value.toInt()));
   }
 }

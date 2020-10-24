@@ -4,6 +4,7 @@ part 'LineStatsCollection.g.dart';
 
 @HiveType(typeId: 30)
 class LineStatsCollection {
+  @HiveField(18)
   final bool isErrored;
   @HiveField(0)
   final bool isConnectionUp;

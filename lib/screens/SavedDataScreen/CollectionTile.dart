@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:dslstats/models/DataProvider.dart';
 import 'package:provider/provider.dart';
-import '../CollectionViewer.dart';
+import 'CollectionViewer.dart';
 
 class CollectionTile extends StatelessWidget {
   final String cKey;

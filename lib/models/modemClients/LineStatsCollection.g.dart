@@ -17,6 +17,7 @@ class LineStatsCollectionAdapter extends TypeAdapter<LineStatsCollection> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return LineStatsCollection(
+      isErrored: fields[18] as bool,
       isConnectionUp: fields[0] as bool,
       status: fields[1] as String,
       connectionType: fields[2] as String,
@@ -39,7 +40,9 @@ class LineStatsCollectionAdapter extends TypeAdapter<LineStatsCollection> {
   @override
   void write(BinaryWriter writer, LineStatsCollection obj) {
     writer
-      ..writeByte(16)
+      ..writeByte(17)
+      ..writeByte(18)
+      ..write(obj.isErrored)
       ..writeByte(0)
       ..write(obj.isConnectionUp)
       ..writeByte(1)

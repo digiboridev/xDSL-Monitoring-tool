@@ -1,7 +1,7 @@
 import 'package:dslstats/models/DataProvider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'CollectionTile.dart';
+import 'SavedDataScreen/CollectionTile.dart';
 
 class SavedDataScreen extends StatelessWidget {
   String _name = 'Collected data';

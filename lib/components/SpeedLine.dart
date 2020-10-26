@@ -1,17 +1,16 @@
 import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart' as intl;
 import 'package:mp_chart/mp/chart/line_chart.dart';
 import 'package:mp_chart/mp/controller/line_chart_controller.dart';
-import 'package:mp_chart/mp/core/axis/axis_base.dart';
 import 'package:mp_chart/mp/core/data/line_data.dart';
 import 'package:mp_chart/mp/core/data_set/line_data_set.dart';
-import 'package:mp_chart/mp/core/description.dart';
 import 'package:mp_chart/mp/core/entry/entry.dart';
 import 'package:mp_chart/mp/core/enums/mode.dart';
 import 'package:mp_chart/mp/core/enums/x_axis_position.dart';
-import 'package:mp_chart/mp/core/value_formatter/value_formatter.dart';
+
+import 'MyLineMarker.dart';
+import 'XDateFormatter.dart';
 
 class SpeedLine extends StatefulWidget {
   List<LineStatsCollection> collection;
@@ -60,7 +59,7 @@ class _SNRMState extends State<SpeedLine> {
             ..gridColor = Colors.blueGrey[50]
             ..drawAxisLine = false
             ..position = XAxisPosition.BOTTOM
-            ..setValueFormatter(Formater());
+            ..setValueFormatter(XDateFormater());
         },
         drawGridBackground: false,
         dragXEnabled: true,
@@ -71,6 +70,8 @@ class _SNRMState extends State<SpeedLine> {
         highLightPerTapEnabled: true,
         drawBorders: false,
         noDataText: 'loading',
+        marker:
+            MyLineMarker(textColor: Colors.white, backColor: Colors.blueGrey),
         highlightPerDragEnabled: true);
   }
 
@@ -134,7 +135,7 @@ class _SNRMState extends State<SpeedLine> {
     // Apply setiings
     downMaxRateSet
       // ..setLineWidth(1)
-      ..setColor1(Colors.blueGrey[200])
+      ..setColor1(Colors.blueGrey[900])
       ..setMode(Mode.STEPPED)
       ..setDrawValues(false)
       ..setDrawCircles(false);
@@ -155,7 +156,7 @@ class _SNRMState extends State<SpeedLine> {
     // Apply settings
     upMaxRateSet
       // ..setLineWidth(1)
-      ..setColor1(Colors.yellow[200])
+      ..setColor1(Colors.yellow[900])
       ..setMode(Mode.STEPPED)
       ..setDrawValues(false)
       ..setDrawCircles(false);
@@ -215,14 +216,5 @@ class _SNRMState extends State<SpeedLine> {
         ),
       ],
     );
-  }
-}
-
-class Formater extends ValueFormatter {
-  final intl.DateFormat mFormat = intl.DateFormat("HH:mm");
-
-  @override
-  String getFormattedValue1(double value) {
-    return mFormat.format(DateTime.fromMillisecondsSinceEpoch(value.toInt()));
   }
 }

@@ -1,9 +1,9 @@
 import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:flutter/material.dart';
-import 'SNRM.dart';
-import 'SpeedLine.dart';
-import 'FECLine.dart';
-import 'CRCLine.dart';
+import '../../components/SNRM.dart';
+import '../../components/SpeedLine.dart';
+import '../../components/FECLine.dart';
+import '../../components/CRCLine.dart';
 
 class CollectionViewer extends StatelessWidget {
   int index;

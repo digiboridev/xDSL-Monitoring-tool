@@ -1,28 +1,27 @@
 import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart' as intl;
 import 'package:mp_chart/mp/chart/line_chart.dart';
 import 'package:mp_chart/mp/controller/line_chart_controller.dart';
-import 'package:mp_chart/mp/core/axis/axis_base.dart';
 import 'package:mp_chart/mp/core/data/line_data.dart';
 import 'package:mp_chart/mp/core/data_set/line_data_set.dart';
-import 'package:mp_chart/mp/core/description.dart';
 import 'package:mp_chart/mp/core/entry/entry.dart';
 import 'package:mp_chart/mp/core/enums/mode.dart';
 import 'package:mp_chart/mp/core/enums/x_axis_position.dart';
-import 'package:mp_chart/mp/core/value_formatter/value_formatter.dart';
 
-class FECLine extends StatefulWidget {
+import 'MyLineMarker.dart';
+import 'XDateFormatter.dart';
+
+class CRCLine extends StatefulWidget {
   List<LineStatsCollection> collection;
 
-  FECLine({this.collection});
+  CRCLine({this.collection});
 
   @override
   _SNRMState createState() => _SNRMState();
 }
 
-class _SNRMState extends State<FECLine> {
+class _SNRMState extends State<CRCLine> {
   LineChartController _controller;
 
   void initState() {
@@ -38,7 +37,7 @@ class _SNRMState extends State<FECLine> {
             ..drawGridLines = true
             ..gridColor = Colors.blueGrey[50]
             ..drawAxisLine = false
-            // ..setAxisMinValue(0)
+            ..setAxisMinValue(0)
             // ..setAxisMaxValue(22)
             ..spacePercentTop = 40
             ..drawGridLinesBehindData = true;
@@ -47,7 +46,7 @@ class _SNRMState extends State<FECLine> {
           axisRight
             ..enabled = true
             ..drawGridLines = false
-            // ..setAxisMinValue(0)
+            ..setAxisMinValue(0)
             // ..setAxisMaxValue(22)
             ..spacePercentTop = 40
             ..drawAxisLine = false;
@@ -61,7 +60,7 @@ class _SNRMState extends State<FECLine> {
             ..gridColor = Colors.blueGrey[50]
             ..drawAxisLine = false
             ..position = XAxisPosition.BOTTOM
-            ..setValueFormatter(Formater());
+            ..setValueFormatter(XDateFormater());
         },
         drawGridBackground: false,
         dragXEnabled: true,
@@ -72,6 +71,8 @@ class _SNRMState extends State<FECLine> {
         highLightPerTapEnabled: true,
         drawBorders: false,
         noDataText: 'loading',
+        marker:
+            MyLineMarker(textColor: Colors.white, backColor: Colors.blueGrey),
         highlightPerDragEnabled: true);
   }
 
@@ -86,66 +87,74 @@ class _SNRMState extends State<FECLine> {
       }
       DateTime time = collection[i].dateTime;
 
-      int upCurr = collection[i].upFEC ?? 0;
-      int downCurr = collection[i].downFEC ?? 0;
-      int upPrev = collection[i - 1].upFEC ?? 0;
-      int downPrev = collection[i - 1].downFEC ?? 0;
+      int upCurr = collection[i].upCRC ?? 0;
+      int downCurr = collection[i].downCRC ?? 0;
+      int upPrev = collection[i - 1].upCRC ?? 0;
+      int downPrev = collection[i - 1].downCRC ?? 0;
 
       int up = upCurr - upPrev;
       int down = downCurr - downPrev;
 
       diff.add({
         'dateTime': time,
-        'downFEC': (down <= 0) ? 0 : down,
-        'upFEC': (up <= 0) ? 0 : up
+        'downCRC': (down <= 0) ? 0 : down,
+        'upCRC': (up <= 0) ? 0 : up
       });
     }
 
-    // Prepare download FEC set
+    // Prepare download CRC set
 
-    List<Entry> downFECValues = List();
+    List<Entry> downCRCValues = List();
 
     diff.forEach((element) {
-      downFECValues.add(new Entry(
+      downCRCValues.add(new Entry(
           x: element['dateTime'].millisecondsSinceEpoch.toDouble(),
-          y: element['downFEC'].toDouble()));
+          y: element['downCRC'].toDouble()));
     });
 
     // Create a dataset
-    LineDataSet downFECSet = new LineDataSet(downFECValues, "FEC Down");
+    LineDataSet downCRCSet = new LineDataSet(downCRCValues, "CRC Down");
 
     // Apply setiings
-    downFECSet
+    downCRCSet
       // ..setLineWidth(1)
       ..setColor1(Colors.blueGrey[600])
       ..setMode(Mode.STEPPED)
       ..setDrawValues(false)
+      ..setDrawFilled(true)
+      ..setFillAlpha(200)
+      ..setLineWidth(0)
+      ..setGradientColor(Colors.yellow[600], Colors.yellow[200])
       ..setDrawCircles(false);
 
-    // Prepare upload FEC set
+    // Prepare upload CRC set
 
-    List<Entry> upFECValues = List();
+    List<Entry> upCRCValues = List();
 
     diff.forEach((element) {
-      upFECValues.add(new Entry(
+      upCRCValues.add(new Entry(
           x: element['dateTime'].millisecondsSinceEpoch.toDouble(),
-          y: element['upFEC'].toDouble()));
+          y: element['upCRC'].toDouble()));
     });
 
     // Create a dataset
-    LineDataSet upFECSet = new LineDataSet(upFECValues, "FEC Up");
+    LineDataSet upCRCSet = new LineDataSet(upCRCValues, "CRC Up");
 
     // Apply settings
-    upFECSet
+    upCRCSet
       // ..setLineWidth(1)
       ..setColor1(Colors.yellow[600])
       ..setMode(Mode.STEPPED)
       ..setDrawValues(false)
+      ..setDrawFilled(true)
+      ..setLineWidth(0)
+      ..setFillAlpha(200)
+      ..setGradientColor(Colors.blueGrey[600], Colors.blueGrey[200])
       ..setDrawCircles(false);
 
     // Add sets to line data and return
     LineData lineData =
-        LineData.fromList(List()..add(downFECSet)..add(upFECSet));
+        LineData.fromList(List()..add(downCRCSet)..add(upCRCSet));
     return lineData;
   }
 
@@ -166,18 +175,9 @@ class _SNRMState extends State<FECLine> {
             color: Colors.amber, height: 200, child: LineChart(_controller)),
         Transform.translate(
           offset: const Offset(0, -190),
-          child: Text('Forward error correction / RS Corr'),
+          child: Text('Cyclic redundancy check / RS Corr'),
         ),
       ],
     );
-  }
-}
-
-class Formater extends ValueFormatter {
-  final intl.DateFormat mFormat = intl.DateFormat("HH:mm");
-
-  @override
-  String getFormattedValue1(double value) {
-    return mFormat.format(DateTime.fromMillisecondsSinceEpoch(value.toInt()));
   }
 }

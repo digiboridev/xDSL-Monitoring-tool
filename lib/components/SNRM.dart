@@ -1,17 +1,16 @@
 import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart' as intl;
 import 'package:mp_chart/mp/chart/line_chart.dart';
 import 'package:mp_chart/mp/controller/line_chart_controller.dart';
-import 'package:mp_chart/mp/core/axis/axis_base.dart';
 import 'package:mp_chart/mp/core/data/line_data.dart';
 import 'package:mp_chart/mp/core/data_set/line_data_set.dart';
-import 'package:mp_chart/mp/core/description.dart';
 import 'package:mp_chart/mp/core/entry/entry.dart';
 import 'package:mp_chart/mp/core/enums/mode.dart';
 import 'package:mp_chart/mp/core/enums/x_axis_position.dart';
-import 'package:mp_chart/mp/core/value_formatter/value_formatter.dart';
+
+import 'MyLineMarker.dart';
+import 'XDateFormatter.dart';
 
 class SNRM extends StatefulWidget {
   List<LineStatsCollection> collection;
@@ -60,7 +59,7 @@ class _SNRMState extends State<SNRM> {
             ..gridColor = Colors.blueGrey[50]
             ..drawAxisLine = false
             ..position = XAxisPosition.BOTTOM
-            ..setValueFormatter(Formater());
+            ..setValueFormatter(XDateFormater());
         },
         drawGridBackground: false,
         dragXEnabled: true,
@@ -71,6 +70,8 @@ class _SNRMState extends State<SNRM> {
         highLightPerTapEnabled: true,
         drawBorders: false,
         noDataText: 'loading',
+        marker:
+            MyLineMarker(textColor: Colors.white, backColor: Colors.blueGrey),
         highlightPerDragEnabled: true);
   }
 
@@ -170,14 +171,5 @@ class _SNRMState extends State<SNRM> {
         ),
       ],
     );
-  }
-}
-
-class Formater extends ValueFormatter {
-  final intl.DateFormat mFormat = intl.DateFormat("HH:mm");
-
-  @override
-  String getFormattedValue1(double value) {
-    return mFormat.format(DateTime.fromMillisecondsSinceEpoch(value.toInt()));
   }
 }

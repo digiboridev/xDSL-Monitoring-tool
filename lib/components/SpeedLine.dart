@@ -14,8 +14,9 @@ import 'XDateFormatter.dart';
 
 class SpeedLine extends StatefulWidget {
   List<LineStatsCollection> collection;
+  Duration showPeriod;
 
-  SpeedLine({this.collection});
+  SpeedLine({this.collection, this.showPeriod});
 
   @override
   _SNRMState createState() => _SNRMState();
@@ -60,6 +61,13 @@ class _SNRMState extends State<SpeedLine> {
             ..drawAxisLine = false
             ..position = XAxisPosition.BOTTOM
             ..setValueFormatter(XDateFormater());
+
+          if (widget.showPeriod != null) {
+            xAxis.setAxisMinValue(widget
+                    .collection.last.dateTime.millisecondsSinceEpoch
+                    .toDouble() -
+                widget.showPeriod.inMilliseconds);
+          }
         },
         drawGridBackground: false,
         dragXEnabled: true,
@@ -206,15 +214,23 @@ class _SNRMState extends State<SpeedLine> {
   @override
   Widget build(BuildContext context) {
     print('render viewer');
-    return Column(
-      children: [
-        Container(
-            color: Colors.amber, height: 200, child: LineChart(_controller)),
-        Transform.translate(
-          offset: const Offset(0, -190),
-          child: Text('Speed rates'),
-        ),
-      ],
-    );
+    return Container(
+        height: 200,
+        child: OverflowBox(
+          alignment: Alignment.topCenter,
+          maxHeight: 260,
+          child: Column(
+            children: [
+              Container(
+                  color: Colors.amber,
+                  height: 200,
+                  child: LineChart(_controller)),
+              Transform.translate(
+                offset: const Offset(0, -190),
+                child: Text('Speed rates'),
+              ),
+            ],
+          ),
+        ));
   }
 }

@@ -14,8 +14,9 @@ import 'XDateFormatter.dart';
 
 class FECLine extends StatefulWidget {
   List<LineStatsCollection> collection;
+  Duration showPeriod;
 
-  FECLine({this.collection});
+  FECLine({this.collection, this.showPeriod});
 
   @override
   _SNRMState createState() => _SNRMState();
@@ -61,6 +62,12 @@ class _SNRMState extends State<FECLine> {
             ..drawAxisLine = false
             ..position = XAxisPosition.BOTTOM
             ..setValueFormatter(XDateFormater());
+          if (widget.showPeriod != null) {
+            xAxis.setAxisMinValue(widget
+                    .collection.last.dateTime.millisecondsSinceEpoch
+                    .toDouble() -
+                widget.showPeriod.inMilliseconds);
+          }
         },
         drawGridBackground: false,
         dragXEnabled: true,
@@ -169,15 +176,23 @@ class _SNRMState extends State<FECLine> {
   @override
   Widget build(BuildContext context) {
     print('render viewer');
-    return Column(
-      children: [
-        Container(
-            color: Colors.amber, height: 200, child: LineChart(_controller)),
-        Transform.translate(
-          offset: const Offset(0, -190),
-          child: Text('Forward error correction / RS Corr'),
-        ),
-      ],
-    );
+    return Container(
+        height: 200,
+        child: OverflowBox(
+          alignment: Alignment.topCenter,
+          maxHeight: 260,
+          child: Column(
+            children: [
+              Container(
+                  color: Colors.amber,
+                  height: 200,
+                  child: LineChart(_controller)),
+              Transform.translate(
+                offset: const Offset(0, -190),
+                child: Text('Speed rates'),
+              ),
+            ],
+          ),
+        ));
   }
 }

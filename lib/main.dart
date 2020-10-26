@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'DslApp.dart';
+import 'ScreensWrapper.dart';
 import 'models/modemClients/LineStatsCollection.dart';
 import 'models/ModemTypes.dart';
 
@@ -10,5 +10,5 @@ void main() async {
   Hive.registerAdapter(ModemTypesAdapter());
   await Hive.initFlutter();
 
-  runApp(DslApp());
+  runApp(ScreensWrapper());
 }

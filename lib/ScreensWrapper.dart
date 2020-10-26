@@ -8,7 +8,7 @@ import 'screens/SettingsScreen.dart';
 
 import 'models/DataProvider.dart';
 
-class DslApp extends StatelessWidget {
+class ScreensWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(

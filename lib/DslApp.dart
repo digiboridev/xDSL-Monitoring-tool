@@ -51,19 +51,32 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
     print('init');
   }
 
+  void toogleSampling() {
+    bool isCounting = context.read<DataProvider>().isCounting;
+    if (isCounting) {
+      context.read<DataProvider>().stopCounter();
+    } else {
+      context.read<DataProvider>().startCounter();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    print('Render buttonbar');
+
     return Scaffold(
       appBar: AppBar(
         title: Text(_screenList[_screenIndex].name),
         backgroundColor: Colors.blueGrey[900],
       ),
       body: _screenList[_screenIndex],
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () => doSome(),
-      //   child: Text('++'),
-      //   hoverColor: Colors.amber[100],
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => toogleSampling(),
+        child: context.watch<DataProvider>().isCounting
+            ? Icon(Icons.stop)
+            : Icon(Icons.play_arrow),
+        hoverColor: Colors.amber[100],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _screenIndex,
         onTap: selectScreen,

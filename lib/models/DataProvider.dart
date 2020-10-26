@@ -37,7 +37,11 @@ class DataProvider extends ChangeNotifier {
   int saveCollectionCounter = 0;
 
   //Shows main counter status
-  bool isCounting = false;
+  bool _isCounting = false;
+
+  get isCounting {
+    return _isCounting;
+  }
 
   //Length of collections in collection map
   get collectionsCount {
@@ -253,11 +257,11 @@ class DataProvider extends ChangeNotifier {
 
 //Starts global sampling
   void startCounter() {
-    if (isCounting) {
+    if (_isCounting) {
       print('Started');
     } else {
       //Mark sampling as started
-      isCounting = true;
+      _isCounting = true;
 
       //Create new collection
       createCollection();
@@ -270,16 +274,19 @@ class DataProvider extends ChangeNotifier {
 
       //Start native partial wakelock
       startWakelock();
+
+      //Notify
+      notifyListeners();
     }
   }
 
 //stops global sampling
   void stopCounter() {
-    if (!isCounting) {
+    if (!_isCounting) {
       print('Stopped');
     } else {
       //Mark sampling as stopped
-      isCounting = false;
+      _isCounting = false;
 
       //Killing isolate
       isolate.kill();
@@ -298,6 +305,9 @@ class DataProvider extends ChangeNotifier {
 
       //Save last local collection to storage
       saveLastCollection();
+
+      //Notify
+      notifyListeners();
     }
   }
 

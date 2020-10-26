@@ -11,6 +11,7 @@ class SavedDataScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('Render saved screen');
     return Container(
       child: ListView.builder(
           padding: EdgeInsets.all(10),

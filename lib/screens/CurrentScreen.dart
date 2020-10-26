@@ -11,6 +11,7 @@ class CurrentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('render current screen');
     return Container(
       child: Center(
         child: Column(

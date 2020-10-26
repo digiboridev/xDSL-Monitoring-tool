@@ -23,6 +23,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('Render settings screen');
     return Container(
       margin: EdgeInsets.all(20),
       child: ListView(

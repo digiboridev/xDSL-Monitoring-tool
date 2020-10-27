@@ -1,5 +1,7 @@
+import 'dart:async';
+import 'dart:isolate';
+
 import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mp_chart/mp/chart/line_chart.dart';
 import 'package:mp_chart/mp/controller/line_chart_controller.dart';
@@ -24,10 +26,185 @@ class SpeedLine extends StatefulWidget {
 
 class _SNRMState extends State<SpeedLine> {
   LineChartController _controller;
+  Isolate _isolateInstance;
+  SendPort _mainToIsolateStream;
+  ReceivePort _isolateToMainStream = ReceivePort();
+  bool isSpawned = false;
 
   void initState() {
     _initController();
-    _initLineData(widget.collection);
+    _initIsolate();
+  }
+
+  @override
+  void dispose() {
+    //kill isolate
+    killingIsolate();
+    //stop listening
+    _isolateToMainStream.close();
+    super.dispose();
+  }
+
+  //Spawns isolate and listen msgs
+  void _initIsolate() async {
+    _isolateToMainStream.listen((data) {
+      if (data is SendPort) {
+        _mainToIsolateStream = data;
+      } else if (data == 'imspawned') {
+        setState(() {
+          isSpawned = true;
+        });
+      } else if (data is LineData) {
+        _mountLineData(data);
+      }
+    });
+
+    _isolateInstance = await Isolate.spawn(
+        LineDataComputingIsolate, _isolateToMainStream.sendPort);
+  }
+
+  //Kill isolate immediately if is spawned or retry after 1 second
+  void killingIsolate() {
+    if (_isolateInstance == null) {
+      print('Chart Isolate kill tick');
+      Timer(Duration(milliseconds: 100), killingIsolate);
+    } else {
+      _isolateInstance.kill();
+    }
+  }
+
+  //Isolate for computing line data
+  //Receives msg with List<LineStatsCollection>
+  //Sends LineData for mount
+  static void LineDataComputingIsolate(SendPort isolateToMainStream) {
+    ReceivePort mainToIsolateStream = ReceivePort();
+    isolateToMainStream.send(mainToIsolateStream.sendPort);
+
+    mainToIsolateStream.listen((data) {
+      if (data is List<LineStatsCollection>) {
+        // Prepare download rate set
+
+        List<Entry> downRateValues = List();
+
+        data.forEach((element) {
+          downRateValues.add(new Entry(
+              x: element.dateTime.millisecondsSinceEpoch.toDouble(),
+              y: element.downRate?.toDouble() ?? 0));
+        });
+
+        // Create a dataset
+        LineDataSet downRateSet = new LineDataSet(downRateValues, "Down");
+
+        // Apply setiings
+        downRateSet
+          // ..setLineWidth(1)
+          ..setColor1(Colors.blueGrey[600])
+          ..setMode(Mode.STEPPED)
+          ..setDrawValues(false)
+          ..setDrawCircles(false);
+
+        // Prepare upload rate set
+
+        List<Entry> upRateValues = List();
+
+        data.forEach((element) {
+          upRateValues.add(new Entry(
+              x: element.dateTime.millisecondsSinceEpoch.toDouble(),
+              y: element.upRate?.toDouble() ?? 0));
+        });
+
+        // Create a dataset
+        LineDataSet upRateSet = new LineDataSet(upRateValues, "Up");
+
+        // Apply settings
+        upRateSet
+          // ..setLineWidth(1)
+          ..setColor1(Colors.yellow[600])
+          ..setMode(Mode.STEPPED)
+          ..setDrawValues(false)
+          ..setDrawCircles(false);
+
+// Prepare download max rate set
+
+        List<Entry> downMaxRateValues = List();
+
+        data.forEach((element) {
+          downMaxRateValues.add(new Entry(
+              x: element.dateTime.millisecondsSinceEpoch.toDouble(),
+              y: element.downMaxRate?.toDouble() ?? 0));
+        });
+
+        // Create a dataset
+        LineDataSet downMaxRateSet =
+            new LineDataSet(downMaxRateValues, "Max down");
+
+        // Apply setiings
+        downMaxRateSet
+          // ..setLineWidth(1)
+          ..setColor1(Colors.blueGrey[900])
+          ..setMode(Mode.STEPPED)
+          ..setDrawValues(false)
+          ..setDrawCircles(false);
+
+        // Prepare upload max rate set
+
+        List<Entry> upMaxRateValues = List();
+
+        data.forEach((element) {
+          upMaxRateValues.add(new Entry(
+              x: element.dateTime.millisecondsSinceEpoch.toDouble(),
+              y: element.upMaxRate?.toDouble() ?? 0));
+        });
+
+        // Create a dataset
+        LineDataSet upMaxRateSet = new LineDataSet(upMaxRateValues, "Max up");
+
+        // Apply settings
+        upMaxRateSet
+          // ..setLineWidth(1)
+          ..setColor1(Colors.yellow[900])
+          ..setMode(Mode.STEPPED)
+          ..setDrawValues(false)
+          ..setDrawCircles(false);
+        // Prepare errors set
+        List<Entry> connectionErrValues = List();
+
+        data.forEach((element) {
+          connectionErrValues.add(new Entry(
+              x: element.dateTime.millisecondsSinceEpoch.toDouble(),
+              y: element.isErrored ? 24000 : 0));
+        });
+
+        // Create a dataset
+        LineDataSet connectionErrSet =
+            new LineDataSet(connectionErrValues, "Data error");
+
+        // Apply settings
+        connectionErrSet
+          ..setColor1(Colors.red[200])
+          ..setLineWidth(0)
+          ..setDrawFilled(true)
+          ..setFillAlpha(255)
+          ..setHighlightEnabled(false)
+          ..setFillColor(Colors.red[200])
+          ..setDrawValues(false)
+          ..setDrawCircles(false)
+          ..setMode(Mode.STEPPED);
+
+        // Add sets to line data and return
+        LineData lineData = LineData.fromList(List()
+          ..add(downRateSet)
+          ..add(upRateSet)
+          ..add(downMaxRateSet)
+          ..add(upMaxRateSet)
+          ..add(connectionErrSet));
+        isolateToMainStream.send(lineData);
+      } else {
+        print('[mainToIsolateStream] $data');
+      }
+    });
+
+    isolateToMainStream.send('imspawned');
   }
 
   // Initialize controller
@@ -60,6 +237,12 @@ class _SNRMState extends State<SpeedLine> {
             ..gridColor = Colors.blueGrey[50]
             ..drawAxisLine = false
             ..position = XAxisPosition.BOTTOM
+            ..setAxisMaxValue(widget
+                .collection.last.dateTime.millisecondsSinceEpoch
+                .toDouble())
+            ..setAxisMinValue(widget
+                .collection.first.dateTime.millisecondsSinceEpoch
+                .toDouble())
             ..setValueFormatter(XDateFormater());
 
           if (widget.showPeriod != null) {
@@ -83,129 +266,8 @@ class _SNRMState extends State<SpeedLine> {
         highlightPerDragEnabled: true);
   }
 
-  // Precompute datasets in Isolate
-  static LineData _computeData(List<LineStatsCollection> collection) {
-    // Prepare download rate set
-
-    List<Entry> downRateValues = List();
-
-    collection.forEach((element) {
-      downRateValues.add(new Entry(
-          x: element.dateTime.millisecondsSinceEpoch.toDouble(),
-          y: element.downRate?.toDouble() ?? 0));
-    });
-
-    // Create a dataset
-    LineDataSet downRateSet = new LineDataSet(downRateValues, "Down");
-
-    // Apply setiings
-    downRateSet
-      // ..setLineWidth(1)
-      ..setColor1(Colors.blueGrey[600])
-      ..setMode(Mode.STEPPED)
-      ..setDrawValues(false)
-      ..setDrawCircles(false);
-
-    // Prepare upload rate set
-
-    List<Entry> upRateValues = List();
-
-    collection.forEach((element) {
-      upRateValues.add(new Entry(
-          x: element.dateTime.millisecondsSinceEpoch.toDouble(),
-          y: element.upRate?.toDouble() ?? 0));
-    });
-
-    // Create a dataset
-    LineDataSet upRateSet = new LineDataSet(upRateValues, "Up");
-
-    // Apply settings
-    upRateSet
-      // ..setLineWidth(1)
-      ..setColor1(Colors.yellow[600])
-      ..setMode(Mode.STEPPED)
-      ..setDrawValues(false)
-      ..setDrawCircles(false);
-
-// Prepare download max rate set
-
-    List<Entry> downMaxRateValues = List();
-
-    collection.forEach((element) {
-      downMaxRateValues.add(new Entry(
-          x: element.dateTime.millisecondsSinceEpoch.toDouble(),
-          y: element.downMaxRate?.toDouble() ?? 0));
-    });
-
-    // Create a dataset
-    LineDataSet downMaxRateSet = new LineDataSet(downMaxRateValues, "Max down");
-
-    // Apply setiings
-    downMaxRateSet
-      // ..setLineWidth(1)
-      ..setColor1(Colors.blueGrey[900])
-      ..setMode(Mode.STEPPED)
-      ..setDrawValues(false)
-      ..setDrawCircles(false);
-
-    // Prepare upload max rate set
-
-    List<Entry> upMaxRateValues = List();
-
-    collection.forEach((element) {
-      upMaxRateValues.add(new Entry(
-          x: element.dateTime.millisecondsSinceEpoch.toDouble(),
-          y: element.upMaxRate?.toDouble() ?? 0));
-    });
-
-    // Create a dataset
-    LineDataSet upMaxRateSet = new LineDataSet(upMaxRateValues, "Max up");
-
-    // Apply settings
-    upMaxRateSet
-      // ..setLineWidth(1)
-      ..setColor1(Colors.yellow[900])
-      ..setMode(Mode.STEPPED)
-      ..setDrawValues(false)
-      ..setDrawCircles(false);
-    // Prepare errors set
-    List<Entry> connectionErrValues = List();
-
-    collection.forEach((element) {
-      connectionErrValues.add(new Entry(
-          x: element.dateTime.millisecondsSinceEpoch.toDouble(),
-          y: element.isErrored ? 24000 : 0));
-    });
-
-    // Create a dataset
-    LineDataSet connectionErrSet =
-        new LineDataSet(connectionErrValues, "Data error");
-
-    // Apply settings
-    connectionErrSet
-      ..setColor1(Colors.red[200])
-      ..setLineWidth(0)
-      ..setDrawFilled(true)
-      ..setFillAlpha(255)
-      ..setHighlightEnabled(false)
-      ..setFillColor(Colors.red[200])
-      ..setDrawValues(false)
-      ..setDrawCircles(false)
-      ..setMode(Mode.STEPPED);
-
-    // Add sets to line data and return
-    LineData lineData = LineData.fromList(List()
-      ..add(downRateSet)
-      ..add(upRateSet)
-      ..add(downMaxRateSet)
-      ..add(upMaxRateSet)
-      ..add(connectionErrSet));
-    return lineData;
-  }
-
-  // Initialize linedata
-  void _initLineData(List<LineStatsCollection> collection) async {
-    LineData lineData = await compute(_computeData, collection);
+  //Mount data in controller and update render by setstate
+  void _mountLineData(LineData lineData) {
     _controller.data = lineData;
     _controller.state?.setStateIfNotDispose();
   }
@@ -213,24 +275,40 @@ class _SNRMState extends State<SpeedLine> {
   // Render
   @override
   Widget build(BuildContext context) {
-    print('render viewer');
-    return Container(
+    //Check for computing isolate spawn
+    //After spawn sends is collection for computing
+
+    if (!isSpawned) {
+      return Container(
         height: 200,
-        child: OverflowBox(
-          alignment: Alignment.topCenter,
-          maxHeight: 260,
-          child: Column(
-            children: [
-              Container(
-                  color: Colors.amber,
-                  height: 200,
-                  child: LineChart(_controller)),
-              Transform.translate(
-                offset: const Offset(0, -190),
-                child: Text('Speed rates'),
-              ),
-            ],
-          ),
-        ));
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    } else {
+      print('render viewer');
+      _mainToIsolateStream.send(widget.collection);
+      return Container(
+          height: 200,
+          child: OverflowBox(
+            alignment: Alignment.topCenter,
+            maxHeight: 260,
+            child: Column(
+              children: [
+                Container(
+                    color: Colors.amber,
+                    height: 200,
+                    child: LineChart(_controller)),
+                Transform.translate(
+                  offset: const Offset(0, -190),
+                  child: Text(
+                    'Speed rates',
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                  ),
+                ),
+              ],
+            ),
+          ));
+    }
   }
 }

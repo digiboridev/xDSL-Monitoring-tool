@@ -282,6 +282,16 @@ class DataProvider extends ChangeNotifier {
 
 //stops global sampling
   void stopCounter() {
+    void killingIsolate() {
+      if (isolate == null) {
+        print('Provider Isolate kill tick');
+        Timer(Duration(milliseconds: 100), killingIsolate);
+      } else {
+        isolate.kill();
+        isolate = null;
+      }
+    }
+
     if (!_isCounting) {
       print('Stopped');
     } else {
@@ -289,10 +299,7 @@ class DataProvider extends ChangeNotifier {
       _isCounting = false;
 
       //Killing isolate
-      isolate.kill();
-
-      //Clear link
-      isolate = null;
+      killingIsolate();
 
       //Close receiver port
       receivePort.close();
@@ -312,7 +319,7 @@ class DataProvider extends ChangeNotifier {
   }
 
 //Isolate
-  static void isolateFunc(params) {
+  static void backgroundDataParser(params) {
     void tick() async {
       params.sendPort.send(await params.client.getData);
       Timer(new Duration(seconds: params.samplingInterval), tick);
@@ -338,7 +345,7 @@ class DataProvider extends ChangeNotifier {
         client(), receivePort.sendPort, _samplingInterval);
 
     isolate = await Isolate.spawn(
-      isolateFunc,
+      backgroundDataParser,
       params,
     );
     receivePort.listen((data) {

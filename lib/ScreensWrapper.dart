@@ -67,7 +67,7 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_screenList[_screenIndex].name),
-        backgroundColor: Colors.blueGrey[900],
+        backgroundColor: Colors.blueGrey[800],
       ),
       body: _screenList[_screenIndex],
       floatingActionButton: FloatingActionButton(
@@ -78,15 +78,43 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
         hoverColor: Colors.amber[100],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.blueGrey[800],
         currentIndex: _screenIndex,
         onTap: selectScreen,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              icon: Icon(Icons.timeline), title: Text('Current')),
+              icon: Icon(
+                Icons.timeline,
+                color: Colors.blueGrey[50],
+              ),
+              title: Text(
+                'Current',
+                style: TextStyle(
+                  color: Colors.blueGrey[50],
+                ),
+              )),
           BottomNavigationBarItem(
-              icon: Icon(Icons.history), title: Text('Saved data')),
+              icon: Icon(
+                Icons.history,
+                color: Colors.blueGrey[50],
+              ),
+              title: Text(
+                'Saved data',
+                style: TextStyle(
+                  color: Colors.blueGrey[50],
+                ),
+              )),
           BottomNavigationBarItem(
-              icon: Icon(Icons.settings), title: Text('Setup'))
+              icon: Icon(
+                Icons.settings,
+                color: Colors.blueGrey[50],
+              ),
+              title: Text(
+                'Setup',
+                style: TextStyle(
+                  color: Colors.blueGrey[50],
+                ),
+              ))
         ],
       ),
     );

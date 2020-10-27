@@ -50,9 +50,16 @@ class _LoginState extends State<Login> {
           children: [
             Text(
               "Login",
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+              style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  color: Colors.blueGrey[800]),
             ),
-            Text(context.watch<DataProvider>().getLogin),
+            Text(context.watch<DataProvider>().getLogin,
+                style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 12,
+                    color: Colors.blueGrey[600])),
           ],
         ),
       ),

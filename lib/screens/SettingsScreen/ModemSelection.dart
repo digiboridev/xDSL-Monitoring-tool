@@ -86,10 +86,17 @@ class _ModemSelectionState extends State<ModemSelection> {
           children: [
             Text(
               'Modem type',
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+              style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  color: Colors.blueGrey[800]),
             ),
             Container(
-              child: Text(modemName()),
+              child: Text(modemName(),
+                  style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12,
+                      color: Colors.blueGrey[600])),
             ),
           ],
         ),

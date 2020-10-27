@@ -50,9 +50,16 @@ class _PasswordState extends State<Password> {
           children: [
             Text(
               "Password",
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+              style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  color: Colors.blueGrey[800]),
             ),
-            Text(context.watch<DataProvider>().getPassword),
+            Text(context.watch<DataProvider>().getPassword,
+                style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 12,
+                    color: Colors.blueGrey[600])),
           ],
         ),
       ),

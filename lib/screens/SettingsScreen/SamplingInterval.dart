@@ -11,8 +11,11 @@ class SamplingInterval extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Sampling interval (s)',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            'Sampling every ${context.watch<DataProvider>().getSamplingInterval.toDouble()} (s)',
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.blueGrey[800]),
           ),
           Slider(
             value: context.watch<DataProvider>().getSamplingInterval.toDouble(),

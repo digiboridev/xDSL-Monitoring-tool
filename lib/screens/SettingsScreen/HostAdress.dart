@@ -50,9 +50,16 @@ class _HostAdressState extends State<HostAdress> {
           children: [
             Text(
               "Host adress",
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+              style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  color: Colors.blueGrey[800]),
             ),
-            Text(context.watch<DataProvider>().getHostAdress),
+            Text(context.watch<DataProvider>().getHostAdress,
+                style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 12,
+                    color: Colors.blueGrey[600])),
           ],
         ),
       ),

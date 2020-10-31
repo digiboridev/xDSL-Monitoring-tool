@@ -66,6 +66,13 @@ class DataProvider extends ChangeNotifier {
     return typed;
   }
 
+  //Returns last collection
+  get getLastCollection {
+    List<dynamic> raw = _collectionMap[getCollectionsKeys.elementAt(0)];
+    List<LineStatsCollection> typed = raw.cast<LineStatsCollection>();
+    return typed;
+  }
+
   //Update all collection from storage
   void updateCollections() async {
     var collectionMap = await Hive.openBox('collectionMap');

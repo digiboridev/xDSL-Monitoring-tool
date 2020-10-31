@@ -9,6 +9,8 @@ import '../components/SpeedLine.dart';
 import '../components/FECLine.dart';
 import '../components/CRCLine.dart';
 
+import 'CurrentScreen/StatsTable.dart';
+
 class CurrentScreen extends StatelessWidget {
   String _name = 'Current stats';
   get name {
@@ -19,15 +21,7 @@ class CurrentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     print('render current screen');
     return ListView(
-      children: [
-        Container(
-          height: 300,
-          child: Center(
-            child: Text('SOMESHIT'),
-          ),
-        ),
-        SpeedLineCurrWrapper()
-      ],
+      children: [StatsTable(), SpeedLineCurrWrapper()],
     );
   }
 }

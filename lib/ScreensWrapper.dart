@@ -67,7 +67,7 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_screenList[_screenIndex].name),
-        backgroundColor: Colors.blueGrey[800],
+        backgroundColor: Colors.blueGrey[900],
       ),
       body: _screenList[_screenIndex],
       floatingActionButton: FloatingActionButton(
@@ -78,7 +78,7 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
         hoverColor: Colors.amber[100],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.blueGrey[800],
+        backgroundColor: Colors.blueGrey[900],
         currentIndex: _screenIndex,
         onTap: selectScreen,
         items: <BottomNavigationBarItem>[

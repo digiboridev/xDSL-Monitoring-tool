@@ -280,7 +280,7 @@ class _SNRMState extends State<SpeedLine> {
 
     if (!isSpawned) {
       return Container(
-        height: 200,
+        height: 260,
         child: Center(
           child: CircularProgressIndicator(),
         ),
@@ -289,21 +289,26 @@ class _SNRMState extends State<SpeedLine> {
       print('render viewer');
       _mainToIsolateStream.send(widget.collection);
       return Container(
-          height: 200,
+          color: Colors.white,
+          height: 260,
           child: OverflowBox(
             alignment: Alignment.topCenter,
             maxHeight: 260,
             child: Column(
               children: [
                 Container(
-                    color: Colors.amber,
+                    margin: EdgeInsets.only(top: 16),
                     height: 200,
                     child: LineChart(_controller)),
                 Transform.translate(
-                  offset: const Offset(0, -190),
-                  child: Text(
-                    'Speed rates',
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                  offset: const Offset(0, -208),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'Speed rates',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                    ),
                   ),
                 ),
               ],

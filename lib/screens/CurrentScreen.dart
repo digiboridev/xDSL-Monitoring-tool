@@ -59,7 +59,7 @@ class _SpeedLineCurrWrapperState extends State<SpeedLineCurrWrapper> {
     return Column(
       children: [
         Container(
-          height: 200,
+          height: 260,
           child: isMapEmpty()
               ? Center(child: Text('No Data'))
               : SpeedLine(
@@ -68,7 +68,7 @@ class _SpeedLineCurrWrapperState extends State<SpeedLineCurrWrapper> {
                 ),
         ),
         Container(
-          height: 200,
+          height: 260,
           child: isMapEmpty()
               ? Center(child: Text('No Data'))
               : SNRM(
@@ -77,7 +77,7 @@ class _SpeedLineCurrWrapperState extends State<SpeedLineCurrWrapper> {
                 ),
         ),
         Container(
-          height: 200,
+          height: 260,
           child: isMapEmpty()
               ? Center(child: Text('No Data'))
               : FECLine(
@@ -86,7 +86,7 @@ class _SpeedLineCurrWrapperState extends State<SpeedLineCurrWrapper> {
                 ),
         ),
         Container(
-          height: 200,
+          height: 260,
           child: isMapEmpty()
               ? Center(child: Text('No Data'))
               : CRCLine(

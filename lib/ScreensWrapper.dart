@@ -46,6 +46,7 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
   @override
   void initState() {
     super.initState();
+
     context.read<DataProvider>().updateCollections();
     context.read<DataProvider>().updateSettings();
     print('init');
@@ -69,12 +70,14 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
         title: Text(_screenList[_screenIndex].name),
         backgroundColor: Colors.blueGrey[900],
       ),
-      body: _screenList[_screenIndex],
+      // body: _screenList[_screenIndex],
+      body: AnimatedSwitcher(
+        duration: Duration(milliseconds: 200),
+        child: _screenList[_screenIndex],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => toogleSampling(),
-        child: context.watch<DataProvider>().isCounting
-            ? Icon(Icons.stop)
-            : Icon(Icons.play_arrow),
+        child: FloatBtnIcon(),
         hoverColor: Colors.amber[100],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -118,5 +121,17 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
         ],
       ),
     );
+  }
+}
+
+class FloatBtnIcon extends StatelessWidget {
+  const FloatBtnIcon({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    print('flbtn render');
+    return context.watch<DataProvider>().isCounting
+        ? Icon(Icons.stop)
+        : Icon(Icons.play_arrow);
   }
 }

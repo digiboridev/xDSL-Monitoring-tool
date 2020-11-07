@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:provider/provider.dart';
 import 'package:dslstats/models/DataProvider.dart';
@@ -45,69 +47,119 @@ class StatusBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.blueGrey[800],
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
+    print('render statusbar');
+    return Column(
+      children: [
+        Container(
+          color: Colors.blueGrey[700],
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Row(
+                  children: [
+                    Text(
+                      'S/C/DSL',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w300),
+                    ),
+                    Container(
+                      width: 10,
+                      margin: EdgeInsets.only(left: 8),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: context.watch<DataProvider>().isCounting
+                                ? Colors.yellow
+                                : Colors.black,
+                            width: 5,
+                          ),
+                          borderRadius: BorderRadius.circular(5)),
+                    ),
+                    Container(
+                      width: 10,
+                      margin: EdgeInsets.only(left: 4),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: getConnectionStatus(context)
+                                ? Colors.yellow
+                                : Colors.black,
+                            width: 5,
+                          ),
+                          borderRadius: BorderRadius.circular(5)),
+                    ),
+                    Container(
+                      width: 10,
+                      margin: EdgeInsets.only(left: 4),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: getDSLStatus(context)
+                                ? Colors.yellow
+                                : Colors.black,
+                            width: 5,
+                          ),
+                          borderRadius: BorderRadius.circular(5)),
+                    ),
+                  ],
+                ),
                 Text(
-                  'S/C/DSL',
+                  'Last sync: ${getLastSync(context)}',
                   style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w300),
-                ),
-                Container(
-                  width: 10,
-                  margin: EdgeInsets.only(left: 8),
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        color: context.watch<DataProvider>().isCounting
-                            ? Colors.yellow
-                            : Colors.black,
-                        width: 5,
-                      ),
-                      borderRadius: BorderRadius.circular(5)),
-                ),
-                Container(
-                  width: 10,
-                  margin: EdgeInsets.only(left: 4),
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        color: getConnectionStatus(context)
-                            ? Colors.yellow
-                            : Colors.black,
-                        width: 5,
-                      ),
-                      borderRadius: BorderRadius.circular(5)),
-                ),
-                Container(
-                  width: 10,
-                  margin: EdgeInsets.only(left: 4),
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        color: getDSLStatus(context)
-                            ? Colors.yellow
-                            : Colors.black,
-                        width: 5,
-                      ),
-                      borderRadius: BorderRadius.circular(5)),
-                ),
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w300),
+                )
               ],
             ),
-            Text(
-              'Last sync: ${getLastSync(context)}',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w300),
+          ),
+        ),
+        ProgressLine()
+      ],
+    );
+  }
+}
+
+class ProgressLine extends StatefulWidget {
+  @override
+  _ProgressLineState createState() => _ProgressLineState();
+}
+
+class _ProgressLineState extends State<ProgressLine> {
+  double progress = 1;
+  int old = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    var asd = context.watch<DataProvider>().getLastCollection;
+    var now = context.watch<DataProvider>().getLastCollection.length;
+    if (old != now) {
+      old = now;
+
+      setState(() {
+        progress = 1;
+      });
+      Timer(
+          Duration(milliseconds: 100),
+          () => setState(() {
+                progress = 0;
+              }));
+    }
+
+    return Container(
+        height: 3,
+        width: MediaQuery.of(context).size.width * 1,
+        color: Colors.blueGrey[50],
+        child: Row(
+          children: [
+            AnimatedContainer(
+              duration: Duration(milliseconds: 100),
+              curve: Curves.linear,
+              color: Colors.yellow[700],
+              height: 3,
+              width: MediaQuery.of(context).size.width * progress,
             )
           ],
-        ),
-      ),
-    );
+        ));
   }
 }

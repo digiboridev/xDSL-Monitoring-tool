@@ -45,15 +45,15 @@ class Client_Simulator implements Client {
       int rndChance = Random().nextInt(100);
 
       if (rndChance <= 10) {
-        mrD = mrD + (rndd - 50) / 100;
-        attD = attD + (rndd - 50) / 100;
+        mrD = ((mrD + (rndd - 50) / 100) * 100).round() / 100;
+        attD = ((attD + (rndd - 50) / 100) * 100).round() / 100;
         fecD = fecD + rndd * 20;
         crcD = crcD + rndd * 9;
       }
 
       if (rndChance <= 10) {
-        mrU = mrU + (rndu - 50) / 100;
-        attU = attU + (rndu - 50) / 100;
+        mrU = ((mrU + (rndu - 50) / 100) * 100).round() / 100;
+        attU = ((attU + (rndu - 50) / 100) * 100).round() / 100;
         fecU = fecU + rndu * 13;
         crcU = crcU + rndu * 6;
       }

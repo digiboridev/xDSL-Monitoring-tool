@@ -47,11 +47,13 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
   void initState() {
     super.initState();
 
+    //Load state data from hive store
     context.read<DataProvider>().updateCollections();
     context.read<DataProvider>().updateSettings();
     print('init');
   }
 
+  //Starts or stop sampling
   void toogleSampling() {
     bool isCounting = context.read<DataProvider>().isCounting;
     if (isCounting) {
@@ -63,7 +65,7 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
 
   @override
   Widget build(BuildContext context) {
-    print('Render buttonbar');
+    print('Render screens wrapper');
 
     return Scaffold(
       appBar: AppBar(
@@ -124,6 +126,8 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
   }
 }
 
+//Return icon by sampling status
+//Prevent screens wrapper from rerender
 class FloatBtnIcon extends StatelessWidget {
   const FloatBtnIcon({Key key}) : super(key: key);
 

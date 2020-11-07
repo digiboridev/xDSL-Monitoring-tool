@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:provider/provider.dart';
@@ -5,6 +6,7 @@ import 'package:dslstats/models/DataProvider.dart';
 import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:flutter/material.dart';
 
+//Draw and animate current speed by canvas
 class CurrentSpeedBar extends StatefulWidget {
   bool _isEmpty;
 
@@ -16,6 +18,7 @@ class CurrentSpeedBar extends StatefulWidget {
 
 class _CurrentSpeedBarState extends State<CurrentSpeedBar>
     with TickerProviderStateMixin {
+  //Speed vars
   double currDown = 0;
   double currUp = 0;
   double attainableDown = 0;
@@ -28,6 +31,7 @@ class _CurrentSpeedBarState extends State<CurrentSpeedBar>
   Animation<double> attainableDownAnimation;
   Animation<double> attainableUpAnimation;
 
+  //Init tweens fo animation
   Tween<double> currDownTween = Tween(begin: 0, end: 0);
   Tween<double> currUpTween = Tween(begin: 0, end: 0);
   Tween<double> attainableDownTween = Tween(begin: 0, end: 0);
@@ -39,22 +43,26 @@ class _CurrentSpeedBarState extends State<CurrentSpeedBar>
     super.initState();
 
     //Init animation controllers
-
+    //Init main controller
     controller = AnimationController(
         vsync: this, duration: Duration(milliseconds: 1000));
 
+    //Extend main controller with curves
+    //First curve for download speed
     final curvedAnimation = CurvedAnimation(
       parent: controller,
       curve: Curves.fastOutSlowIn,
       reverseCurve: Curves.easeOut,
     );
 
+    //second curve for upload speed
     final curvedAnimationAlt = CurvedAnimation(
       parent: controller,
       curve: Curves.bounceInOut,
       reverseCurve: Curves.easeOut,
     );
 
+    //Init animations separately for all variables
     currDownAnimation = currDownTween.animate(curvedAnimation)
       ..addListener(() {
         setState(() {});
@@ -102,20 +110,25 @@ class _CurrentSpeedBarState extends State<CurrentSpeedBar>
           controller.stop();
         }
       });
+    Timer(Duration(milliseconds: 100), () => {updateData(context)});
   }
 
   @override
   void didUpdateWidget(covariant CurrentSpeedBar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    updateData(context);
+    // update data in winget updating by parrent
+    // prevent updating data on widget render
+    Timer(Duration(milliseconds: 100), () => {updateData(context)});
   }
 
   void updateData(BuildContext context) {
+    //Save old data before update for animation
     var currDownold = currDown;
     var currUpold = currUp;
     var attainableDownold = attainableDown;
     var attainableUpold = attainableUp;
 
+    //Update data
     if (!context.read<DataProvider>().isCounting) {
       currDown = 0;
       currUp = 0;
@@ -137,6 +150,8 @@ class _CurrentSpeedBarState extends State<CurrentSpeedBar>
       attainableUp = asd.upMaxRate?.toDouble() ?? 0;
     }
 
+    //Check for difference beetween old and new data
+    //Start animation from old and to data
     if (currDown != currDownold) {
       currDownTween.begin = currDownold;
       currDownTween.end = currDown;
@@ -165,7 +180,6 @@ class _CurrentSpeedBarState extends State<CurrentSpeedBar>
 
   @override
   Widget build(BuildContext context) {
-    // print('speedbar render');
     return Column(
       children: [
         Container(
@@ -258,6 +272,7 @@ class _CurrentSpeedBarState extends State<CurrentSpeedBar>
   }
 }
 
+//Current speed animater circles paiter
 class SpdPainter extends CustomPainter {
   double curr;
   double attainable;

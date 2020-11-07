@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 
 import 'StatusBar.dart';
 import 'CurrentSpeedBar.dart';
+import 'CurrentSNRBar.dart';
+import 'RsCounters.dart';
 
 class StatsTable extends StatelessWidget {
   @override
@@ -22,9 +24,24 @@ class StatsTable extends StatelessWidget {
     }
 
     return Container(
-      color: Colors.blueGrey[00],
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomCenter,
+              colors: [
+            Colors.cyan[100],
+            Colors.cyan[50],
+            // Colors.white,
+            Colors.white
+          ])),
+      // color: Colors.blueGrey[300],
       child: Column(
-        children: [StatusBar(isMapEmpty()), CurrentSpeedBar(isMapEmpty())],
+        children: [
+          StatusBar(isMapEmpty()),
+          CurrentSpeedBar(isMapEmpty()),
+          CurrentSNRBar(isMapEmpty()),
+          RsCounters()
+        ],
       ),
     );
   }

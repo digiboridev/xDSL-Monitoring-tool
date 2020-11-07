@@ -21,80 +21,58 @@ class CurrentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     print('render current screen');
     return ListView(
-      children: [StatsTable(), SpeedLineCurrWrapper()],
+      children: [
+        StatsTable(),
+        // SpeedLineCurrWrapper(),
+      ],
     );
   }
 }
 
-class SpeedLineCurrWrapper extends StatefulWidget {
-  SpeedLineCurrWrapper({Key key}) : super(key: key);
-
-  @override
-  _SpeedLineCurrWrapperState createState() => _SpeedLineCurrWrapperState();
-}
-
-class _SpeedLineCurrWrapperState extends State<SpeedLineCurrWrapper> {
-  int asd = 0;
-
+class SpeedLineCurrWrapper extends StatelessWidget {
   List<LineStatsCollection> getCollection(BuildContext context) {
     return context.watch<DataProvider>().getCollectionByKey(
         context.watch<DataProvider>().getCollectionsKeys.elementAt(0));
   }
 
+  //Check collection for minimum two points in
+  //Prevent red screen on mpcharts
+  bool isMapEmpty(BuildContext context) {
+    if (context.watch<DataProvider>().collectionsCount == 0) {
+      return true;
+    } else if (getCollection(context).length < 2) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    //Check collection for minimum two points in
-    //Prevent red screen on mpcharts
-    bool isMapEmpty() {
-      if (context.watch<DataProvider>().collectionsCount == 0) {
-        return true;
-      } else if (getCollection(context).length < 2) {
-        return true;
-      } else {
-        return false;
-      }
+    if (isMapEmpty(context)) {
+      return Center(child: Text('No Data'));
+    } else {
+      return Column(
+        children: [
+          SpeedLine(
+            collection: getCollection(context),
+            showPeriod: Duration(minutes: 5),
+          ),
+          SNRM(
+            collection: getCollection(context),
+            showPeriod: Duration(minutes: 5),
+          ),
+          FECLine(
+            collection: getCollection(context),
+            showPeriod: Duration(minutes: 5),
+          ),
+          CRCLine(
+            collection: getCollection(context),
+            showPeriod: Duration(minutes: 5),
+          ),
+        ],
+      );
     }
-
     // Grand render
-    return Column(
-      children: [
-        Container(
-          height: 260,
-          child: isMapEmpty()
-              ? Center(child: Text('No Data'))
-              : SpeedLine(
-                  collection: getCollection(context),
-                  showPeriod: Duration(minutes: 5),
-                ),
-        ),
-        Container(
-          height: 260,
-          child: isMapEmpty()
-              ? Center(child: Text('No Data'))
-              : SNRM(
-                  collection: getCollection(context),
-                  showPeriod: Duration(minutes: 5),
-                ),
-        ),
-        Container(
-          height: 260,
-          child: isMapEmpty()
-              ? Center(child: Text('No Data'))
-              : FECLine(
-                  collection: getCollection(context),
-                  showPeriod: Duration(minutes: 5),
-                ),
-        ),
-        Container(
-          height: 260,
-          child: isMapEmpty()
-              ? Center(child: Text('No Data'))
-              : CRCLine(
-                  collection: getCollection(context),
-                  showPeriod: Duration(minutes: 5),
-                ),
-        )
-      ],
-    );
   }
 }

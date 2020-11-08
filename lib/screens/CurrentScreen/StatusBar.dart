@@ -114,50 +114,111 @@ class StatusBar extends StatelessWidget {
             ),
           ),
         ),
-        ProgressLine()
+        ProgressLine(_isEmpty)
       ],
     );
   }
 }
 
+// Draws animated line when sampling is running
 class ProgressLine extends StatefulWidget {
+  bool _isEmpty;
+  ProgressLine(this._isEmpty);
+
   @override
   _ProgressLineState createState() => _ProgressLineState();
 }
 
-class _ProgressLineState extends State<ProgressLine> {
+class _ProgressLineState extends State<ProgressLine>
+    with TickerProviderStateMixin {
+  //Animation vars
+  AnimationController controller;
+  Animation<double> animation;
+  Tween<double> animTween = Tween(begin: 0, end: 0);
   double progress = 1;
   int old = 0;
 
   @override
-  Widget build(BuildContext context) {
-    var asd = context.watch<DataProvider>().getLastCollection;
-    var now = context.watch<DataProvider>().getLastCollection.length;
-    if (old != now) {
-      old = now;
+  void initState() {
+    super.initState();
 
-      setState(() {
-        progress = 1;
+    //Init animation controller
+
+    controller = AnimationController(
+        vsync: this,
+        duration: Duration(
+            seconds: context.read<DataProvider>().getSamplingInterval));
+
+    //Extend main controller with curve
+    final curvedAnimation = CurvedAnimation(
+      parent: controller,
+      curve: Curves.slowMiddle,
+      reverseCurve: Curves.easeOut,
+    );
+
+    //Init animation
+    animation = animTween.animate(curvedAnimation)
+      ..addListener(() {
+        setState(() {});
+      })
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          controller.reset();
+        } else if (status == AnimationStatus.dismissed) {
+          controller.reset();
+        }
       });
-      Timer(
-          Duration(milliseconds: 100),
-          () => setState(() {
-                progress = 0;
-              }));
+  }
+
+  @override
+  void didUpdateWidget(covariant ProgressLine oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+
+    //Return if collection is empty
+    if (widget._isEmpty) {
+      return;
     }
 
+    //Load current collection length
+    var now = context.read<DataProvider>().getLastCollection.length;
+
+    //Compare current length with previous
+    if (old != now) {
+      //Skip if init value
+      if (old == 0) {
+        old = now;
+        return;
+      }
+
+      //Set new value as old value and start animation
+      old = now;
+      animTween.begin = 0;
+      animTween.end = 1;
+      controller.reset();
+      controller.forward();
+    }
+  }
+
+  //Stop controller on dispose
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
         height: 3,
         width: MediaQuery.of(context).size.width * 1,
         color: Colors.blueGrey[50],
         child: Row(
           children: [
-            AnimatedContainer(
-              duration: Duration(milliseconds: 100),
-              curve: Curves.linear,
+            Container(
               color: Colors.yellow[700],
               height: 3,
-              width: MediaQuery.of(context).size.width * progress,
+              width: MediaQuery.of(context).size.width * animation.value ?? 0,
             )
           ],
         ));

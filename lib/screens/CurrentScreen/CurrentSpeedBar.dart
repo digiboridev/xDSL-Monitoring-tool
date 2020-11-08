@@ -110,7 +110,7 @@ class _CurrentSpeedBarState extends State<CurrentSpeedBar>
           controller.stop();
         }
       });
-    Timer(Duration(milliseconds: 100), () => {updateData(context)});
+    updateData(context);
   }
 
   @override

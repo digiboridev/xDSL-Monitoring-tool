@@ -9,70 +9,87 @@ import '../components/SpeedLine.dart';
 import '../components/FECLine.dart';
 import '../components/CRCLine.dart';
 
-import 'CurrentScreen/StatsTable.dart';
+import 'CurrentScreen/StatusBar.dart';
+import 'CurrentScreen/CurrentSpeedBar.dart';
+import 'CurrentScreen/CurrentSNRBar.dart';
+import 'CurrentScreen/RsCounters.dart';
 
 class CurrentScreen extends StatelessWidget {
+  //Name of screen
   String _name = 'Current stats';
+  //Returns name of screen
   get name {
     return _name;
   }
 
+  bool isMapEmpty = true;
+
+  List<LineStatsCollection> collection;
+
   @override
   Widget build(BuildContext context) {
-    print('render current screen');
-    return ListView(
-      children: [
-        StatsTable(),
-        // SpeedLineCurrWrapper(),
-      ],
-    );
-  }
-}
-
-class SpeedLineCurrWrapper extends StatelessWidget {
-  List<LineStatsCollection> getCollection(BuildContext context) {
-    return context.watch<DataProvider>().getCollectionByKey(
-        context.watch<DataProvider>().getCollectionsKeys.elementAt(0));
-  }
-
-  //Check collection for minimum two points in
-  //Prevent red screen on mpcharts
-  bool isMapEmpty(BuildContext context) {
+    //Check collection for minimum two points in
+    //Prevent red screen on mpcharts
     if (context.watch<DataProvider>().collectionsCount == 0) {
-      return true;
-    } else if (getCollection(context).length < 2) {
-      return true;
+      isMapEmpty = true;
+    } else if (context.watch<DataProvider>().getLastCollection.length < 2) {
+      isMapEmpty = true;
     } else {
-      return false;
+      isMapEmpty = false;
     }
-  }
+    //Update collection
+    if (!isMapEmpty) {
+      collection = context.watch<DataProvider>().getLastCollection;
+    }
 
-  @override
-  Widget build(BuildContext context) {
-    if (isMapEmpty(context)) {
-      return Center(child: Text('No Data'));
-    } else {
-      return Column(
+    print('render current screen');
+
+    return Container(
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomCenter,
+              colors: [Colors.cyan[50], Colors.white, Colors.white])),
+      child: ListView(
         children: [
-          SpeedLine(
-            collection: getCollection(context),
-            showPeriod: Duration(minutes: 5),
-          ),
-          SNRM(
-            collection: getCollection(context),
-            showPeriod: Duration(minutes: 5),
-          ),
-          FECLine(
-            collection: getCollection(context),
-            showPeriod: Duration(minutes: 5),
-          ),
-          CRCLine(
-            collection: getCollection(context),
-            showPeriod: Duration(minutes: 5),
-          ),
+          StatusBar(isMapEmpty),
+          CurrentSpeedBar(isMapEmpty),
+          CurrentSNRBar(isMapEmpty),
+          RsCounters(isMapEmpty),
+          Column(
+            children: [
+              Container(
+                margin: EdgeInsets.all(16),
+                child: Text('Histogram dataset',
+                    style: TextStyle(
+                        color: Colors.blueGrey[900],
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600)),
+              ),
+              SpeedLineExpandable(
+                isEmpty: isMapEmpty,
+                collection: collection,
+                showPeriod: Duration(minutes: 5),
+              ),
+              SNRMExpandable(
+                isEmpty: isMapEmpty,
+                collection: collection,
+                showPeriod: Duration(minutes: 5),
+              ),
+              FECLineExpandable(
+                isEmpty: isMapEmpty,
+                collection: collection,
+                showPeriod: Duration(minutes: 5),
+              ),
+              CRCLineExpandable(
+                isEmpty: isMapEmpty,
+                collection: collection,
+                showPeriod: Duration(minutes: 5),
+              ),
+            ],
+          )
         ],
-      );
-    }
-    // Grand render
+      ),
+    );
   }
 }

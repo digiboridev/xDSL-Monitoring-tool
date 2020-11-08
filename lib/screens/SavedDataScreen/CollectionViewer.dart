@@ -25,25 +25,29 @@ class CollectionViewer extends StatelessWidget {
         children: [
           Container(
             color: Colors.blueGrey[50],
-            child: SpeedLine(
+            child: SpeedLineExpandable(
+              isEmpty: false,
               collection: collection,
             ),
           ),
           Container(
             color: Colors.blueGrey[50],
-            child: SNRM(
+            child: SNRMExpandable(
+              isEmpty: false,
               collection: collection,
             ),
           ),
           Container(
             color: Colors.blueGrey[50],
-            child: FECLine(
+            child: FECLineExpandable(
+              isEmpty: false,
               collection: collection,
             ),
           ),
           Container(
             color: Colors.blueGrey[50],
-            child: CRCLine(
+            child: CRCLineExpandable(
+              isEmpty: false,
               collection: collection,
             ),
           ),

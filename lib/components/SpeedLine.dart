@@ -3,6 +3,7 @@ import 'dart:isolate';
 
 import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_android/android_os.dart';
 import 'package:mp_chart/mp/chart/line_chart.dart';
 import 'package:mp_chart/mp/controller/line_chart_controller.dart';
 import 'package:mp_chart/mp/core/data/line_data.dart';
@@ -280,40 +281,102 @@ class _SNRMState extends State<SpeedLine> {
 
     if (!isSpawned) {
       return Container(
-        height: 260,
+        color: Colors.white,
+        height: 200,
         child: Center(
           child: CircularProgressIndicator(),
         ),
       );
     } else {
-      print('render viewer');
+      print('render Speedline');
       _mainToIsolateStream.send(widget.collection);
-      return Container(
-          color: Colors.white,
-          height: 260,
-          child: OverflowBox(
-            alignment: Alignment.topCenter,
-            maxHeight: 260,
-            child: Column(
+      return Container(height: 200, child: LineChart(_controller));
+    }
+  }
+}
+
+class SpeedLineExpandable extends StatefulWidget {
+  List<LineStatsCollection> collection;
+  Duration showPeriod;
+  bool isEmpty;
+
+  SpeedLineExpandable({this.isEmpty, this.collection, this.showPeriod});
+
+  @override
+  _SpeedLineExpandableState createState() => _SpeedLineExpandableState();
+}
+
+class _SpeedLineExpandableState extends State<SpeedLineExpandable> {
+  bool _show = false;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              _show = !_show;
+            });
+          },
+          child: Container(
+            // color: Colors.white,
+            decoration: BoxDecoration(
+              border: Border(
+                  bottom: BorderSide(color: Colors.blueGrey[50], width: 1)),
+              color: Colors.white,
+            ),
+            padding:
+                const EdgeInsets.only(left: 32, top: 16, right: 32, bottom: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                    margin: EdgeInsets.only(top: 16),
-                    height: 200,
-                    child: LineChart(_controller)),
-                Transform.translate(
-                  offset: const Offset(0, -208),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'Speed rates',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.bar_chart,
+                      color:
+                          _show ? Colors.blueGrey[900] : Colors.blueGrey[400],
                     ),
-                  ),
+                    Container(
+                      width: 16,
+                    ),
+                    Text('Speed rates line ',
+                        style: TextStyle(
+                            // color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400)),
+                  ],
                 ),
+                _show
+                    ? Icon(
+                        Icons.arrow_drop_up,
+                        color: Colors.blueGrey[600],
+                      )
+                    : Icon(
+                        Icons.arrow_drop_down,
+                        color: Colors.blueGrey[600],
+                      )
               ],
             ),
-          ));
-    }
+          ),
+        ),
+
+        //First check for show bool
+        //Then check for empty data
+        Container(
+          child: !_show
+              ? null
+              : !widget.isEmpty
+                  ? SpeedLine(
+                      collection: widget.collection,
+                      showPeriod: widget.showPeriod)
+                  : Container(
+                      height: 200,
+                      color: Colors.white,
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+        ),
+      ],
+    );
   }
 }

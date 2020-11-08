@@ -21,7 +21,7 @@ class DataProvider extends ChangeNotifier {
   String _login = 'admin';
   String _password = 'admin';
   int _samplingInterval = 1;
-  int _collectInterval = 60;
+  int _collectInterval = 30;
 
   //Set vars for isolate
   Isolate isolate;

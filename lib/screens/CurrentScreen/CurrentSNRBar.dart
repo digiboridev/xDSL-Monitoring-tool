@@ -35,7 +35,7 @@ class _CurrentSNRBarState extends State<CurrentSNRBar> {
   void didUpdateWidget(covariant CurrentSNRBar oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-    Timer(Duration(milliseconds: 300), () => {getLastSNRM(context)});
+    getLastSNRM(context);
   }
 
   void getLastSNRM(BuildContext context) {

@@ -93,7 +93,9 @@ class Client_HG530e implements Client {
           response = await _dataRequest;
         } else {
           return LineStatsCollection(
-              isErrored: true, status: 'Failed to login');
+              isErrored: true,
+              status: 'Failed to login',
+              dateTime: DateTime.now());
         }
       }
 

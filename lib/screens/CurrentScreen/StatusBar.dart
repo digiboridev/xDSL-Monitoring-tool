@@ -72,7 +72,9 @@ class StatusBar extends StatelessWidget {
             ? '${getStatus(context)}  '
             : '') +
         (getDSLStatus(context) ? getType(context) : '') +
-        '  ${getLastSync(context)}';
+        (context.watch<DataProvider>().isCounting
+            ? '  ${getLastSync(context)}'
+            : '');
   }
 
   @override

@@ -60,8 +60,8 @@ class _CurrentSNRBarState extends State<CurrentSNRBar> {
       setState(() {
         downSNRM = asd.downMargin ?? 0;
         upSNRM = asd.upMargin ?? 0;
-        downAtt = asd.downAttenuation ?? 0;
-        upAtt = asd.upAttenuation ?? 0;
+        downAtt = asd.downAttenuation ?? 100;
+        upAtt = asd.upAttenuation ?? 100;
       });
     }
   }

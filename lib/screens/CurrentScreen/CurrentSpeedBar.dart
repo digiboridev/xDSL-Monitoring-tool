@@ -287,11 +287,11 @@ class SpdPainter extends CustomPainter {
   SpdPainter({this.curr, this.attainable, this.max});
 
   double percentageCurr() {
-    return 5.4 * curr / max;
+    return curr > max ? 5.4 : 5.4 * curr / max;
   }
 
   double percentageAtta() {
-    return 5.4 * attainable / max;
+    return attainable > max ? 5.4 : 5.4 * attainable / max;
   }
 
   @override

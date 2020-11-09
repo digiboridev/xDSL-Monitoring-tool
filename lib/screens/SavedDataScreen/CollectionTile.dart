@@ -17,6 +17,9 @@ class CollectionTile extends StatelessWidget {
     return GestureDetector(
       onTap: () => context.read<DataProvider>().deleteCollection(cKey),
       child: Container(
+        width: 40,
+        height: 40,
+        color: Colors.transparent,
         child: Icon(Icons.delete_forever),
       ),
     );

@@ -152,30 +152,47 @@ class _CurrentSpeedBarState extends State<CurrentSpeedBar>
 
     //Check for difference beetween old and new data
     //Start animation from old and to data
-    if (currDown != currDownold) {
+
+    if (currDown != currDownold ||
+        currUp != currUpold ||
+        attainableDown != attainableDownold ||
+        attainableUp != attainableUpold) {
       currDownTween.begin = currDownold;
       currDownTween.end = currDown;
-      controller.reset();
-      controller.forward();
-    }
-    if (currUp != currUpold) {
       currUpTween.begin = currUpold;
       currUpTween.end = currUp;
-      controller.reset();
-      controller.forward();
-    }
-    if (attainableDown != attainableDownold) {
       attainableDownTween.begin = attainableDownold;
       attainableDownTween.end = attainableDown;
-      controller.reset();
-      controller.forward();
-    }
-    if (attainableUp != attainableUpold) {
       attainableUpTween.begin = attainableUpold;
       attainableUpTween.end = attainableUp;
       controller.reset();
       controller.forward();
     }
+
+    // if (currDown != currDownold) {
+    //   currDownTween.begin = currDownold;
+    //   currDownTween.end = currDown;
+    //   controller.reset();
+    //   controller.forward();
+    // }
+    // if (currUp != currUpold) {
+    //   currUpTween.begin = currUpold;
+    //   currUpTween.end = currUp;
+    //   controller.reset();
+    //   controller.forward();
+    // }
+    // if (attainableDown != attainableDownold) {
+    //   attainableDownTween.begin = attainableDownold;
+    //   attainableDownTween.end = attainableDown;
+    //   controller.reset();
+    //   controller.forward();
+    // }
+    // if (attainableUp != attainableUpold) {
+    //   attainableUpTween.begin = attainableUpold;
+    //   attainableUpTween.end = attainableUp;
+    //   controller.reset();
+    //   controller.forward();
+    // }
   }
 
   //Stop controller on dispose

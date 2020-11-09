@@ -42,7 +42,37 @@ class StatusBar extends StatelessWidget {
     }
     LineStatsCollection asd =
         context.watch<DataProvider>().getLastCollection.last;
-    return asd.dateTime.toString().substring(0, 19);
+    return asd.dateTime.toString().substring(11, 19);
+  }
+
+  String getStatus(BuildContext context) {
+    if (_isEmpty) {
+      return 'unknown';
+    }
+    LineStatsCollection asd =
+        context.watch<DataProvider>().getLastCollection.last;
+    return asd.status;
+  }
+
+  String getType(BuildContext context) {
+    if (_isEmpty) {
+      return 'unknown';
+    }
+    LineStatsCollection asd =
+        context.watch<DataProvider>().getLastCollection.last;
+    return asd.connectionType;
+  }
+
+  String getStatusString(BuildContext context) {
+    if (_isEmpty) {
+      return 'unknown';
+    }
+
+    return (context.watch<DataProvider>().isCounting
+            ? '${getStatus(context)}  '
+            : '') +
+        (getDSLStatus(context) ? getType(context) : '') +
+        '  ${getLastSync(context)}';
   }
 
   @override
@@ -104,7 +134,7 @@ class StatusBar extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  'Last sync: ${getLastSync(context)}',
+                  getStatusString(context),
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 14,

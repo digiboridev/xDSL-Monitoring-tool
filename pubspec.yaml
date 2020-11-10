@@ -29,6 +29,7 @@ dependencies:
   hive: ^1.4.4+1
   hive_flutter: ^0.3.1
   mp_chart: ^0.3.0
+  rename: ^1.2.0
   flutter:
     sdk: flutter
 

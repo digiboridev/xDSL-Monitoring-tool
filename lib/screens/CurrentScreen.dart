@@ -16,7 +16,7 @@ import 'CurrentScreen/RsCounters.dart';
 
 class CurrentScreen extends StatelessWidget {
   //Name of screen
-  String _name = 'Current stats';
+  String _name = 'Current stats monitoring';
   //Returns name of screen
   get name {
     return _name;
@@ -60,7 +60,7 @@ class CurrentScreen extends StatelessWidget {
             children: [
               Container(
                 margin: EdgeInsets.all(16),
-                child: Text('Histogram dataset',
+                child: Text('Graph stats per time',
                     style: TextStyle(
                         color: Colors.blueGrey[900],
                         fontSize: 16,

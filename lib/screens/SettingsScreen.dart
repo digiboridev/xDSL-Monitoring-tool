@@ -25,7 +25,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     print('Render settings screen');
     return Container(
-      margin: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomCenter,
+              colors: [Colors.cyan[50], Colors.white, Colors.white])),
+      padding: EdgeInsets.all(20),
       child: ListView(
         children: [
           ModemSelection(),

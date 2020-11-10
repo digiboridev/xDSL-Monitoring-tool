@@ -93,7 +93,7 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
                 color: Colors.blueGrey[50],
               ),
               title: Text(
-                'Current',
+                'Monitoring',
                 style: TextStyle(
                   color: Colors.blueGrey[50],
                 ),
@@ -104,7 +104,7 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
                 color: Colors.blueGrey[50],
               ),
               title: Text(
-                'Saved data',
+                'Snapshots',
                 style: TextStyle(
                   color: Colors.blueGrey[50],
                 ),
@@ -115,7 +115,7 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
                 color: Colors.blueGrey[50],
               ),
               title: Text(
-                'Setup',
+                'Settings',
                 style: TextStyle(
                   color: Colors.blueGrey[50],
                 ),
@@ -136,6 +136,8 @@ class FloatBtnIcon extends StatelessWidget {
     print('flbtn render');
     return context.watch<DataProvider>().isCounting
         ? Icon(Icons.stop)
-        : Icon(Icons.play_arrow);
+        : Icon(
+            Icons.play_arrow,
+          );
   }
 }

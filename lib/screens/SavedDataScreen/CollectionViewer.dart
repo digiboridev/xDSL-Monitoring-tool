@@ -18,7 +18,7 @@ class CollectionViewer extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Charts ' + cKey),
+        title: Text('Snapshot ' + cKey),
         backgroundColor: Colors.blueGrey[900],
       ),
       body: ListView(

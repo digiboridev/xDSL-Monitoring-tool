@@ -400,8 +400,8 @@ class DataProvider extends ChangeNotifier {
       onStopped: () {
         print("Foreground on Stopped");
       },
-      title: "Sampling started",
-      content: null,
+      title: 'Sampling is on',
+      content: 'Host: ' + _hostAdress,
       iconName: "ic_stat_show_chart",
     );
   }

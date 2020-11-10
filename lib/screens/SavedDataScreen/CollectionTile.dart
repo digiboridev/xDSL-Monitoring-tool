@@ -20,7 +20,10 @@ class CollectionTile extends StatelessWidget {
         width: 40,
         height: 40,
         color: Colors.transparent,
-        child: Icon(Icons.delete_forever),
+        child: Icon(
+          Icons.clear_rounded,
+          color: Colors.blueGrey[800],
+        ),
       ),
     );
   }
@@ -50,7 +53,12 @@ class CollectionTile extends StatelessWidget {
       child: ListTile(
           leading: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [Icon(Icons.show_chart)],
+            children: [
+              Icon(
+                Icons.auto_awesome_motion,
+                color: Colors.blueGrey[800],
+              )
+            ],
           ),
           title: Text(
             cKey,

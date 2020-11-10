@@ -293,7 +293,7 @@ class _SNRMExpandableState extends State<SNRMExpandable> {
                     Icon(
                       Icons.bar_chart,
                       color:
-                          _show ? Colors.blueGrey[900] : Colors.blueGrey[400],
+                          _show ? Colors.blueGrey[900] : Colors.blueGrey[800],
                     ),
                     Container(
                       width: 16,

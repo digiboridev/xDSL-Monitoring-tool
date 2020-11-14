@@ -23,7 +23,7 @@ environment:
 dependencies:
   provider: ^4.3.2+2
   flutter_android: ^0.8.0
-  flutter_foreground_plugin: ^0.4.0
+  flutter_foreground_plugin: ^0.6.0
   http: ^0.12.2
   crypto: ^2.1.5
   hive: ^1.4.4+1

@@ -17,16 +17,26 @@ class SamplingInterval extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 color: Colors.blueGrey[800]),
           ),
-          Slider(
-            value: context.watch<DataProvider>().getSamplingInterval.toDouble(),
-            min: 1,
-            max: 15,
-            divisions: 3,
-            label: context.watch<DataProvider>().getSamplingInterval.toString(),
-            onChanged: (double value) {
-              context.read<DataProvider>().setSamplingInterval = value.floor();
-            },
-          ),
+          SliderTheme(
+            data: SliderThemeData(
+                trackHeight: 2,
+                thumbColor: Colors.blueGrey[900],
+                thumbShape: RoundSliderThumbShape(
+                    enabledThumbRadius: 8, pressedElevation: 10)),
+            child: Slider(
+              value:
+                  context.watch<DataProvider>().getSamplingInterval.toDouble(),
+              min: 1,
+              max: 15,
+              divisions: 3,
+              label:
+                  context.watch<DataProvider>().getSamplingInterval.toString(),
+              onChanged: (double value) {
+                context.read<DataProvider>().setSamplingInterval =
+                    value.floor();
+              },
+            ),
+          )
         ],
       ),
     );

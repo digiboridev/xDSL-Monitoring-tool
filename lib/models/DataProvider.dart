@@ -355,9 +355,15 @@ class DataProvider extends ChangeNotifier {
       backgroundDataParser,
       params,
     );
-    receivePort.listen((data) {
+    receivePort.listen((data) async {
+      print(saveCollectionCounter);
       print(data.getAsMap);
       addToLast(data);
+
+      // if (saveCollectionCounter % 60 == 0) {
+      //   await FlutterForegroundPlugin.stopForegroundService();
+      //   startForegroundService();
+      // }
       // setCounter = data;
     });
   }
@@ -390,9 +396,12 @@ class DataProvider extends ChangeNotifier {
   }
 
   void startForegroundService() async {
-    await FlutterForegroundPlugin.setServiceMethodInterval(seconds: 360);
+    await FlutterForegroundPlugin.setServiceMethodInterval(seconds: 10);
     await FlutterForegroundPlugin.setServiceMethod(foregroundServiceFunc);
     await FlutterForegroundPlugin.startForegroundService(
+      // stopAction: true,
+      // stopIcon: "ic_stat_show_chart",
+      chronometer: true,
       holdWakeLock: false,
       onStarted: () {
         print("Foreground on Started");

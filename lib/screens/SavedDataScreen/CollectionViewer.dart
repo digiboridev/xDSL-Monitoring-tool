@@ -8,6 +8,8 @@ import '../../components/CRCLine.dart';
 class CollectionViewer extends StatelessWidget {
   int index;
   String cKey;
+  bool isMapEmpty = false;
+
   List<LineStatsCollection> collection;
 
   CollectionViewer({this.index, this.cKey, this.collection});
@@ -15,6 +17,10 @@ class CollectionViewer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('render');
+
+    if (collection.length < 2) {
+      isMapEmpty = true;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -26,28 +32,28 @@ class CollectionViewer extends StatelessWidget {
           Container(
             color: Colors.blueGrey[50],
             child: SpeedLineExpandable(
-              isEmpty: false,
+              isEmpty: isMapEmpty,
               collection: collection,
             ),
           ),
           Container(
             color: Colors.blueGrey[50],
             child: SNRMExpandable(
-              isEmpty: false,
+              isEmpty: isMapEmpty,
               collection: collection,
             ),
           ),
           Container(
             color: Colors.blueGrey[50],
             child: FECLineExpandable(
-              isEmpty: false,
+              isEmpty: isMapEmpty,
               collection: collection,
             ),
           ),
           Container(
             color: Colors.blueGrey[50],
             child: CRCLineExpandable(
-              isEmpty: false,
+              isEmpty: isMapEmpty,
               collection: collection,
             ),
           ),

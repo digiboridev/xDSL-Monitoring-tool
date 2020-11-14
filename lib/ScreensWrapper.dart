@@ -8,6 +8,8 @@ import 'screens/SettingsScreen.dart';
 
 import 'models/DataProvider.dart';
 
+import 'package:move_to_background/move_to_background.dart';
+
 class ScreensWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -67,60 +69,67 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
   Widget build(BuildContext context) {
     print('Render screens wrapper');
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(_screenList[_screenIndex].name),
-        backgroundColor: Colors.blueGrey[900],
-      ),
-      // body: _screenList[_screenIndex],
-      body: AnimatedSwitcher(
-        duration: Duration(milliseconds: 200),
-        child: _screenList[_screenIndex],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => toogleSampling(),
-        child: FloatBtnIcon(),
-        hoverColor: Colors.amber[100],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.blueGrey[900],
-        currentIndex: _screenIndex,
-        onTap: selectScreen,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.timeline,
-                color: Colors.blueGrey[50],
-              ),
-              title: Text(
-                'Monitoring',
-                style: TextStyle(
+    return WillPopScope(
+      onWillPop: () async {
+        MoveToBackground.moveTaskToBack();
+        print('minimized');
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(_screenList[_screenIndex].name),
+          backgroundColor: Colors.blueGrey[900],
+        ),
+        // body: _screenList[_screenIndex],
+        body: AnimatedSwitcher(
+          duration: Duration(milliseconds: 200),
+          child: _screenList[_screenIndex],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => toogleSampling(),
+          child: FloatBtnIcon(),
+          hoverColor: Colors.amber[100],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.blueGrey[900],
+          currentIndex: _screenIndex,
+          onTap: selectScreen,
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.timeline,
                   color: Colors.blueGrey[50],
                 ),
-              )),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.history,
-                color: Colors.blueGrey[50],
-              ),
-              title: Text(
-                'Snapshots',
-                style: TextStyle(
+                title: Text(
+                  'Monitoring',
+                  style: TextStyle(
+                    color: Colors.blueGrey[50],
+                  ),
+                )),
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.history,
                   color: Colors.blueGrey[50],
                 ),
-              )),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.settings,
-                color: Colors.blueGrey[50],
-              ),
-              title: Text(
-                'Settings',
-                style: TextStyle(
+                title: Text(
+                  'Snapshots',
+                  style: TextStyle(
+                    color: Colors.blueGrey[50],
+                  ),
+                )),
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.settings,
                   color: Colors.blueGrey[50],
                 ),
-              ))
-        ],
+                title: Text(
+                  'Settings',
+                  style: TextStyle(
+                    color: Colors.blueGrey[50],
+                  ),
+                ))
+          ],
+        ),
       ),
     );
   }

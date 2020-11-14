@@ -30,6 +30,7 @@ dependencies:
   hive_flutter: ^0.3.1
   mp_chart: ^0.3.0
   rename: ^1.2.0
+  move_to_background: ^1.0.1
   flutter:
     sdk: flutter
 

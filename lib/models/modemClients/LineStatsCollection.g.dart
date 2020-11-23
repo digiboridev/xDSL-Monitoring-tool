@@ -34,13 +34,15 @@ class LineStatsCollectionAdapter extends TypeAdapter<LineStatsCollection> {
       upFEC: fields[13] as int,
       downFEC: fields[14] as int,
       dateTime: fields[17] as DateTime,
+      latencyToModem: fields[28] as double,
+      latencyToExternal: fields[29] as double,
     );
   }
 
   @override
   void write(BinaryWriter writer, LineStatsCollection obj) {
     writer
-      ..writeByte(17)
+      ..writeByte(19)
       ..writeByte(18)
       ..write(obj.isErrored)
       ..writeByte(0)
@@ -74,7 +76,11 @@ class LineStatsCollectionAdapter extends TypeAdapter<LineStatsCollection> {
       ..writeByte(14)
       ..write(obj.downFEC)
       ..writeByte(17)
-      ..write(obj.dateTime);
+      ..write(obj.dateTime)
+      ..writeByte(28)
+      ..write(obj.latencyToModem)
+      ..writeByte(29)
+      ..write(obj.latencyToExternal);
   }
 
   @override

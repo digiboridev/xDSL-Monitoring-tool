@@ -18,6 +18,7 @@ class DataProvider extends ChangeNotifier {
   //Initialize global settings
   ModemTypes _modemType = ModemTypes.Dlink_2640u;
   String _hostAdress = '192.168.1.10';
+  String _externalAdress = '8.8.8.8';
   String _login = 'admin';
   String _password = 'admin';
   int _samplingInterval = 1;
@@ -153,6 +154,9 @@ class DataProvider extends ChangeNotifier {
     _modemType = box.get('modem') == null ? _modemType : box.get('modem');
     _hostAdress =
         box.get('hostAdress') == null ? _hostAdress : box.get('hostAdress');
+    _externalAdress = box.get('externalAdress') == null
+        ? _externalAdress
+        : box.get('externalAdress');
     _login = box.get('login') == null ? _login : box.get('login');
     _password = box.get('password') == null ? _password : box.get('password');
     _samplingInterval = box.get('samplingInterval') == null
@@ -210,6 +214,22 @@ class DataProvider extends ChangeNotifier {
 
   get getHostAdress {
     return _hostAdress;
+  }
+
+  set setExternalAdress(value) {
+    void setToHive() async {
+      var box = await Hive.openBox('settings');
+      box.put('externalAdress', value);
+    }
+
+    setToHive();
+
+    _externalAdress = value;
+    notifyListeners();
+  }
+
+  get getExternalAdress {
+    return _externalAdress;
   }
 
   set setModemtype(ModemTypes type) {
@@ -342,9 +362,12 @@ class DataProvider extends ChangeNotifier {
     Client client() {
       if (_modemType == ModemTypes.Huawei_HG532e) {
         return Client_HG530e(
-            ip: _hostAdress, user: _login, password: _password);
+            ip: _hostAdress,
+            extIp: _externalAdress,
+            user: _login,
+            password: _password);
       } else {
-        return Client_Simulator();
+        return Client_Simulator(ip: _hostAdress, extIp: _externalAdress);
       }
     }
 

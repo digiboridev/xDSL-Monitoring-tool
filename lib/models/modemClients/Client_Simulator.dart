@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'dart:async';
@@ -16,6 +17,7 @@ class Client_Simulator implements Client {
   //variables
 
   final String _ip;
+  final String _extIp;
   final String user;
   final String password;
   double mrU = 10;
@@ -28,10 +30,24 @@ class Client_Simulator implements Client {
   int crcD = 0;
 
   //constructor
-  Client_Simulator({ip, user, password})
+  Client_Simulator({ip, extIp, user, password})
       : _ip = ip,
+        _extIp = extIp,
         user = user,
         password = password;
+
+  Future<double> _pingTo(String adress) async {
+    ProcessResult result =
+        await Process.run('ping', ['-c', '1', '-W', '1', adress]);
+    String out = result.stdout;
+
+    if (result.exitCode == 0) {
+      return double.parse(
+          out.substring(out.indexOf('time=') + 5, out.indexOf(' ms')));
+    } else {
+      return 0;
+    }
+  }
 
   @override
   Future<LineStatsCollection> get getData async {
@@ -39,6 +55,8 @@ class Client_Simulator implements Client {
       if (Random().nextInt(100) <= 1) {
         throw ('');
       }
+
+      var latencys = await Future.wait([_pingTo(_ip), _pingTo(_extIp)]);
 
       int rndd = Random().nextInt(100);
       int rndu = Random().nextInt(100);
@@ -75,6 +93,8 @@ class Client_Simulator implements Client {
         upFEC: fecU,
         downFEC: fecD,
         dateTime: DateTime.now(),
+        latencyToModem: latencys[0],
+        latencyToExternal: latencys[1],
       );
     } catch (e) {
       return LineStatsCollection(

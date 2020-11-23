@@ -5,6 +5,7 @@ import 'SettingsScreen/HostAdress.dart';
 import 'SettingsScreen/Login.dart';
 import 'SettingsScreen/SamplingInterval.dart';
 import 'SettingsScreen/CollecDatatInterval.dart';
+import 'SettingsScreen/ExternalAdress.dart';
 
 //asdasd
 
@@ -38,7 +39,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Login(),
           Password(),
           SamplingInterval(),
-          CollectDataInterval()
+          CollectDataInterval(),
+          ExternalAdress()
         ],
       ),
     );

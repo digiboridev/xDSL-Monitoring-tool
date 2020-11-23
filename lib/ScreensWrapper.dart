@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
@@ -56,7 +58,7 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
   }
 
   //Starts or stop sampling
-  void toogleSampling() {
+  void toogleSampling() async {
     bool isCounting = context.read<DataProvider>().isCounting;
     if (isCounting) {
       context.read<DataProvider>().stopCounter();

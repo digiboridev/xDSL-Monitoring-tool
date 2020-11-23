@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/DataProvider.dart';
 
-class HostAdress extends StatefulWidget {
+class ExternalAdress extends StatefulWidget {
   @override
-  _HostAdressState createState() => _HostAdressState();
+  _ExternalAdressState createState() => _ExternalAdressState();
 }
 
-class _HostAdressState extends State<HostAdress> {
+class _ExternalAdressState extends State<ExternalAdress> {
   String _dialogText = 'asd';
 
   _showDialog() async {
@@ -15,7 +15,7 @@ class _HostAdressState extends State<HostAdress> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              title: Text('Host adress input'),
+              title: Text('External adress input'),
               content: Container(
                   height: 40,
                   child: TextField(
@@ -26,7 +26,8 @@ class _HostAdressState extends State<HostAdress> {
               actions: [
                 FlatButton(
                     onPressed: () {
-                      context.read<DataProvider>().setHostAdress = _dialogText;
+                      context.read<DataProvider>().setExternalAdress =
+                          _dialogText;
                       Navigator.pop(context, true);
                     },
                     child: Text('Save')),
@@ -49,13 +50,13 @@ class _HostAdressState extends State<HostAdress> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              "Host adress",
+              "External adress for ping",
               style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
                   color: Colors.blueGrey[800]),
             ),
-            Text(context.watch<DataProvider>().getHostAdress,
+            Text(context.watch<DataProvider>().getExternalAdress,
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 12,

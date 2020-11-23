@@ -38,6 +38,10 @@ class LineStatsCollection {
   final int downFEC;
   @HiveField(17)
   final DateTime dateTime;
+  @HiveField(28)
+  final double latencyToModem;
+  @HiveField(29)
+  final double latencyToExternal;
 
   Map get getAsMap {
     return {
@@ -57,7 +61,9 @@ class LineStatsCollection {
       'downCRC': downCRC,
       'upFEC': upFEC,
       'downFEC': downFEC,
-      'dateTime': dateTime
+      'dateTime': dateTime,
+      'latencyToModem': latencyToModem,
+      'latencyToExternal': latencyToExternal
     };
   }
 
@@ -78,5 +84,7 @@ class LineStatsCollection {
       this.downCRC,
       this.upFEC,
       this.downFEC,
-      this.dateTime});
+      this.dateTime,
+      this.latencyToModem,
+      this.latencyToExternal});
 }

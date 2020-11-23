@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -16,12 +18,14 @@ class Client_HG530e implements Client {
   String _cookie;
 
   final String _ip;
+  final String _extIp;
   final String user;
   final String password;
 
   //constructor
-  Client_HG530e({ip, user, password})
+  Client_HG530e({ip, extIp, user, password})
       : _ip = ip,
+        _extIp = extIp,
         user = user,
         password = password;
 
@@ -53,8 +57,9 @@ class Client_HG530e implements Client {
     return false;
   }
 
-  //data parser
-  LineStatsCollection _parser(String res) {
+  //Data parcer
+  //Parce string of adsl data,add latencyes and return LineStatsCollection instance
+  LineStatsCollection _parser(String res, double ltcModem, double ltcExt) {
     final substr = res.substring(
         res.indexOf(
             '"InternetGatewayDevice.WANDevice.1.WANDSLInterfaceConfig"'),
@@ -80,18 +85,45 @@ class Client_HG530e implements Client {
       upFEC: int.parse(decodedString[20]),
       downFEC: int.parse(decodedString[19]),
       dateTime: DateTime.now(),
+      latencyToModem: ltcModem,
+      latencyToExternal: ltcExt,
     );
   }
 
-  //complex procedure
+  //Simple pinger by running unix ping and parse it to double
+  //return 0 if any errors or out of 1 second timeout
+  Future<double> _pingTo(String adress) async {
+    ProcessResult result =
+        await Process.run('ping', ['-c', '1', '-W', '1', adress]);
+    String out = result.stdout;
+
+    if (result.exitCode == 0) {
+      return double.parse(
+          out.substring(out.indexOf('time=') + 5, out.indexOf(' ms')));
+    } else {
+      return 0;
+    }
+  }
+
+  //Main procedure of getting data
   @override
   Future<LineStatsCollection> get getData async {
     try {
-      var response = await _dataRequest;
+      //Send parallel adsl data request to modem and pings to modem and external host
+      var multipleRequests =
+          await Future.wait([_dataRequest, _pingTo(_ip), _pingTo(_extIp)]);
+
+      //extract only adsl data
+      http.Response response = multipleRequests[0];
+
+      //check for login by content length
       if (response.headers['content-length'] == '691') {
+        //if length invalid send login request
         if (await _loginRequest) {
+          //then retry response
           response = await _dataRequest;
         } else {
+          //or return as failed to login
           return LineStatsCollection(
               isErrored: true,
               status: 'Failed to login',
@@ -99,7 +131,8 @@ class Client_HG530e implements Client {
         }
       }
 
-      return _parser(response.body);
+      //If all is ok send all data to parser end return conpleted LineStatsCollection instance
+      return _parser(response.body, multipleRequests[1], multipleRequests[2]);
     } catch (e) {
       return LineStatsCollection(
           isErrored: true,

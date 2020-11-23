@@ -274,7 +274,7 @@ class _ModemLatencyExpandable extends State<ModemLatencyExpandable> {
                     Container(
                       width: 16,
                     ),
-                    Text('Modem ping ',
+                    Text('Main host ping ',
                         style: TextStyle(
                             // color: Colors.white,
                             fontSize: 14,

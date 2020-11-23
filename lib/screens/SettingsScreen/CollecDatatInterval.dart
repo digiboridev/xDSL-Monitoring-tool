@@ -11,7 +11,7 @@ class CollectDataInterval extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Start new collection after ${context.watch<DataProvider>().getCollectInterval.toString()} (min)',
+            'Split snapshots to ${context.watch<DataProvider>().getCollectInterval.toString()} (min)',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
           SliderTheme(

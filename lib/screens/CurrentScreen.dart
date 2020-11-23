@@ -8,6 +8,8 @@ import '../components/SNRM.dart';
 import '../components/SpeedLine.dart';
 import '../components/FECLine.dart';
 import '../components/CRCLine.dart';
+import '../components/ModemLatency.dart';
+import '../components/ExternalLatency.dart';
 
 import 'CurrentScreen/StatusBar.dart';
 import 'CurrentScreen/CurrentSpeedBar.dart';
@@ -82,6 +84,16 @@ class CurrentScreen extends StatelessWidget {
                 showPeriod: Duration(minutes: 5),
               ),
               CRCLineExpandable(
+                isEmpty: isMapEmpty,
+                collection: collection,
+                showPeriod: Duration(minutes: 5),
+              ),
+              ModemLatencyExpandable(
+                isEmpty: isMapEmpty,
+                collection: collection,
+                showPeriod: Duration(minutes: 5),
+              ),
+              ExternalLatencyExpandable(
                 isEmpty: isMapEmpty,
                 collection: collection,
                 showPeriod: Duration(minutes: 5),

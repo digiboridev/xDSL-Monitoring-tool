@@ -4,6 +4,8 @@ import '../../components/SNRM.dart';
 import '../../components/SpeedLine.dart';
 import '../../components/FECLine.dart';
 import '../../components/CRCLine.dart';
+import '../../components/ModemLatency.dart';
+import '../../components/ExternalLatency.dart';
 
 class CollectionViewer extends StatelessWidget {
   int index;
@@ -29,33 +31,51 @@ class CollectionViewer extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          Container(
-            color: Colors.blueGrey[50],
-            child: SpeedLineExpandable(
-              isEmpty: isMapEmpty,
-              collection: collection,
-            ),
-          ),
-          Container(
-            color: Colors.blueGrey[50],
-            child: SNRMExpandable(
-              isEmpty: isMapEmpty,
-              collection: collection,
-            ),
-          ),
-          Container(
-            color: Colors.blueGrey[50],
-            child: FECLineExpandable(
-              isEmpty: isMapEmpty,
-              collection: collection,
-            ),
-          ),
-          Container(
-            color: Colors.blueGrey[50],
-            child: CRCLineExpandable(
-              isEmpty: isMapEmpty,
-              collection: collection,
-            ),
+          Column(
+            children: [
+              Container(
+                color: Colors.blueGrey[50],
+                child: SpeedLineExpandable(
+                  isEmpty: isMapEmpty,
+                  collection: collection,
+                ),
+              ),
+              Container(
+                color: Colors.blueGrey[50],
+                child: SNRMExpandable(
+                  isEmpty: isMapEmpty,
+                  collection: collection,
+                ),
+              ),
+              Container(
+                color: Colors.blueGrey[50],
+                child: FECLineExpandable(
+                  isEmpty: isMapEmpty,
+                  collection: collection,
+                ),
+              ),
+              Container(
+                color: Colors.blueGrey[50],
+                child: CRCLineExpandable(
+                  isEmpty: isMapEmpty,
+                  collection: collection,
+                ),
+              ),
+              Container(
+                color: Colors.blueGrey[50],
+                child: ModemLatencyExpandable(
+                  isEmpty: isMapEmpty,
+                  collection: collection,
+                ),
+              ),
+              Container(
+                color: Colors.blueGrey[50],
+                child: ExternalLatencyExpandable(
+                  isEmpty: isMapEmpty,
+                  collection: collection,
+                ),
+              ),
+            ],
           ),
         ],
       ),

@@ -1,6 +1,6 @@
+import 'package:dslstats/models/SettingsModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../models/DataProvider.dart';
 
 class HostAdress extends StatefulWidget {
   @override
@@ -26,7 +26,7 @@ class _HostAdressState extends State<HostAdress> {
               actions: [
                 FlatButton(
                     onPressed: () {
-                      context.read<DataProvider>().setHostAdress = _dialogText;
+                      context.read<SettingsModel>().setHostAdress = _dialogText;
                       Navigator.pop(context, true);
                     },
                     child: Text('Save')),
@@ -55,7 +55,7 @@ class _HostAdressState extends State<HostAdress> {
                   fontSize: 16,
                   color: Colors.blueGrey[800]),
             ),
-            Text(context.watch<DataProvider>().getHostAdress,
+            Text(context.watch<SettingsModel>().getHostAdress,
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 12,

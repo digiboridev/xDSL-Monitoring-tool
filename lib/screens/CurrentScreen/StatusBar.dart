@@ -1,8 +1,7 @@
-import 'dart:async';
-
+import 'package:dslstats/models/ADSLDataModel.dart';
+import 'package:dslstats/models/SettingsModel.dart';
 import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:provider/provider.dart';
-import 'package:dslstats/models/DataProvider.dart';
 import 'package:flutter/material.dart';
 
 class StatusBar extends StatelessWidget {
@@ -11,27 +10,31 @@ class StatusBar extends StatelessWidget {
   StatusBar(this._isEmpty);
 
   bool getConnectionStatus(BuildContext context) {
-    if (!context.watch<DataProvider>().isCounting) {
+    if (!context.watch<ADSLDataModel>().isCounting) {
       return false;
     } else if (_isEmpty) {
       return false;
     } else {
       LineStatsCollection asd =
-          context.watch<DataProvider>().getLastCollection.last;
+          context.watch<ADSLDataModel>().getLastCollection.last;
       return asd.isErrored ? false : true;
     }
   }
 
   bool getDSLStatus(BuildContext context) {
-    if (!context.watch<DataProvider>().isCounting) {
+    if (!context.watch<ADSLDataModel>().isCounting) {
       return false;
     } else if (_isEmpty) {
       return false;
-    } else if (context.watch<DataProvider>().getLastCollection.last.isErrored) {
+    } else if (context
+        .watch<ADSLDataModel>()
+        .getLastCollection
+        .last
+        .isErrored) {
       return false;
     } else {
       LineStatsCollection asd =
-          context.watch<DataProvider>().getLastCollection.last;
+          context.watch<ADSLDataModel>().getLastCollection.last;
       return asd.isConnectionUp ? true : false;
     }
   }
@@ -41,7 +44,7 @@ class StatusBar extends StatelessWidget {
       return 'unknown';
     }
     LineStatsCollection asd =
-        context.watch<DataProvider>().getLastCollection.last;
+        context.watch<ADSLDataModel>().getLastCollection.last;
     return asd.dateTime.toString().substring(11, 19);
   }
 
@@ -50,7 +53,7 @@ class StatusBar extends StatelessWidget {
       return 'unknown';
     }
     LineStatsCollection asd =
-        context.watch<DataProvider>().getLastCollection.last;
+        context.watch<ADSLDataModel>().getLastCollection.last;
     return asd.status;
   }
 
@@ -59,7 +62,7 @@ class StatusBar extends StatelessWidget {
       return 'unknown';
     }
     LineStatsCollection asd =
-        context.watch<DataProvider>().getLastCollection.last;
+        context.watch<ADSLDataModel>().getLastCollection.last;
     return asd.connectionType;
   }
 
@@ -68,11 +71,11 @@ class StatusBar extends StatelessWidget {
       return 'unknown';
     }
 
-    return (context.watch<DataProvider>().isCounting
+    return (context.watch<ADSLDataModel>().isCounting
             ? '${getStatus(context)}  '
             : '') +
         (getDSLStatus(context) ? getType(context) : '') +
-        (context.watch<DataProvider>().isCounting
+        (context.watch<ADSLDataModel>().isCounting
             ? '  ${getLastSync(context)}'
             : '');
   }
@@ -102,7 +105,7 @@ class StatusBar extends StatelessWidget {
                       margin: EdgeInsets.only(left: 8),
                       decoration: BoxDecoration(
                           border: Border.all(
-                            color: context.watch<DataProvider>().isCounting
+                            color: context.watch<ADSLDataModel>().isCounting
                                 ? Colors.yellow
                                 : Colors.black,
                             width: 5,
@@ -179,7 +182,7 @@ class _ProgressLineState extends State<ProgressLine>
     controller = AnimationController(
         vsync: this,
         duration: Duration(
-            seconds: context.read<DataProvider>().getSamplingInterval));
+            seconds: context.read<SettingsModel>().getSamplingInterval));
 
     //Extend main controller with curve
     final curvedAnimation = CurvedAnimation(
@@ -213,7 +216,7 @@ class _ProgressLineState extends State<ProgressLine>
     }
 
     //Load current collection length
-    var now = context.read<DataProvider>().getLastCollection.length;
+    var now = context.read<ADSLDataModel>().getLastCollection.length;
 
     //Compare current length with previous
     if (old != now) {

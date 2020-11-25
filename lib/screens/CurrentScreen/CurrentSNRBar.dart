@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:dslstats/models/ADSLDataModel.dart';
 import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:dslstats/models/DataProvider.dart';
 
 class CurrentSNRBar extends StatefulWidget {
   bool _isEmpty;
@@ -39,7 +39,7 @@ class _CurrentSNRBarState extends State<CurrentSNRBar> {
   }
 
   void getLastSNRM(BuildContext context) {
-    if (!context.read<DataProvider>().isCounting) {
+    if (!context.read<ADSLDataModel>().isCounting) {
       setState(() {
         downSNRM = 0;
         upSNRM = 0;
@@ -55,7 +55,7 @@ class _CurrentSNRBarState extends State<CurrentSNRBar> {
       });
     } else {
       LineStatsCollection asd =
-          context.read<DataProvider>().getLastCollection.last;
+          context.read<ADSLDataModel>().getLastCollection.last;
 
       setState(() {
         downSNRM = asd.downMargin ?? 0;

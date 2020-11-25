@@ -2,7 +2,7 @@ import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:dslstats/models/DataProvider.dart';
+import 'package:dslstats/models/ADSLDataModel.dart';
 
 import '../components/SNRM.dart';
 import '../components/SpeedLine.dart';
@@ -32,16 +32,16 @@ class CurrentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     //Check collection for minimum two points in
     //Prevent red screen on mpcharts
-    if (context.watch<DataProvider>().collectionsCount == 0) {
+    if (context.watch<ADSLDataModel>().collectionsCount == 0) {
       isMapEmpty = true;
-    } else if (context.watch<DataProvider>().getLastCollection.length < 2) {
+    } else if (context.watch<ADSLDataModel>().getLastCollection.length < 2) {
       isMapEmpty = true;
     } else {
       isMapEmpty = false;
     }
     //Update collection
     if (!isMapEmpty) {
-      collection = context.watch<DataProvider>().getLastCollection;
+      collection = context.watch<ADSLDataModel>().getLastCollection;
     }
 
     print('render current screen');

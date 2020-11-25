@@ -1,6 +1,6 @@
+import 'package:dslstats/models/SettingsModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../models/DataProvider.dart';
 
 class ExternalAdress extends StatefulWidget {
   @override
@@ -26,7 +26,7 @@ class _ExternalAdressState extends State<ExternalAdress> {
               actions: [
                 FlatButton(
                     onPressed: () {
-                      context.read<DataProvider>().setExternalAdress =
+                      context.read<SettingsModel>().setExternalAdress =
                           _dialogText;
                       Navigator.pop(context, true);
                     },
@@ -56,7 +56,7 @@ class _ExternalAdressState extends State<ExternalAdress> {
                   fontSize: 16,
                   color: Colors.blueGrey[800]),
             ),
-            Text(context.watch<DataProvider>().getExternalAdress,
+            Text(context.watch<SettingsModel>().getExternalAdress,
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 12,

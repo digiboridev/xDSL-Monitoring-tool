@@ -1,6 +1,6 @@
+import 'package:dslstats/models/SettingsModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../models/DataProvider.dart';
 
 class Password extends StatefulWidget {
   @override
@@ -26,7 +26,7 @@ class _PasswordState extends State<Password> {
               actions: [
                 FlatButton(
                     onPressed: () {
-                      context.read<DataProvider>().setPassword = _dialogText;
+                      context.read<SettingsModel>().setPassword = _dialogText;
                       Navigator.pop(context, true);
                     },
                     child: Text('Save')),
@@ -55,7 +55,7 @@ class _PasswordState extends State<Password> {
                   fontSize: 16,
                   color: Colors.blueGrey[800]),
             ),
-            Text(context.watch<DataProvider>().getPassword,
+            Text(context.watch<SettingsModel>().getPassword,
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 12,

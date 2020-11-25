@@ -111,7 +111,7 @@ class _ExternalLatencyState extends State<ExternalLatency> {
         data.forEach((element) {
           connectionErrValues.add(new Entry(
               x: element.dateTime.millisecondsSinceEpoch.toDouble(),
-              y: element.latencyToModem == 0 ? 1000 : 0));
+              y: element.latencyToExternal == 0 ? 1000 : 0));
         });
 
         // Create a dataset

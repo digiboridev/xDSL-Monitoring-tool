@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'dart:math';
 
+import 'package:dslstats/models/ADSLDataModel.dart';
 import 'package:provider/provider.dart';
-import 'package:dslstats/models/DataProvider.dart';
 import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:flutter/material.dart';
 
@@ -129,7 +128,7 @@ class _CurrentSpeedBarState extends State<CurrentSpeedBar>
     var attainableUpold = attainableUp;
 
     //Update data
-    if (!context.read<DataProvider>().isCounting) {
+    if (!context.read<ADSLDataModel>().isCounting) {
       currDown = 0;
       currUp = 0;
       attainableDown = 0;
@@ -143,7 +142,7 @@ class _CurrentSpeedBarState extends State<CurrentSpeedBar>
       // return;
     } else {
       LineStatsCollection asd =
-          context.read<DataProvider>().getLastCollection.last;
+          context.read<ADSLDataModel>().getLastCollection.last;
       currDown = asd.downRate?.toDouble() ?? 0;
       currUp = asd.upRate?.toDouble() ?? 0;
       attainableDown = asd.downMaxRate?.toDouble() ?? 0;

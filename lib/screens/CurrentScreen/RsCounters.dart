@@ -1,7 +1,7 @@
+import 'package:dslstats/models/ADSLDataModel.dart';
 import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:dslstats/models/DataProvider.dart';
 
 class RsCounters extends StatefulWidget {
   bool _isEmpty;
@@ -26,7 +26,7 @@ class _RsCountersState extends State<RsCounters> {
   }
 
   void getLastRS(BuildContext context) {
-    if (!context.read<DataProvider>().isCounting) {
+    if (!context.read<ADSLDataModel>().isCounting) {
       setState(() {
         RsCorrD = 0;
         RsCorrU = 0;
@@ -42,7 +42,7 @@ class _RsCountersState extends State<RsCounters> {
       });
     } else {
       LineStatsCollection asd =
-          context.read<DataProvider>().getLastCollection.last;
+          context.read<ADSLDataModel>().getLastCollection.last;
 
       setState(() {
         RsCorrD = asd.downFEC ?? 0;

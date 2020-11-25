@@ -1,6 +1,6 @@
+import 'package:dslstats/models/SettingsModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../models/DataProvider.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -26,7 +26,7 @@ class _LoginState extends State<Login> {
               actions: [
                 FlatButton(
                     onPressed: () {
-                      context.read<DataProvider>().setLogin = _dialogText;
+                      context.read<SettingsModel>().setLogin = _dialogText;
                       Navigator.pop(context, true);
                     },
                     child: Text('Save')),
@@ -55,7 +55,7 @@ class _LoginState extends State<Login> {
                   fontSize: 16,
                   color: Colors.blueGrey[800]),
             ),
-            Text(context.watch<DataProvider>().getLogin,
+            Text(context.watch<SettingsModel>().getLogin,
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 12,

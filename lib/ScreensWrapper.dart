@@ -1,5 +1,5 @@
-import 'dart:io';
-
+import 'package:dslstats/models/ADSLDataModel.dart';
+import 'package:dslstats/models/SettingsModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
@@ -8,21 +8,40 @@ import 'screens/CurrentScreen.dart';
 import 'screens/SavedDataScreen.dart';
 import 'screens/SettingsScreen.dart';
 
-import 'models/DataProvider.dart';
-
 import 'package:move_to_background/move_to_background.dart';
 
 class ScreensWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => DataProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => SettingsModel()),
+        ChangeNotifierProxyProvider<SettingsModel, ADSLDataModel>(
+          create: (_) => ADSLDataModel(),
+          update: (context, value, previous) => ADSLDataModel(
+              modemType: value.getModemType,
+              hostAdress: value.getHostAdress,
+              externalAdress: value.getExternalAdress,
+              login: value.getLogin,
+              password: value.getPassword,
+              samplingInt: value.getSamplingInterval,
+              collectInt: value.getCollectInterval),
+        ),
+      ],
       child: MaterialApp(
         title: 'DslStats',
         theme: ThemeData(primarySwatch: Colors.blueGrey),
         home: ButtonDisplaySelection(),
       ),
     );
+    // return ChangeNotifierProvider(
+    //   create: (context) => DataProvider(),
+    //   child: MaterialApp(
+    //     title: 'DslStats',
+    //     theme: ThemeData(primarySwatch: Colors.blueGrey),
+    //     home: ButtonDisplaySelection(),
+    //   ),
+    // );
   }
 }
 
@@ -52,18 +71,18 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
     super.initState();
 
     //Load state data from hive store
-    context.read<DataProvider>().updateCollections();
-    context.read<DataProvider>().updateSettings();
+    context.read<ADSLDataModel>().updateCollections();
+    context.read<SettingsModel>().updateSettings();
     print('init');
   }
 
   //Starts or stop sampling
   void toogleSampling() async {
-    bool isCounting = context.read<DataProvider>().isCounting;
+    bool isCounting = context.read<ADSLDataModel>().isCounting;
     if (isCounting) {
-      context.read<DataProvider>().stopCounter();
+      context.read<ADSLDataModel>().stopCounter();
     } else {
-      context.read<DataProvider>().startCounter();
+      context.read<ADSLDataModel>().startCounter();
     }
   }
 
@@ -145,7 +164,8 @@ class FloatBtnIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('flbtn render');
-    return context.watch<DataProvider>().isCounting
+    bool isCounting = context.select((ADSLDataModel c) => c.isCounting);
+    return isCounting
         ? Icon(Icons.stop)
         : Icon(
             Icons.play_arrow,

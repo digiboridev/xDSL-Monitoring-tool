@@ -1,7 +1,7 @@
 import 'dart:ui';
 
+import 'package:dslstats/models/ADSLDataModel.dart';
 import 'package:flutter/material.dart';
-import 'package:dslstats/models/DataProvider.dart';
 import 'package:provider/provider.dart';
 import 'CollectionViewer.dart';
 
@@ -15,7 +15,7 @@ class CollectionTile extends StatelessWidget {
       return null;
     }
     return GestureDetector(
-      onTap: () => context.read<DataProvider>().deleteCollection(cKey),
+      onTap: () => context.read<ADSLDataModel>().deleteCollection(cKey),
       child: Container(
         width: 40,
         height: 40,
@@ -29,7 +29,7 @@ class CollectionTile extends StatelessWidget {
   }
 
   void pushCollectionViewer(BuildContext context) {
-    var collection = context.read<DataProvider>().getCollectionByKey(cKey);
+    var collection = context.read<ADSLDataModel>().getCollectionByKey(cKey);
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return CollectionViewer(
         cKey: cKey,
@@ -43,7 +43,7 @@ class CollectionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     String length() {
       return context
-          .watch<DataProvider>()
+          .watch<ADSLDataModel>()
           .getCollections[cKey]
           .length
           .toString();

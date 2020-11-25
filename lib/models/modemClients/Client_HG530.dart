@@ -108,13 +108,17 @@ class Client_HG530e implements Client {
   //Main procedure of getting data
   @override
   Future<LineStatsCollection> get getData async {
+    double ping1 = 0;
+    double ping2 = 0;
     try {
       //Send parallel adsl data request to modem and pings to modem and external host
-      var multipleRequests =
-          await Future.wait([_dataRequest, _pingTo(_ip), _pingTo(_extIp)]);
+      await Future.wait([_pingTo(_ip), _pingTo(_extIp)]).then((value) {
+        ping1 = value[0];
+        ping2 = value[1];
+      });
 
       //extract only adsl data
-      http.Response response = multipleRequests[0];
+      http.Response response = await _dataRequest;
 
       //check for login by content length
       if (response.headers['content-length'] == '691') {
@@ -127,17 +131,21 @@ class Client_HG530e implements Client {
           return LineStatsCollection(
               isErrored: true,
               status: 'Failed to login',
-              dateTime: DateTime.now());
+              dateTime: DateTime.now(),
+              latencyToModem: ping1,
+              latencyToExternal: ping2);
         }
       }
 
       //If all is ok send all data to parser end return conpleted LineStatsCollection instance
-      return _parser(response.body, multipleRequests[1], multipleRequests[2]);
+      return _parser(response.body, ping1, ping2);
     } catch (e) {
       return LineStatsCollection(
           isErrored: true,
           status: 'Connection failed',
-          dateTime: DateTime.now());
+          dateTime: DateTime.now(),
+          latencyToModem: ping1,
+          latencyToExternal: ping2);
     }
   }
 }

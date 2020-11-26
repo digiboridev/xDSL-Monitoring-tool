@@ -34,14 +34,6 @@ class ScreensWrapper extends StatelessWidget {
         home: ButtonDisplaySelection(),
       ),
     );
-    // return ChangeNotifierProvider(
-    //   create: (context) => DataProvider(),
-    //   child: MaterialApp(
-    //     title: 'DslStats',
-    //     theme: ThemeData(primarySwatch: Colors.blueGrey),
-    //     home: ButtonDisplaySelection(),
-    //   ),
-    // );
   }
 }
 

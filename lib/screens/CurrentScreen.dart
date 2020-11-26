@@ -62,7 +62,7 @@ class CurrentScreen extends StatelessWidget {
             children: [
               Container(
                 margin: EdgeInsets.all(16),
-                child: Text('Graph stats per time',
+                child: Text('Detailed histograms',
                     style: TextStyle(
                         color: Colors.blueGrey[900],
                         fontSize: 16,

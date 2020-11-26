@@ -1,3 +1,4 @@
+import 'package:dslstats/components/AverageStats.dart';
 import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:flutter/material.dart';
 import '../../components/SNRM.dart';
@@ -33,6 +34,13 @@ class CollectionViewer extends StatelessWidget {
         children: [
           Column(
             children: [
+              Container(
+                color: Colors.blueGrey[50],
+                child: AverageStats(
+                  isEmpty: isMapEmpty,
+                  collection: collection,
+                ),
+              ),
               Container(
                 color: Colors.blueGrey[50],
                 child: SpeedLineExpandable(

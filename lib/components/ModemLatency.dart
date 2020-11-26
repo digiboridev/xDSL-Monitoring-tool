@@ -99,10 +99,13 @@ class _ModemLatencyState extends State<ModemLatency> {
 
         // Apply settings
         ModenLatencySet
-          // ..setLineWidth(1)
           ..setColor1(Colors.blueGrey[800])
           ..setMode(Mode.STEPPED)
           ..setDrawValues(false)
+          ..setDrawFilled(true)
+          ..setFillAlpha(200)
+          ..setLineWidth(0)
+          ..setGradientColor(Colors.blueGrey[600], Colors.blueGrey[200])
           ..setDrawCircles(false);
 
         // Prepare errors set

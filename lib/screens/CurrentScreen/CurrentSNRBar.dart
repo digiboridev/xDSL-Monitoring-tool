@@ -17,28 +17,29 @@ class CurrentSNRBar extends StatefulWidget {
 
 class _CurrentSNRBarState extends State<CurrentSNRBar> {
   double downSNRM = 0;
-
   double upSNRM = 0;
-
   double downAtt = 100;
-
   double upAtt = 100;
+  double minSnrD = 0;
+  double minSnrU = 0;
+  double maxSnrD = 0;
+  double maxSnrU = 0;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    Timer(Duration(milliseconds: 300), () => {getLastSNRM(context)});
+    Timer(Duration(milliseconds: 300), () => {loadData(context)});
   }
 
   @override
   void didUpdateWidget(covariant CurrentSNRBar oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-    getLastSNRM(context);
+    loadData(context);
   }
 
-  void getLastSNRM(BuildContext context) {
+  void loadData(BuildContext context) {
     if (!context.read<ADSLDataModel>().isCounting) {
       setState(() {
         downSNRM = 0;
@@ -54,14 +55,98 @@ class _CurrentSNRBarState extends State<CurrentSNRBar> {
         upAtt = 100;
       });
     } else {
-      LineStatsCollection asd =
-          context.read<ADSLDataModel>().getLastCollection.last;
+      List<LineStatsCollection> lastCollMap =
+          context.read<ADSLDataModel>().getLastCollection;
+
+      LineStatsCollection collection = lastCollMap.last;
+
+      //Find min value of snrmu
+      double snrmuMin() {
+        List<double> acc = [];
+
+        for (var i = 0; i < lastCollMap.length; i++) {
+          if (lastCollMap[i].upMargin == null || lastCollMap[i].upMargin < 2) {
+            continue;
+          }
+          acc.add(lastCollMap[i].upMargin);
+        }
+
+        if (acc.length < 1) {
+          return 0;
+        }
+
+        return acc
+            .reduce((value, element) => value > element ? element : value);
+      }
+
+      //Find min value of snrmd
+      double snrmdMin() {
+        List<double> acc = [];
+
+        for (var i = 0; i < lastCollMap.length; i++) {
+          if (lastCollMap[i].downMargin == null ||
+              lastCollMap[i].downMargin < 2) {
+            continue;
+          }
+          acc.add(lastCollMap[i].downMargin);
+        }
+
+        if (acc.length < 1) {
+          return 0;
+        }
+
+        return acc
+            .reduce((value, element) => value > element ? element : value);
+      }
+
+      //Find max value of snrmd
+      double snrmdMax() {
+        List<double> acc = [];
+
+        for (var i = 0; i < lastCollMap.length; i++) {
+          if (lastCollMap[i].downMargin == null ||
+              lastCollMap[i].downMargin < 2) {
+            continue;
+          }
+          acc.add(lastCollMap[i].downMargin);
+        }
+
+        if (acc.length < 1) {
+          return 0;
+        }
+
+        return acc
+            .reduce((value, element) => value < element ? element : value);
+      }
+
+      //Find max value of snrmu
+      double snrmuMax() {
+        List<double> acc = [];
+
+        for (var i = 0; i < lastCollMap.length; i++) {
+          if (lastCollMap[i].upMargin == null || lastCollMap[i].upMargin < 2) {
+            continue;
+          }
+          acc.add(lastCollMap[i].upMargin);
+        }
+
+        if (acc.length < 1) {
+          return 0;
+        }
+
+        return acc
+            .reduce((value, element) => value < element ? element : value);
+      }
 
       setState(() {
-        downSNRM = asd.downMargin ?? 0;
-        upSNRM = asd.upMargin ?? 0;
-        downAtt = asd.downAttenuation ?? 100;
-        upAtt = asd.upAttenuation ?? 100;
+        downSNRM = collection.downMargin ?? 0;
+        upSNRM = collection.upMargin ?? 0;
+        downAtt = collection.downAttenuation ?? 100;
+        upAtt = collection.upAttenuation ?? 100;
+        maxSnrD = snrmdMax();
+        maxSnrU = snrmuMax();
+        minSnrD = snrmdMin();
+        minSnrU = snrmuMin();
       });
     }
   }
@@ -84,30 +169,46 @@ class _CurrentSNRBarState extends State<CurrentSNRBar> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Meter(
-                name: 'SNRMd',
+                name: 'SNRM DL',
                 value: downSNRM,
                 max: 20,
                 reverse: false,
               ),
               Meter(
-                name: 'Att D',
-                value: downAtt,
-                max: 100,
-                reverse: true,
-              )
+                name: 'SNRM UL',
+                value: upSNRM,
+                max: 20,
+                reverse: false,
+              ),
             ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  'min: $minSnrD max: $maxSnrD',
+                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.w300),
+                ),
+                Text(
+                  'min: $minSnrU  max: $maxSnrU',
+                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.w300),
+                )
+              ],
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Meter(
-                name: 'SNRMu',
-                value: upSNRM,
-                max: 20,
-                reverse: false,
+                name: 'Att DL',
+                value: downAtt,
+                max: 100,
+                reverse: true,
               ),
               Meter(
-                name: 'Attu',
+                name: 'Att UL',
                 value: upAtt,
                 max: 100,
                 reverse: true,

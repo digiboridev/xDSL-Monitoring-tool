@@ -113,7 +113,7 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
                 title: Text(
                   'Monitoring',
                   style: TextStyle(
-                    color: Colors.blueGrey[200],
+                    color: Colors.blueGrey[50],
                   ),
                 )),
             BottomNavigationBarItem(

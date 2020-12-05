@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:dslstats/models/ADSLDataModel.dart';
+import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'CollectionViewer.dart';
@@ -41,12 +42,22 @@ class CollectionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<LineStatsCollection> collectionMap =
+        context.watch<ADSLDataModel>().getCollectionByKey(cKey);
+
     String length() {
-      return context
-          .watch<ADSLDataModel>()
-          .getCollections[cKey]
-          .length
-          .toString();
+      return collectionMap.length.toString();
+    }
+
+    String disconnects() {
+      int count = 0;
+      for (var i = 1; i < collectionMap.length; i++) {
+        if (collectionMap[i - 1].isConnectionUp == true &&
+            collectionMap[i].isConnectionUp == false) {
+          count++;
+        }
+      }
+      return count.toString();
     }
 
     return Container(
@@ -64,7 +75,8 @@ class CollectionTile extends StatelessWidget {
             cKey,
             style: TextStyle(fontSize: 14),
           ),
-          subtitle: Text(length() + ' samples'),
+          subtitle:
+              Text(length() + ' samples  ' + disconnects() + ' disconnects'),
           trailing: trail(context),
           onTap: () => pushCollectionViewer(context)),
     );

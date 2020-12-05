@@ -53,19 +53,14 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
 
   //screen index setter
   void selectScreen(int index) {
+    bool isCounting = context.read<ADSLDataModel>().isCounting;
+    if (isCounting & (index == 2)) {
+      print('blocket');
+      return;
+    }
     setState(() {
       _screenIndex = index;
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    //Load state data from hive store
-    context.read<ADSLDataModel>().updateCollections();
-    context.read<SettingsModel>().updateSettings();
-    print('init');
   }
 
   //Starts or stop sampling
@@ -98,11 +93,13 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
           duration: Duration(milliseconds: 200),
           child: _screenList[_screenIndex],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => toogleSampling(),
-          child: FloatBtnIcon(),
-          hoverColor: Colors.amber[100],
-        ),
+        floatingActionButton: _screenIndex == 2
+            ? null
+            : FloatingActionButton(
+                onPressed: () => toogleSampling(),
+                child: FloatBtnIcon(),
+                hoverColor: Colors.amber[100],
+              ),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.blueGrey[900],
           currentIndex: _screenIndex,
@@ -133,12 +130,16 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
             BottomNavigationBarItem(
                 icon: Icon(
                   Icons.settings,
-                  color: Colors.blueGrey[50],
+                  color: context.watch<ADSLDataModel>().isCounting
+                      ? Colors.blueGrey[600]
+                      : Colors.blueGrey[50],
                 ),
                 title: Text(
                   'Settings',
                   style: TextStyle(
-                    color: Colors.blueGrey[50],
+                    color: context.watch<ADSLDataModel>().isCounting
+                        ? Colors.blueGrey[600]
+                        : Colors.blueGrey[50],
                   ),
                 ))
           ],

@@ -37,7 +37,9 @@ class ADSLDataModel extends ChangeNotifier {
         _login = login,
         _password = password,
         _samplingInterval = samplingInt,
-        _collectInterval = collectInt;
+        _collectInterval = collectInt {
+    updateCollections();
+  }
 
   //Set vars for isolate
   Isolate isolate;
@@ -90,8 +92,8 @@ class ADSLDataModel extends ChangeNotifier {
   }
 
   //Update all collection from storage
-  void updateCollections() async {
-    var collectionMap = await Hive.openBox('collectionMap');
+  void updateCollections() {
+    var collectionMap = Hive.box('collectionMap');
     _collectionMap = collectionMap.toMap();
     notifyListeners();
   }

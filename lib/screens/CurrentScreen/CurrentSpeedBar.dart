@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dslstats/models/ADSLDataModel.dart';
+import 'package:dslstats/models/SettingsModel.dart';
 import 'package:provider/provider.dart';
 import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,10 @@ class _CurrentSpeedBarState extends State<CurrentSpeedBar>
     //Init animation controllers
     //Init main controller
     controller = AnimationController(
-        vsync: this, duration: Duration(milliseconds: 1000));
+        vsync: this,
+        duration: Duration(
+            milliseconds:
+                (context.read<SettingsModel>().getAnimated) ? 1000 : 0));
 
     //Extend main controller with curves
     //First curve for download speed

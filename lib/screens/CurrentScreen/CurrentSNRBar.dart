@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dslstats/models/ADSLDataModel.dart';
+import 'package:dslstats/models/SettingsModel.dart';
 import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -276,7 +277,10 @@ class Meter extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               AnimatedContainer(
-                duration: Duration(milliseconds: 1000),
+                duration: Duration(
+                    milliseconds: (context.watch<SettingsModel>().getAnimated
+                        ? 1000
+                        : 0)),
                 curve: Curves.bounceOut,
                 decoration: BoxDecoration(
                     color: Colors.blueGrey[200],

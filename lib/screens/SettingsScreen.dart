@@ -6,6 +6,7 @@ import 'SettingsScreen/Login.dart';
 import 'SettingsScreen/SamplingInterval.dart';
 import 'SettingsScreen/CollecDatatInterval.dart';
 import 'SettingsScreen/ExternalAdress.dart';
+import 'SettingsScreen/AnimationToggler.dart';
 
 //asdasd
 
@@ -40,7 +41,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Password(),
           SamplingInterval(),
           CollectDataInterval(),
-          ExternalAdress()
+          ExternalAdress(),
+          AnimationToggler()
         ],
       ),
     );

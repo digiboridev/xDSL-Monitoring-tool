@@ -12,12 +12,17 @@ class SettingsModel extends ChangeNotifier {
   String _password = 'admin';
   int _samplingInterval = 1;
   int _collectInterval = 30;
+  bool _animated = true;
+
+  SettingsModel() {
+    updateSettings();
+  }
 
   //Global settings
 
   //Update settings from storage
-  void updateSettings() async {
-    var box = await Hive.openBox('settings');
+  void updateSettings() {
+    var box = Hive.box('settings');
     _modemType = box.get('modem') == null ? _modemType : box.get('modem');
     _hostAdress =
         box.get('hostAdress') == null ? _hostAdress : box.get('hostAdress');
@@ -32,6 +37,7 @@ class SettingsModel extends ChangeNotifier {
     _collectInterval = box.get('collectInterval') == null
         ? _collectInterval
         : box.get('collectInterval');
+    _animated = box.get('animated') == null ? _animated : box.get('animated');
   }
 
   //Settings setters and getters
@@ -145,5 +151,21 @@ class SettingsModel extends ChangeNotifier {
 
   get getCollectInterval {
     return _collectInterval;
+  }
+
+  set setAnimated(bool val) {
+    void setToHive() async {
+      var box = await Hive.openBox('settings');
+      box.put('animated', val);
+    }
+
+    setToHive();
+    _animated = val;
+    notifyListeners();
+    print(val);
+  }
+
+  get getAnimated {
+    return _animated;
   }
 }

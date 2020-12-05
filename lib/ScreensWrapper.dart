@@ -3,6 +3,7 @@ import 'package:dslstats/models/SettingsModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 
 import 'screens/CurrentScreen.dart';
 import 'screens/SavedDataScreen.dart';
@@ -75,6 +76,20 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
 
   @override
   Widget build(BuildContext context) {
+    if (context.watch<SettingsModel>().getOrient) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
+    } else {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight
+      ]);
+    }
+
     print('Render screens wrapper');
 
     return WillPopScope(

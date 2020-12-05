@@ -7,6 +7,7 @@ import 'SettingsScreen/SamplingInterval.dart';
 import 'SettingsScreen/CollecDatatInterval.dart';
 import 'SettingsScreen/ExternalAdress.dart';
 import 'SettingsScreen/AnimationToggler.dart';
+import 'SettingsScreen/OrientToggler.dart';
 
 //asdasd
 
@@ -42,7 +43,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           SamplingInterval(),
           CollectDataInterval(),
           ExternalAdress(),
-          AnimationToggler()
+          AnimationToggler(),
+          OrientToggler()
         ],
       ),
     );

@@ -13,6 +13,7 @@ class SettingsModel extends ChangeNotifier {
   int _samplingInterval = 1;
   int _collectInterval = 30;
   bool _animated = true;
+  bool _orientFixed = true;
 
   SettingsModel() {
     updateSettings();
@@ -38,6 +39,7 @@ class SettingsModel extends ChangeNotifier {
         ? _collectInterval
         : box.get('collectInterval');
     _animated = box.get('animated') == null ? _animated : box.get('animated');
+    _orientFixed = box.get('orient') == null ? _orientFixed : box.get('orient');
   }
 
   //Settings setters and getters
@@ -167,5 +169,21 @@ class SettingsModel extends ChangeNotifier {
 
   get getAnimated {
     return _animated;
+  }
+
+  set setOrient(bool val) {
+    void setToHive() async {
+      var box = await Hive.openBox('settings');
+      box.put('orient', val);
+    }
+
+    setToHive();
+    _orientFixed = val;
+    notifyListeners();
+    print(val);
+  }
+
+  get getOrient {
+    return _orientFixed;
   }
 }

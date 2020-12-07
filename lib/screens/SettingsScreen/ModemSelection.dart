@@ -1,4 +1,4 @@
-import 'package:dslstats/models/SettingsModel.dart';
+import 'package:dslstats/models/DataSamplingService.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/ModemTypes.dart';
@@ -23,7 +23,7 @@ class _ModemSelectionState extends State<ModemSelection> {
               SimpleDialogOption(
                 child: Text('Huawei_HG532e'),
                 onPressed: () {
-                  context.read<SettingsModel>().setModemtype =
+                  context.read<DataSamplingService>().setModemtype =
                       ModemTypes.Huawei_HG532e;
                   Navigator.pop(context, true);
                 },
@@ -31,7 +31,7 @@ class _ModemSelectionState extends State<ModemSelection> {
               SimpleDialogOption(
                 child: Text('Dlink_2640u'),
                 onPressed: () {
-                  context.read<SettingsModel>().setModemtype =
+                  context.read<DataSamplingService>().setModemtype =
                       ModemTypes.Dlink_2640u;
                   Navigator.pop(context, true);
                 },
@@ -39,7 +39,7 @@ class _ModemSelectionState extends State<ModemSelection> {
               SimpleDialogOption(
                 child: Text('ZTE_h108n'),
                 onPressed: () {
-                  context.read<SettingsModel>().setModemtype =
+                  context.read<DataSamplingService>().setModemtype =
                       ModemTypes.ZTE_h108n;
                   Navigator.pop(context, true);
                 },
@@ -47,7 +47,7 @@ class _ModemSelectionState extends State<ModemSelection> {
               SimpleDialogOption(
                 child: Text('Tebda_D301'),
                 onPressed: () {
-                  context.read<SettingsModel>().setModemtype =
+                  context.read<DataSamplingService>().setModemtype =
                       ModemTypes.Tebda_D301;
                   Navigator.pop(context, true);
                 },
@@ -60,7 +60,7 @@ class _ModemSelectionState extends State<ModemSelection> {
   @override
   Widget build(BuildContext context) {
     String modemName() {
-      switch (context.watch<SettingsModel>().getModemType) {
+      switch (context.watch<DataSamplingService>().getModemType) {
         case ModemTypes.Dlink_2640u:
           return 'Dlink_2640u';
           break;

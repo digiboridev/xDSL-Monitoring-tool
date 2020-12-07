@@ -1,4 +1,5 @@
 import 'package:dslstats/models/ADSLDataModel.dart';
+import 'package:dslstats/models/DataSamplingService.dart';
 import 'package:dslstats/models/SettingsModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,18 +17,9 @@ class ScreensWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => ADSLDataModel()),
+        ChangeNotifierProvider(create: (_) => DataSamplingService()),
         ChangeNotifierProvider(create: (_) => SettingsModel()),
-        ChangeNotifierProxyProvider<SettingsModel, ADSLDataModel>(
-          create: (_) => ADSLDataModel(),
-          update: (context, value, previous) => ADSLDataModel(
-              modemType: value.getModemType,
-              hostAdress: value.getHostAdress,
-              externalAdress: value.getExternalAdress,
-              login: value.getLogin,
-              password: value.getPassword,
-              samplingInt: value.getSamplingInterval,
-              collectInt: value.getCollectInterval),
-        ),
       ],
       child: MaterialApp(
         title: 'DslStats',
@@ -54,7 +46,7 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
 
   //screen index setter
   void selectScreen(int index) {
-    bool isCounting = context.read<ADSLDataModel>().isCounting;
+    bool isCounting = context.read<DataSamplingService>().isCounting;
     if (isCounting & (index == 2)) {
       print('blocket');
       return;
@@ -66,11 +58,15 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
 
   //Starts or stop sampling
   void toogleSampling() async {
-    bool isCounting = context.read<ADSLDataModel>().isCounting;
+    bool isCounting = context.read<DataSamplingService>().isCounting;
     if (isCounting) {
-      context.read<ADSLDataModel>().stopCounter();
+      context.read<DataSamplingService>().stopSampling();
+      context.read<ADSLDataModel>().saveLastCollection();
     } else {
-      context.read<ADSLDataModel>().startCounter();
+      context.read<ADSLDataModel>().createCollection();
+      context
+          .read<DataSamplingService>()
+          .startSampling(context.read<ADSLDataModel>().addToLast);
     }
   }
 
@@ -145,14 +141,14 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
             BottomNavigationBarItem(
                 icon: Icon(
                   Icons.settings,
-                  color: context.watch<ADSLDataModel>().isCounting
+                  color: context.watch<DataSamplingService>().isCounting
                       ? Colors.blueGrey[600]
                       : Colors.blueGrey[50],
                 ),
                 title: Text(
                   'Settings',
                   style: TextStyle(
-                    color: context.watch<ADSLDataModel>().isCounting
+                    color: context.watch<DataSamplingService>().isCounting
                         ? Colors.blueGrey[600]
                         : Colors.blueGrey[50],
                   ),
@@ -172,7 +168,7 @@ class FloatBtnIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('flbtn render');
-    bool isCounting = context.select((ADSLDataModel c) => c.isCounting);
+    bool isCounting = context.select((DataSamplingService c) => c.isCounting);
     return isCounting
         ? Icon(Icons.stop)
         : Icon(

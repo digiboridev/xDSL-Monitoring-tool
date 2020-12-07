@@ -1,4 +1,4 @@
-import 'package:dslstats/models/SettingsModel.dart';
+import 'package:dslstats/models/DataSamplingService.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +26,8 @@ class _LoginState extends State<Login> {
               actions: [
                 FlatButton(
                     onPressed: () {
-                      context.read<SettingsModel>().setLogin = _dialogText;
+                      context.read<DataSamplingService>().setLogin =
+                          _dialogText;
                       Navigator.pop(context, true);
                     },
                     child: Text('Save')),
@@ -55,7 +56,7 @@ class _LoginState extends State<Login> {
                   fontSize: 16,
                   color: Colors.blueGrey[800]),
             ),
-            Text(context.watch<SettingsModel>().getLogin,
+            Text(context.watch<DataSamplingService>().getLogin,
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 12,

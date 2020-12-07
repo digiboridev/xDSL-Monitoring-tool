@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dslstats/models/ADSLDataModel.dart';
+import 'package:dslstats/models/DataSamplingService.dart';
 import 'package:dslstats/models/SettingsModel.dart';
 import 'package:provider/provider.dart';
 import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
@@ -132,7 +133,7 @@ class _CurrentSpeedBarState extends State<CurrentSpeedBar>
     var attainableUpold = attainableUp;
 
     //Update data
-    if (!context.read<ADSLDataModel>().isCounting) {
+    if (!context.read<DataSamplingService>().isCounting) {
       currDown = 0;
       currUp = 0;
       attainableDown = 0;

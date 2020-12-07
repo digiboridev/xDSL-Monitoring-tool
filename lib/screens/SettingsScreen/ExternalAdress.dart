@@ -1,4 +1,4 @@
-import 'package:dslstats/models/SettingsModel.dart';
+import 'package:dslstats/models/DataSamplingService.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +26,7 @@ class _ExternalAdressState extends State<ExternalAdress> {
               actions: [
                 FlatButton(
                     onPressed: () {
-                      context.read<SettingsModel>().setExternalAdress =
+                      context.read<DataSamplingService>().setExternalAdress =
                           _dialogText;
                       Navigator.pop(context, true);
                     },
@@ -56,7 +56,7 @@ class _ExternalAdressState extends State<ExternalAdress> {
                   fontSize: 16,
                   color: Colors.blueGrey[800]),
             ),
-            Text(context.watch<SettingsModel>().getExternalAdress,
+            Text(context.watch<DataSamplingService>().getExternalAdress,
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 12,

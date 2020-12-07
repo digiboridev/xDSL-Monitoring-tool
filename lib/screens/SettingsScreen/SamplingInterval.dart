@@ -1,4 +1,4 @@
-import 'package:dslstats/models/SettingsModel.dart';
+import 'package:dslstats/models/DataSamplingService.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +11,7 @@ class SamplingInterval extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Sampling every ${context.watch<SettingsModel>().getSamplingInterval.toDouble()} (s)',
+            'Sampling every ${context.watch<DataSamplingService>().getSamplingInterval.toDouble()} (s)',
             style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -24,15 +24,19 @@ class SamplingInterval extends StatelessWidget {
                 thumbShape: RoundSliderThumbShape(
                     enabledThumbRadius: 8, pressedElevation: 10)),
             child: Slider(
-              value:
-                  context.watch<SettingsModel>().getSamplingInterval.toDouble(),
+              value: context
+                  .watch<DataSamplingService>()
+                  .getSamplingInterval
+                  .toDouble(),
               min: 1,
               max: 15,
               divisions: 3,
-              label:
-                  context.watch<SettingsModel>().getSamplingInterval.toString(),
+              label: context
+                  .watch<DataSamplingService>()
+                  .getSamplingInterval
+                  .toString(),
               onChanged: (double value) {
-                context.read<SettingsModel>().setSamplingInterval =
+                context.read<DataSamplingService>().setSamplingInterval =
                     value.floor();
               },
             ),

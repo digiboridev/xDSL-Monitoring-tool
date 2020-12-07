@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dslstats/models/ADSLDataModel.dart';
+import 'package:dslstats/models/DataSamplingService.dart';
 import 'package:dslstats/models/SettingsModel.dart';
 import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:flutter/foundation.dart';
@@ -41,7 +42,7 @@ class _CurrentSNRBarState extends State<CurrentSNRBar> {
   }
 
   void loadData(BuildContext context) {
-    if (!context.read<ADSLDataModel>().isCounting) {
+    if (!context.read<DataSamplingService>().isCounting) {
       setState(() {
         downSNRM = 0;
         upSNRM = 0;

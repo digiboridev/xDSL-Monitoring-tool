@@ -1,65 +1,44 @@
-import 'dart:async';
-import 'dart:isolate';
-
 import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_foreground_plugin/flutter_foreground_plugin.dart';
-import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 
-import 'modemClients/Client.dart';
-import 'modemClients/Client_Simulator.dart';
-import 'modemClients/Client_HG530.dart';
-import 'ModemTypes.dart';
-import 'IsolateParameters.dart';
-
 class ADSLDataModel extends ChangeNotifier {
-  //Initialize global settings
-  ModemTypes _modemType;
-  String _hostAdress;
-  String _externalAdress;
-  String _login;
-  String _password;
-  int _samplingInterval;
-  int _collectInterval;
+  int _collectInterval = 30;
 
-  ADSLDataModel(
-      {modemType,
-      hostAdress,
-      externalAdress,
-      login,
-      password,
-      samplingInt,
-      collectInt})
-      : _modemType = modemType,
-        _hostAdress = hostAdress,
-        _externalAdress = externalAdress,
-        _login = login,
-        _password = password,
-        _samplingInterval = samplingInt,
-        _collectInterval = collectInt {
-    updateCollections();
+  set setCollectInterval(m) {
+    void setToHive() {
+      Box box = Hive.box('settings');
+      box.put('collectInterval', m);
+    }
+
+    setToHive();
+    _collectInterval = m;
+    notifyListeners();
+    print(m);
   }
 
-  //Set vars for isolate
-  Isolate isolate;
-  ReceivePort receivePort = ReceivePort();
+  void updateCollectInterval() {
+    Box box = Hive.box('settings');
+    if (box.get('collectInterval') != null) {
+      _collectInterval = box.get('collectInterval');
+    }
+    notifyListeners();
+  }
 
-  //Initialize method channel for native operations
-  static const platform = const MethodChannel('getsome');
+  get getCollectInterval {
+    return _collectInterval;
+  }
+
+  ADSLDataModel() {
+    updateCollections();
+    updateCollectInterval();
+  }
 
   //Init map for stats collectios
   Map _collectionMap = {};
 
   //Hive saving optimizations
   int saveCollectionCounter = 0;
-
-  //Shows main counter status
-  bool _isCounting = false;
-
-  get isCounting {
-    return _isCounting;
-  }
 
   //Length of collections in collection map
   get collectionsCount {
@@ -155,168 +134,5 @@ class ADSLDataModel extends ChangeNotifier {
     saveLastCollection();
     createCollection();
     print('renewed collection');
-  }
-
-  void printCollections() async {
-    var cTime = DateTime.parse(_collectionMap.keys.last);
-    var dif = DateTime.now().difference(cTime);
-    print(dif >= Duration(minutes: 10));
-  }
-
-// Methods
-
-//Starts global sampling
-  void startCounter() {
-    if (_isCounting) {
-      print('Started');
-    } else {
-      //Mark sampling as started
-      _isCounting = true;
-
-      //Create new collection
-      createCollection();
-
-      //Start isolate with inner timer
-      setIsolatedTimer();
-
-      //Start foreground notification
-      startForegroundService();
-
-      //Start native partial wakelock
-      startWakelock();
-
-      //Notify
-      notifyListeners();
-    }
-  }
-
-//stops global sampling
-  void stopCounter() {
-    void killingIsolate() {
-      if (isolate == null) {
-        print('Provider Isolate kill tick');
-        Timer(Duration(milliseconds: 100), killingIsolate);
-      } else {
-        isolate.kill();
-        isolate = null;
-      }
-    }
-
-    if (!_isCounting) {
-      print('Stopped');
-    } else {
-      //Mark sampling as stopped
-      _isCounting = false;
-
-      //Killing isolate
-      killingIsolate();
-
-      //Close receiver port
-      receivePort.close();
-
-      //Stop native partial wakelock
-      stopWakelock();
-
-      //Remove foreground notification
-      FlutterForegroundPlugin.stopForegroundService();
-
-      //Save last local collection to storage
-      saveLastCollection();
-
-      //Notify
-      notifyListeners();
-    }
-  }
-
-//Isolate
-  static void backgroundDataParser(params) {
-    void tick() async {
-      params.sendPort.send(await params.client.getData);
-      Timer(new Duration(seconds: params.samplingInterval), tick);
-    }
-
-    tick();
-  }
-
-//Start isolate and receiver port
-  void setIsolatedTimer() async {
-    ReceivePort receivePort = ReceivePort();
-
-    //Return modem client instance by _modemType parameter
-    Client client() {
-      if (_modemType == ModemTypes.Huawei_HG532e) {
-        return Client_HG530e(
-            ip: _hostAdress,
-            extIp: _externalAdress,
-            user: _login,
-            password: _password);
-      } else {
-        return Client_Simulator(ip: _hostAdress, extIp: _externalAdress);
-      }
-    }
-
-    //Create instance of isolate parameters with client sendport and interval
-    IsolateParameters params = new IsolateParameters(
-        client(), receivePort.sendPort, _samplingInterval);
-
-    //Spawn isolate
-    isolate = await Isolate.spawn(
-      backgroundDataParser,
-      params,
-    );
-
-    //Add listener to receiveport
-    receivePort.listen((data) async {
-      print(saveCollectionCounter);
-      print(data.getAsMap);
-      addToLast(data);
-    });
-  }
-
-//Start partial wakelock by native message
-  void startWakelock() async {
-    String value;
-    try {
-      value = await platform.invokeMethod('startWakeLock');
-    } catch (e) {
-      print(e);
-    }
-    print(value);
-  }
-
-//Stop partial wakelock by native message
-  void stopWakelock() async {
-    String value;
-    try {
-      value = await platform.invokeMethod('stopWakeLock');
-    } catch (e) {
-      print(e);
-    }
-    print(value);
-  }
-
-//Show notify message
-  static void foregroundServiceFunc() {
-    debugPrint("Foreground service tick ${DateTime.now()}");
-  }
-
-  void startForegroundService() async {
-    await FlutterForegroundPlugin.setServiceMethodInterval(seconds: 10);
-    await FlutterForegroundPlugin.setServiceMethod(foregroundServiceFunc);
-    await FlutterForegroundPlugin.startForegroundService(
-      // stopAction: true,
-      // stopIcon: "ic_stat_show_chart",
-      chronometer: true,
-      holdWakeLock: false,
-      onStarted: () {
-        print("Foreground on Started");
-      },
-      onStopped: () {
-        print("Foreground on Stopped");
-      },
-      title: 'Sampling is on',
-      content: 'Host: ' + _hostAdress,
-      iconName: "ic_stat_show_chart",
-    );
   }
 }

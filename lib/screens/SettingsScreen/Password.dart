@@ -1,4 +1,4 @@
-import 'package:dslstats/models/SettingsModel.dart';
+import 'package:dslstats/models/DataSamplingService.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +26,8 @@ class _PasswordState extends State<Password> {
               actions: [
                 FlatButton(
                     onPressed: () {
-                      context.read<SettingsModel>().setPassword = _dialogText;
+                      context.read<DataSamplingService>().setPassword =
+                          _dialogText;
                       Navigator.pop(context, true);
                     },
                     child: Text('Save')),
@@ -55,7 +56,7 @@ class _PasswordState extends State<Password> {
                   fontSize: 16,
                   color: Colors.blueGrey[800]),
             ),
-            Text(context.watch<SettingsModel>().getPassword,
+            Text(context.watch<DataSamplingService>().getPassword,
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 12,

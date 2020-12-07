@@ -1,4 +1,4 @@
-import 'package:dslstats/models/SettingsModel.dart';
+import 'package:dslstats/models/DataSamplingService.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +26,8 @@ class _HostAdressState extends State<HostAdress> {
               actions: [
                 FlatButton(
                     onPressed: () {
-                      context.read<SettingsModel>().setHostAdress = _dialogText;
+                      context.read<DataSamplingService>().setHostAdress =
+                          _dialogText;
                       Navigator.pop(context, true);
                     },
                     child: Text('Save')),
@@ -55,7 +56,7 @@ class _HostAdressState extends State<HostAdress> {
                   fontSize: 16,
                   color: Colors.blueGrey[800]),
             ),
-            Text(context.watch<SettingsModel>().getHostAdress,
+            Text(context.watch<DataSamplingService>().getHostAdress,
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 12,

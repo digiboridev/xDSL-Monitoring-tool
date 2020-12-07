@@ -1,5 +1,6 @@
 import 'package:dslstats/models/ADSLDataModel.dart';
 import 'package:dslstats/models/SettingsModel.dart';
+import 'package:dslstats/models/DataSamplingService.dart';
 import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ class StatusBar extends StatelessWidget {
   StatusBar(this._isEmpty);
 
   bool getConnectionStatus(BuildContext context) {
-    if (!context.watch<ADSLDataModel>().isCounting) {
+    if (!context.watch<DataSamplingService>().isCounting) {
       return false;
     } else if (_isEmpty) {
       return false;
@@ -22,7 +23,7 @@ class StatusBar extends StatelessWidget {
   }
 
   bool getDSLStatus(BuildContext context) {
-    if (!context.watch<ADSLDataModel>().isCounting) {
+    if (!context.watch<DataSamplingService>().isCounting) {
       return false;
     } else if (_isEmpty) {
       return false;
@@ -71,11 +72,11 @@ class StatusBar extends StatelessWidget {
       return 'unknown';
     }
 
-    return (context.watch<ADSLDataModel>().isCounting
+    return (context.watch<DataSamplingService>().isCounting
             ? '${getStatus(context)}  '
             : '') +
         (getDSLStatus(context) ? getType(context) : '') +
-        (context.watch<ADSLDataModel>().isCounting
+        (context.watch<DataSamplingService>().isCounting
             ? '  ${getLastSync(context)}'
             : '');
   }
@@ -105,9 +106,10 @@ class StatusBar extends StatelessWidget {
                       margin: EdgeInsets.only(left: 8),
                       decoration: BoxDecoration(
                           border: Border.all(
-                            color: context.watch<ADSLDataModel>().isCounting
-                                ? Colors.yellow
-                                : Colors.black,
+                            color:
+                                context.watch<DataSamplingService>().isCounting
+                                    ? Colors.yellow
+                                    : Colors.black,
                             width: 5,
                           ),
                           borderRadius: BorderRadius.circular(5)),
@@ -182,7 +184,7 @@ class _ProgressLineState extends State<ProgressLine>
     controller = AnimationController(
         vsync: this,
         duration: Duration(
-            seconds: context.read<SettingsModel>().getSamplingInterval));
+            seconds: context.read<DataSamplingService>().getSamplingInterval));
 
     //Extend main controller with curve
     final curvedAnimation = CurvedAnimation(

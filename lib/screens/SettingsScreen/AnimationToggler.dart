@@ -13,7 +13,7 @@ class AnimationToggler extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            'On/Off animation',
+            'Animations',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
           Switch(

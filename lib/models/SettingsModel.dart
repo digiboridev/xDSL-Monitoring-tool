@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
-import 'package:hive/hive.dart';
+import 'package:dslstats/models/StorageManager/HiveSettingsStorageManager.dart';
 
-class SettingsModel extends ChangeNotifier {
+class SettingsModel extends ChangeNotifier with HiveSettingsStorageManager {
   //Initialize parameters with defaults
   bool _animated = true;
   bool _orientFixed = true;
@@ -26,23 +26,14 @@ class SettingsModel extends ChangeNotifier {
 
   // Animation
 
-  set setAnimated(bool val) {
-    void setToHive() {
-      Box box = Hive.box('settings');
-      box.put('animated', val);
-    }
-
-    setToHive();
-    _animated = val;
+  set setAnimated(bool value) {
+    saveToStorage('animated', value);
+    _animated = value;
     notifyListeners();
-    print(val);
   }
 
   void updateAnimated() {
-    Box box = Hive.box('settings');
-    if (box.get('animated') != null) {
-      _animated = box.get('animated');
-    }
+    _animated = loadFromStorage('animated') ?? _animated;
     notifyListeners();
   }
 
@@ -52,23 +43,14 @@ class SettingsModel extends ChangeNotifier {
 
   //Orientation
 
-  set setOrient(bool val) {
-    void setToHive() async {
-      Box box = await Hive.box('settings');
-      box.put('orient', val);
-    }
-
-    setToHive();
-    _orientFixed = val;
+  set setOrient(bool value) {
+    saveToStorage('orient', value);
+    _orientFixed = value;
     notifyListeners();
-    print(val);
   }
 
   void updateOrient() {
-    Box box = Hive.box('settings');
-    if (box.get('orient') != null) {
-      _orientFixed = box.get('orient');
-    }
+    loadFromStorage('orient');
     notifyListeners();
   }
 

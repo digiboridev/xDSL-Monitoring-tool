@@ -1,27 +1,19 @@
 import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
+import 'package:dslstats/models/StorageManager/HiveSettingsStorageManager.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-class ADSLDataModel extends ChangeNotifier {
+class ADSLDataModel extends ChangeNotifier with HiveSettingsStorageManager {
   int _collectInterval = 30;
 
-  set setCollectInterval(m) {
-    void setToHive() {
-      Box box = Hive.box('settings');
-      box.put('collectInterval', m);
-    }
-
-    setToHive();
-    _collectInterval = m;
+  set setCollectInterval(value) {
+    saveToStorage('collectInterval', value);
+    _collectInterval = value;
     notifyListeners();
-    print(m);
   }
 
   void updateCollectInterval() {
-    Box box = Hive.box('settings');
-    if (box.get('collectInterval') != null) {
-      _collectInterval = box.get('collectInterval');
-    }
+    _collectInterval = loadFromStorage('collectInterval') ?? _collectInterval;
     notifyListeners();
   }
 

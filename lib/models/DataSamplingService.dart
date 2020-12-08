@@ -1,30 +1,19 @@
 import 'dart:async';
 import 'dart:isolate';
 
+import 'package:dslstats/models/StorageManager/HiveSettingsStorageManager.dart';
+import 'package:dslstats/models/misc/ModemTypes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_foreground_plugin/flutter_foreground_plugin.dart';
-import 'package:hive/hive.dart';
 
-import 'IsolateParameters.dart';
-import 'ModemTypes.dart';
+import 'misc/IsolateParameters.dart';
 import 'modemClients/Client.dart';
 import 'modemClients/Client_HG530.dart';
 import 'modemClients/Client_Simulator.dart';
 
-mixin HiveSettingsManager {
-  Box box = Hive.box('settings');
-
-  void savetToHive(String key, value) async {
-    box.put('$key', value);
-  }
-
-  loadFromHive(String key) {
-    return box.get('$key');
-  }
-}
-
-class DataSamplingService extends ChangeNotifier with HiveSettingsManager {
+class DataSamplingService extends ChangeNotifier
+    with HiveSettingsStorageManager {
   ModemTypes _modemType = ModemTypes.Dlink_2640u;
   String _hostAdress = '192.168.1.10';
   String _externalAdress = '8.8.8.8';
@@ -65,13 +54,13 @@ class DataSamplingService extends ChangeNotifier with HiveSettingsManager {
   // Password
 
   set setPassword(value) {
-    savetToHive('password', value);
+    saveToStorage('password', value);
     _password = value;
     notifyListeners();
   }
 
   void updatePassword() {
-    _password = loadFromHive('password') ?? _password;
+    _password = loadFromStorage('password') ?? _password;
     notifyListeners();
   }
 
@@ -82,13 +71,13 @@ class DataSamplingService extends ChangeNotifier with HiveSettingsManager {
   // Login
 
   set setLogin(value) {
-    savetToHive('login', value);
+    saveToStorage('login', value);
     _login = value;
     notifyListeners();
   }
 
   void updateLogin() {
-    _login = loadFromHive('login') ?? _login;
+    _login = loadFromStorage('login') ?? _login;
     notifyListeners();
   }
 
@@ -99,13 +88,13 @@ class DataSamplingService extends ChangeNotifier with HiveSettingsManager {
   // Host
 
   set setHostAdress(value) {
-    savetToHive('hostAdress', value);
+    saveToStorage('hostAdress', value);
     _hostAdress = value;
     notifyListeners();
   }
 
   void updateHostAdress() {
-    _hostAdress = loadFromHive('hostAdress') ?? _hostAdress;
+    _hostAdress = loadFromStorage('hostAdress') ?? _hostAdress;
     notifyListeners();
   }
 
@@ -116,13 +105,13 @@ class DataSamplingService extends ChangeNotifier with HiveSettingsManager {
   // External host
 
   set setExternalAdress(value) {
-    savetToHive('externalAdress', value);
+    saveToStorage('externalAdress', value);
     _externalAdress = value;
     notifyListeners();
   }
 
   void updateExternalAdress() {
-    _externalAdress = loadFromHive('externalAdress') ?? _externalAdress;
+    _externalAdress = loadFromStorage('externalAdress') ?? _externalAdress;
     notifyListeners();
   }
 
@@ -133,13 +122,13 @@ class DataSamplingService extends ChangeNotifier with HiveSettingsManager {
   // Modem type
 
   set setModemtype(ModemTypes type) {
-    savetToHive('modem', type);
+    saveToStorage('modem', type);
     _modemType = type;
     notifyListeners();
   }
 
   void updateModemtype() {
-    _modemType = loadFromHive('modem') ?? _modemType;
+    _modemType = loadFromStorage('modem') ?? _modemType;
     notifyListeners();
   }
 
@@ -150,13 +139,14 @@ class DataSamplingService extends ChangeNotifier with HiveSettingsManager {
   //Sampling interval
 
   set setSamplingInterval(value) {
-    savetToHive('samplingInterval', value);
+    saveToStorage('samplingInterval', value);
     _samplingInterval = value;
     notifyListeners();
   }
 
   void updateSamplingInterval() {
-    _samplingInterval = loadFromHive('samplingInterval') ?? _samplingInterval;
+    _samplingInterval =
+        loadFromStorage('samplingInterval') ?? _samplingInterval;
     notifyListeners();
   }
 

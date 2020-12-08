@@ -12,7 +12,19 @@ import 'modemClients/Client.dart';
 import 'modemClients/Client_HG530.dart';
 import 'modemClients/Client_Simulator.dart';
 
-class DataSamplingService extends ChangeNotifier {
+mixin HiveSettingsManager {
+  Box box = Hive.box('settings');
+
+  void savetToHive(String key, value) async {
+    box.put('$key', value);
+  }
+
+  loadFromHive(String key) {
+    return box.get('$key');
+  }
+}
+
+class DataSamplingService extends ChangeNotifier with HiveSettingsManager {
   ModemTypes _modemType = ModemTypes.Dlink_2640u;
   String _hostAdress = '192.168.1.10';
   String _externalAdress = '8.8.8.8';
@@ -53,22 +65,13 @@ class DataSamplingService extends ChangeNotifier {
   // Password
 
   set setPassword(value) {
-    void setToHive() async {
-      var box = await Hive.openBox('settings');
-      box.put('password', value);
-    }
-
-    setToHive();
-
+    savetToHive('password', value);
     _password = value;
     notifyListeners();
   }
 
   void updatePassword() {
-    Box box = Hive.box('settings');
-    if (box.get('password') != null) {
-      _password = box.get('password');
-    }
+    _password = loadFromHive('password') ?? _password;
     notifyListeners();
   }
 
@@ -79,22 +82,13 @@ class DataSamplingService extends ChangeNotifier {
   // Login
 
   set setLogin(value) {
-    void setToHive() {
-      Box box = Hive.box('settings');
-      box.put('login', value);
-    }
-
-    setToHive();
-
+    savetToHive('login', value);
     _login = value;
     notifyListeners();
   }
 
   void updateLogin() {
-    Box box = Hive.box('settings');
-    if (box.get('login') != null) {
-      _login = box.get('login');
-    }
+    _login = loadFromHive('login') ?? _login;
     notifyListeners();
   }
 
@@ -105,22 +99,13 @@ class DataSamplingService extends ChangeNotifier {
   // Host
 
   set setHostAdress(value) {
-    void setToHive() {
-      Box box = Hive.box('settings');
-      box.put('hostAdress', value);
-    }
-
-    setToHive();
-
+    savetToHive('hostAdress', value);
     _hostAdress = value;
     notifyListeners();
   }
 
   void updateHostAdress() {
-    Box box = Hive.box('settings');
-    if (box.get('hostAdress') != null) {
-      _hostAdress = box.get('hostAdress');
-    }
+    _hostAdress = loadFromHive('hostAdress') ?? _hostAdress;
     notifyListeners();
   }
 
@@ -131,22 +116,13 @@ class DataSamplingService extends ChangeNotifier {
   // External host
 
   set setExternalAdress(value) {
-    void setToHive() {
-      Box box = Hive.box('settings');
-      box.put('externalAdress', value);
-    }
-
-    setToHive();
-
+    savetToHive('externalAdress', value);
     _externalAdress = value;
     notifyListeners();
   }
 
   void updateExternalAdress() {
-    Box box = Hive.box('settings');
-    if (box.get('externalAdress') != null) {
-      _externalAdress = box.get('externalAdress');
-    }
+    _externalAdress = loadFromHive('externalAdress') ?? _externalAdress;
     notifyListeners();
   }
 
@@ -157,21 +133,13 @@ class DataSamplingService extends ChangeNotifier {
   // Modem type
 
   set setModemtype(ModemTypes type) {
-    void setToHive() {
-      Box box = Hive.box('settings');
-      box.put('modem', type);
-    }
-
-    setToHive();
+    savetToHive('modem', type);
     _modemType = type;
     notifyListeners();
   }
 
   void updateModemtype() {
-    Box box = Hive.box('settings');
-    if (box.get('modem') != null) {
-      _modemType = box.get('modem');
-    }
+    _modemType = loadFromHive('modem') ?? _modemType;
     notifyListeners();
   }
 
@@ -181,24 +149,14 @@ class DataSamplingService extends ChangeNotifier {
 
   //Sampling interval
 
-  set setSamplingInterval(s) {
-    void setToHive() {
-      Box box = Hive.box('settings');
-      box.put('samplingInterval', s);
-    }
-
-    setToHive();
-
-    _samplingInterval = s;
+  set setSamplingInterval(value) {
+    savetToHive('samplingInterval', value);
+    _samplingInterval = value;
     notifyListeners();
-    print(s);
   }
 
   void updateSamplingInterval() {
-    Box box = Hive.box('settings');
-    if (box.get('samplingInterval') != null) {
-      _samplingInterval = box.get('samplingInterval');
-    }
+    _samplingInterval = loadFromHive('samplingInterval') ?? _samplingInterval;
     notifyListeners();
   }
 

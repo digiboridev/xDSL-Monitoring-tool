@@ -51,6 +51,22 @@ class _ModemSelectionState extends State<ModemSelection> {
                       ModemTypes.ZTE_H108n_v1_via_telnet;
                   Navigator.pop(context, true);
                 },
+              ),
+              SimpleDialogOption(
+                child: Text('Dlink_2640u_via_telnet'),
+                onPressed: () {
+                  context.read<DataSamplingService>().setModemtype =
+                      ModemTypes.Dlink_2640u_via_telnet;
+                  Navigator.pop(context, true);
+                },
+              ),
+              SimpleDialogOption(
+                child: Text('Tenda_d301_via_telnet'),
+                onPressed: () {
+                  context.read<DataSamplingService>().setModemtype =
+                      ModemTypes.Tenda_d301_via_telnet;
+                  Navigator.pop(context, true);
+                },
               )
             ],
           );

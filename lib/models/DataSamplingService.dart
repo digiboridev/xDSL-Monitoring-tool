@@ -12,7 +12,9 @@ import 'misc/IsolateParameters.dart';
 import 'modemClients/Client.dart';
 import 'modemClients/Client_HG530.dart';
 import 'modemClients/Client_Simulator.dart';
+import 'modemClients/Dlink_2640u_via_telnet.dart';
 import 'modemClients/TPLink_w8901_via_telnet.dart';
+import 'modemClients/Tenda_d301_via_telnet.dart';
 
 class DataSamplingService extends ChangeNotifier
     with HiveSettingsStorageManager {
@@ -239,6 +241,18 @@ class DataSamplingService extends ChangeNotifier
             password: _password);
       } else if (_modemType == ModemTypes.ZTE_H108n_v1_via_telnet) {
         return ZTE_H108n_v1_via_telnet(
+            ip: _hostAdress,
+            extIp: _externalAdress,
+            user: _login,
+            password: _password);
+      } else if (_modemType == ModemTypes.Dlink_2640u_via_telnet) {
+        return Dlink_2640u_via_telnet(
+            ip: _hostAdress,
+            extIp: _externalAdress,
+            user: _login,
+            password: _password);
+      } else if (_modemType == ModemTypes.Tenda_d301_via_telnet) {
+        return Tenda_d301_via_telnet(
             ip: _hostAdress,
             extIp: _externalAdress,
             user: _login,

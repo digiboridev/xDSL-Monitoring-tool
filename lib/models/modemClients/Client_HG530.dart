@@ -59,7 +59,7 @@ class Client_HG530e implements Client {
 
   //Data parcer
   //Parce string of adsl data,add latencyes and return LineStatsCollection instance
-  LineStatsCollection _parser(String res, double ltcModem, double ltcExt) {
+  LineStatsCollection _parser(String res) {
     final substr = res.substring(
         res.indexOf(
             '"InternetGatewayDevice.WANDevice.1.WANDSLInterfaceConfig"'),
@@ -68,26 +68,23 @@ class Client_HG530e implements Client {
     final List<dynamic> decodedString = jsonDecode('[' + substr + ']');
 
     return LineStatsCollection(
-      isErrored: false,
-      isConnectionUp: decodedString[2] == 'Up' ? true : false,
-      status: decodedString[2],
-      connectionType: decodedString[1],
-      upMaxRate: int.parse(decodedString[3]),
-      downMaxRate: int.parse(decodedString[4]),
-      upRate: int.parse(decodedString[5]),
-      downRate: int.parse(decodedString[6]),
-      upMargin: double.parse(decodedString[7]) / 10,
-      downMargin: double.parse(decodedString[8]) / 10,
-      upAttenuation: double.parse(decodedString[12]) / 10,
-      downAttenuation: double.parse(decodedString[13]) / 10,
-      upCRC: int.parse(decodedString[18]),
-      downCRC: int.parse(decodedString[17]),
-      upFEC: int.parse(decodedString[20]),
-      downFEC: int.parse(decodedString[19]),
-      dateTime: DateTime.now(),
-      latencyToModem: ltcModem,
-      latencyToExternal: ltcExt,
-    );
+        isErrored: false,
+        isConnectionUp: decodedString[2] == 'Up' ? true : false,
+        status: decodedString[2],
+        connectionType: decodedString[1],
+        upMaxRate: int.parse(decodedString[3]),
+        downMaxRate: int.parse(decodedString[4]),
+        upRate: int.parse(decodedString[5]),
+        downRate: int.parse(decodedString[6]),
+        upMargin: double.parse(decodedString[7]) / 10,
+        downMargin: double.parse(decodedString[8]) / 10,
+        upAttenuation: double.parse(decodedString[12]) / 10,
+        downAttenuation: double.parse(decodedString[13]) / 10,
+        upCRC: int.parse(decodedString[18]),
+        downCRC: int.parse(decodedString[17]),
+        upFEC: int.parse(decodedString[20]),
+        downFEC: int.parse(decodedString[19]),
+        dateTime: DateTime.now());
   }
 
   //Simple pinger by running unix ping and parse it to double
@@ -107,16 +104,8 @@ class Client_HG530e implements Client {
 
   //Main procedure of getting data
   @override
-  Future<LineStatsCollection> get getData async {
-    double ping1 = 0;
-    double ping2 = 0;
+  Future<LineStatsCollection> get _getCollection async {
     try {
-      //Send parallel adsl data request to modem and pings to modem and external host
-      await Future.wait([_pingTo(_ip), _pingTo(_extIp)]).then((value) {
-        ping1 = value[0];
-        ping2 = value[1];
-      });
-
       //extract only adsl data
       http.Response response = await _dataRequest;
 
@@ -131,21 +120,31 @@ class Client_HG530e implements Client {
           return LineStatsCollection(
               isErrored: true,
               status: 'Failed to login',
-              dateTime: DateTime.now(),
-              latencyToModem: ping1,
-              latencyToExternal: ping2);
+              dateTime: DateTime.now());
         }
       }
 
       //If all is ok send all data to parser end return conpleted LineStatsCollection instance
-      return _parser(response.body, ping1, ping2);
+      return _parser(response.body);
     } catch (e) {
       return LineStatsCollection(
           isErrored: true,
           status: 'Connection failed',
-          dateTime: DateTime.now(),
-          latencyToModem: ping1,
-          latencyToExternal: ping2);
+          dateTime: DateTime.now());
     }
+  }
+
+  // Wait for ping and collection parallel
+  // return collection with pings
+  @override
+  Future<LineStatsCollection> get getData async {
+    LineStatsCollection collection;
+    await Future.wait([_getCollection, _pingTo(_ip), _pingTo(_extIp)])
+        .then((value) {
+      collection = value[0];
+      collection.latencyToModem = value[1];
+      collection.latencyToExternal = value[2];
+    });
+    return collection;
   }
 }

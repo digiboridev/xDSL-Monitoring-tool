@@ -39,9 +39,9 @@ class LineStatsCollection {
   @HiveField(17)
   final DateTime dateTime;
   @HiveField(28)
-  final double latencyToModem;
+  double latencyToModem;
   @HiveField(29)
-  final double latencyToExternal;
+  double latencyToExternal;
 
   Map get getAsMap {
     return {

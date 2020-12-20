@@ -21,6 +21,14 @@ class _ModemSelectionState extends State<ModemSelection> {
             title: Text('Select model type'),
             children: [
               SimpleDialogOption(
+                child: Text('Client_simulation'),
+                onPressed: () {
+                  context.read<DataSamplingService>().setModemtype =
+                      ModemTypes.Client_simulation;
+                  Navigator.pop(context, true);
+                },
+              ),
+              SimpleDialogOption(
                 child: Text('Huawei_HG532e'),
                 onPressed: () {
                   context.read<DataSamplingService>().setModemtype =
@@ -29,26 +37,18 @@ class _ModemSelectionState extends State<ModemSelection> {
                 },
               ),
               SimpleDialogOption(
-                child: Text('Dlink_2640u'),
+                child: Text('TPLink_w8901_via_telnet'),
                 onPressed: () {
                   context.read<DataSamplingService>().setModemtype =
-                      ModemTypes.Dlink_2640u;
+                      ModemTypes.TPLink_w8901_via_telnet;
                   Navigator.pop(context, true);
                 },
               ),
               SimpleDialogOption(
-                child: Text('ZTE_h108n'),
+                child: Text('ZTE_H108n_v1_via_telnet'),
                 onPressed: () {
                   context.read<DataSamplingService>().setModemtype =
-                      ModemTypes.ZTE_h108n;
-                  Navigator.pop(context, true);
-                },
-              ),
-              SimpleDialogOption(
-                child: Text('Tebda_D301'),
-                onPressed: () {
-                  context.read<DataSamplingService>().setModemtype =
-                      ModemTypes.Tebda_D301;
+                      ModemTypes.ZTE_H108n_v1_via_telnet;
                   Navigator.pop(context, true);
                 },
               )
@@ -60,22 +60,12 @@ class _ModemSelectionState extends State<ModemSelection> {
   @override
   Widget build(BuildContext context) {
     String modemName() {
-      switch (context.watch<DataSamplingService>().getModemType) {
-        case ModemTypes.Dlink_2640u:
-          return 'Dlink_2640u';
-          break;
-        case ModemTypes.Huawei_HG532e:
-          return 'Huawei_HG532e';
-          break;
-        case ModemTypes.Tebda_D301:
-          return 'Tebda_D301';
-          break;
-        case ModemTypes.ZTE_h108n:
-          return 'ZTE_h108n';
-          break;
-        default:
-      }
-      return 'asdasd';
+      return context
+          .watch<DataSamplingService>()
+          .getModemType
+          .toString()
+          .split('.')
+          .last;
     }
 
     return InkWell(

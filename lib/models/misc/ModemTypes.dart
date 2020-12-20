@@ -4,15 +4,15 @@ part 'ModemTypes.g.dart';
 
 @HiveType(typeId: 40)
 enum ModemTypes {
-  @HiveField(0)
-  Huawei_HG532e,
-
   @HiveField(1)
-  Dlink_2640u,
+  Client_simulation,
 
   @HiveField(2)
-  ZTE_h108n,
+  ZTE_H108n_v1_via_telnet,
 
   @HiveField(3)
-  Tebda_D301
+  TPLink_w8901_via_telnet,
+
+  @HiveField(4)
+  Huawei_HG532e
 }

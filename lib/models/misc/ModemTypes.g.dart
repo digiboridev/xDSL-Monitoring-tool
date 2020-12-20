@@ -16,11 +16,9 @@ class ModemTypesAdapter extends TypeAdapter<ModemTypes> {
       case 0:
         return ModemTypes.Huawei_HG532e;
       case 1:
-        return ModemTypes.Dlink_2640u;
-      case 2:
-        return ModemTypes.ZTE_h108n;
-      case 3:
-        return ModemTypes.Tebda_D301;
+        return ModemTypes.ZTE_H108n_v1_via_telnet;
+      case 4:
+        return ModemTypes.TPLink_w8901_via_telnet;
       default:
         return null;
     }
@@ -32,14 +30,11 @@ class ModemTypesAdapter extends TypeAdapter<ModemTypes> {
       case ModemTypes.Huawei_HG532e:
         writer.writeByte(0);
         break;
-      case ModemTypes.Dlink_2640u:
+      case ModemTypes.ZTE_H108n_v1_via_telnet:
         writer.writeByte(1);
         break;
-      case ModemTypes.ZTE_h108n:
-        writer.writeByte(2);
-        break;
-      case ModemTypes.Tebda_D301:
-        writer.writeByte(3);
+      case ModemTypes.TPLink_w8901_via_telnet:
+        writer.writeByte(4);
         break;
     }
   }

@@ -3,6 +3,7 @@ import 'dart:isolate';
 
 import 'package:dslstats/models/StorageManager/HiveSettingsStorageManager.dart';
 import 'package:dslstats/models/misc/ModemTypes.dart';
+import 'package:dslstats/models/modemClients/ZTE_H108n_v1_via_telnet.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_foreground_plugin/flutter_foreground_plugin.dart';
@@ -11,10 +12,11 @@ import 'misc/IsolateParameters.dart';
 import 'modemClients/Client.dart';
 import 'modemClients/Client_HG530.dart';
 import 'modemClients/Client_Simulator.dart';
+import 'modemClients/TPLink_w8901_via_telnet.dart';
 
 class DataSamplingService extends ChangeNotifier
     with HiveSettingsStorageManager {
-  ModemTypes _modemType = ModemTypes.Dlink_2640u;
+  ModemTypes _modemType = ModemTypes.Client_simulation;
   String _hostAdress = '192.168.1.10';
   String _externalAdress = '8.8.8.8';
   String _login = 'admin';
@@ -231,6 +233,18 @@ class DataSamplingService extends ChangeNotifier
     Client client() {
       if (_modemType == ModemTypes.Huawei_HG532e) {
         return Client_HG530e(
+            ip: _hostAdress,
+            extIp: _externalAdress,
+            user: _login,
+            password: _password);
+      } else if (_modemType == ModemTypes.ZTE_H108n_v1_via_telnet) {
+        return ZTE_H108n_v1_via_telnet(
+            ip: _hostAdress,
+            extIp: _externalAdress,
+            user: _login,
+            password: _password);
+      } else if (_modemType == ModemTypes.TPLink_w8901_via_telnet) {
+        return TPLink_w8901_via_telnet(
             ip: _hostAdress,
             extIp: _externalAdress,
             user: _login,

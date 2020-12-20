@@ -13,12 +13,14 @@ class ModemTypesAdapter extends TypeAdapter<ModemTypes> {
   @override
   ModemTypes read(BinaryReader reader) {
     switch (reader.readByte()) {
-      case 0:
-        return ModemTypes.Huawei_HG532e;
       case 1:
+        return ModemTypes.Client_simulation;
+      case 2:
         return ModemTypes.ZTE_H108n_v1_via_telnet;
-      case 4:
+      case 3:
         return ModemTypes.TPLink_w8901_via_telnet;
+      case 4:
+        return ModemTypes.Huawei_HG532e;
       default:
         return null;
     }
@@ -27,13 +29,16 @@ class ModemTypesAdapter extends TypeAdapter<ModemTypes> {
   @override
   void write(BinaryWriter writer, ModemTypes obj) {
     switch (obj) {
-      case ModemTypes.Huawei_HG532e:
-        writer.writeByte(0);
-        break;
-      case ModemTypes.ZTE_H108n_v1_via_telnet:
+      case ModemTypes.Client_simulation:
         writer.writeByte(1);
         break;
+      case ModemTypes.ZTE_H108n_v1_via_telnet:
+        writer.writeByte(2);
+        break;
       case ModemTypes.TPLink_w8901_via_telnet:
+        writer.writeByte(3);
+        break;
+      case ModemTypes.Huawei_HG532e:
         writer.writeByte(4);
         break;
     }

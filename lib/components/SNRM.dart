@@ -331,7 +331,7 @@ class _SNRMExpandableState extends State<SNRMExpandable> {
                   : Container(
                       height: 200,
                       color: Colors.white,
-                      child: Center(child: CircularProgressIndicator()),
+                      child: Center(child: Text('No data')),
                     ),
         ),
       ],

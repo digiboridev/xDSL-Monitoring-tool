@@ -311,7 +311,7 @@ class _ExternalLatencyExpandableState extends State<ExternalLatencyExpandable> {
                   : Container(
                       height: 200,
                       color: Colors.white,
-                      child: Center(child: CircularProgressIndicator()),
+                      child: Center(child: Text('No data')),
                     ),
         ),
       ],

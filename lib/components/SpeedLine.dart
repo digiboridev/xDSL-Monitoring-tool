@@ -373,7 +373,7 @@ class _SpeedLineExpandableState extends State<SpeedLineExpandable> {
                   : Container(
                       height: 200,
                       color: Colors.white,
-                      child: Center(child: CircularProgressIndicator()),
+                      child: Center(child: Text('No data')),
                     ),
         ),
       ],

@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:dslstats/models/ADSLDataModel.dart';
 import 'package:dslstats/models/DataSamplingService.dart';
 import 'package:dslstats/models/SettingsModel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_foreground_plugin/flutter_foreground_plugin.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -97,6 +100,28 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(_screenList[_screenIndex].name),
+          actions: [
+            IconButton(
+                tooltip: 'minimize app',
+                icon: Icon(
+                  Icons.minimize,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  MoveToBackground.moveTaskToBack();
+                  print('minimized');
+                }),
+            IconButton(
+                tooltip: 'Close app',
+                icon: Icon(
+                  Icons.power_settings_new,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  FlutterForegroundPlugin.stopForegroundService();
+                  exit(0);
+                })
+          ],
           backgroundColor: Colors.blueGrey[900],
         ),
         // body: _screenList[_screenIndex],

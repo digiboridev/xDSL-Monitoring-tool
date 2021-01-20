@@ -328,7 +328,7 @@ class DataSamplingService extends ChangeNotifier
       },
       title: 'Sampling is on',
       content: 'Host: ' + _hostAdress,
-      iconName: "ic_stat_show_chart",
+      iconName: "ic_stat_new_icon",
     );
   }
 }

@@ -12,5 +12,9 @@ This is a helpful tool that makes service staff job more easier and dsl ISPs hap
   - Showing precise data
   
   
-![alt text](https://github.com/digiborimusik/xDSL-Monitoring-tool/blob/main/md/bg.jpg)
+![screenshot](https://github.com/digiborimusik/xDSL-Monitoring-tool/blob/main/md/bg.jpg)
   
+# Installation
+[Download][df1] last version.
+Install apk file.
+Grant persmission for working in background (According to your os shell).

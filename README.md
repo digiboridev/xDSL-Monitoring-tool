@@ -1,4 +1,5 @@
-<img src="https://github.com/digiborimusik/xDSL-Monitoring-tool/blob/main/new%20icon.png" width="250">
+<img src="https://github.com/digiborimusik/xDSL-Monitoring-tool/blob/main/new%20icon.png" width="200">
+
 # xDSL Monitoring tool
 
 xDSL Monitoring tool is an android app for collect line stats of ADSL modem in realtime.

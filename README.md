@@ -1,5 +1,6 @@
 # xDSL Monitoring tool
-![screenshot](https://github.com/digiborimusik/xDSL-Monitoring-tool/blob/main/new%20icon.png)
+
+<img src="https://github.com/digiborimusik/xDSL-Monitoring-tool/blob/main/new%20icon.png" width="250">
 
 xDSL Monitoring tool is an android app for collect line stats of ADSL modem in realtime.
 It works with DSL modems using telnet or http interface. Data is displayed in graphical form, and also provide long time monitoring in background.
@@ -15,7 +16,7 @@ This is a helpful tool that makes service staff job more easier and dsl ISPs hap
   - Showing precise data
   
   
-![screenshot](https://github.com/digiborimusik/xDSL-Monitoring-tool/blob/main/md/bg.jpg)
+![screenshot](https://github.com/digiborimusik/xDSL-Monitoring-tool/blob/main/md/bg.jpg = 50x)
   
 # Installation
 [Download](https://github.com/digiborimusik/xDSL-Monitoring-tool/releases/tag/xDSLmt) last version.

@@ -25,6 +25,7 @@ class ScreensWrapper extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => SettingsModel()),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'DslStats',
         theme: ThemeData(primarySwatch: Colors.blueGrey),
         home: ButtonDisplaySelection(),

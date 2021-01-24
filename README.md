@@ -1,16 +1,14 @@
-# dslstats
+# xDSL Monitoring tool
 
-A new Flutter project.
+xDSL Monitoring tool is an android app for collect line stats of ADSL modem in realtime.
+It works with DSL modems using telnet or http interface. Data is displayed in graphical form, and also provide long time monitoring in background.
+Can be used to display the current line stats and long-term monitoring to identify problems with dsl lines. 
 
-## Getting Started
+This is a helpful tool that makes service staff job more easier and dsl ISPs happier.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+  - Realtime
+  - Background logging
+  - Useful interface
+  - Showing precise data
+ 
+  

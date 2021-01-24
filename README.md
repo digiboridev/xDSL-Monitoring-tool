@@ -20,3 +20,12 @@ This is a helpful tool that makes service staff job more easier and dsl ISPs hap
 Install apk file.
 
 Grant persmission for working in background (According to your os shell).
+
+# Supported modems
+  - Huawei hg532e
+  - TP-Link w8901n 
+  - ZTE H108n v1 
+  - DLink 2640u
+  - Tenda d301
+  
+If you want to add modem support, contact me digiborimusik@gmail.com

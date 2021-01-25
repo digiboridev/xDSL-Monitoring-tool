@@ -1,6 +1,6 @@
-import 'package:dslstats/components/AverageStats.dart';
-import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:flutter/material.dart';
+import 'package:xDSL_Monitoring_tool/components/AverageStats.dart';
+import 'package:xDSL_Monitoring_tool/models/modemClients/LineStatsCollection.dart';
 import '../../components/SNRM.dart';
 import '../../components/SpeedLine.dart';
 import '../../components/FECLine.dart';

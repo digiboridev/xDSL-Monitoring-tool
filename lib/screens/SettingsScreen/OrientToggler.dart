@@ -1,6 +1,6 @@
-import 'package:dslstats/models/SettingsModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xDSL_Monitoring_tool/models/SettingsModel.dart';
 
 class OrientToggler extends StatelessWidget {
   @override

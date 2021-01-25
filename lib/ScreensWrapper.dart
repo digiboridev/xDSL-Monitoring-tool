@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:dslstats/models/ADSLDataModel.dart';
-import 'package:dslstats/models/DataSamplingService.dart';
-import 'package:dslstats/models/SettingsModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_foreground_plugin/flutter_foreground_plugin.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:xDSL_Monitoring_tool/models/ADSLDataModel.dart';
+import 'package:xDSL_Monitoring_tool/models/DataSamplingService.dart';
+import 'package:xDSL_Monitoring_tool/models/SettingsModel.dart';
 
 import 'screens/CurrentScreen.dart';
 import 'screens/SavedDataScreen.dart';

@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'dart:isolate';
 
-import 'package:dslstats/models/StorageManager/HiveSettingsStorageManager.dart';
-import 'package:dslstats/models/misc/ModemTypes.dart';
-import 'package:dslstats/models/modemClients/ZTE_H108n_v1_via_telnet.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_foreground_plugin/flutter_foreground_plugin.dart';
+import 'package:xDSL_Monitoring_tool/models/StorageManager/HiveSettingsStorageManager.dart';
+import 'package:xDSL_Monitoring_tool/models/misc/ModemTypes.dart';
 
 import 'misc/IsolateParameters.dart';
 import 'modemClients/Client.dart';
@@ -15,6 +14,7 @@ import 'modemClients/Client_Simulator.dart';
 import 'modemClients/Dlink_2640u_via_telnet.dart';
 import 'modemClients/TPLink_w8901_via_telnet.dart';
 import 'modemClients/Tenda_d301_via_telnet.dart';
+import 'modemClients/ZTE_H108n_v1_via_telnet.dart';
 
 class DataSamplingService extends ChangeNotifier
     with HiveSettingsStorageManager {

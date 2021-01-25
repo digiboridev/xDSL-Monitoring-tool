@@ -1,9 +1,8 @@
-import 'package:dslstats/models/ADSLDataModel.dart';
-import 'package:dslstats/models/SettingsModel.dart';
-import 'package:dslstats/models/DataSamplingService.dart';
-import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:xDSL_Monitoring_tool/models/ADSLDataModel.dart';
+import 'package:xDSL_Monitoring_tool/models/DataSamplingService.dart';
+import 'package:xDSL_Monitoring_tool/models/modemClients/LineStatsCollection.dart';
 
 class StatusBar extends StatelessWidget {
   bool _isEmpty;

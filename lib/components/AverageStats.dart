@@ -1,6 +1,6 @@
-import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:xDSL_Monitoring_tool/models/modemClients/LineStatsCollection.dart';
 
 class AvgStatsData {
   final Duration time;

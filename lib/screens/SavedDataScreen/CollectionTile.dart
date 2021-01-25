@@ -1,9 +1,9 @@
 import 'dart:ui';
 
-import 'package:dslstats/models/ADSLDataModel.dart';
-import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xDSL_Monitoring_tool/models/ADSLDataModel.dart';
+import 'package:xDSL_Monitoring_tool/models/modemClients/LineStatsCollection.dart';
 import 'CollectionViewer.dart';
 
 class CollectionTile extends StatelessWidget {

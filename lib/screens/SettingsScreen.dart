@@ -1,5 +1,5 @@
-import 'package:dslstats/screens/SettingsScreen/Password.dart';
 import 'package:flutter/material.dart';
+import 'package:xDSL_Monitoring_tool/screens/SettingsScreen/Password.dart';
 import 'SettingsScreen/ModemSelection.dart';
 import 'SettingsScreen/HostAdress.dart';
 import 'SettingsScreen/Login.dart';

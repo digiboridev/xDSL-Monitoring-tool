@@ -1,7 +1,7 @@
-import 'package:dslstats/models/DataSamplingService.dart';
-import 'package:dslstats/models/misc/ModemTypes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xDSL_Monitoring_tool/models/DataSamplingService.dart';
+import 'package:xDSL_Monitoring_tool/models/misc/ModemTypes.dart';
 
 class ModemSelection extends StatefulWidget {
   const ModemSelection({Key key}) : super(key: key);

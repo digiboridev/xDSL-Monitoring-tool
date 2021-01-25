@@ -1,6 +1,6 @@
-import 'package:dslstats/models/DataSamplingService.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xDSL_Monitoring_tool/models/DataSamplingService.dart';
 
 class Login extends StatefulWidget {
   @override

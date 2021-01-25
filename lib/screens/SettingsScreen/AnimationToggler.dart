@@ -1,6 +1,6 @@
-import 'package:dslstats/models/SettingsModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xDSL_Monitoring_tool/models/SettingsModel.dart';
 
 class AnimationToggler extends StatelessWidget {
   const AnimationToggler({Key key}) : super(key: key);

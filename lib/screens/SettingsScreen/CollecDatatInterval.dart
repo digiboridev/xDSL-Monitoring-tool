@@ -1,6 +1,6 @@
-import 'package:dslstats/models/ADSLDataModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xDSL_Monitoring_tool/models/ADSLDataModel.dart';
 
 class CollectDataInterval extends StatelessWidget {
   @override

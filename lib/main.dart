@@ -1,8 +1,7 @@
-import 'package:dslstats/components/ModemLatency.dart';
-import 'package:dslstats/models/misc/ModemTypes.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:xDSL_Monitoring_tool/models/misc/ModemTypes.dart';
 import 'ScreensWrapper.dart';
 import 'models/modemClients/LineStatsCollection.dart';
 

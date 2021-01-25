@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:isolate';
 
-import 'package:dslstats/models/modemClients/LineStatsCollection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_android/android_os.dart';
 import 'package:mp_chart/mp/chart/line_chart.dart';
@@ -11,6 +10,7 @@ import 'package:mp_chart/mp/core/data_set/line_data_set.dart';
 import 'package:mp_chart/mp/core/entry/entry.dart';
 import 'package:mp_chart/mp/core/enums/mode.dart';
 import 'package:mp_chart/mp/core/enums/x_axis_position.dart';
+import 'package:xDSL_Monitoring_tool/models/modemClients/LineStatsCollection.dart';
 
 import 'MyLineMarker.dart';
 import 'XDateFormatter.dart';

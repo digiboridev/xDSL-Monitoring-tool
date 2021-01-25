@@ -13,7 +13,7 @@ This is a helpful tool that makes service staff job more easier and dsl ISPs hap
   - Realtime stats
   - Background logging
   - Useful interface
-  - Showing precise data
+  - Plotting precise graphs
   
   
 ![screenshot](https://github.com/digiborimusik/xDSL-Monitoring-tool/blob/main/md/bg.jpg)

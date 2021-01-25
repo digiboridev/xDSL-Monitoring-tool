@@ -48,7 +48,8 @@
             android:name="flutterEmbedding"
             android:value="2" />
         <service
-            android:name="changjoopark.com.flutter_foreground_plugin.FlutterForegroundService"/>
+            android:name="changjoopark.com.flutter_foreground_plugin.FlutterForegroundService"
+            android:resource="@drawable/ic_stat_new_icon_cut"/>
         <service
             android:name="io.flutter.plugins.androidalarmmanager.AlarmService"
             android:permission="android.permission.BIND_JOB_SERVICE"

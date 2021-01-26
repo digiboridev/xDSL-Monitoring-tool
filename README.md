@@ -19,7 +19,7 @@ This is a helpful tool that makes network staff job more easier and dsl ISPs hap
 ![screenshot](https://github.com/digiborimusik/xDSL-Monitoring-tool/blob/main/md/bg.jpg)
   
 # Installation
-[Download](https://github.com/digiborimusik/xDSL-Monitoring-tool/releases/tag/xDSLmt) last version.
+[Download](https://github.com/digiborimusik/xDSL-Monitoring-tool/releases/) last version.
 
 Install apk file.
 

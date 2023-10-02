@@ -1,6 +1,5 @@
 import 'dart:isolate';
-
-import '../modemClients/client.dart';
+import 'package:xdsl_mt/models/modemClients/client.dart';
 
 class IsolateParameters {
   Client client;

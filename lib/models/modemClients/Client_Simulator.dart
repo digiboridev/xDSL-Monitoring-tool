@@ -1,14 +1,7 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-import 'package:crypto/crypto.dart';
 import 'package:xdsl_mt/models/modemClients/client.dart';
 import 'package:xdsl_mt/models/modemClients/line_stats_collection.dart';
-
-String ultraEncoder(text) {
-  var ultraHash = base64.encode(utf8.encode((sha256.convert(utf8.encode(text))).toString()));
-  return ultraHash;
-}
 
 class ClientSimulator implements Client {
   @override

@@ -28,8 +28,7 @@ class CollectionTile extends StatelessWidget {
   }
 
   void pushCollectionViewer(BuildContext context) {
-    // TODO: cast remove;
-    List<LineStatsCollection> collection = context.read<ADSLDataModel>().getCollectionByKey(cKey) as List<LineStatsCollection>;
+    List<LineStatsCollection> collection = context.read<ADSLDataModel>().getCollectionByKey(cKey);
 
     Navigator.push(
       context,
@@ -47,8 +46,7 @@ class CollectionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: cast remove;
-    List<LineStatsCollection> collectionMap = context.watch<ADSLDataModel>().getCollectionByKey(cKey) as List<LineStatsCollection>;
+    List<LineStatsCollection> collectionMap = context.watch<ADSLDataModel>().getCollectionByKey(cKey);
 
     String length() {
       return collectionMap.length.toString();

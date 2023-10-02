@@ -3,10 +3,11 @@ import 'dart:isolate';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:xdsl_mt/models/StorageManager/HiveSettingsStorageManager.dart';
-import 'package:xdsl_mt/models/misc/IsolateParameters.dart';
+import 'package:xdsl_mt/models/misc/isolate_parameters.dart';
 import 'package:xdsl_mt/models/misc/modem_types.dart';
 import 'package:xdsl_mt/models/modemClients/client.dart';
 import 'package:xdsl_mt/models/modemClients/client_simulator.dart';
+import 'package:xdsl_mt/models/modemClients/line_stats_collection.dart';
 
 class DataSamplingService extends ChangeNotifier with HiveSettingsStorageManager {
   ModemTypes _modemType = ModemTypes.Client_simulation;
@@ -148,7 +149,7 @@ class DataSamplingService extends ChangeNotifier with HiveSettingsStorageManager
     return _samplingInterval;
   }
 
-  void startSampling(callback) {
+  void startSampling(Function(LineStatsCollection data) callback) {
     //Check counting status
     if (_isCounting) {
       debugPrint('Started');
@@ -208,7 +209,7 @@ class DataSamplingService extends ChangeNotifier with HiveSettingsStorageManager
   static const _platform = MethodChannel('getsome');
 
   //Isolate
-  static void _backgroundDataParser(params) {
+  static void _backgroundDataParser(IsolateParameters params) {
     void tick() async {
       params.sendPort.send(await params.client.getData);
       Timer(Duration(seconds: params.samplingInterval), tick);
@@ -218,7 +219,7 @@ class DataSamplingService extends ChangeNotifier with HiveSettingsStorageManager
   }
 
 //Start isolate and receiver port
-  void _setIsolatedTimer(callback) async {
+  void _setIsolatedTimer(Function(LineStatsCollection data) callback) async {
     ReceivePort receivePort = ReceivePort();
 
     //Return modem client instance by _modemType parameter
@@ -252,8 +253,12 @@ class DataSamplingService extends ChangeNotifier with HiveSettingsStorageManager
 
     //Add listener to receiveport
     receivePort.listen((data) async {
-      debugPrint(data.getAsMap);
-      callback(data);
+      if (data is LineStatsCollection) {
+        debugPrint(data.toString());
+        callback(data);
+      }
+      // debugPrint(data.getAsMap);
+      // callback(data);
     });
   }
 

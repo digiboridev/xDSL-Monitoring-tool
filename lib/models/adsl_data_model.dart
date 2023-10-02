@@ -43,20 +43,20 @@ class ADSLDataModel extends ChangeNotifier with HiveSettingsStorageManager {
   }
 
   //Get collection map instanse
-  get getCollections {
-    return _collectionMap;
-  }
+  // get getCollections {
+  //   return _collectionMap;
+  // }
 
   //Get single collection by id
   //Cast list values type as LineStatsCollection
-  List getCollectionByKey(cKey) {
+  List<LineStatsCollection> getCollectionByKey(cKey) {
     List<dynamic> raw = _collectionMap[cKey];
     List<LineStatsCollection> typed = raw.cast<LineStatsCollection>();
     return typed;
   }
 
   //Returns last collection
-  get getLastCollection {
+  List<LineStatsCollection> get getLastCollection {
     List<dynamic> raw = _collectionMap[getCollectionsKeys.elementAt(0)];
     List<LineStatsCollection> typed = raw.cast<LineStatsCollection>();
     return typed;
@@ -93,7 +93,7 @@ class ADSLDataModel extends ChangeNotifier with HiveSettingsStorageManager {
   }
 
   //Adding sample to last collection
-  void addToLast(data) {
+  void addToLast(LineStatsCollection data) {
     //add to provider state
     _collectionMap[_collectionMap.keys.last].add(data);
 

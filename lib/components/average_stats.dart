@@ -144,7 +144,7 @@ class _AverageStatsState extends State<AverageStats> {
         acc.add(collection[i].downMargin);
       }
 
-      if (acc.length < 1) {
+      if (acc.isEmpty) {
         return 0;
       }
 
@@ -162,7 +162,7 @@ class _AverageStatsState extends State<AverageStats> {
         acc.add(collection[i].upMargin);
       }
 
-      if (acc.length < 1) {
+      if (acc.isEmpty) {
         return 0;
       }
 
@@ -180,7 +180,7 @@ class _AverageStatsState extends State<AverageStats> {
         acc.add(collection[i].downMargin);
       }
 
-      if (acc.length < 1) {
+      if (acc.isEmpty) {
         return 0;
       }
 
@@ -198,7 +198,7 @@ class _AverageStatsState extends State<AverageStats> {
         acc.add(collection[i].upMargin);
       }
 
-      if (acc.length < 1) {
+      if (acc.isEmpty) {
         return 0;
       }
 

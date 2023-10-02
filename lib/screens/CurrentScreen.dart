@@ -8,10 +8,10 @@ import '../components/fec_line.dart';
 import '../components/crc_line.dart';
 import '../components/modem_latency.dart';
 import '../components/external_latency.dart';
-import 'CurrentScreen/status_bar.dart';
-import 'CurrentScreen/current_speed_bar.dart';
-import 'CurrentScreen/current_snr_bar.dart';
-import 'CurrentScreen/rs_counters.dart';
+import 'currentScreen/status_bar.dart';
+import 'currentScreen/current_speed_bar.dart';
+import 'currentScreen/current_snr_bar.dart';
+import 'currentScreen/rs_counters.dart';
 
 class CurrentScreen extends StatelessWidget {
   //Name of screen

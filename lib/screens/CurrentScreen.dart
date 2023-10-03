@@ -51,9 +51,9 @@ class CurrentScreen extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomCenter,
           colors: [
-            Colors.cyan.shade50,
+            Colors.cyan.shade100,
             Colors.white,
-            Colors.white,
+            Colors.cyan.shade100,
           ],
         ),
       ),

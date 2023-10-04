@@ -6,19 +6,19 @@ import 'package:xdsl_mt/utils/formatters.dart';
 import 'package:xdsl_mt/utils/validators.dart';
 import 'package:xdsl_mt/widgets/text_styles.dart';
 
-class NuIP extends StatelessWidget {
-  const NuIP({super.key});
+class ExternalHost extends StatelessWidget {
+  const ExternalHost({super.key});
 
   SettingsScreenViewModel _getVm(BuildContext context) => context.read<SettingsScreenViewModel>();
-  String _watchHost(BuildContext context) => context.select<SettingsScreenViewModel, String>((v) => v.host);
-  String _getHost(BuildContext context) => context.read<SettingsScreenViewModel>().host;
+  String _watchExternalHost(BuildContext context) => context.select<SettingsScreenViewModel, String>((v) => v.externalHost);
+  String _getExternalHost(BuildContext context) => context.read<SettingsScreenViewModel>().externalHost;
 
   _showDialog(BuildContext context) async {
-    String currentHost = _getHost(context);
+    String currentExternalHost = _getExternalHost(context);
     SettingsScreenViewModel vm = _getVm(context);
 
-    String? newHost = await showDialog(context: context, builder: (_) => Dialog(hostAdress: currentHost));
-    if (newHost != null) vm.setHost = newHost;
+    String? newExternalHost = await showDialog(context: context, builder: (_) => Dialog(extHostAdress: currentExternalHost));
+    if (newExternalHost != null) vm.setExternalHost = newExternalHost;
   }
 
   @override
@@ -35,11 +35,11 @@ class NuIP extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                'Network unit IP',
+                'External host',
                 style: TextStyles.f16w6.blueGrey800,
               ),
               Text(
-                _watchHost(context),
+                _watchExternalHost(context),
                 style: TextStyles.f12.blueGrey600,
               ),
             ],
@@ -52,15 +52,15 @@ class NuIP extends StatelessWidget {
 }
 
 class Dialog extends StatefulWidget {
-  final String hostAdress;
-  const Dialog({super.key, required this.hostAdress});
+  final String extHostAdress;
+  const Dialog({super.key, required this.extHostAdress});
 
   @override
   State<Dialog> createState() => _DialogState();
 }
 
 class _DialogState extends State<Dialog> {
-  late String hostAdress = widget.hostAdress;
+  late String extHostAdress = widget.extHostAdress;
   final formKey = GlobalKey<FormState>();
   bool get resultValid => formKey.currentState?.validate() ?? false;
 
@@ -69,11 +69,11 @@ class _DialogState extends State<Dialog> {
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
       child: AlertDialog(
-        title: Text('Network unit IP form', style: TextStyles.f18w6.blueGrey800),
-        content: Form(key: formKey, child: ipField()),
+        title: Text('External host form', style: TextStyles.f18w6.blueGrey800),
+        content: Form(key: formKey, child: hostField()),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context, hostAdress),
+            onPressed: () => Navigator.pop(context, extHostAdress),
             child: Text('Save', style: resultValid ? TextStyles.f16.blueGrey800 : TextStyles.f16.blueGrey400),
           ),
         ],
@@ -81,12 +81,12 @@ class _DialogState extends State<Dialog> {
     );
   }
 
-  TextFormField ipField() {
+  TextFormField hostField() {
     return TextFormField(
       style: TextStyles.f16.blueGrey800,
-      initialValue: hostAdress,
+      initialValue: extHostAdress,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      onChanged: (v) => setState(() => hostAdress = v),
+      onChanged: (v) => setState(() => extHostAdress = v),
       inputFormatters: [AppFormatters.ipFormatter],
       validator: (value) {
         if (value == null || value.isEmpty) {

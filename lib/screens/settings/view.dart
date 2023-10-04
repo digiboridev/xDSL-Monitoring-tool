@@ -2,10 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:xdsl_mt/screens/settings/components/animation_switch.dart';
 import 'package:xdsl_mt/screens/settings/components/split_interval.dart';
-import 'package:xdsl_mt/screens/settings/components/ext_ip.dart';
-import 'package:xdsl_mt/screens/settings/components/nu_ip.dart';
+import 'package:xdsl_mt/screens/settings/components/ext_host.dart';
+import 'package:xdsl_mt/screens/settings/components/nu_host.dart';
 import 'package:xdsl_mt/screens/settings/components/nu_login.dart';
-import 'package:xdsl_mt/screens/settings/components/nu_parser.dart';
+import 'package:xdsl_mt/screens/settings/components/nu_type.dart';
 import 'package:xdsl_mt/screens/settings/components/orient_lock.dart';
 import 'package:xdsl_mt/screens/settings/components/nu_password.dart';
 import 'package:xdsl_mt/screens/settings/components/sampling_interval.dart';
@@ -40,11 +40,11 @@ class SettingsScreenView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                NuParser(),
-                NuIP(),
+                NuType(),
+                NuHost(),
                 NuLogin(),
                 NuPassword(),
-                ExternalIp(),
+                ExternalHost(),
                 SamplingInterval(),
                 SplitInterval(),
                 AnimationSwitch(),

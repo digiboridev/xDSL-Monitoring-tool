@@ -1,4 +1,4 @@
-import 'package:xdsl_mt/data/model/app_settings.dart';
+import 'package:xdsl_mt/data/models/app_settings.dart';
 
 sealed class SettingsScreenState {
   SettingsScreenState();

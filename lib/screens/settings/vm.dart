@@ -1,9 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:xdsl_mt/data/model/app_settings.dart';
-import 'package:xdsl_mt/data/model/nu_parsers.dart';
-import 'package:xdsl_mt/data/repository/settings_repo.dart';
+import 'package:xdsl_mt/data/models/app_settings.dart';
+import 'package:xdsl_mt/data/models/network_unit_type.dart';
+import 'package:xdsl_mt/data/repositories/settings_repo.dart';
 import 'package:xdsl_mt/screens/settings/state.dart';
 import 'package:xdsl_mt/utils/streambang.dart';
 
@@ -28,7 +28,7 @@ class SettingsScreenViewModel extends ValueNotifier<SettingsScreenState> with St
 
   bool get vmReady => value is SettingsScreenLoaded;
 
-  NUParsers get nuParser => _expSettings.nuParser;
+  NetworkUnitType get nuType => _expSettings.nuType;
   String get host => _expSettings.host;
   String get login => _expSettings.login;
   String get pwd => _expSettings.pwd;
@@ -38,7 +38,7 @@ class SettingsScreenViewModel extends ValueNotifier<SettingsScreenState> with St
   bool get animations => _expSettings.animations;
   bool get orientLock => _expSettings.orientLock;
 
-  set setNuParser(NUParsers v) => _setSettings(_expSettings.copyWith(nuParser: v));
+  set setNuType(NetworkUnitType v) => _setSettings(_expSettings.copyWith(nuType: v));
   set setHost(String v) => _setSettings(_expSettings.copyWith(host: v));
   set setLogin(String v) => _setSettings(_expSettings.copyWith(login: v));
   set setPwd(String v) => _setSettings(_expSettings.copyWith(pwd: v));

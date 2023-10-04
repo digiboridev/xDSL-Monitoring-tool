@@ -1,9 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-import 'package:xdsl_mt/data/model/nu_parsers.dart';
+import 'package:xdsl_mt/data/models/network_unit_type.dart';
 
 class AppSettings {
-  final NUParsers nuParser;
+  final NetworkUnitType nuType;
   final String host;
   final String login;
   final String pwd;
@@ -14,7 +14,7 @@ class AppSettings {
   final bool orientLock;
 
   AppSettings._({
-    required this.nuParser,
+    required this.nuType,
     required this.host,
     required this.login,
     required this.pwd,
@@ -27,7 +27,7 @@ class AppSettings {
 
   factory AppSettings.base() {
     return AppSettings._(
-      nuParser: NUParsers.simulator,
+      nuType: NetworkUnitType.simulator,
       host: '192.168.1.1',
       login: 'admin',
       pwd: 'admin',
@@ -40,7 +40,7 @@ class AppSettings {
   }
 
   AppSettings copyWith({
-    NUParsers? nuParser,
+    NetworkUnitType? nuType,
     String? host,
     String? login,
     String? pwd,
@@ -51,7 +51,7 @@ class AppSettings {
     bool? orientLock,
   }) {
     return AppSettings._(
-      nuParser: nuParser ?? this.nuParser,
+      nuType: nuType ?? this.nuType,
       host: host ?? this.host,
       login: login ?? this.login,
       pwd: pwd ?? this.pwd,
@@ -65,7 +65,7 @@ class AppSettings {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'nuParser': nuParser.name,
+      'nuType': nuType.name,
       'host': host,
       'login': login,
       'pwd': pwd,
@@ -79,7 +79,7 @@ class AppSettings {
 
   factory AppSettings.fromMap(Map<String, dynamic> map) {
     return AppSettings._(
-      nuParser: NUParsers.values.byName(map['nuParser'] as String),
+      nuType: NetworkUnitType.values.byName(map['nuType'] as String),
       host: map['host'] as String,
       login: map['login'] as String,
       pwd: map['pwd'] as String,
@@ -97,14 +97,14 @@ class AppSettings {
 
   @override
   String toString() {
-    return 'AppSettings(nuParser: $nuParser, host: $host, login: $login, pwd: $pwd, samplingInterval: $samplingInterval, splitInterval: $splitInterval, externalHost: $externalHost, animations: $animations, orientLock: $orientLock)';
+    return 'AppSettings(nuType: $nuType, host: $host, login: $login, pwd: $pwd, samplingInterval: $samplingInterval, splitInterval: $splitInterval, externalHost: $externalHost, animations: $animations, orientLock: $orientLock)';
   }
 
   @override
   bool operator ==(covariant AppSettings other) {
     if (identical(this, other)) return true;
 
-    return other.nuParser == nuParser &&
+    return other.nuType == nuType &&
         other.host == host &&
         other.login == login &&
         other.pwd == pwd &&
@@ -117,7 +117,7 @@ class AppSettings {
 
   @override
   int get hashCode {
-    return nuParser.hashCode ^
+    return nuType.hashCode ^
         host.hashCode ^
         login.hashCode ^
         pwd.hashCode ^

@@ -1,7 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 /// Network unit parser types
-enum NUParsers {
+enum NetworkUnitType {
   /// Mock
   simulator,
 

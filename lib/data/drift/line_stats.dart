@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:xdsl_mt/data/drift/db.dart';
-import 'package:xdsl_mt/data/model/line_stats.dart';
+import 'package:xdsl_mt/data/models/line_stats.dart';
 
 part 'line_stats.g.dart';
 

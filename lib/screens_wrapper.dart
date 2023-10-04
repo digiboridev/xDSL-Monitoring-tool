@@ -1,21 +1,18 @@
-// import 'dart:io';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-// import 'package:flutter_foreground_plugin/flutter_foreground_plugin.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
+import 'package:xdsl_mt/data/model/line_stats.dart';
 import 'package:xdsl_mt/data/repository/settings_repo.dart';
+import 'package:xdsl_mt/main.dart';
 import 'package:xdsl_mt/models/data_sampling_service.dart';
 import 'package:xdsl_mt/models/settings_model.dart';
 import 'package:xdsl_mt/models/adsl_data_model.dart';
+import 'package:xdsl_mt/screens/CurrentScreen.dart';
+import 'package:xdsl_mt/screens/saved_data_screen.dart';
 import 'package:xdsl_mt/screens/settings/binding.dart';
-
-import 'screens/CurrentScreen.dart';
-import 'screens/saved_data_screen.dart';
-import 'screens/settings/view.dart';
-
 import 'package:move_to_background/move_to_background.dart';
+import 'package:xdsl_mt/screens/settings/view.dart';
 
 class ScreensWrapper extends StatelessWidget {
   const ScreensWrapper({super.key});
@@ -163,14 +160,41 @@ class FloatButton extends StatefulWidget {
 
 class _FloatButtonState extends State<FloatButton> {
   void toogleSampling(BuildContext context) async {
-    bool isCounting = context.read<DataSamplingService>().isCounting;
-    if (isCounting) {
-      context.read<DataSamplingService>().stopSampling();
-      context.read<ADSLDataModel>().saveLastCollection();
-    } else {
-      context.read<ADSLDataModel>().createCollection();
-      context.read<DataSamplingService>().startSampling(context.read<ADSLDataModel>().addToLast);
-    }
+    final repo = SL().lineStatsRepository;
+    final linestats = LineStats.connectionUp(
+      session: 'aa',
+      statusText: 'ac all good',
+      connectionType: 'adsl2',
+      upMaxRate: 12,
+      downMaxRate: 2,
+      upRate: 3,
+      downRate: 4,
+      upMargin: 5,
+      downMargin: 6,
+      upAttenuation: 7,
+      downAttenuation: 8,
+      upCRC: 9,
+      downCRC: 10,
+      upFEC: 11,
+      downFEC: 12,
+    );
+    await repo.insert(linestats);
+    final all = await repo.getAll();
+    final last = await repo.getLast();
+    final sessions = await repo.getSessions();
+
+    debugPrint('all: ${all.length}');
+    debugPrint('last: ${last?.toJson()}');
+    debugPrint('sessions: $sessions');
+
+    // bool isCounting = context.read<DataSamplingService>().isCounting;
+    // if (isCounting) {
+    //   context.read<DataSamplingService>().stopSampling();
+    //   context.read<ADSLDataModel>().saveLastCollection();
+    // } else {
+    //   context.read<ADSLDataModel>().createCollection();
+    //   context.read<DataSamplingService>().startSampling(context.read<ADSLDataModel>().addToLast);
+    // }
   }
 
   Icon get getIcon {

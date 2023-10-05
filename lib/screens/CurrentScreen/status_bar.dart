@@ -1,75 +1,20 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:xdsl_mt/models/adsl_data_model.dart';
-import 'package:xdsl_mt/models/data_sampling_service.dart';
-import 'package:xdsl_mt/models/modemClients/line_stats_collection.dart';
+import 'package:xdsl_mt/data/models/line_stats.dart';
+import 'package:xdsl_mt/data/services/stats_sampling_service.dart';
 
 class StatusBar extends StatelessWidget {
-  final bool _isEmpty;
-
-  const StatusBar(this._isEmpty, {super.key});
-
-  bool getConnectionStatus(BuildContext context) {
-    if (!context.watch<DataSamplingService>().isCounting) {
-      return false;
-    } else if (_isEmpty) {
-      return false;
-    } else {
-      LineStatsCollection asd = context.watch<ADSLDataModel>().getLastCollection.last;
-      return asd.isErrored ? false : true;
-    }
-  }
-
-  bool getDSLStatus(BuildContext context) {
-    if (!context.watch<DataSamplingService>().isCounting) {
-      return false;
-    } else if (_isEmpty) {
-      return false;
-    } else if (context.watch<ADSLDataModel>().getLastCollection.last.isErrored) {
-      return false;
-    } else {
-      LineStatsCollection asd = context.watch<ADSLDataModel>().getLastCollection.last;
-      return asd.isConnectionUp ? true : false;
-    }
-  }
-
-  String getLastSync(BuildContext context) {
-    if (_isEmpty) {
-      return 'unknown';
-    }
-    LineStatsCollection asd = context.watch<ADSLDataModel>().getLastCollection.last;
-    return asd.dateTime.toString().substring(11, 19);
-  }
-
-  String getStatus(BuildContext context) {
-    if (_isEmpty) {
-      return 'unknown';
-    }
-    LineStatsCollection asd = context.watch<ADSLDataModel>().getLastCollection.last;
-    return asd.status;
-  }
-
-  String getType(BuildContext context) {
-    if (_isEmpty) {
-      return 'unknown';
-    }
-    LineStatsCollection asd = context.watch<ADSLDataModel>().getLastCollection.last;
-    return asd.connectionType;
-  }
-
-  String getStatusString(BuildContext context) {
-    if (_isEmpty) {
-      return 'unknown';
-    }
-
-    return (context.watch<DataSamplingService>().isCounting ? '${getStatus(context)}  ' : '') +
-        (getDSLStatus(context) ? getType(context) : '') +
-        (context.watch<DataSamplingService>().isCounting ? '  ${getLastSync(context)}' : '');
-  }
+  const StatusBar({super.key});
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('render statusbar');
+    StatsSamplingService samplingService = context.watch<StatsSamplingService>();
+    LineStats? lastSample = samplingService.lastSample;
+
+    bool sampling = samplingService.sampling;
+    bool netUnitConnected = lastSample is LineStats && lastSample.status != SampleStatus.samplingError;
+    bool connectionUp = lastSample is LineStats && lastSample.status == SampleStatus.connectionUp;
+
     return Column(
       children: [
         Container(
@@ -77,56 +22,104 @@ class StatusBar extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    Text(
-                      'S/C/DSL',
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300),
-                    ),
-                    Container(
-                      width: 10,
-                      margin: EdgeInsets.only(left: 8),
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                            color: context.watch<DataSamplingService>().isCounting ? Colors.yellow : Colors.black,
-                            width: 5,
-                          ),
-                          borderRadius: BorderRadius.circular(5)),
-                    ),
-                    Container(
-                      width: 10,
-                      margin: EdgeInsets.only(left: 4),
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                            color: getConnectionStatus(context) ? Colors.yellow : Colors.black,
-                            width: 5,
-                          ),
-                          borderRadius: BorderRadius.circular(5)),
-                    ),
-                    Container(
-                      width: 10,
-                      margin: EdgeInsets.only(left: 4),
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                            color: getDSLStatus(context) ? Colors.yellow : Colors.black,
-                            width: 5,
-                          ),
-                          borderRadius: BorderRadius.circular(5)),
-                    ),
-                  ],
-                ),
-                Text(
-                  getStatusString(context),
-                  style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w300),
-                )
+                Flexible(fit: FlexFit.loose, child: indicators(sampling, netUnitConnected, connectionUp)),
+                SizedBox(width: 8),
+                Flexible(fit: FlexFit.tight, child: statusText(sampling, lastSample)),
               ],
             ),
           ),
         ),
-        ProgressLine(_isEmpty)
+        ProgressLine(),
+      ],
+    );
+  }
+
+  Widget statusText(bool sampling, LineStats? lastSample) {
+    String statusText = '';
+    if (sampling) {
+      if (lastSample is LineStats) {
+        statusText = lastSample.statusText;
+      } else {
+        statusText = 'Connecting...';
+      }
+    } else {
+      statusText = 'Idle';
+    }
+
+    return AnimatedSwitcher(
+      duration: Duration(milliseconds: 300),
+      switchInCurve: Curves.elasticOut,
+      switchOutCurve: Curves.easeIn,
+      transitionBuilder: (child, animation) {
+        return SlideTransition(
+          position: Tween<Offset>(begin: Offset(0.1, 0), end: Offset(0, 0)).animate(animation),
+          child: FadeTransition(
+            opacity: Tween<double>(begin: -1, end: 1).animate(animation),
+            child: child,
+          ),
+        );
+      },
+      child: Align(
+        key: Key(statusText),
+        alignment: Alignment.centerRight,
+        child: Text(
+          statusText,
+          style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w300),
+          overflow: TextOverflow.ellipsis,
+          // key: Key(statusText),
+          // key: UniqueKey(),
+        ),
+      ),
+    );
+  }
+
+  Widget indicators(bool sampling, bool netUnitConnected, bool connectionUp) {
+    return Row(
+      children: [
+        Text(
+          'S/C/DSL',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300),
+        ),
+        AnimatedContainer(
+          duration: Duration(milliseconds: 400),
+          curve: Curves.easeInOutBack,
+          width: 10,
+          margin: EdgeInsets.only(left: 8),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: sampling ? Colors.yellow : Colors.black,
+              width: 5,
+            ),
+            borderRadius: BorderRadius.circular(5),
+          ),
+        ),
+        AnimatedContainer(
+          duration: Duration(milliseconds: 400),
+          curve: Curves.easeInOutBack,
+          width: 10,
+          margin: EdgeInsets.only(left: 4),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: netUnitConnected ? Colors.yellow : Colors.black,
+              width: 5,
+            ),
+            borderRadius: BorderRadius.circular(5),
+          ),
+        ),
+        AnimatedContainer(
+          duration: Duration(milliseconds: 400),
+          curve: Curves.easeInOutBack,
+          width: 10,
+          margin: EdgeInsets.only(left: 4),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: connectionUp ? Colors.yellow : Colors.black,
+              width: 5,
+            ),
+            borderRadius: BorderRadius.circular(5),
+          ),
+        ),
       ],
     );
   }
@@ -134,86 +127,39 @@ class StatusBar extends StatelessWidget {
 
 // Draws animated line when sampling is running
 class ProgressLine extends StatefulWidget {
-  final bool _isEmpty;
-  const ProgressLine(this._isEmpty, {super.key});
+  const ProgressLine({super.key});
 
   @override
   State<ProgressLine> createState() => _ProgressLineState();
 }
 
 class _ProgressLineState extends State<ProgressLine> with TickerProviderStateMixin {
-  //Animation vars
-  late final AnimationController controller;
-  late final Animation<double> animation;
-  Tween<double> animTween = Tween(begin: 0, end: 0);
-  double progress = 1;
-  int old = 0;
+  late final AnimationController controller = AnimationController(vsync: this, duration: Duration(seconds: 1));
+  late final curvedAnimation = CurvedAnimation(parent: controller, curve: Curves.ease, reverseCurve: Curves.ease);
+  late final Tween<double> animTween = Tween(begin: 0, end: 0);
+  late final Animation<double> animation = animTween.animate(curvedAnimation);
 
   @override
   void initState() {
     super.initState();
 
-    //Init animation controller
+    controller.addListener(() => setState(() {}));
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) controller.reset();
+      if (status == AnimationStatus.dismissed) controller.reset();
+    });
 
-    controller = AnimationController(
-      vsync: this,
-      duration: Duration(
-        seconds: context.read<DataSamplingService>().getSamplingInterval,
-      ),
-    );
+    StatsSamplingService samplingService = context.read<StatsSamplingService>();
 
-    //Extend main controller with curve
-    final curvedAnimation = CurvedAnimation(
-      parent: controller,
-      curve: Curves.slowMiddle,
-      reverseCurve: Curves.easeOut,
-    );
-
-    //Init animation
-    animation = animTween.animate(curvedAnimation)
-      ..addListener(() {
-        setState(() {});
-      })
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          controller.reset();
-        } else if (status == AnimationStatus.dismissed) {
-          controller.reset();
-        }
-      });
-  }
-
-  @override
-  void didUpdateWidget(covariant ProgressLine oldWidget) {
-    // TODO: implement didUpdateWidget
-    super.didUpdateWidget(oldWidget);
-
-    //Return if collection is empty
-    if (widget._isEmpty) {
-      return;
-    }
-
-    //Load current collection length
-    var now = context.read<ADSLDataModel>().getLastCollection.length;
-
-    //Compare current length with previous
-    if (old != now) {
-      //Skip if init value
-      if (old == 0) {
-        old = now;
-        return;
-      }
-
-      //Set new value as old value and start animation
-      old = now;
+    samplingService.statsStream.forEach((_) {
+      if (!mounted) return;
       animTween.begin = 0;
       animTween.end = 1;
       controller.reset();
       controller.forward();
-    }
+    });
   }
 
-  //Stop controller on dispose
   @override
   void dispose() {
     controller.dispose();
@@ -222,15 +168,13 @@ class _ProgressLineState extends State<ProgressLine> with TickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 3,
+    return SizedBox(
       width: MediaQuery.of(context).size.width * 1,
-      color: Colors.blueGrey.shade50,
       child: Row(
         children: [
           Container(
             color: Colors.yellow[700],
-            height: 3,
+            height: 2,
             width: MediaQuery.of(context).size.width * animation.value,
           ),
         ],

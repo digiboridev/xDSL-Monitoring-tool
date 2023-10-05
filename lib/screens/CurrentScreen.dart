@@ -59,8 +59,8 @@ class CurrentScreen extends StatelessWidget {
       ),
       child: ListView(
         children: [
-          StatusBar(isMapEmpty),
-          CurrentSpeedBar(isMapEmpty),
+          StatusBar(),
+          CurrentSpeedBar(),
           CurrentSNRBar(isMapEmpty),
           RsCounters(isMapEmpty),
           Column(

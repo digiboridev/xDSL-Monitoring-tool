@@ -30,5 +30,5 @@ final class SL {
   late final LineStatsRepository lineStatsRepository = LineStatsRepositoryDriftImpl(dao: LineStatsDao(_drift));
   late final SettingsRepository settingsRepository = SettingsRepositoryPrefsImpl();
 
-  late final StatsSamplingService statsSamplingService = StatsSamplingService(lineStatsRepository, settingsRepository);
+  StatsSamplingService get statsSamplingService => StatsSamplingService(lineStatsRepository, settingsRepository);
 }

@@ -1,158 +1,64 @@
-import 'dart:async';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:xdsl_mt/models/adsl_data_model.dart';
-import 'package:xdsl_mt/models/data_sampling_service.dart';
-import 'package:xdsl_mt/models/modemClients/line_stats_collection.dart';
-import 'package:xdsl_mt/models/settings_model.dart';
+import 'package:xdsl_mt/data/models/line_stats.dart';
+import 'package:xdsl_mt/data/services/stats_sampling_service.dart';
 
-//Draw and animate current speed by canvas
 class CurrentSpeedBar extends StatefulWidget {
-  final bool _isEmpty;
-
-  const CurrentSpeedBar(this._isEmpty, {super.key});
+  const CurrentSpeedBar({super.key});
 
   @override
   State<CurrentSpeedBar> createState() => _CurrentSpeedBarState();
 }
 
 class _CurrentSpeedBarState extends State<CurrentSpeedBar> with TickerProviderStateMixin {
-  //Speed vars
+  // Values
   double currDown = 0;
   double currUp = 0;
   double attainableDown = 0;
   double attainableUp = 0;
 
   //Animation vars
-  late AnimationController controller;
-  late Animation<double> currDownAnimation;
-  late Animation<double> currUpAnimation;
-  late Animation<double> attainableDownAnimation;
-  late Animation<double> attainableUpAnimation;
+  late final AnimationController controller = AnimationController(vsync: this, duration: Duration(seconds: 1));
+  late final curvedAnimation = CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn, reverseCurve: Curves.easeOut);
+  late final curvedAnimationAlt = CurvedAnimation(parent: controller, curve: Curves.bounceInOut, reverseCurve: Curves.easeOut);
 
-  //Init tweens fo animation
-  Tween<double> currDownTween = Tween(begin: 0, end: 0);
-  Tween<double> currUpTween = Tween(begin: 0, end: 0);
-  Tween<double> attainableDownTween = Tween(begin: 0, end: 0);
-  Tween<double> attainableUpTween = Tween(begin: 0, end: 0);
+  late final Tween<double> currDownTween = Tween(begin: 0, end: 0);
+  late final Tween<double> currUpTween = Tween(begin: 0, end: 0);
+  late final Tween<double> attainableDownTween = Tween(begin: 0, end: 0);
+  late final Tween<double> attainableUpTween = Tween(begin: 0, end: 0);
+
+  late final Animation<double> currDownAnimation = currDownTween.animate(curvedAnimation);
+  late final Animation<double> currUpAnimation = currUpTween.animate(curvedAnimation);
+  late final Animation<double> attainableDownAnimation = attainableDownTween.animate(curvedAnimationAlt);
+  late final Animation<double> attainableUpAnimation = attainableUpTween.animate(curvedAnimationAlt);
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    controller.addListener(() => setState(() {}));
 
-    //Init animation controllers
-    //Init main controller
-    controller = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: (context.read<SettingsModel>().getAnimated) ? 1000 : 0),
-    );
+    updateData();
 
-    //Extend main controller with curves
-    //First curve for download speed
-    final curvedAnimation = CurvedAnimation(
-      parent: controller,
-      curve: Curves.fastOutSlowIn,
-      reverseCurve: Curves.easeOut,
-    );
-
-    //second curve for upload speed
-    final curvedAnimationAlt = CurvedAnimation(
-      parent: controller,
-      curve: Curves.bounceInOut,
-      reverseCurve: Curves.easeOut,
-    );
-
-    //Init animations separately for all variables
-    currDownAnimation = currDownTween.animate(curvedAnimation)
-      ..addListener(() {
-        setState(() {});
-      })
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          controller.stop();
-        } else if (status == AnimationStatus.dismissed) {
-          controller.stop();
-        }
-      });
-
-    currUpAnimation = currUpTween.animate(curvedAnimation)
-      ..addListener(() {
-        setState(() {});
-      })
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          controller.stop();
-        } else if (status == AnimationStatus.dismissed) {
-          controller.stop();
-        }
-      });
-
-    attainableDownAnimation = attainableDownTween.animate(curvedAnimationAlt)
-      ..addListener(() {
-        setState(() {});
-      })
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          controller.stop();
-        } else if (status == AnimationStatus.dismissed) {
-          controller.stop();
-        }
-      });
-
-    attainableUpAnimation = attainableUpTween.animate(curvedAnimationAlt)
-      ..addListener(() {
-        setState(() {});
-      })
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          controller.stop();
-        } else if (status == AnimationStatus.dismissed) {
-          controller.stop();
-        }
-      });
-    updateData(context);
+    context.read<StatsSamplingService>().addListener(() {
+      if (mounted) updateData();
+    });
   }
 
-  @override
-  void didUpdateWidget(covariant CurrentSpeedBar oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // update data in winget updating by parrent
-    // prevent updating data on widget render
-    Timer(Duration(milliseconds: 100), () => updateData(context));
-  }
-
-  void updateData(BuildContext context) {
-    //Save old data before update for animation
+  updateData() {
+    // Save prev values
     var currDownold = currDown;
     var currUpold = currUp;
     var attainableDownold = attainableDown;
     var attainableUpold = attainableUp;
 
-    //Update data
-    if (!context.read<DataSamplingService>().isCounting) {
-      currDown = 0;
-      currUp = 0;
-      attainableDown = 0;
-      attainableUp = 0;
-      // return;
-    } else if (widget._isEmpty) {
-      currDown = 0;
-      currUp = 0;
-      attainableDown = 0;
-      attainableUp = 0;
-      // return;
-    } else {
-      LineStatsCollection asd = context.read<ADSLDataModel>().getLastCollection.last;
-      currDown = asd.downRate.toDouble();
-      currUp = asd.upRate.toDouble();
-      attainableDown = asd.downMaxRate.toDouble();
-      attainableUp = asd.upMaxRate.toDouble();
-    }
+    // Get new values
+    LineStats? stats = context.read<StatsSamplingService>().lastSample;
+    currDown = stats?.downRate?.toDouble() ?? 0;
+    currUp = stats?.upRate?.toDouble() ?? 0;
+    attainableDown = stats?.downMaxRate?.toDouble() ?? 0;
+    attainableUp = stats?.upMaxRate?.toDouble() ?? 0;
 
-    //Check for difference beetween old and new data
-    //Start animation from old and to data
-
+    // Start animation from old to new values if changed
     if (currDown != currDownold || currUp != currUpold || attainableDown != attainableDownold || attainableUp != attainableUpold) {
       currDownTween.begin = currDownold;
       currDownTween.end = currDown;
@@ -165,34 +71,8 @@ class _CurrentSpeedBarState extends State<CurrentSpeedBar> with TickerProviderSt
       controller.reset();
       controller.forward();
     }
-
-    // if (currDown != currDownold) {
-    //   currDownTween.begin = currDownold;
-    //   currDownTween.end = currDown;
-    //   controller.reset();
-    //   controller.forward();
-    // }
-    // if (currUp != currUpold) {
-    //   currUpTween.begin = currUpold;
-    //   currUpTween.end = currUp;
-    //   controller.reset();
-    //   controller.forward();
-    // }
-    // if (attainableDown != attainableDownold) {
-    //   attainableDownTween.begin = attainableDownold;
-    //   attainableDownTween.end = attainableDown;
-    //   controller.reset();
-    //   controller.forward();
-    // }
-    // if (attainableUp != attainableUpold) {
-    //   attainableUpTween.begin = attainableUpold;
-    //   attainableUpTween.end = attainableUp;
-    //   controller.reset();
-    //   controller.forward();
-    // }
   }
 
-  //Stop controller on dispose
   @override
   void dispose() {
     controller.dispose();
@@ -215,7 +95,7 @@ class _CurrentSpeedBarState extends State<CurrentSpeedBar> with TickerProviderSt
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Container(
+              SizedBox(
                 height: 120,
                 width: 120,
                 child: CustomPaint(
@@ -232,12 +112,12 @@ class _CurrentSpeedBarState extends State<CurrentSpeedBar> with TickerProviderSt
                       Text(
                         'Kbps',
                         style: TextStyle(fontSize: 12, color: Colors.blueGrey.shade900, fontWeight: FontWeight.w300),
-                      )
+                      ),
                     ],
                   ),
                 ),
               ),
-              Container(
+              SizedBox(
                 height: 120,
                 width: 120,
                 child: CustomPaint(
@@ -247,13 +127,15 @@ class _CurrentSpeedBarState extends State<CurrentSpeedBar> with TickerProviderSt
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text('Up', style: TextStyle(fontSize: 12, color: Colors.blueGrey.shade900, fontWeight: FontWeight.w300)),
-                      Text('${currUpAnimation.value.toInt()}/${attainableUpAnimation.value.toInt()}',
-                          style: TextStyle(fontSize: 14, color: Colors.blueGrey.shade900, fontWeight: FontWeight.w300)),
-                      Text('Kbps', style: TextStyle(fontSize: 12, color: Colors.blueGrey.shade900, fontWeight: FontWeight.w300))
+                      Text(
+                        '${currUpAnimation.value.toInt()}/${attainableUpAnimation.value.toInt()}',
+                        style: TextStyle(fontSize: 14, color: Colors.blueGrey.shade900, fontWeight: FontWeight.w300),
+                      ),
+                      Text('Kbps', style: TextStyle(fontSize: 12, color: Colors.blueGrey.shade900, fontWeight: FontWeight.w300)),
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -281,32 +163,35 @@ class SpdPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     var rect = Offset.zero & Size(size.width, size.height);
     canvas.drawArc(
-        rect,
-        2,
-        5.4,
-        false,
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 16
-          ..color = Colors.blueGrey.shade200);
+      rect,
+      2,
+      5.4,
+      false,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 16
+        ..color = Colors.blueGrey.shade200,
+    );
     canvas.drawArc(
-        rect,
-        2,
-        percentageAtta(),
-        false,
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 8
-          ..color = Colors.yellow.shade400);
+      rect,
+      2,
+      percentageAtta(),
+      false,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 8
+        ..color = Colors.yellow.shade400,
+    );
     canvas.drawArc(
-        rect,
-        2,
-        percentageCurr(),
-        false,
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 8
-          ..color = Colors.blueGrey.shade800);
+      rect,
+      2,
+      percentageCurr(),
+      false,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 8
+        ..color = Colors.blueGrey.shade800,
+    );
   }
 
   @override

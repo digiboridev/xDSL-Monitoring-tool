@@ -6,11 +6,23 @@ import 'package:xdsl_mt/data/net_unit_clients/net_unit_client.dart';
 final class ClientSimulator extends NetUnitClient {
   ClientSimulator({required super.session}) : super(ip: '_', login: '_', password: '_');
 
+  // Base speed rates
+  final int _bupRate = 1500;
+  final int _bdownRate = 16000;
+  final int _bupAttainableRate = 2000;
+  final int _bdownAttainableRate = 18000;
+
   // Base line values
   final double _bmrU = 10;
   final double _bmrD = 10;
   final double _battU = 40;
   final double _battD = 40;
+
+  // Current speed rates
+  late int _upRate = _bupRate;
+  late int _downRate = _bdownRate;
+  late int _upAttainableRate = _bupAttainableRate;
+  late int _downAttainableRate = _bdownAttainableRate;
 
   // Current line stats
   late double _mrU = _bmrU;
@@ -55,36 +67,42 @@ final class ClientSimulator extends NetUnitClient {
 
     // 5% chance of donwstream stats drift
     if (_rndChance <= 5) {
-      int rndDrift = Random().nextInt(100);
+      int sigDrift = Random().nextInt(200) - 100;
+      int unsigDrift = sigDrift.abs();
 
-      _mrD = ((_mrD + (rndDrift - 50) / 100) * 100).round() / 100;
-      _attD = ((_attD + (rndDrift - 50) / 100) * 100).round() / 100;
-      _fecD = _fecD + rndDrift * 20;
-      _crcD = _crcD + rndDrift * 9;
+      _downRate += sigDrift * 8;
+      _downAttainableRate += sigDrift * 8;
+
+      _mrD += sigDrift / 100;
+      _attD += sigDrift / 100;
+      _fecD += unsigDrift * 8;
+      _crcD += unsigDrift * 4;
+
+      // TODO max values limit
     }
 
     // 5% chance of upstream stats drift
     if (_rndChance <= 5) {
-      int rndDrift = Random().nextInt(100);
+      int sigDrift = Random().nextInt(200) - 100;
+      int unsigDrift = sigDrift.abs();
 
-      _mrU = ((_mrU + (rndDrift - 50) / 100) * 100).round() / 100;
-      _attU = ((_attU + (rndDrift - 50) / 100) * 100).round() / 100;
-      _fecU = _fecU + rndDrift * 13;
-      _crcU = _crcU + rndDrift * 6;
+      _upRate += sigDrift * 2;
+      _upAttainableRate += sigDrift * 2;
+
+      _mrU += sigDrift / 100;
+      _attU += sigDrift / 100;
+      _fecU += unsigDrift * 4;
+      _crcU += unsigDrift * 2;
     }
 
     return LineStats.connectionUp(
       session: session,
       statusText: 'Up',
       connectionType: 'ADSL2+',
-      // upMaxRate: 2000,
-      upMaxRate: Random().nextInt(2000),
-      // downMaxRate: 19000,
-      downMaxRate: Random().nextInt(19000),
-      // upRate: 1898,
-      upRate: Random().nextInt(1898),
-      // downRate: 17809,
-      downRate: Random().nextInt(17809),
+      upAttainableRate: _upAttainableRate,
+      downAttainableRate: _downAttainableRate,
+      upRate: _upRate,
+      downRate: _downRate,
       upMargin: _mrU,
       downMargin: _mrD,
       upAttenuation: _attU,

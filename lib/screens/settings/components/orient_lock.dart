@@ -18,9 +18,16 @@ class OrientLock extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text('Lock orientation', style: TextStyles.f16w6.blueGrey800),
-          Switch(
-            value: watchOrientLock(context),
-            onChanged: (v) => _getVm(context).setOrientLock = v,
+          SizedBox(width: 8),
+          SizedBox(
+            height: 28,
+            child: FittedBox(
+              fit: BoxFit.fitHeight,
+              child: Switch(
+                value: watchOrientLock(context),
+                onChanged: (v) => _getVm(context).setOrientLock = v,
+              ),
+            ),
           ),
         ],
       ),

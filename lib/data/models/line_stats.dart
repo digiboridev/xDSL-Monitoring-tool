@@ -13,8 +13,8 @@ class LineStats {
   final SampleStatus status;
   final String statusText;
   final String? connectionType;
-  final int? upMaxRate;
-  final int? downMaxRate;
+  final int? upAttainableRate;
+  final int? downAttainableRate;
   final int? upRate;
   final int? downRate;
   final double? upMargin;
@@ -32,8 +32,8 @@ class LineStats {
     required this.status,
     required this.statusText,
     this.connectionType,
-    this.upMaxRate,
-    this.downMaxRate,
+    this.upAttainableRate,
+    this.downAttainableRate,
     this.upRate,
     this.downRate,
     this.upMargin,
@@ -68,8 +68,8 @@ class LineStats {
     required String session,
     required String statusText,
     required String connectionType,
-    required int upMaxRate,
-    required int downMaxRate,
+    required int upAttainableRate,
+    required int downAttainableRate,
     required int upRate,
     required int downRate,
     required double upMargin,
@@ -87,8 +87,8 @@ class LineStats {
       status: SampleStatus.connectionUp,
       statusText: statusText,
       connectionType: connectionType,
-      upMaxRate: upMaxRate,
-      downMaxRate: downMaxRate,
+      upAttainableRate: upAttainableRate,
+      downAttainableRate: downAttainableRate,
       upRate: upRate,
       downRate: downRate,
       upMargin: upMargin,
@@ -111,8 +111,8 @@ class LineStats {
         other.status == status &&
         other.statusText == statusText &&
         other.connectionType == connectionType &&
-        other.upMaxRate == upMaxRate &&
-        other.downMaxRate == downMaxRate &&
+        other.upAttainableRate == upAttainableRate &&
+        other.downAttainableRate == downAttainableRate &&
         other.upRate == upRate &&
         other.downRate == downRate &&
         other.upMargin == upMargin &&
@@ -132,8 +132,8 @@ class LineStats {
         status.hashCode ^
         statusText.hashCode ^
         connectionType.hashCode ^
-        upMaxRate.hashCode ^
-        downMaxRate.hashCode ^
+        upAttainableRate.hashCode ^
+        downAttainableRate.hashCode ^
         upRate.hashCode ^
         downRate.hashCode ^
         upMargin.hashCode ^
@@ -148,7 +148,7 @@ class LineStats {
 
   @override
   String toString() {
-    return 'LineStats(time: $time, session: $session, status: $status, statusText: $statusText, connectionType: $connectionType, upMaxRate: $upMaxRate, downMaxRate: $downMaxRate, upRate: $upRate, downRate: $downRate, upMargin: $upMargin, downMargin: $downMargin, upAttenuation: $upAttenuation, downAttenuation: $downAttenuation, upCRC: $upCRC, downCRC: $downCRC, upFEC: $upFEC, downFEC: $downFEC)';
+    return 'LineStats(time: $time, session: $session, status: $status, statusText: $statusText, connectionType: $connectionType, upAttainableRate: $upAttainableRate, downAttainableRate: $downAttainableRate, upRate: $upRate, downRate: $downRate, upMargin: $upMargin, downMargin: $downMargin, upAttenuation: $upAttenuation, downAttenuation: $downAttenuation, upCRC: $upCRC, downCRC: $downCRC, upFEC: $upFEC, downFEC: $downFEC)';
   }
 
   Map<String, dynamic> toMap() {
@@ -158,8 +158,8 @@ class LineStats {
       'status': status.name,
       'statusText': statusText,
       'connectionType': connectionType,
-      'upMaxRate': upMaxRate,
-      'downMaxRate': downMaxRate,
+      'upAttainableRate': upAttainableRate,
+      'downAttainableRate': downAttainableRate,
       'upRate': upRate,
       'downRate': downRate,
       'upMargin': upMargin,
@@ -180,8 +180,8 @@ class LineStats {
       status: SampleStatus.values.byName(map['status'] as String),
       statusText: map['statusText'] as String,
       connectionType: map['connectionType'] != null ? map['connectionType'] as String : null,
-      upMaxRate: map['upMaxRate'] != null ? map['upMaxRate'] as int : null,
-      downMaxRate: map['downMaxRate'] != null ? map['downMaxRate'] as int : null,
+      upAttainableRate: map['upAttainableRate'] != null ? map['upAttainableRate'] as int : null,
+      downAttainableRate: map['downAttainableRate'] != null ? map['downAttainableRate'] as int : null,
       upRate: map['upRate'] != null ? map['upRate'] as int : null,
       downRate: map['downRate'] != null ? map['downRate'] as int : null,
       upMargin: map['upMargin'] != null ? map['upMargin'] as double : null,

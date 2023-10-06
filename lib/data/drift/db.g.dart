@@ -51,17 +51,17 @@ class $LineStatsTableTable extends LineStatsTable
   late final GeneratedColumn<String> connectionType = GeneratedColumn<String>(
       'connection_type', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _upMaxRateMeta =
-      const VerificationMeta('upMaxRate');
+  static const VerificationMeta _upAttainableRateMeta =
+      const VerificationMeta('upAttainableRate');
   @override
-  late final GeneratedColumn<int> upMaxRate = GeneratedColumn<int>(
-      'up_max_rate', aliasedName, true,
+  late final GeneratedColumn<int> upAttainableRate = GeneratedColumn<int>(
+      'up_attainable_rate', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _downMaxRateMeta =
-      const VerificationMeta('downMaxRate');
+  static const VerificationMeta _downAttainableRateMeta =
+      const VerificationMeta('downAttainableRate');
   @override
-  late final GeneratedColumn<int> downMaxRate = GeneratedColumn<int>(
-      'down_max_rate', aliasedName, true,
+  late final GeneratedColumn<int> downAttainableRate = GeneratedColumn<int>(
+      'down_attainable_rate', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _upRateMeta = const VerificationMeta('upRate');
   @override
@@ -128,8 +128,8 @@ class $LineStatsTableTable extends LineStatsTable
         status,
         statusText,
         connectionType,
-        upMaxRate,
-        downMaxRate,
+        upAttainableRate,
+        downAttainableRate,
         upRate,
         downRate,
         upMargin,
@@ -181,17 +181,17 @@ class $LineStatsTableTable extends LineStatsTable
           connectionType.isAcceptableOrUnknown(
               data['connection_type']!, _connectionTypeMeta));
     }
-    if (data.containsKey('up_max_rate')) {
+    if (data.containsKey('up_attainable_rate')) {
       context.handle(
-          _upMaxRateMeta,
-          upMaxRate.isAcceptableOrUnknown(
-              data['up_max_rate']!, _upMaxRateMeta));
+          _upAttainableRateMeta,
+          upAttainableRate.isAcceptableOrUnknown(
+              data['up_attainable_rate']!, _upAttainableRateMeta));
     }
-    if (data.containsKey('down_max_rate')) {
+    if (data.containsKey('down_attainable_rate')) {
       context.handle(
-          _downMaxRateMeta,
-          downMaxRate.isAcceptableOrUnknown(
-              data['down_max_rate']!, _downMaxRateMeta));
+          _downAttainableRateMeta,
+          downAttainableRate.isAcceptableOrUnknown(
+              data['down_attainable_rate']!, _downAttainableRateMeta));
     }
     if (data.containsKey('up_rate')) {
       context.handle(_upRateMeta,
@@ -261,10 +261,10 @@ class $LineStatsTableTable extends LineStatsTable
           .read(DriftSqlType.string, data['${effectivePrefix}status_text'])!,
       connectionType: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}connection_type']),
-      upMaxRate: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}up_max_rate']),
-      downMaxRate: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}down_max_rate']),
+      upAttainableRate: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}up_attainable_rate']),
+      downAttainableRate: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}down_attainable_rate']),
       upRate: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}up_rate']),
       downRate: attachedDatabase.typeMapping
@@ -304,8 +304,8 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
   final SampleStatus status;
   final String statusText;
   final String? connectionType;
-  final int? upMaxRate;
-  final int? downMaxRate;
+  final int? upAttainableRate;
+  final int? downAttainableRate;
   final int? upRate;
   final int? downRate;
   final double? upMargin;
@@ -323,8 +323,8 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
       required this.status,
       required this.statusText,
       this.connectionType,
-      this.upMaxRate,
-      this.downMaxRate,
+      this.upAttainableRate,
+      this.downAttainableRate,
       this.upRate,
       this.downRate,
       this.upMargin,
@@ -349,11 +349,11 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
     if (!nullToAbsent || connectionType != null) {
       map['connection_type'] = Variable<String>(connectionType);
     }
-    if (!nullToAbsent || upMaxRate != null) {
-      map['up_max_rate'] = Variable<int>(upMaxRate);
+    if (!nullToAbsent || upAttainableRate != null) {
+      map['up_attainable_rate'] = Variable<int>(upAttainableRate);
     }
-    if (!nullToAbsent || downMaxRate != null) {
-      map['down_max_rate'] = Variable<int>(downMaxRate);
+    if (!nullToAbsent || downAttainableRate != null) {
+      map['down_attainable_rate'] = Variable<int>(downAttainableRate);
     }
     if (!nullToAbsent || upRate != null) {
       map['up_rate'] = Variable<int>(upRate);
@@ -398,12 +398,12 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
       connectionType: connectionType == null && nullToAbsent
           ? const Value.absent()
           : Value(connectionType),
-      upMaxRate: upMaxRate == null && nullToAbsent
+      upAttainableRate: upAttainableRate == null && nullToAbsent
           ? const Value.absent()
-          : Value(upMaxRate),
-      downMaxRate: downMaxRate == null && nullToAbsent
+          : Value(upAttainableRate),
+      downAttainableRate: downAttainableRate == null && nullToAbsent
           ? const Value.absent()
-          : Value(downMaxRate),
+          : Value(downAttainableRate),
       upRate:
           upRate == null && nullToAbsent ? const Value.absent() : Value(upRate),
       downRate: downRate == null && nullToAbsent
@@ -445,8 +445,8 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
           .fromJson(serializer.fromJson<String>(json['status'])),
       statusText: serializer.fromJson<String>(json['statusText']),
       connectionType: serializer.fromJson<String?>(json['connectionType']),
-      upMaxRate: serializer.fromJson<int?>(json['upMaxRate']),
-      downMaxRate: serializer.fromJson<int?>(json['downMaxRate']),
+      upAttainableRate: serializer.fromJson<int?>(json['upAttainableRate']),
+      downAttainableRate: serializer.fromJson<int?>(json['downAttainableRate']),
       upRate: serializer.fromJson<int?>(json['upRate']),
       downRate: serializer.fromJson<int?>(json['downRate']),
       upMargin: serializer.fromJson<double?>(json['upMargin']),
@@ -470,8 +470,8 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
           .toJson<String>($LineStatsTableTable.$converterstatus.toJson(status)),
       'statusText': serializer.toJson<String>(statusText),
       'connectionType': serializer.toJson<String?>(connectionType),
-      'upMaxRate': serializer.toJson<int?>(upMaxRate),
-      'downMaxRate': serializer.toJson<int?>(downMaxRate),
+      'upAttainableRate': serializer.toJson<int?>(upAttainableRate),
+      'downAttainableRate': serializer.toJson<int?>(downAttainableRate),
       'upRate': serializer.toJson<int?>(upRate),
       'downRate': serializer.toJson<int?>(downRate),
       'upMargin': serializer.toJson<double?>(upMargin),
@@ -492,8 +492,8 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
           SampleStatus? status,
           String? statusText,
           Value<String?> connectionType = const Value.absent(),
-          Value<int?> upMaxRate = const Value.absent(),
-          Value<int?> downMaxRate = const Value.absent(),
+          Value<int?> upAttainableRate = const Value.absent(),
+          Value<int?> downAttainableRate = const Value.absent(),
           Value<int?> upRate = const Value.absent(),
           Value<int?> downRate = const Value.absent(),
           Value<double?> upMargin = const Value.absent(),
@@ -512,8 +512,12 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
         statusText: statusText ?? this.statusText,
         connectionType:
             connectionType.present ? connectionType.value : this.connectionType,
-        upMaxRate: upMaxRate.present ? upMaxRate.value : this.upMaxRate,
-        downMaxRate: downMaxRate.present ? downMaxRate.value : this.downMaxRate,
+        upAttainableRate: upAttainableRate.present
+            ? upAttainableRate.value
+            : this.upAttainableRate,
+        downAttainableRate: downAttainableRate.present
+            ? downAttainableRate.value
+            : this.downAttainableRate,
         upRate: upRate.present ? upRate.value : this.upRate,
         downRate: downRate.present ? downRate.value : this.downRate,
         upMargin: upMargin.present ? upMargin.value : this.upMargin,
@@ -537,8 +541,8 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
           ..write('status: $status, ')
           ..write('statusText: $statusText, ')
           ..write('connectionType: $connectionType, ')
-          ..write('upMaxRate: $upMaxRate, ')
-          ..write('downMaxRate: $downMaxRate, ')
+          ..write('upAttainableRate: $upAttainableRate, ')
+          ..write('downAttainableRate: $downAttainableRate, ')
           ..write('upRate: $upRate, ')
           ..write('downRate: $downRate, ')
           ..write('upMargin: $upMargin, ')
@@ -561,8 +565,8 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
       status,
       statusText,
       connectionType,
-      upMaxRate,
-      downMaxRate,
+      upAttainableRate,
+      downAttainableRate,
       upRate,
       downRate,
       upMargin,
@@ -583,8 +587,8 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
           other.status == this.status &&
           other.statusText == this.statusText &&
           other.connectionType == this.connectionType &&
-          other.upMaxRate == this.upMaxRate &&
-          other.downMaxRate == this.downMaxRate &&
+          other.upAttainableRate == this.upAttainableRate &&
+          other.downAttainableRate == this.downAttainableRate &&
           other.upRate == this.upRate &&
           other.downRate == this.downRate &&
           other.upMargin == this.upMargin &&
@@ -604,8 +608,8 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
   final Value<SampleStatus> status;
   final Value<String> statusText;
   final Value<String?> connectionType;
-  final Value<int?> upMaxRate;
-  final Value<int?> downMaxRate;
+  final Value<int?> upAttainableRate;
+  final Value<int?> downAttainableRate;
   final Value<int?> upRate;
   final Value<int?> downRate;
   final Value<double?> upMargin;
@@ -623,8 +627,8 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
     this.status = const Value.absent(),
     this.statusText = const Value.absent(),
     this.connectionType = const Value.absent(),
-    this.upMaxRate = const Value.absent(),
-    this.downMaxRate = const Value.absent(),
+    this.upAttainableRate = const Value.absent(),
+    this.downAttainableRate = const Value.absent(),
     this.upRate = const Value.absent(),
     this.downRate = const Value.absent(),
     this.upMargin = const Value.absent(),
@@ -643,8 +647,8 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
     required SampleStatus status,
     required String statusText,
     this.connectionType = const Value.absent(),
-    this.upMaxRate = const Value.absent(),
-    this.downMaxRate = const Value.absent(),
+    this.upAttainableRate = const Value.absent(),
+    this.downAttainableRate = const Value.absent(),
     this.upRate = const Value.absent(),
     this.downRate = const Value.absent(),
     this.upMargin = const Value.absent(),
@@ -666,8 +670,8 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
     Expression<String>? status,
     Expression<String>? statusText,
     Expression<String>? connectionType,
-    Expression<int>? upMaxRate,
-    Expression<int>? downMaxRate,
+    Expression<int>? upAttainableRate,
+    Expression<int>? downAttainableRate,
     Expression<int>? upRate,
     Expression<int>? downRate,
     Expression<double>? upMargin,
@@ -686,8 +690,9 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
       if (status != null) 'status': status,
       if (statusText != null) 'status_text': statusText,
       if (connectionType != null) 'connection_type': connectionType,
-      if (upMaxRate != null) 'up_max_rate': upMaxRate,
-      if (downMaxRate != null) 'down_max_rate': downMaxRate,
+      if (upAttainableRate != null) 'up_attainable_rate': upAttainableRate,
+      if (downAttainableRate != null)
+        'down_attainable_rate': downAttainableRate,
       if (upRate != null) 'up_rate': upRate,
       if (downRate != null) 'down_rate': downRate,
       if (upMargin != null) 'up_margin': upMargin,
@@ -708,8 +713,8 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
       Value<SampleStatus>? status,
       Value<String>? statusText,
       Value<String?>? connectionType,
-      Value<int?>? upMaxRate,
-      Value<int?>? downMaxRate,
+      Value<int?>? upAttainableRate,
+      Value<int?>? downAttainableRate,
       Value<int?>? upRate,
       Value<int?>? downRate,
       Value<double?>? upMargin,
@@ -727,8 +732,8 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
       status: status ?? this.status,
       statusText: statusText ?? this.statusText,
       connectionType: connectionType ?? this.connectionType,
-      upMaxRate: upMaxRate ?? this.upMaxRate,
-      downMaxRate: downMaxRate ?? this.downMaxRate,
+      upAttainableRate: upAttainableRate ?? this.upAttainableRate,
+      downAttainableRate: downAttainableRate ?? this.downAttainableRate,
       upRate: upRate ?? this.upRate,
       downRate: downRate ?? this.downRate,
       upMargin: upMargin ?? this.upMargin,
@@ -764,11 +769,11 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
     if (connectionType.present) {
       map['connection_type'] = Variable<String>(connectionType.value);
     }
-    if (upMaxRate.present) {
-      map['up_max_rate'] = Variable<int>(upMaxRate.value);
+    if (upAttainableRate.present) {
+      map['up_attainable_rate'] = Variable<int>(upAttainableRate.value);
     }
-    if (downMaxRate.present) {
-      map['down_max_rate'] = Variable<int>(downMaxRate.value);
+    if (downAttainableRate.present) {
+      map['down_attainable_rate'] = Variable<int>(downAttainableRate.value);
     }
     if (upRate.present) {
       map['up_rate'] = Variable<int>(upRate.value);
@@ -812,8 +817,8 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
           ..write('status: $status, ')
           ..write('statusText: $statusText, ')
           ..write('connectionType: $connectionType, ')
-          ..write('upMaxRate: $upMaxRate, ')
-          ..write('downMaxRate: $downMaxRate, ')
+          ..write('upAttainableRate: $upAttainableRate, ')
+          ..write('downAttainableRate: $downAttainableRate, ')
           ..write('upRate: $upRate, ')
           ..write('downRate: $downRate, ')
           ..write('upMargin: $upMargin, ')

@@ -12,7 +12,7 @@ import 'screens_wrapper.dart';
 void main() async {
   // Hive.registerAdapter(LineStatsCollectionAdapter());
   // Hive.registerAdapter(ModemTypesAdapter());
-
+  // debugRepaintRainbowEnabled = true;
   await Hive.initFlutter();
   await Hive.openBox('settings');
   await Hive.openBox('collectionMap');

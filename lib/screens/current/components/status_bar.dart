@@ -9,7 +9,7 @@ class StatusBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     StatsSamplingService samplingService = context.watch<StatsSamplingService>();
-    LineStats? lastSample = samplingService.lastSample;
+    LineStats? lastSample = samplingService.lastSamples.lastOrNull;
 
     bool sampling = samplingService.sampling;
     bool netUnitConnected = lastSample is LineStats && lastSample.status != SampleStatus.samplingError;
@@ -26,6 +26,8 @@ class StatusBar extends StatelessWidget {
                 Flexible(fit: FlexFit.loose, child: indicators(sampling, netUnitConnected, connectionUp)),
                 SizedBox(width: 8),
                 Flexible(fit: FlexFit.tight, child: statusText(sampling, lastSample)),
+                SizedBox(width: 4),
+                Icon(Icons.chevron_left_sharp, color: Colors.white, size: 16),
               ],
             ),
           ),
@@ -47,80 +49,86 @@ class StatusBar extends StatelessWidget {
       statusText = 'Idle';
     }
 
-    return AnimatedSwitcher(
-      duration: Duration(milliseconds: 300),
-      switchInCurve: Curves.elasticOut,
-      switchOutCurve: Curves.easeIn,
-      transitionBuilder: (child, animation) {
-        return SlideTransition(
-          position: Tween<Offset>(begin: Offset(0.1, 0), end: Offset(0, 0)).animate(animation),
-          child: FadeTransition(
-            opacity: Tween<double>(begin: -1, end: 1).animate(animation),
-            child: child,
+    return Tooltip(
+      message: 'Current execution status or error messages',
+      child: AnimatedSwitcher(
+        duration: Duration(milliseconds: 300),
+        switchInCurve: Curves.elasticOut,
+        switchOutCurve: Curves.easeIn,
+        transitionBuilder: (child, animation) {
+          return SlideTransition(
+            position: Tween<Offset>(begin: Offset(0.1, 0), end: Offset(0, 0)).animate(animation),
+            child: FadeTransition(
+              opacity: Tween<double>(begin: -1, end: 1).animate(animation),
+              child: child,
+            ),
+          );
+        },
+        child: Align(
+          key: Key(statusText),
+          alignment: Alignment.centerRight,
+          child: Text(
+            statusText,
+            style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w300),
+            overflow: TextOverflow.ellipsis,
+            // key: Key(statusText),
+            // key: UniqueKey(),
           ),
-        );
-      },
-      child: Align(
-        key: Key(statusText),
-        alignment: Alignment.centerRight,
-        child: Text(
-          statusText,
-          style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w300),
-          overflow: TextOverflow.ellipsis,
-          // key: Key(statusText),
-          // key: UniqueKey(),
         ),
       ),
     );
   }
 
   Widget indicators(bool sampling, bool netUnitConnected, bool connectionUp) {
-    return Row(
-      children: [
-        Text(
-          'S/C/DSL',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300),
-        ),
-        AnimatedContainer(
-          duration: Duration(milliseconds: 400),
-          curve: Curves.easeInOutBack,
-          width: 10,
-          margin: EdgeInsets.only(left: 8),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: sampling ? Colors.yellow : Colors.black,
-              width: 5,
-            ),
-            borderRadius: BorderRadius.circular(5),
+    return Tooltip(
+      message: 'Sampling active / Connected to network unit / DSL connection up',
+      child: Row(
+        children: [
+          Text(
+            'S/C/DSL',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300),
           ),
-        ),
-        AnimatedContainer(
-          duration: Duration(milliseconds: 400),
-          curve: Curves.easeInOutBack,
-          width: 10,
-          margin: EdgeInsets.only(left: 4),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: netUnitConnected ? Colors.yellow : Colors.black,
-              width: 5,
+          AnimatedContainer(
+            duration: Duration(milliseconds: 400),
+            curve: Curves.easeInOutBack,
+            width: 10,
+            margin: EdgeInsets.only(left: 8),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: sampling ? Colors.yellow : Colors.black,
+                width: 5,
+              ),
+              borderRadius: BorderRadius.circular(5),
             ),
-            borderRadius: BorderRadius.circular(5),
           ),
-        ),
-        AnimatedContainer(
-          duration: Duration(milliseconds: 400),
-          curve: Curves.easeInOutBack,
-          width: 10,
-          margin: EdgeInsets.only(left: 4),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: connectionUp ? Colors.yellow : Colors.black,
-              width: 5,
+          AnimatedContainer(
+            duration: Duration(milliseconds: 400),
+            curve: Curves.easeInOutBack,
+            width: 10,
+            margin: EdgeInsets.only(left: 4),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: netUnitConnected ? Colors.yellow : Colors.black,
+                width: 5,
+              ),
+              borderRadius: BorderRadius.circular(5),
             ),
-            borderRadius: BorderRadius.circular(5),
           ),
-        ),
-      ],
+          AnimatedContainer(
+            duration: Duration(milliseconds: 400),
+            curve: Curves.easeInOutBack,
+            width: 10,
+            margin: EdgeInsets.only(left: 4),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: connectionUp ? Colors.yellow : Colors.black,
+                width: 5,
+              ),
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

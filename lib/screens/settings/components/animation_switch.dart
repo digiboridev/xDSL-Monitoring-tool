@@ -17,9 +17,16 @@ class AnimationSwitch extends StatelessWidget {
       child: Row(
         children: [
           Text('Animations', style: TextStyles.f16w6.blueGrey800),
-          Switch(
-            value: watchAnimations(context),
-            onChanged: (v) => _getVm(context).setAnimations = v,
+          SizedBox(width: 8),
+          SizedBox(
+            height: 28,
+            child: FittedBox(
+              fit: BoxFit.fitHeight,
+              child: Switch(
+                value: watchAnimations(context),
+                onChanged: (v) => _getVm(context).setAnimations = v,
+              ),
+            ),
           ),
         ],
       ),

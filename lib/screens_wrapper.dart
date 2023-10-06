@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/services.dart';
 import 'package:xdsl_mt/data/repositories/line_stats_repo.dart';
 import 'package:xdsl_mt/data/repositories/settings_repo.dart';
 import 'package:xdsl_mt/data/services/stats_sampling_service.dart';
@@ -9,7 +8,7 @@ import 'package:xdsl_mt/main.dart';
 import 'package:xdsl_mt/models/data_sampling_service.dart';
 import 'package:xdsl_mt/models/settings_model.dart';
 import 'package:xdsl_mt/models/adsl_data_model.dart';
-import 'package:xdsl_mt/screens/CurrentScreen.dart';
+import 'package:xdsl_mt/screens/current/current_screen.dart';
 import 'package:xdsl_mt/screens/saved_data_screen.dart';
 import 'package:xdsl_mt/screens/settings/binding.dart';
 import 'package:move_to_background/move_to_background.dart';
@@ -32,7 +31,15 @@ class ScreensWrapper extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'DslStats',
-        theme: ThemeData(primarySwatch: Colors.blueGrey),
+        theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: Colors.blueGrey,
+            accentColor: Colors.yellow,
+            backgroundColor: Colors.cyan.shade50,
+          ),
+          // colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
+        ),
         home: const ButtonDisplaySelection(),
       ),
     );
@@ -66,16 +73,17 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
 
   @override
   Widget build(BuildContext context) {
-    if (context.watch<SettingsModel>().getOrient) {
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-      ]);
-    } else {
-      SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown, DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight],
-      );
-    }
+    // TODO - fix orientation
+    // if (context.watch<SettingsModel>().getOrient) {
+    //   SystemChrome.setPreferredOrientations([
+    //     DeviceOrientation.portraitUp,
+    //     DeviceOrientation.portraitDown,
+    //   ]);
+    // } else {
+    //   SystemChrome.setPreferredOrientations(
+    //     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown, DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight],
+    //   );
+    // }
 
     debugPrint('Render screens wrapper');
 
@@ -187,6 +195,7 @@ class _FloatButtonState extends State<FloatButton> {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      backgroundColor: Colors.blueGrey.shade900.withOpacity(0.75),
       onPressed: () => toogleSampling(context),
       hoverColor: Colors.amber[100],
       child: AnimatedSwitcher(

@@ -33,8 +33,8 @@ class LineStatsTable extends Table {
   TextColumn get status => textEnum<SampleStatus>()();
   TextColumn get statusText => text()();
   TextColumn get connectionType => text().nullable()();
-  IntColumn get upMaxRate => integer().nullable()();
-  IntColumn get downMaxRate => integer().nullable()();
+  IntColumn get upAttainableRate => integer().nullable()();
+  IntColumn get downAttainableRate => integer().nullable()();
   IntColumn get upRate => integer().nullable()();
   IntColumn get downRate => integer().nullable()();
   RealColumn get upMargin => real().nullable()();

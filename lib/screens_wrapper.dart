@@ -1,59 +1,23 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:xdsl_mt/data/repositories/line_stats_repo.dart';
-import 'package:xdsl_mt/data/repositories/settings_repo.dart';
 import 'package:xdsl_mt/data/services/stats_sampling_service.dart';
-import 'package:xdsl_mt/main.dart';
 import 'package:xdsl_mt/models/data_sampling_service.dart';
-import 'package:xdsl_mt/models/settings_model.dart';
-import 'package:xdsl_mt/models/adsl_data_model.dart';
 import 'package:xdsl_mt/screens/current/current_screen.dart';
 import 'package:xdsl_mt/screens/saved_data_screen.dart';
 import 'package:xdsl_mt/screens/settings/binding.dart';
 import 'package:move_to_background/move_to_background.dart';
 import 'package:xdsl_mt/screens/settings/view.dart';
 
-class ScreensWrapper extends StatelessWidget {
+class ScreensWrapper extends StatefulWidget {
   const ScreensWrapper({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        Provider<SettingsRepository>(create: (_) => SettingsRepositoryPrefsImpl()),
-        Provider<LineStatsRepository>(create: (_) => SL().lineStatsRepository),
-        ChangeNotifierProvider<StatsSamplingService>(create: (_) => SL().statsSamplingService),
-        ChangeNotifierProvider(create: (_) => ADSLDataModel()),
-        ChangeNotifierProvider(create: (_) => DataSamplingService()),
-        ChangeNotifierProvider(create: (_) => SettingsModel()),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'DslStats',
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: Colors.blueGrey,
-            accentColor: Colors.yellow,
-            backgroundColor: Colors.cyan.shade50,
-          ),
-          // colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
-        ),
-        home: const ButtonDisplaySelection(),
-      ),
-    );
-  }
+  State<ScreensWrapper> createState() => _ScreensWrapperState();
 }
 
-class ButtonDisplaySelection extends StatefulWidget {
-  const ButtonDisplaySelection({super.key});
-
-  @override
-  State<ButtonDisplaySelection> createState() => _ButtonDisplaySelectionState();
-}
-
-class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
+class _ScreensWrapperState extends State<ScreensWrapper> {
   late final List screens = [
     CurrentScreen(),
     SavedDataScreen(),
@@ -71,6 +35,19 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
     setState(() => _screenIndex = index);
   }
 
+  String get screenName {
+    switch (_screenIndex) {
+      case 0:
+        return 'Monitoring';
+      case 1:
+        return 'Snapshots';
+      case 2:
+        return 'Settings';
+      default:
+        return 'Unknown';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO - fix orientation
@@ -85,24 +62,19 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
     //   );
     // }
 
-    debugPrint('Render screens wrapper');
-
     return WillPopScope(
       onWillPop: () async {
         MoveToBackground.moveTaskToBack();
-        debugPrint('minimized');
+        log('Minimized');
         return false;
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Screen: $_screenIndex'),
+          title: Text(screenName, style: TextStyle(color: Colors.cyan.shade100)),
           actions: [
             IconButton(
-              tooltip: 'minimize app',
-              icon: const Icon(
-                Icons.minimize,
-                color: Colors.white,
-              ),
+              tooltip: 'Minimize app',
+              icon: Icon(Icons.minimize, color: Colors.cyan.shade100),
               onPressed: () {
                 MoveToBackground.moveTaskToBack();
                 debugPrint('minimized');
@@ -110,10 +82,7 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
             ),
             IconButton(
               tooltip: 'Close app',
-              icon: const Icon(
-                Icons.power_settings_new,
-                color: Colors.white,
-              ),
+              icon: Icon(Icons.power_settings_new, color: Colors.cyan.shade100),
               onPressed: () {
                 // TODO
                 // FlutterForegroundPlugin.stopForegroundService();
@@ -130,28 +99,28 @@ class _ButtonDisplaySelectionState extends State<ButtonDisplaySelection> {
         ),
         floatingActionButton: _screenIndex == 2 ? null : FloatButton(),
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.blueGrey.shade900,
+          // backgroundColor: Colors.blueGrey.shade900,
           currentIndex: _screenIndex,
           onTap: selectScreen,
-          items: <BottomNavigationBarItem>[
+          items: [
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.timeline,
-                color: Colors.blueGrey.shade50,
+                // color: Colors.blueGrey.shade50,
               ),
               label: 'Monitoring',
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.history,
-                color: Colors.blueGrey.shade50,
+                // color: Colors.blueGrey.shade50,
               ),
               label: 'Snapshots',
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.settings,
-                color: context.watch<DataSamplingService>().isCounting ? Colors.blueGrey.shade600 : Colors.blueGrey.shade50,
+                // color: Colors.blueGrey.shade50,
               ),
               label: 'Settings',
             ),

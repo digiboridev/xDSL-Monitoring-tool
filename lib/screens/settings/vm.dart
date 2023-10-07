@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:xdsl_mt/data/models/app_settings.dart';
 import 'package:xdsl_mt/data/models/network_unit_type.dart';
@@ -10,7 +11,7 @@ import 'package:xdsl_mt/utils/streambang.dart';
 class SettingsScreenViewModel extends ValueNotifier<SettingsScreenState> with StreamBang {
   final SettingsRepository settingsRepository;
 
-  SettingsScreenViewModel({required this.settingsRepository}) : super(SettingsScreenState.loading()) {
+  SettingsScreenViewModel(this.settingsRepository) : super(SettingsScreenState.loading()) {
     _init();
   }
 
@@ -18,6 +19,7 @@ class SettingsScreenViewModel extends ValueNotifier<SettingsScreenState> with St
     value = SettingsScreenState.loaded(await settingsRepository.getSettings);
     var sub = settingsRepository.updatesStream.listen((update) => value = SettingsScreenState.loaded(update));
     insert(sub);
+    log('SettingsScreenViewModel: _init()');
   }
 
   Future<void> _setSettings(AppSettings settings) => settingsRepository.setSettings(settings);

@@ -10,7 +10,7 @@ class SettingsScreenBinding extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListenableProvider<SettingsScreenViewModel>(
-      create: (_) => SettingsScreenViewModel(settingsRepository: context.read<SettingsRepository>()),
+      create: (_) => SettingsScreenViewModel(context.read<SettingsRepository>()),
 
       // VM loading guard
       builder: (context, child) {

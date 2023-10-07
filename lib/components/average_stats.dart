@@ -40,11 +40,7 @@ class AverageStats extends StatefulWidget {
   // bool isEmpty;
   final List<LineStatsCollection> collection;
 
-  const AverageStats({
-    super.key,
-    // this.isEmpty,
-    required this.collection,
-  });
+  const AverageStats({super.key, required this.collection});
 
   @override
   State<AverageStats> createState() => _AverageStatsState();

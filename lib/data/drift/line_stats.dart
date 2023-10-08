@@ -16,17 +16,17 @@ class LineStatsDao extends DatabaseAccessor<DB> with _$LineStatsDaoMixin {
       .getSingleOrNull();
   Future<List<DriftLineStats>> getAll() => select(lineStatsTable).get();
 
-  Future<List<DriftLineStats>> getBySession(String session) => (select(lineStatsTable)..where((tbl) => tbl.session.equals(session))).get();
+  Future<List<DriftLineStats>> getBySnapshot(String snapshotId) => (select(lineStatsTable)..where((tbl) => tbl.snapshotId.equals(snapshotId))).get();
 
-  Future<List<String>> getSessions() async {
-    final r = await customSelect('SELECT DISTINCT session FROM line_stats_table ORDER BY time DESC').get();
-    return r.map((row) => row.read<String>('session')).toList();
+  Future<List<String>> getSnapshots() async {
+    final r = await customSelect('SELECT DISTINCT snapshot_id FROM line_stats_table ORDER BY time DESC').get();
+    return r.map((row) => row.read<String>('snapshot_id')).toList();
 
     // Same as the above, but using the Drift API
     // final q = selectOnly(lineStatsTable, distinct: true);
-    // q.addColumns([lineStatsTable.session]);
+    // q.addColumns([lineStatsTable.snapshotId]);
     // q.orderBy([OrderingTerm(expression: lineStatsTable.time, mode: OrderingMode.desc)]);
-    // final s = q.map((row) => row.read<String>(lineStatsTable.session)).map((s) => s!);
+    // final s = q.map((row) => row.read<String>(lineStatsTable.snapshotId)).map((s) => s!);
     // return await s.get();
   }
 
@@ -37,7 +37,7 @@ class LineStatsDao extends DatabaseAccessor<DB> with _$LineStatsDaoMixin {
 class LineStatsTable extends Table {
   IntColumn get id => integer().autoIncrement()();
   DateTimeColumn get time => dateTime()();
-  TextColumn get session => text().withLength(min: 1)();
+  TextColumn get snapshotId => text().withLength(min: 1)();
   TextColumn get status => textEnum<SampleStatus>()();
   TextColumn get statusText => text()();
   TextColumn get connectionType => text().nullable()();

@@ -23,7 +23,7 @@ class _SnapshotViewerState extends State<SnapshotViewer> {
   @override
   void initState() {
     super.initState();
-    lineStatsRepository.getBySession(widget.snapshotId).then((data) {
+    lineStatsRepository.getBySnapshot(widget.snapshotId).then((data) {
       if (mounted) setState(() => statsList = data);
     });
   }

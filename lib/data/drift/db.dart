@@ -21,7 +21,7 @@ class DB extends _$DB {
       });
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration {
@@ -29,7 +29,7 @@ class DB extends _$DB {
       onCreate: (migrator) => migrator.createAll(),
       onUpgrade: (migrator, from, to) async {
         debugPrint('onUpgrade: $from -> $to');
-        if (from < 3) {
+        if (from < 4) {
           await migrator.drop(lineStatsTable);
           await migrator.createTable(lineStatsTable);
         }

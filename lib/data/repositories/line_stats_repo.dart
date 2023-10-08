@@ -7,8 +7,8 @@ abstract class LineStatsRepository {
   Future<void> insert(LineStats sample);
   Future<LineStats?> getLast();
   Future<List<LineStats>> getAll();
-  Future<List<LineStats>> getBySession(String session);
-  Future<List<String>> getSessions();
+  Future<List<LineStats>> getBySnapshot(String snapshotId);
+  Future<List<String>> getSnapshots();
   Future<void> deleteAll();
 }
 
@@ -21,7 +21,7 @@ class LineStatsRepositoryDriftImpl implements LineStatsRepository {
     await _dao.insert(
       LineStatsTableCompanion(
         time: Value(sample.time),
-        session: Value(sample.session),
+        snapshotId: Value(sample.snapshotId),
         status: Value(sample.status),
         statusText: Value(sample.statusText),
         connectionType: Value(sample.connectionType),
@@ -55,14 +55,14 @@ class LineStatsRepositoryDriftImpl implements LineStatsRepository {
   }
 
   @override
-  Future<List<LineStats>> getBySession(String session) async {
-    final models = await _dao.getBySession(session);
+  Future<List<LineStats>> getBySnapshot(String snapshotId) async {
+    final models = await _dao.getBySnapshot(snapshotId);
     return models.map((e) => LineStats.fromMap(e.toJson())).toList();
   }
 
   @override
-  Future<List<String>> getSessions() {
-    return _dao.getSessions();
+  Future<List<String>> getSnapshots() {
+    return _dao.getSnapshots();
   }
 
   @override

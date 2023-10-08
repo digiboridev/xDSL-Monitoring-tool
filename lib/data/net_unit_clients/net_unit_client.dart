@@ -13,24 +13,24 @@ abstract base class NetUnitClient {
   /// Password credentials
   final String password;
 
-  /// Unique session ID
-  final String session;
+  /// Unique snapshot ID
+  final String snapshotId;
 
   /// Fetches line stats from the network unit
   Future<LineStats> fetchStats();
 
-  NetUnitClient({required this.ip, required this.login, required this.password, required this.session});
+  NetUnitClient({required this.ip, required this.login, required this.password, required this.snapshotId});
 
-  factory NetUnitClient.fromType(NetworkUnitType type, String session, String ip, String login, String password) {
+  factory NetUnitClient.fromType(NetworkUnitType type, String snapshotId, String ip, String login, String password) {
     switch (type) {
       case NetworkUnitType.simulator:
-        return ClientSimulator(session: session);
+        return ClientSimulator(snapshotId: snapshotId);
       default:
         throw Exception('Unknown NetUnitClient type: $type');
     }
   }
 
-  factory NetUnitClient.fromSettings(AppSettings settings, String session) {
-    return NetUnitClient.fromType(settings.nuType, session, settings.host, settings.login, settings.pwd);
+  factory NetUnitClient.fromSettings(AppSettings settings, String snapshotId) {
+    return NetUnitClient.fromType(settings.nuType, snapshotId, settings.host, settings.login, settings.pwd);
   }
 }

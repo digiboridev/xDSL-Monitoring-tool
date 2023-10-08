@@ -20,10 +20,10 @@ class CurrentSNRBar extends StatelessWidget {
               builder: (context) {
                 final data = context.select<StatsSamplingService, MeterValue>(
                   (s) => (
-                    value: s.sessionStats?.downSNRmLast,
-                    min: s.sessionStats?.downSNRmMin,
-                    max: s.sessionStats?.downSNRmMax,
-                    avg: s.sessionStats?.downSNRmAvg,
+                    value: s.snapshotStats?.downSNRmLast,
+                    min: s.snapshotStats?.downSNRmMin,
+                    max: s.snapshotStats?.downSNRmMax,
+                    avg: s.snapshotStats?.downSNRmAvg,
                   ),
                 );
 
@@ -34,10 +34,10 @@ class CurrentSNRBar extends StatelessWidget {
               builder: (context) {
                 final data = context.select<StatsSamplingService, MeterValue>(
                   (s) => (
-                    value: s.sessionStats?.upSNRmLast,
-                    min: s.sessionStats?.upSNRmMin,
-                    max: s.sessionStats?.upSNRmMax,
-                    avg: s.sessionStats?.upSNRmAvg,
+                    value: s.snapshotStats?.upSNRmLast,
+                    min: s.snapshotStats?.upSNRmMin,
+                    max: s.snapshotStats?.upSNRmMax,
+                    avg: s.snapshotStats?.upSNRmAvg,
                   ),
                 );
 
@@ -54,10 +54,10 @@ class CurrentSNRBar extends StatelessWidget {
               builder: (context) {
                 final data = context.select<StatsSamplingService, MeterValue>(
                   (s) => (
-                    value: s.sessionStats?.upAttenuationLast,
-                    min: s.sessionStats?.upAttenuationMin,
-                    max: s.sessionStats?.upAttenuationMax,
-                    avg: s.sessionStats?.upAttenuationAvg,
+                    value: s.snapshotStats?.upAttenuationLast,
+                    min: s.snapshotStats?.upAttenuationMin,
+                    max: s.snapshotStats?.upAttenuationMax,
+                    avg: s.snapshotStats?.upAttenuationAvg,
                   ),
                 );
                 return Meter(name: 'Att DL', data: data, limit: 100, reverse: true);
@@ -67,10 +67,10 @@ class CurrentSNRBar extends StatelessWidget {
               builder: (context) {
                 final data = context.select<StatsSamplingService, MeterValue>(
                   (s) => (
-                    value: s.sessionStats?.upAttenuationLast,
-                    min: s.sessionStats?.upAttenuationMin,
-                    max: s.sessionStats?.upAttenuationMax,
-                    avg: s.sessionStats?.upAttenuationAvg,
+                    value: s.snapshotStats?.upAttenuationLast,
+                    min: s.snapshotStats?.upAttenuationMin,
+                    max: s.snapshotStats?.upAttenuationMax,
+                    avg: s.snapshotStats?.upAttenuationAvg,
                   ),
                 );
                 return Meter(name: 'Att UL', data: data, limit: 100, reverse: true);

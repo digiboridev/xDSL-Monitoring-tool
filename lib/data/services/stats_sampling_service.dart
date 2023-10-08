@@ -9,14 +9,18 @@ import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 import 'package:xdslmt/data/repositories/line_stats_repo.dart';
 import 'package:xdslmt/data/repositories/settings_repo.dart';
 
-class SessionStats {
-  // TODO disconnects, up down error count
-  final String sessionId;
+class SnapshotStats {
+  final String snapshotId;
   final String host;
   final String login;
   final String password;
   final DateTime startTime;
-  final int samplesCount;
+  final int samples;
+  final int disconnects;
+  final int samplingErrors;
+  final Duration samplingDuration;
+  final Duration uplinkDuration;
+  final SampleStatus? lastSampleStatus;
   final DateTime? lastSampleTime;
   final int? downRateLast;
   final int? downRateMin;
@@ -59,13 +63,18 @@ class SessionStats {
   final int? upCrcLast;
   final int? upCrcTotal;
 
-  SessionStats._({
-    required this.sessionId,
+  SnapshotStats._({
+    required this.snapshotId,
     required this.host,
     required this.login,
     required this.password,
     required this.startTime,
-    required this.samplesCount,
+    required this.samples,
+    required this.disconnects,
+    required this.samplingErrors,
+    required this.samplingDuration,
+    required this.uplinkDuration,
+    this.lastSampleStatus,
     this.lastSampleTime,
     this.downRateLast,
     this.downRateMin,
@@ -109,8 +118,25 @@ class SessionStats {
     this.upCrcTotal,
   });
 
-  factory SessionStats.create(String sessionId, String host, String login, String password) {
-    return SessionStats._(sessionId: sessionId, host: host, login: login, password: password, startTime: DateTime.now(), samplesCount: 0);
+  /// Creates a new snapshot with initial values
+  factory SnapshotStats.create(
+    String snapshotId,
+    String host,
+    String login,
+    String password,
+  ) {
+    return SnapshotStats._(
+      snapshotId: snapshotId,
+      host: host,
+      login: login,
+      password: password,
+      startTime: DateTime.now(),
+      samples: 0,
+      disconnects: 0,
+      samplingErrors: 0,
+      samplingDuration: Duration.zero,
+      uplinkDuration: Duration.zero,
+    );
   }
 
   num? _minVal(num? prev, num? next) {
@@ -138,15 +164,44 @@ class SessionStats {
     return diff > 0 ? diff : prev;
   }
 
-  SessionStats copyWithStats(LineStats stats) {
-    return SessionStats._(
-      sessionId: sessionId,
+  bool _isDisconnect(SampleStatus newStatus) {
+    if (lastSampleStatus == SampleStatus.connectionUp && newStatus == SampleStatus.connectionDown) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool _isSamplingError(SampleStatus newStatus) {
+    if (newStatus == SampleStatus.samplingError) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Duration uplinkDurationIncrement(SampleStatus newStatus, DateTime newTime) {
+    if (lastSampleTime == null) return Duration.zero;
+    if (lastSampleStatus != SampleStatus.connectionUp) return Duration.zero;
+    if (newStatus != SampleStatus.connectionUp) return Duration.zero;
+
+    return newTime.difference(lastSampleTime!);
+  }
+
+  SnapshotStats copyWithStats(LineStats stats) {
+    return SnapshotStats._(
+      snapshotId: snapshotId,
       host: host,
       login: login,
       password: password,
       startTime: startTime,
+      samples: samples + 1,
+      disconnects: _isDisconnect(stats.status) ? disconnects + 1 : disconnects,
+      samplingErrors: _isSamplingError(stats.status) ? samplingErrors + 1 : samplingErrors,
+      samplingDuration: DateTime.now().difference(startTime),
+      uplinkDuration: uplinkDuration + uplinkDurationIncrement(stats.status, stats.time),
+      lastSampleStatus: stats.status,
       lastSampleTime: stats.time,
-      samplesCount: samplesCount + 1,
       downRateLast: stats.downRate,
       downRateMin: _minVal(downRateMin, stats.downRate)?.toInt(),
       downRateMax: _maxVal(downRateMax, stats.downRate)?.toInt(),
@@ -201,24 +256,24 @@ class StatsSamplingService extends ChangeNotifier {
     debugPrint('SamplingService init');
   }
 
-  SessionStats? _sessionStats;
+  SnapshotStats? _snapshotStats;
   final _lastSamples = Queue<LineStats>();
 
-  bool get sampling => _sessionStats != null;
+  bool get sampling => _snapshotStats != null;
   Queue<LineStats> get lastSamples => _lastSamples;
   Stream<LineStats> get statsStream => _statsStreamController.stream;
 
-  SessionStats? get sessionStats => _sessionStats;
+  SnapshotStats? get snapshotStats => _snapshotStats;
 
   runSampling() async {
     if (sampling) return;
 
     AppSettings settings = await _settingsRepository.getSettings;
     Duration samplingInterval = settings.samplingInterval;
-    String session = DateTime.now().toString();
-    NetUnitClient client = NetUnitClient.fromSettings(settings, session);
+    String snapshotId = DateTime.now().toString();
+    NetUnitClient client = NetUnitClient.fromSettings(settings, snapshotId);
 
-    _sessionStats = SessionStats.create(session, settings.host, settings.login, settings.pwd);
+    _snapshotStats = SnapshotStats.create(snapshotId, settings.host, settings.login, settings.pwd);
     notifyListeners();
 
     tick() async {
@@ -237,12 +292,12 @@ class StatsSamplingService extends ChangeNotifier {
   stopSampling() {
     if (!sampling) return;
     _lastSamples.clear();
-    _sessionStats = null;
+    _snapshotStats = null;
     notifyListeners();
   }
 
   _handleStats(LineStats stats) {
-    _sessionStats = _sessionStats?.copyWithStats(stats);
+    _snapshotStats = _snapshotStats?.copyWithStats(stats);
     _lastSamples.addLast(stats);
     if (_lastSamples.length > 10) _lastSamples.removeFirst();
     _statsStreamController.add(stats);
@@ -255,7 +310,7 @@ class StatsSamplingService extends ChangeNotifier {
   @override
   void dispose() {
     _statsStreamController.close();
-    _sessionStats = null;
+    _snapshotStats = null;
     super.dispose();
   }
 }

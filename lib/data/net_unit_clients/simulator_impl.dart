@@ -4,7 +4,7 @@ import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 
 final class ClientSimulator extends NetUnitClient {
-  ClientSimulator({required super.session}) : super(ip: '_', login: '_', password: '_');
+  ClientSimulator({required super.snapshotId}) : super(ip: '_', login: '_', password: '_');
 
   // Base speed rates
   final int _bupRate = 1500;
@@ -56,13 +56,13 @@ final class ClientSimulator extends NetUnitClient {
 
     // 1% chance of fetch failure
     if (_rndChance <= 1) {
-      return LineStats.errored(session: session, statusText: 'Connection failed');
+      return LineStats.errored(snapshotId: snapshotId, statusText: 'Connection failed');
     }
 
     // 1% chance of connection down
     if (_rndChance <= 1) {
       _reduceStatsHalfway();
-      return LineStats.connectionDown(session: session, statusText: 'Down');
+      return LineStats.connectionDown(snapshotId: snapshotId, statusText: 'Down');
     }
 
     // 5% chance of donwstream stats drift
@@ -96,7 +96,7 @@ final class ClientSimulator extends NetUnitClient {
     }
 
     return LineStats.connectionUp(
-      session: session,
+      snapshotId: snapshotId,
       statusText: 'Up',
       connectionType: 'ADSL2+',
       upAttainableRate: _upAttainableRate,

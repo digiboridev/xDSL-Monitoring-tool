@@ -23,11 +23,11 @@ class $LineStatsTableTable extends LineStatsTable
   late final GeneratedColumn<DateTime> time = GeneratedColumn<DateTime>(
       'time', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _sessionMeta =
-      const VerificationMeta('session');
+  static const VerificationMeta _snapshotIdMeta =
+      const VerificationMeta('snapshotId');
   @override
-  late final GeneratedColumn<String> session =
-      GeneratedColumn<String>('session', aliasedName, false,
+  late final GeneratedColumn<String> snapshotId =
+      GeneratedColumn<String>('snapshot_id', aliasedName, false,
           additionalChecks: GeneratedColumn.checkTextLength(
             minTextLength: 1,
           ),
@@ -124,7 +124,7 @@ class $LineStatsTableTable extends LineStatsTable
   List<GeneratedColumn> get $columns => [
         id,
         time,
-        session,
+        snapshotId,
         status,
         statusText,
         connectionType,
@@ -160,11 +160,13 @@ class $LineStatsTableTable extends LineStatsTable
     } else if (isInserting) {
       context.missing(_timeMeta);
     }
-    if (data.containsKey('session')) {
-      context.handle(_sessionMeta,
-          session.isAcceptableOrUnknown(data['session']!, _sessionMeta));
+    if (data.containsKey('snapshot_id')) {
+      context.handle(
+          _snapshotIdMeta,
+          snapshotId.isAcceptableOrUnknown(
+              data['snapshot_id']!, _snapshotIdMeta));
     } else if (isInserting) {
-      context.missing(_sessionMeta);
+      context.missing(_snapshotIdMeta);
     }
     context.handle(_statusMeta, const VerificationResult.success());
     if (data.containsKey('status_text')) {
@@ -252,8 +254,8 @@ class $LineStatsTableTable extends LineStatsTable
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       time: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}time'])!,
-      session: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}session'])!,
+      snapshotId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}snapshot_id'])!,
       status: $LineStatsTableTable.$converterstatus.fromSql(attachedDatabase
           .typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}status'])!),
@@ -300,7 +302,7 @@ class $LineStatsTableTable extends LineStatsTable
 class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
   final int id;
   final DateTime time;
-  final String session;
+  final String snapshotId;
   final SampleStatus status;
   final String statusText;
   final String? connectionType;
@@ -319,7 +321,7 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
   const DriftLineStats(
       {required this.id,
       required this.time,
-      required this.session,
+      required this.snapshotId,
       required this.status,
       required this.statusText,
       this.connectionType,
@@ -340,7 +342,7 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['time'] = Variable<DateTime>(time);
-    map['session'] = Variable<String>(session);
+    map['snapshot_id'] = Variable<String>(snapshotId);
     {
       final converter = $LineStatsTableTable.$converterstatus;
       map['status'] = Variable<String>(converter.toSql(status));
@@ -392,7 +394,7 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
     return LineStatsTableCompanion(
       id: Value(id),
       time: Value(time),
-      session: Value(session),
+      snapshotId: Value(snapshotId),
       status: Value(status),
       statusText: Value(statusText),
       connectionType: connectionType == null && nullToAbsent
@@ -440,7 +442,7 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
     return DriftLineStats(
       id: serializer.fromJson<int>(json['id']),
       time: serializer.fromJson<DateTime>(json['time']),
-      session: serializer.fromJson<String>(json['session']),
+      snapshotId: serializer.fromJson<String>(json['snapshotId']),
       status: $LineStatsTableTable.$converterstatus
           .fromJson(serializer.fromJson<String>(json['status'])),
       statusText: serializer.fromJson<String>(json['statusText']),
@@ -465,7 +467,7 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'time': serializer.toJson<DateTime>(time),
-      'session': serializer.toJson<String>(session),
+      'snapshotId': serializer.toJson<String>(snapshotId),
       'status': serializer
           .toJson<String>($LineStatsTableTable.$converterstatus.toJson(status)),
       'statusText': serializer.toJson<String>(statusText),
@@ -488,7 +490,7 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
   DriftLineStats copyWith(
           {int? id,
           DateTime? time,
-          String? session,
+          String? snapshotId,
           SampleStatus? status,
           String? statusText,
           Value<String?> connectionType = const Value.absent(),
@@ -507,7 +509,7 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
       DriftLineStats(
         id: id ?? this.id,
         time: time ?? this.time,
-        session: session ?? this.session,
+        snapshotId: snapshotId ?? this.snapshotId,
         status: status ?? this.status,
         statusText: statusText ?? this.statusText,
         connectionType:
@@ -537,7 +539,7 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
     return (StringBuffer('DriftLineStats(')
           ..write('id: $id, ')
           ..write('time: $time, ')
-          ..write('session: $session, ')
+          ..write('snapshotId: $snapshotId, ')
           ..write('status: $status, ')
           ..write('statusText: $statusText, ')
           ..write('connectionType: $connectionType, ')
@@ -561,7 +563,7 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
   int get hashCode => Object.hash(
       id,
       time,
-      session,
+      snapshotId,
       status,
       statusText,
       connectionType,
@@ -583,7 +585,7 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
       (other is DriftLineStats &&
           other.id == this.id &&
           other.time == this.time &&
-          other.session == this.session &&
+          other.snapshotId == this.snapshotId &&
           other.status == this.status &&
           other.statusText == this.statusText &&
           other.connectionType == this.connectionType &&
@@ -604,7 +606,7 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
 class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
   final Value<int> id;
   final Value<DateTime> time;
-  final Value<String> session;
+  final Value<String> snapshotId;
   final Value<SampleStatus> status;
   final Value<String> statusText;
   final Value<String?> connectionType;
@@ -623,7 +625,7 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
   const LineStatsTableCompanion({
     this.id = const Value.absent(),
     this.time = const Value.absent(),
-    this.session = const Value.absent(),
+    this.snapshotId = const Value.absent(),
     this.status = const Value.absent(),
     this.statusText = const Value.absent(),
     this.connectionType = const Value.absent(),
@@ -643,7 +645,7 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
   LineStatsTableCompanion.insert({
     this.id = const Value.absent(),
     required DateTime time,
-    required String session,
+    required String snapshotId,
     required SampleStatus status,
     required String statusText,
     this.connectionType = const Value.absent(),
@@ -660,13 +662,13 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
     this.upFEC = const Value.absent(),
     this.downFEC = const Value.absent(),
   })  : time = Value(time),
-        session = Value(session),
+        snapshotId = Value(snapshotId),
         status = Value(status),
         statusText = Value(statusText);
   static Insertable<DriftLineStats> custom({
     Expression<int>? id,
     Expression<DateTime>? time,
-    Expression<String>? session,
+    Expression<String>? snapshotId,
     Expression<String>? status,
     Expression<String>? statusText,
     Expression<String>? connectionType,
@@ -686,7 +688,7 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (time != null) 'time': time,
-      if (session != null) 'session': session,
+      if (snapshotId != null) 'snapshot_id': snapshotId,
       if (status != null) 'status': status,
       if (statusText != null) 'status_text': statusText,
       if (connectionType != null) 'connection_type': connectionType,
@@ -709,7 +711,7 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
   LineStatsTableCompanion copyWith(
       {Value<int>? id,
       Value<DateTime>? time,
-      Value<String>? session,
+      Value<String>? snapshotId,
       Value<SampleStatus>? status,
       Value<String>? statusText,
       Value<String?>? connectionType,
@@ -728,7 +730,7 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
     return LineStatsTableCompanion(
       id: id ?? this.id,
       time: time ?? this.time,
-      session: session ?? this.session,
+      snapshotId: snapshotId ?? this.snapshotId,
       status: status ?? this.status,
       statusText: statusText ?? this.statusText,
       connectionType: connectionType ?? this.connectionType,
@@ -756,8 +758,8 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
     if (time.present) {
       map['time'] = Variable<DateTime>(time.value);
     }
-    if (session.present) {
-      map['session'] = Variable<String>(session.value);
+    if (snapshotId.present) {
+      map['snapshot_id'] = Variable<String>(snapshotId.value);
     }
     if (status.present) {
       final converter = $LineStatsTableTable.$converterstatus;
@@ -813,7 +815,7 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
     return (StringBuffer('LineStatsTableCompanion(')
           ..write('id: $id, ')
           ..write('time: $time, ')
-          ..write('session: $session, ')
+          ..write('snapshotId: $snapshotId, ')
           ..write('status: $status, ')
           ..write('statusText: $statusText, ')
           ..write('connectionType: $connectionType, ')

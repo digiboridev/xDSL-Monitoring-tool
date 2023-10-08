@@ -13,7 +13,7 @@ class RsCounters extends StatelessWidget {
       children: [
         Builder(
           builder: (context) {
-            final downFecLast = context.select<StatsSamplingService, int?>((s) => s.sessionStats?.downFecLast);
+            final downFecLast = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downFecLast);
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -26,7 +26,7 @@ class RsCounters extends StatelessWidget {
         ),
         Builder(
           builder: (context) {
-            final downCrcLast = context.select<StatsSamplingService, int?>((s) => s.sessionStats?.downCrcLast);
+            final downCrcLast = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downCrcLast);
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,7 +39,7 @@ class RsCounters extends StatelessWidget {
         ),
         Builder(
           builder: (context) {
-            final upFecLast = context.select<StatsSamplingService, int?>((s) => s.sessionStats?.upFecLast);
+            final upFecLast = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upFecLast);
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,7 +52,7 @@ class RsCounters extends StatelessWidget {
         ),
         Builder(
           builder: (context) {
-            final upCrcLast = context.select<StatsSamplingService, int?>((s) => s.sessionStats?.upCrcLast);
+            final upCrcLast = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upCrcLast);
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,

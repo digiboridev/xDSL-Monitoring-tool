@@ -52,7 +52,7 @@ class _CurrentSpeedBarState extends State<CurrentSpeedBar> with TickerProviderSt
     int attainableUpold = attainableUp;
 
     // Get new values
-    SessionStats? stats = context.read<StatsSamplingService>().sessionStats;
+    SnapshotStats? stats = context.read<StatsSamplingService>().snapshotStats;
     currDown = stats?.downRateLast ?? 0;
     currUp = stats?.upRateLast ?? 0;
     attainableDown = stats?.downAttainableRateLast ?? 0;

@@ -10,7 +10,7 @@ enum SampleStatus {
 // TODO err increase
 class LineStats {
   final DateTime time;
-  final String session;
+  final String snapshotId;
   final SampleStatus status;
   final String statusText;
   final String? connectionType;
@@ -29,7 +29,7 @@ class LineStats {
 
   const LineStats._({
     required this.time,
-    required this.session,
+    required this.snapshotId,
     required this.status,
     required this.statusText,
     this.connectionType,
@@ -47,26 +47,26 @@ class LineStats {
     this.downFEC,
   });
 
-  factory LineStats.errored({required String session, required String statusText}) {
+  factory LineStats.errored({required String snapshotId, required String statusText}) {
     return LineStats._(
       time: DateTime.now(),
-      session: session,
+      snapshotId: snapshotId,
       status: SampleStatus.samplingError,
       statusText: statusText,
     );
   }
 
-  factory LineStats.connectionDown({required String session, required String statusText}) {
+  factory LineStats.connectionDown({required String snapshotId, required String statusText}) {
     return LineStats._(
       time: DateTime.now(),
-      session: session,
+      snapshotId: snapshotId,
       status: SampleStatus.connectionDown,
       statusText: statusText,
     );
   }
 
   factory LineStats.connectionUp({
-    required String session,
+    required String snapshotId,
     required String statusText,
     required String connectionType,
     required int upAttainableRate,
@@ -84,7 +84,7 @@ class LineStats {
   }) {
     return LineStats._(
       time: DateTime.now(),
-      session: session,
+      snapshotId: snapshotId,
       status: SampleStatus.connectionUp,
       statusText: statusText,
       connectionType: connectionType,
@@ -108,7 +108,7 @@ class LineStats {
     if (identical(this, other)) return true;
 
     return other.time == time &&
-        other.session == session &&
+        other.snapshotId == snapshotId &&
         other.status == status &&
         other.statusText == statusText &&
         other.connectionType == connectionType &&
@@ -129,7 +129,7 @@ class LineStats {
   @override
   int get hashCode {
     return time.hashCode ^
-        session.hashCode ^
+        snapshotId.hashCode ^
         status.hashCode ^
         statusText.hashCode ^
         connectionType.hashCode ^
@@ -149,13 +149,13 @@ class LineStats {
 
   @override
   String toString() {
-    return 'LineStats(time: $time, session: $session, status: $status, statusText: $statusText, connectionType: $connectionType, upAttainableRate: $upAttainableRate, downAttainableRate: $downAttainableRate, upRate: $upRate, downRate: $downRate, upMargin: $upMargin, downMargin: $downMargin, upAttenuation: $upAttenuation, downAttenuation: $downAttenuation, upCRC: $upCRC, downCRC: $downCRC, upFEC: $upFEC, downFEC: $downFEC)';
+    return 'LineStats(time: $time, snapshotId: $snapshotId, status: $status, statusText: $statusText, connectionType: $connectionType, upAttainableRate: $upAttainableRate, downAttainableRate: $downAttainableRate, upRate: $upRate, downRate: $downRate, upMargin: $upMargin, downMargin: $downMargin, upAttenuation: $upAttenuation, downAttenuation: $downAttenuation, upCRC: $upCRC, downCRC: $downCRC, upFEC: $upFEC, downFEC: $downFEC)';
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'time': time.millisecondsSinceEpoch,
-      'session': session,
+      'snapshotId': snapshotId,
       'status': status.name,
       'statusText': statusText,
       'connectionType': connectionType,
@@ -177,7 +177,7 @@ class LineStats {
   factory LineStats.fromMap(Map<String, dynamic> map) {
     return LineStats._(
       time: DateTime.fromMillisecondsSinceEpoch(map['time'] as int),
-      session: map['session'] as String,
+      snapshotId: map['snapshotId'] as String,
       status: SampleStatus.values.byName(map['status'] as String),
       statusText: map['statusText'] as String,
       connectionType: map['connectionType'] != null ? map['connectionType'] as String : null,

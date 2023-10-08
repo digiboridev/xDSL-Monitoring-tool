@@ -1,7 +1,7 @@
 import 'dart:math';
-
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:xdslmt/data/models/snapshot_stats.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
 import 'package:xdslmt/widgets/text_styles.dart';
 

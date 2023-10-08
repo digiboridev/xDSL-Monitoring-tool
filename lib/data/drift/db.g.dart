@@ -839,7 +839,7 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
 abstract class _$DB extends GeneratedDatabase {
   _$DB(QueryExecutor e) : super(e);
   late final $LineStatsTableTable lineStatsTable = $LineStatsTableTable(this);
-  late final LineStatsDao lineStatsDao = LineStatsDao(this as DB);
+  late final StatsDao statsDao = StatsDao(this as DB);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();

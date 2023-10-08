@@ -1,16 +1,16 @@
 import 'dart:developer';
 import 'package:flutter/foundation.dart';
-import 'package:xdslmt/data/repositories/line_stats_repo.dart';
+import 'package:xdslmt/data/repositories/stats_repo.dart';
 import 'package:xdslmt/screens/snapshots/state.dart';
 
 class SnapshotsScreenViewModel extends ValueNotifier<SnapshotsScreenState> {
-  final LineStatsRepository lineStatsRepository;
-  SnapshotsScreenViewModel(this.lineStatsRepository) : super(SnapshotsScreenState.loading()) {
+  final StatsRepository statsRepository;
+  SnapshotsScreenViewModel(this.statsRepository) : super(SnapshotsScreenState.loading()) {
     _init();
   }
 
   _init() async {
-    value = SnapshotsScreenState.loaded(await lineStatsRepository.getSnapshots());
+    value = SnapshotsScreenState.loaded(await statsRepository.getSnapshots());
     log('SnapshotsScreenViewModel: _init()');
   }
 

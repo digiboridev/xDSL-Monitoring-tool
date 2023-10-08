@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/data/drift/db.dart';
-import 'package:xdslmt/data/drift/line_stats.dart';
-import 'package:xdslmt/data/repositories/line_stats_repo.dart';
+import 'package:xdslmt/data/drift/stats.dart';
+import 'package:xdslmt/data/repositories/stats_repo.dart';
 import 'package:xdslmt/data/repositories/settings_repo.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
 import 'package:xdslmt/screens_wrapper.dart';
@@ -18,10 +18,10 @@ final class SL {
 
   late final _drift = DB();
 
-  late final LineStatsRepository lineStatsRepository = LineStatsRepositoryDriftImpl(dao: LineStatsDao(_drift));
+  late final StatsRepository statsRepository = StatsRepositoryDriftImpl(dao: StatsDao(_drift));
   late final SettingsRepository settingsRepository = SettingsRepositoryPrefsImpl();
 
-  StatsSamplingService get statsSamplingService => StatsSamplingService(lineStatsRepository, settingsRepository);
+  StatsSamplingService get statsSamplingService => StatsSamplingService(statsRepository, settingsRepository);
 }
 
 class App extends StatelessWidget {
@@ -32,7 +32,7 @@ class App extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<SettingsRepository>(create: (_) => SettingsRepositoryPrefsImpl()),
-        Provider<LineStatsRepository>(create: (_) => SL().lineStatsRepository),
+        Provider<StatsRepository>(create: (_) => SL().statsRepository),
         ChangeNotifierProvider<StatsSamplingService>(create: (_) => SL().statsSamplingService),
       ],
       child: MaterialApp(

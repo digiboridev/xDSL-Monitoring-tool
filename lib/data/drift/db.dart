@@ -4,12 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart' as path;
-import 'package:xdslmt/data/drift/line_stats.dart';
+import 'package:xdslmt/data/drift/stats.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 
 part 'db.g.dart';
 
-@DriftDatabase(tables: [LineStatsTable], daos: [LineStatsDao])
+@DriftDatabase(tables: [LineStatsTable], daos: [StatsDao])
 class DB extends _$DB {
   DB({QueryExecutor? e}) : super(e ?? _executor);
 

@@ -1,9 +1,9 @@
 import 'package:drift/drift.dart';
 import 'package:xdslmt/data/drift/db.dart';
-import 'package:xdslmt/data/drift/line_stats.dart';
+import 'package:xdslmt/data/drift/stats.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 
-abstract class LineStatsRepository {
+abstract class StatsRepository {
   Future<void> insert(LineStats sample);
   Future<LineStats?> getLast();
   Future<List<LineStats>> getAll();
@@ -12,9 +12,9 @@ abstract class LineStatsRepository {
   Future<void> deleteAll();
 }
 
-class LineStatsRepositoryDriftImpl implements LineStatsRepository {
-  final LineStatsDao _dao;
-  LineStatsRepositoryDriftImpl({required LineStatsDao dao}) : _dao = dao;
+class StatsRepositoryDriftImpl implements StatsRepository {
+  final StatsDao _dao;
+  StatsRepositoryDriftImpl({required StatsDao dao}) : _dao = dao;
 
   @override
   Future<void> insert(LineStats sample) async {

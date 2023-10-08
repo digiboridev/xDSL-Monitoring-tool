@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:xdslmt/data/repositories/line_stats_repo.dart';
+import 'package:xdslmt/data/repositories/stats_repo.dart';
 import 'package:xdslmt/screens/snapshots/vm.dart';
 
 class SnapshotsScreenBinding extends StatelessWidget {
@@ -10,7 +10,7 @@ class SnapshotsScreenBinding extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListenableProvider<SnapshotsScreenViewModel>(
-      create: (_) => SnapshotsScreenViewModel(context.read<LineStatsRepository>()),
+      create: (_) => SnapshotsScreenViewModel(context.read<StatsRepository>()),
 
       // VM loading guard
       builder: (context, child) {

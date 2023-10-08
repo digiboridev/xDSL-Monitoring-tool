@@ -2,11 +2,11 @@ import 'package:drift/drift.dart';
 import 'package:xdslmt/data/drift/db.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 
-part 'line_stats.g.dart';
+part 'stats.g.dart';
 
 @DriftAccessor(tables: [LineStatsTable])
-class LineStatsDao extends DatabaseAccessor<DB> with _$LineStatsDaoMixin {
-  LineStatsDao(DB db) : super(db);
+class StatsDao extends DatabaseAccessor<DB> with _$StatsDaoMixin {
+  StatsDao(DB db) : super(db);
 
   Future<int> insert(LineStatsTableCompanion entry) => into(lineStatsTable).insert(entry);
 

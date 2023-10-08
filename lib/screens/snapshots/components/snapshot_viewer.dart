@@ -5,7 +5,7 @@ import 'package:xdslmt/components/fec_line.dart';
 import 'package:xdslmt/components/snrm.dart';
 import 'package:xdslmt/components/speed_line.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
-import 'package:xdslmt/data/repositories/line_stats_repo.dart';
+import 'package:xdslmt/data/repositories/stats_repo.dart';
 import 'package:xdslmt/widgets/text_styles.dart';
 
 class SnapshotViewer extends StatefulWidget {
@@ -17,13 +17,13 @@ class SnapshotViewer extends StatefulWidget {
 }
 
 class _SnapshotViewerState extends State<SnapshotViewer> {
-  late final lineStatsRepository = context.read<LineStatsRepository>();
+  late final statsRepository = context.read<StatsRepository>();
   List<LineStats> statsList = [];
 
   @override
   void initState() {
     super.initState();
-    lineStatsRepository.getBySnapshot(widget.snapshotId).then((data) {
+    statsRepository.getBySnapshot(widget.snapshotId).then((data) {
       if (mounted) setState(() => statsList = data);
     });
   }

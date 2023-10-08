@@ -1,26 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/data/drift/db.dart';
 import 'package:xdslmt/data/drift/line_stats.dart';
 import 'package:xdslmt/data/repositories/line_stats_repo.dart';
 import 'package:xdslmt/data/repositories/settings_repo.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
-import 'package:xdslmt/models/adsl_data_model.dart';
-import 'package:xdslmt/models/data_sampling_service.dart';
-import 'package:xdslmt/models/settings_model.dart';
-// import 'package:xDSL_Monitoring_tool/models/misc/ModemTypes.dart';
-import 'screens_wrapper.dart';
-// import 'models/modemClients/LineStatsCollection.dart';
+import 'package:xdslmt/screens_wrapper.dart';
 
 void main() async {
-  // Hive.registerAdapter(LineStatsCollectionAdapter());
-  // Hive.registerAdapter(ModemTypesAdapter());
-  // debugRepaintRainbowEnabled = true;
-  await Hive.initFlutter();
-  await Hive.openBox('settings');
-  await Hive.openBox('collectionMap');
-
   runApp(const App());
 }
 
@@ -47,9 +34,6 @@ class App extends StatelessWidget {
         Provider<SettingsRepository>(create: (_) => SettingsRepositoryPrefsImpl()),
         Provider<LineStatsRepository>(create: (_) => SL().lineStatsRepository),
         ChangeNotifierProvider<StatsSamplingService>(create: (_) => SL().statsSamplingService),
-        ChangeNotifierProvider(create: (_) => ADSLDataModel()),
-        ChangeNotifierProvider(create: (_) => DataSamplingService()),
-        ChangeNotifierProvider(create: (_) => SettingsModel()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

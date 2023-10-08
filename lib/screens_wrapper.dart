@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
-import 'package:xdslmt/models/data_sampling_service.dart';
 import 'package:xdslmt/screens/current/current_screen.dart';
 import 'package:xdslmt/screens/settings/binding.dart';
 import 'package:move_to_background/move_to_background.dart';
@@ -27,14 +26,7 @@ class _ScreensWrapperState extends State<ScreensWrapper> {
 
   int _screenIndex = 0;
 
-  void selectScreen(int index) {
-    bool isCounting = context.read<DataSamplingService>().isCounting;
-    if (isCounting & (index == 2)) {
-      debugPrint('blocket');
-      return;
-    }
-    setState(() => _screenIndex = index);
-  }
+  void selectScreen(int index) => setState(() => _screenIndex = index);
 
   String get screenName {
     switch (_screenIndex) {

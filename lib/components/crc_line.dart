@@ -10,7 +10,7 @@ import 'package:mp_chart_x/mp/core/enums/mode.dart';
 import 'package:mp_chart_x/mp/core/enums/x_axis_position.dart';
 import 'package:xdslmt/components/my_line_marker.dart';
 import 'package:xdslmt/components/x_date_formatter.dart';
-import 'package:xdslmt/models/modemClients/line_stats_collection.dart';
+import 'package:xdslmt/bak/modemClients/line_stats_collection.dart';
 
 class CRCLine extends StatefulWidget {
   final List<LineStatsCollection> collection;

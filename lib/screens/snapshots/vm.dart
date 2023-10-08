@@ -14,6 +14,10 @@ class SnapshotsScreenViewModel extends ValueNotifier<SnapshotsScreenState> {
     log('SnapshotsScreenViewModel: _init()');
   }
 
+  refresh() async {
+    value = SnapshotsScreenState.loaded(await statsRepository.snapshotIds());
+  }
+
   bool get vmReady => value is SnapshotsScreenLoaded;
-  List<String> get snapshots => (value as SnapshotsScreenLoaded).snapshots;
+  List<String> get snapshots => vmReady ? (value as SnapshotsScreenLoaded).snapshots : [];
 }

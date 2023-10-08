@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/data/drift/db.dart';
 import 'package:xdslmt/data/drift/stats.dart';
@@ -8,6 +9,7 @@ import 'package:xdslmt/data/services/stats_sampling_service.dart';
 import 'package:xdslmt/screens_wrapper.dart';
 
 void main() async {
+  // debugRepaintRainbowEnabled = true;
   runApp(const App());
 }
 
@@ -36,7 +38,6 @@ class App extends StatelessWidget {
         ChangeNotifierProvider<StatsSamplingService>(create: (_) => SL().statsSamplingService),
       ],
       child: MaterialApp(
-        debugShowCheckedModeBanner: false,
         title: 'xDSL Monitoring Tool',
         theme: ThemeData(
           useMaterial3: true,

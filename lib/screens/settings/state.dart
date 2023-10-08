@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:xdslmt/data/models/app_settings.dart';
 
 sealed class SettingsScreenState {
@@ -8,20 +9,13 @@ sealed class SettingsScreenState {
 
 final class SettingsScreenLoading extends SettingsScreenState {}
 
-final class SettingsScreenLoaded extends SettingsScreenState {
+final class SettingsScreenLoaded extends SettingsScreenState with EquatableMixin {
   final AppSettings settings;
   SettingsScreenLoaded(this.settings);
 
   @override
-  bool operator ==(covariant SettingsScreenLoaded other) {
-    if (identical(this, other)) return true;
-
-    return other.settings == settings;
-  }
+  List<Object> get props => [settings];
 
   @override
-  int get hashCode => settings.hashCode;
-
-  @override
-  String toString() => 'SettingsScreenLoaded(settings: $settings)';
+  bool get stringify => true;
 }

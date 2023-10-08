@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:equatable/equatable.dart';
 
 sealed class SnapshotsScreenState {
   SnapshotsScreenState();
@@ -8,20 +8,13 @@ sealed class SnapshotsScreenState {
 
 final class SnapshotsScreenLoading extends SnapshotsScreenState {}
 
-final class SnapshotsScreenLoaded extends SnapshotsScreenState {
+final class SnapshotsScreenLoaded extends SnapshotsScreenState with EquatableMixin {
   final List<String> snapshots;
   SnapshotsScreenLoaded(this.snapshots);
 
   @override
-  bool operator ==(covariant SnapshotsScreenLoaded other) {
-    if (identical(this, other)) return true;
-
-    return listEquals(other.snapshots, snapshots);
-  }
+  List<Object> get props => [snapshots];
 
   @override
-  int get hashCode => snapshots.hashCode;
-
-  @override
-  String toString() => 'SnapshotsScreenLoaded(snapshots: $snapshots)';
+  bool get stringify => true;
 }

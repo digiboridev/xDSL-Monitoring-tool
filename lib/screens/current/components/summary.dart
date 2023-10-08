@@ -1,22 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/data/models/snapshot_stats.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
+import 'package:xdslmt/utils/formatters.dart';
 import 'package:xdslmt/widgets/text_styles.dart';
-
-extension FormatDate on DateTime {
-  DateFormat get formatter => DateFormat('yyyy-MM-dd HH:mm:ss');
-
-  String get ymdhms => this.formatter.format(this);
-
-  String get numhms => '${this.hour}:${this.minute}:${this.second}';
-  String get numymd => '${this.year}-${this.month}-${this.day}';
-}
-
-extension FormatDuration on Duration {
-  String get hms => '${this.inHours}:${this.inMinutes.remainder(60).toString().padLeft(2, '0')}:${this.inSeconds.remainder(60).toString().padLeft(2, '0')}';
-}
 
 class Summary extends StatelessWidget {
   const Summary({super.key});

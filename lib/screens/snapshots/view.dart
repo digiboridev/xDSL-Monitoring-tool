@@ -21,26 +21,37 @@ class SnapshotsScreenView extends StatelessWidget {
             ],
           ),
         ),
-        child: Builder(
-          builder: (context) {
-            final snapshots = context.select<SnapshotsScreenViewModel, List<String>>((vm) => vm.snapshots);
-            if (snapshots.isNotEmpty) {
-              return ListView.builder(
-                padding: EdgeInsets.all(10),
-                itemBuilder: (context, index) {
-                  final snapshot = snapshots[index];
-                  return SnaplistTile(snapshot: snapshot);
-                },
-                itemCount: snapshots.length,
-              );
-            }
-            return Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [Icon(Icons.data_array), SizedBox(width: 8), Text('Nothing captured yet...')],
-              ),
-            );
+        child: ShaderMask(
+          shaderCallback: (Rect rect) {
+            return const LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Colors.white, Colors.transparent, Colors.transparent, Colors.white],
+              stops: [0.0, 0.025, 0.950, 1.0],
+            ).createShader(rect);
           },
+          blendMode: BlendMode.dstOut,
+          child: Builder(
+            builder: (context) {
+              final snapshots = context.select<SnapshotsScreenViewModel, List<String>>((vm) => vm.snapshots);
+              if (snapshots.isNotEmpty) {
+                return ListView.builder(
+                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+                  itemBuilder: (context, index) {
+                    final snapshotId = snapshots[index];
+                    return SnaplistTile(snapshotId: snapshotId, key: ValueKey(snapshotId));
+                  },
+                  itemCount: snapshots.length,
+                );
+              }
+              return Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [Icon(Icons.data_array), SizedBox(width: 8), Text('Nothing captured yet...')],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

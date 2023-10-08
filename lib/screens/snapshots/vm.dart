@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/foundation.dart';
-import 'package:xdsl_mt/data/repositories/line_stats_repo.dart';
-import 'package:xdsl_mt/screens/snapshots/state.dart';
+import 'package:xdslmt/data/repositories/line_stats_repo.dart';
+import 'package:xdslmt/screens/snapshots/state.dart';
 
 class SnapshotsScreenViewModel extends ValueNotifier<SnapshotsScreenState> {
   final LineStatsRepository lineStatsRepository;

@@ -2,14 +2,14 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:xdsl_mt/data/services/stats_sampling_service.dart';
-import 'package:xdsl_mt/models/data_sampling_service.dart';
-import 'package:xdsl_mt/screens/current/current_screen.dart';
-import 'package:xdsl_mt/screens/settings/binding.dart';
+import 'package:xdslmt/data/services/stats_sampling_service.dart';
+import 'package:xdslmt/models/data_sampling_service.dart';
+import 'package:xdslmt/screens/current/current_screen.dart';
+import 'package:xdslmt/screens/settings/binding.dart';
 import 'package:move_to_background/move_to_background.dart';
-import 'package:xdsl_mt/screens/settings/view.dart';
-import 'package:xdsl_mt/screens/snapshots/binding.dart';
-import 'package:xdsl_mt/screens/snapshots/view.dart';
+import 'package:xdslmt/screens/settings/view.dart';
+import 'package:xdslmt/screens/snapshots/binding.dart';
+import 'package:xdslmt/screens/snapshots/view.dart';
 
 class ScreensWrapper extends StatefulWidget {
   const ScreensWrapper({super.key});

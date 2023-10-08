@@ -1,9 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:xdsl_mt/data/models/network_unit_type.dart';
-import 'package:xdsl_mt/screens/settings/vm.dart';
-import 'package:xdsl_mt/widgets/text_styles.dart';
+import 'package:xdslmt/data/models/network_unit_type.dart';
+import 'package:xdslmt/screens/settings/vm.dart';
+import 'package:xdslmt/widgets/text_styles.dart';
 
 class NuType extends StatelessWidget {
   const NuType({super.key});

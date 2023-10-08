@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart' as path;
-import 'package:xdsl_mt/data/drift/line_stats.dart';
-import 'package:xdsl_mt/data/models/line_stats.dart';
+import 'package:xdslmt/data/drift/line_stats.dart';
+import 'package:xdslmt/data/models/line_stats.dart';
 
 part 'db.g.dart';
 

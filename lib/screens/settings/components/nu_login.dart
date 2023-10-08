@@ -1,8 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:xdsl_mt/screens/settings/vm.dart';
-import 'package:xdsl_mt/widgets/text_styles.dart';
+import 'package:xdslmt/screens/settings/vm.dart';
+import 'package:xdslmt/widgets/text_styles.dart';
 
 class NuLogin extends StatelessWidget {
   const NuLogin({super.key});

@@ -2,11 +2,11 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:xdsl_mt/data/models/app_settings.dart';
-import 'package:xdsl_mt/data/models/network_unit_type.dart';
-import 'package:xdsl_mt/data/repositories/settings_repo.dart';
-import 'package:xdsl_mt/screens/settings/state.dart';
-import 'package:xdsl_mt/utils/streambang.dart';
+import 'package:xdslmt/data/models/app_settings.dart';
+import 'package:xdslmt/data/models/network_unit_type.dart';
+import 'package:xdslmt/data/repositories/settings_repo.dart';
+import 'package:xdslmt/screens/settings/state.dart';
+import 'package:xdslmt/utils/streambang.dart';
 
 class SettingsScreenViewModel extends ValueNotifier<SettingsScreenState> with StreamBang {
   final SettingsRepository settingsRepository;

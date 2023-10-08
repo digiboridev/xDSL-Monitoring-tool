@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:xdsl_mt/data/services/stats_sampling_service.dart';
-import 'package:xdsl_mt/widgets/text_styles.dart';
+import 'package:xdslmt/data/services/stats_sampling_service.dart';
+import 'package:xdslmt/widgets/text_styles.dart';
 
 typedef MeterValue = ({double? value, double? min, double? max, double? avg});
 

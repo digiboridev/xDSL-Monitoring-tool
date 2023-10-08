@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
-import 'package:xdsl_mt/data/drift/db.dart';
-import 'package:xdsl_mt/data/drift/line_stats.dart';
-import 'package:xdsl_mt/data/models/line_stats.dart';
+import 'package:xdslmt/data/drift/db.dart';
+import 'package:xdslmt/data/drift/line_stats.dart';
+import 'package:xdslmt/data/models/line_stats.dart';
 
 abstract class LineStatsRepository {
   Future<void> insert(LineStats sample);

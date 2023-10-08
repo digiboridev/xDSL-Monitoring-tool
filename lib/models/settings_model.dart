@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:xdsl_mt/models/StorageManager/HiveSettingsStorageManager.dart';
+import 'package:xdslmt/models/StorageManager/HiveSettingsStorageManager.dart';
 
 class SettingsModel extends ChangeNotifier with HiveSettingsStorageManager {
   //Initialize parameters with defaults

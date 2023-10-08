@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:xdsl_mt/data/repositories/line_stats_repo.dart';
-import 'package:xdsl_mt/screens/snapshots/vm.dart';
+import 'package:xdslmt/data/repositories/line_stats_repo.dart';
+import 'package:xdslmt/screens/snapshots/vm.dart';
 
 class SnapshotsScreenBinding extends StatelessWidget {
   final Widget child;

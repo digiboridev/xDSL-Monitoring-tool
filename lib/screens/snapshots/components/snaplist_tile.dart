@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:xdsl_mt/screens/snapshots/components/snapshot_viewer.dart';
+import 'package:xdslmt/screens/snapshots/components/snapshot_viewer.dart';
 
 class SnaplistTile extends StatelessWidget {
   const SnaplistTile({super.key, required this.snapshot});

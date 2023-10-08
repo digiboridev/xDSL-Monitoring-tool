@@ -3,11 +3,11 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:developer';
 import 'package:flutter/foundation.dart';
-import 'package:xdsl_mt/data/models/app_settings.dart';
-import 'package:xdsl_mt/data/models/line_stats.dart';
-import 'package:xdsl_mt/data/net_unit_clients/net_unit_client.dart';
-import 'package:xdsl_mt/data/repositories/line_stats_repo.dart';
-import 'package:xdsl_mt/data/repositories/settings_repo.dart';
+import 'package:xdslmt/data/models/app_settings.dart';
+import 'package:xdslmt/data/models/line_stats.dart';
+import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
+import 'package:xdslmt/data/repositories/line_stats_repo.dart';
+import 'package:xdslmt/data/repositories/settings_repo.dart';
 
 class SessionStats {
   final String sessionId;

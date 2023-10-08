@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:xdsl_mt/models/StorageManager/ISettingsStorageManager.dart';
+import 'package:xdslmt/models/StorageManager/ISettingsStorageManager.dart';
 
 mixin HiveSettingsStorageManager implements ISettingsStorageManager {
   Box box = Hive.box('settings');

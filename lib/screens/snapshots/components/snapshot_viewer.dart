@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:xdsl_mt/components/average_stats.dart';
-import 'package:xdsl_mt/components/crc_line.dart';
-import 'package:xdsl_mt/components/external_latency.dart';
-import 'package:xdsl_mt/components/fec_line.dart';
-import 'package:xdsl_mt/components/modem_latency.dart';
-import 'package:xdsl_mt/components/snrm.dart';
-import 'package:xdsl_mt/components/speed_line.dart';
-import 'package:xdsl_mt/data/models/line_stats.dart';
-import 'package:xdsl_mt/data/repositories/line_stats_repo.dart';
+import 'package:xdslmt/components/average_stats.dart';
+import 'package:xdslmt/components/crc_line.dart';
+import 'package:xdslmt/components/external_latency.dart';
+import 'package:xdslmt/components/fec_line.dart';
+import 'package:xdslmt/components/modem_latency.dart';
+import 'package:xdslmt/components/snrm.dart';
+import 'package:xdslmt/components/speed_line.dart';
+import 'package:xdslmt/data/models/line_stats.dart';
+import 'package:xdslmt/data/repositories/line_stats_repo.dart';
 
 class SnapshotViewer extends StatefulWidget {
   final String snapshotId;

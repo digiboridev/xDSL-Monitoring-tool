@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:math';
-import 'package:xdsl_mt/data/models/line_stats.dart';
-import 'package:xdsl_mt/data/net_unit_clients/net_unit_client.dart';
+import 'package:xdslmt/data/models/line_stats.dart';
+import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 
 final class ClientSimulator extends NetUnitClient {
   ClientSimulator({required super.session}) : super(ip: '_', login: '_', password: '_');

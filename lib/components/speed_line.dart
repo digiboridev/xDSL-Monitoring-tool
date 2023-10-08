@@ -6,9 +6,9 @@ import 'package:mp_chart_x/mp/core/data_set/line_data_set.dart';
 import 'package:mp_chart_x/mp/core/entry/entry.dart';
 import 'package:mp_chart_x/mp/core/enums/mode.dart';
 import 'package:mp_chart_x/mp/core/enums/x_axis_position.dart';
-import 'package:xdsl_mt/components/my_line_marker.dart';
-import 'package:xdsl_mt/components/x_date_formatter.dart';
-import 'package:xdsl_mt/data/models/line_stats.dart';
+import 'package:xdslmt/components/my_line_marker.dart';
+import 'package:xdslmt/components/x_date_formatter.dart';
+import 'package:xdslmt/data/models/line_stats.dart';
 
 class SpeedLine extends StatefulWidget {
   final List<LineStats> statsList;

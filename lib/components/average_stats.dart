@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:xdsl_mt/models/modemClients/line_stats_collection.dart';
+import 'package:xdslmt/models/modemClients/line_stats_collection.dart';
 
 class AvgStatsData {
   final Duration time;

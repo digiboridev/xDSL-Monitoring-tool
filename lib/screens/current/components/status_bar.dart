@@ -1,7 +1,7 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:xdsl_mt/data/models/line_stats.dart';
-import 'package:xdsl_mt/data/services/stats_sampling_service.dart';
+import 'package:xdslmt/data/models/line_stats.dart';
+import 'package:xdslmt/data/services/stats_sampling_service.dart';
 
 class StatusBar extends StatelessWidget {
   const StatusBar({super.key});

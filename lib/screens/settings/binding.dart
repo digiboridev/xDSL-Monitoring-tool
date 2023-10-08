@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:xdsl_mt/data/repositories/settings_repo.dart';
-import 'package:xdsl_mt/screens/settings/vm.dart';
+import 'package:xdslmt/data/repositories/settings_repo.dart';
+import 'package:xdslmt/screens/settings/vm.dart';
 
 class SettingsScreenBinding extends StatelessWidget {
   final Widget child;

@@ -1,7 +1,7 @@
-import 'package:xdsl_mt/data/models/app_settings.dart';
-import 'package:xdsl_mt/data/models/line_stats.dart';
-import 'package:xdsl_mt/data/models/network_unit_type.dart';
-import 'package:xdsl_mt/data/net_unit_clients/simulator_impl.dart';
+import 'package:xdslmt/data/models/app_settings.dart';
+import 'package:xdslmt/data/models/line_stats.dart';
+import 'package:xdslmt/data/models/network_unit_type.dart';
+import 'package:xdslmt/data/net_unit_clients/simulator_impl.dart';
 
 abstract base class NetUnitClient {
   /// IP address of the network unit

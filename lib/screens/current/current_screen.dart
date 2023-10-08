@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:xdsl_mt/widgets/fillable_scrollable_wrapper.dart';
-import 'package:xdsl_mt/widgets/min_spacer.dart';
-import 'package:xdsl_mt/widgets/text_styles.dart';
+import 'package:xdslmt/widgets/fillable_scrollable_wrapper.dart';
+import 'package:xdslmt/widgets/min_spacer.dart';
+import 'package:xdslmt/widgets/text_styles.dart';
 import 'components/status_bar.dart';
 import 'components/current_speed_bar.dart';
 import 'components/current_snr_bar.dart';

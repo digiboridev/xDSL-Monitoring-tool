@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:xdsl_mt/data/models/app_settings.dart';
+import 'package:xdslmt/data/models/app_settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract interface class SettingsRepository {

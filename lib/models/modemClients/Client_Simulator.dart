@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:math';
-import 'package:xdsl_mt/models/modemClients/client.dart';
-import 'package:xdsl_mt/models/modemClients/line_stats_collection.dart';
+import 'package:xdslmt/models/modemClients/client.dart';
+import 'package:xdslmt/models/modemClients/line_stats_collection.dart';
 
 class ClientSimulator implements Client {
   @override

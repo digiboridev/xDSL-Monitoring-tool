@@ -2,12 +2,12 @@ import 'dart:async';
 import 'dart:isolate';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:xdsl_mt/models/StorageManager/HiveSettingsStorageManager.dart';
-import 'package:xdsl_mt/models/misc/isolate_parameters.dart';
-import 'package:xdsl_mt/models/misc/modem_types.dart';
-import 'package:xdsl_mt/models/modemClients/client.dart';
-import 'package:xdsl_mt/models/modemClients/client_simulator.dart';
-import 'package:xdsl_mt/models/modemClients/line_stats_collection.dart';
+import 'package:xdslmt/models/StorageManager/HiveSettingsStorageManager.dart';
+import 'package:xdslmt/models/misc/isolate_parameters.dart';
+import 'package:xdslmt/models/misc/modem_types.dart';
+import 'package:xdslmt/models/modemClients/client.dart';
+import 'package:xdslmt/models/modemClients/client_simulator.dart';
+import 'package:xdslmt/models/modemClients/line_stats_collection.dart';
 
 class DataSamplingService extends ChangeNotifier with HiveSettingsStorageManager {
   ModemTypes _modemType = ModemTypes.Client_simulation;

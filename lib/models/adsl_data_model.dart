@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:xdsl_mt/models/StorageManager/HiveSettingsStorageManager.dart';
-import 'package:xdsl_mt/models/modemClients/line_stats_collection.dart';
+import 'package:xdslmt/models/StorageManager/HiveSettingsStorageManager.dart';
+import 'package:xdslmt/models/modemClients/line_stats_collection.dart';
 
 class ADSLDataModel extends ChangeNotifier with HiveSettingsStorageManager {
   int _collectInterval = 30;

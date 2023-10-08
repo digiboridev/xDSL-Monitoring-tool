@@ -1,5 +1,3 @@
-import 'dart:async';
-import 'dart:isolate';
 import 'package:flutter/material.dart';
 import 'package:mp_chart_x/mp/chart/line_chart.dart';
 import 'package:mp_chart_x/mp/controller/line_chart_controller.dart';
@@ -10,165 +8,105 @@ import 'package:mp_chart_x/mp/core/enums/mode.dart';
 import 'package:mp_chart_x/mp/core/enums/x_axis_position.dart';
 import 'package:xdslmt/components/my_line_marker.dart';
 import 'package:xdslmt/components/x_date_formatter.dart';
-import 'package:xdslmt/bak/modemClients/line_stats_collection.dart';
+import 'package:xdslmt/data/models/line_stats.dart';
 
 class FECLine extends StatefulWidget {
-  final List<LineStatsCollection> collection;
+  final List<LineStats> collection;
   final Duration? showPeriod;
 
   const FECLine({super.key, required this.collection, this.showPeriod});
 
   @override
-  State<FECLine> createState() => _SNRMState();
+  State<FECLine> createState() => _FECLineState();
 }
 
-class _SNRMState extends State<FECLine> {
+class _FECLineState extends State<FECLine> {
   late LineChartController _controller;
-  Isolate? _isolateInstance;
-  late SendPort _mainToIsolateStream;
-  final ReceivePort _isolateToMainStream = ReceivePort();
-  bool isSpawned = false;
 
   @override
   void initState() {
     super.initState();
     _initController();
-    _initIsolate();
-  }
-
-  @override
-  void dispose() {
-    //kill isolate
-    killingIsolate();
-    //stop listening
-    _isolateToMainStream.close();
-    super.dispose();
-  }
-
-  //Spawns isolate and listen msgs
-  void _initIsolate() async {
-    _isolateToMainStream.listen((data) {
-      if (data is SendPort) {
-        _mainToIsolateStream = data;
-      } else if (data == 'imspawned') {
-        setState(() {
-          isSpawned = true;
-        });
-      } else if (data is LineData) {
-        _mountLineData(data);
-      }
-    });
-
-    _isolateInstance = await Isolate.spawn(lineDataComputingIsolate, _isolateToMainStream.sendPort);
-  }
-
-  //Kill isolate immediately if is spawned or retry after 1 second
-  void killingIsolate() {
-    if (_isolateInstance == null) {
-      debugPrint('Chart Isolate kill tick');
-      Timer(Duration(milliseconds: 100), killingIsolate);
-    } else {
-      _isolateInstance?.kill();
-    }
-  }
-
-  //Isolate for computing line data
-  //Receives msg with List<LineStatsCollection>
-  //Sends LineData for mount
-  static void lineDataComputingIsolate(SendPort isolateToMainStream) {
-    ReceivePort mainToIsolateStream = ReceivePort();
-    isolateToMainStream.send(mainToIsolateStream.sendPort);
-
-    mainToIsolateStream.listen((data) {
-      if (data is List<LineStatsCollection>) {
-        //Calc diff beteen current and previous values
-        List<Map> diff = [];
-        for (var i = 1; i < data.length; i++) {
-          if (data[i - 1].isErrored) {
-            continue;
-          }
-          DateTime time = data[i].dateTime;
-
-          int upCurr = data[i].upFEC;
-          int downCurr = data[i].downFEC;
-          int upPrev = data[i - 1].upFEC;
-          int downPrev = data[i - 1].downFEC;
-
-          int up = upCurr - upPrev;
-          int down = downCurr - downPrev;
-
-          diff.add({'dateTime': time, 'downFEC': (down <= 0) ? 0 : down, 'upFEC': (up <= 0) ? 0 : up});
-        }
-
-        // Prepare download FEC set
-
-        List<Entry> downFECValues = [];
-
-        for (var element in diff) {
-          downFECValues.add(
-            Entry(
-              x: element['dateTime'].millisecondsSinceEpoch.toDouble(),
-              y: element['downFEC'].toDouble(),
-            ),
-          );
-        }
-
-        // Create a dataset
-        LineDataSet downFECSet = LineDataSet(downFECValues, 'FEC Down');
-
-        // Apply setiings
-        downFECSet
-          // ..setLineWidth(1)
-          ..setColor1(Colors.blueGrey.shade600)
-          ..setMode(Mode.stepped)
-          ..setDrawValues(false)
-          ..setDrawFilled(true)
-          ..setFillAlpha(200)
-          ..setLineWidth(0)
-          ..setGradientColor(Colors.blueGrey.shade600, Colors.blueGrey.shade200)
-          ..setDrawCircles(false);
-
-        // Prepare upload FEC set
-
-        List<Entry> upFECValues = [];
-
-        for (var element in diff) {
-          upFECValues.add(
-            Entry(
-              x: element['dateTime'].millisecondsSinceEpoch.toDouble(),
-              y: element['upFEC'].toDouble(),
-            ),
-          );
-        }
-
-        // Create a dataset
-        LineDataSet upFECSet = LineDataSet(upFECValues, 'FEC Up');
-
-        // Apply settings
-        upFECSet
-          // ..setLineWidth(1)
-          ..setColor1(Colors.yellow.shade600)
-          ..setMode(Mode.stepped)
-          ..setDrawValues(false)
-          ..setDrawFilled(true)
-          ..setLineWidth(0)
-          ..setFillAlpha(200)
-          ..setGradientColor(Colors.yellow.shade600, Colors.yellow.shade200)
-          ..setDrawCircles(false);
-
-        // Add sets to line data and return
-        LineData lineData = LineData.fromList([downFECSet, upFECSet]);
-        isolateToMainStream.send(lineData);
-      } else {
-        debugPrint('[mainToIsolateStream] $data');
-      }
-    });
-
-    isolateToMainStream.send('imspawned');
   }
 
   // Initialize controller
   void _initController() {
+    final data = widget.collection;
+
+    List<(DateTime, double, double)> rdiff = [];
+
+    for (var i = 1; i < data.length; i++) {
+      DateTime time = data[i].time;
+
+      int upCurr = data[i].upFEC ?? 0;
+      int downCurr = data[i].downFEC ?? 0;
+      int upPrev = data[i - 1].upFEC ?? 0;
+      int downPrev = data[i - 1].downFEC ?? 0;
+
+      int up = upCurr - upPrev;
+      int down = downCurr - downPrev;
+
+      rdiff.add((time, (down <= 0) ? 0 : down.toDouble(), (up <= 0) ? 0 : up.toDouble()));
+    }
+
+    // Prepare download FEC set
+
+    List<Entry> downFECValues = [];
+
+    for (final element in rdiff) {
+      downFECValues.add(
+        Entry(
+          x: element.$1.millisecondsSinceEpoch.toDouble(),
+          y: element.$2,
+        ),
+      );
+    }
+
+    // Create a dataset
+    LineDataSet downFECSet = LineDataSet(downFECValues, 'FEC Down');
+
+    // Apply setiings
+    downFECSet
+      // ..setLineWidth(1)
+      ..setColor1(Colors.blueGrey.shade600)
+      ..setMode(Mode.stepped)
+      ..setDrawValues(false)
+      ..setDrawFilled(true)
+      ..setFillAlpha(200)
+      ..setLineWidth(0)
+      ..setGradientColor(Colors.blueGrey.shade600, Colors.blueGrey.shade200)
+      ..setDrawCircles(false);
+
+    // Prepare upload FEC set
+
+    List<Entry> upFECValues = [];
+
+    for (final element in rdiff) {
+      upFECValues.add(
+        Entry(
+          x: element.$1.millisecondsSinceEpoch.toDouble(),
+          y: element.$3,
+        ),
+      );
+    }
+
+    // Create a dataset
+    LineDataSet upFECSet = LineDataSet(upFECValues, 'FEC Up');
+
+    // Apply settings
+    upFECSet
+      // ..setLineWidth(1)
+      ..setColor1(Colors.yellow.shade600)
+      ..setMode(Mode.stepped)
+      ..setDrawValues(false)
+      ..setDrawFilled(true)
+      ..setLineWidth(0)
+      ..setFillAlpha(200)
+      ..setGradientColor(Colors.yellow.shade600, Colors.yellow.shade200)
+      ..setDrawCircles(false);
+
+    // Add sets to line data and return
+    LineData lineData = LineData.fromList([downFECSet, upFECSet]);
     _controller = LineChartController(
       axisLeftSettingFunction: (axisLeft, controller) {
         axisLeft
@@ -198,11 +136,11 @@ class _SNRMState extends State<FECLine> {
           ..gridColor = Colors.blueGrey.shade50
           ..drawAxisLine = false
           ..position = XAxisPosition.bottom
-          ..setAxisMaxValue(widget.collection.last.dateTime.millisecondsSinceEpoch.toDouble())
-          ..setAxisMinValue(widget.collection.first.dateTime.millisecondsSinceEpoch.toDouble())
+          ..setAxisMaxValue(widget.collection.last.time.millisecondsSinceEpoch.toDouble())
+          ..setAxisMinValue(widget.collection.first.time.millisecondsSinceEpoch.toDouble())
           ..setValueFormatter(XDateFormater());
         if (widget.showPeriod != null) {
-          xAxis.setAxisMinValue(widget.collection.last.dateTime.millisecondsSinceEpoch.toDouble() - widget.showPeriod!.inMilliseconds);
+          xAxis.setAxisMinValue(widget.collection.last.time.millisecondsSinceEpoch.toDouble() - widget.showPeriod!.inMilliseconds);
         }
       },
       drawGridBackground: false,
@@ -214,44 +152,21 @@ class _SNRMState extends State<FECLine> {
       highLightPerTapEnabled: true,
       drawBorders: false,
       noDataText: 'loading',
-      marker: MyLineMarker(textColor: Colors.white, backColor: Colors.blueGrey),
+      marker: MyLineMarker(textColor: Colors.white, backColor: Colors.blueGrey, fontSize: 12),
       highlightPerDragEnabled: true,
     );
-  }
-
-  //Mount data in controller and update render by setstate
-  void _mountLineData(LineData lineData) {
     _controller.data = lineData;
-    _controller.state.setStateIfNotDispose();
   }
 
   // Render
   @override
   Widget build(BuildContext context) {
-    //Check for computing isolate spawn
-    //After spawn sends is collection for computing
-
-    if (!isSpawned) {
-      return Container(
-        height: 200,
-        color: Colors.white,
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    } else {
-      debugPrint('render viewer');
-      _mainToIsolateStream.send(widget.collection);
-      return SizedBox(
-        height: 200,
-        child: LineChart(_controller),
-      );
-    }
+    return LineChart(_controller);
   }
 }
 
 class FECLineExpandable extends StatefulWidget {
-  final List<LineStatsCollection> collection;
+  final List<LineStats> collection;
   final Duration? showPeriod;
   final bool isEmpty;
 
@@ -315,20 +230,17 @@ class _FECLineExpandableState extends State<FECLineExpandable> {
             ),
           ),
         ),
-
-        //First check for show bool
-        //Then check for empty data
-        Container(
-          child: !_show
-              ? null
-              : !widget.isEmpty
-                  ? FECLine(collection: widget.collection, showPeriod: widget.showPeriod)
-                  : Container(
-                      height: 200,
-                      color: Colors.white,
-                      child: Center(child: Text('No data')),
-                    ),
-        ),
+        if (_show) ...[
+          if (widget.collection.isEmpty)
+            Container(height: 200, color: Colors.white, child: Center(child: Text('No data')))
+          else
+            Container(
+              height: 200,
+              color: Colors.white,
+              padding: const EdgeInsets.all(32),
+              child: FECLine(collection: widget.collection, showPeriod: widget.showPeriod),
+            ),
+        ],
       ],
     );
   }

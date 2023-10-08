@@ -10,6 +10,7 @@ import 'package:xdslmt/data/repositories/line_stats_repo.dart';
 import 'package:xdslmt/data/repositories/settings_repo.dart';
 
 class SessionStats {
+  // TODO disconnects, up down error count
   final String sessionId;
   final String host;
   final String login;

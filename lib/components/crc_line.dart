@@ -168,9 +168,8 @@ class _CRCLineState extends State<CRCLine> {
 class CRCLineExpandable extends StatefulWidget {
   final List<LineStats> collection;
   final Duration? showPeriod;
-  final bool isEmpty;
 
-  const CRCLineExpandable({super.key, required this.isEmpty, required this.collection, this.showPeriod});
+  const CRCLineExpandable({super.key, required this.collection, this.showPeriod});
 
   @override
   State<CRCLineExpandable> createState() => _CRCLineExpandableState();

@@ -168,9 +168,8 @@ class _FECLineState extends State<FECLine> {
 class FECLineExpandable extends StatefulWidget {
   final List<LineStats> collection;
   final Duration? showPeriod;
-  final bool isEmpty;
 
-  const FECLineExpandable({super.key, required this.isEmpty, required this.collection, this.showPeriod});
+  const FECLineExpandable({super.key, required this.collection, this.showPeriod});
 
   @override
   State<FECLineExpandable> createState() => _FECLineExpandableState();

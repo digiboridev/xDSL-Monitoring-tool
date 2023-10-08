@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:xdslmt/components/average_stats.dart';
 import 'package:xdslmt/components/crc_line.dart';
-import 'package:xdslmt/components/external_latency.dart';
 import 'package:xdslmt/components/fec_line.dart';
-import 'package:xdslmt/components/modem_latency.dart';
 import 'package:xdslmt/components/snrm.dart';
 import 'package:xdslmt/components/speed_line.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/repositories/line_stats_repo.dart';
+import 'package:xdslmt/widgets/text_styles.dart';
 
 class SnapshotViewer extends StatefulWidget {
   final String snapshotId;
@@ -34,7 +32,18 @@ class _SnapshotViewerState extends State<SnapshotViewer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Snapshot ${widget.snapshotId}'),
+        leading: SizedBox(),
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(Icons.close),
+            color: Colors.cyan.shade100,
+          ),
+        ],
+        title: Text(
+          'Snapshot: ${widget.snapshotId}',
+          style: TextStyles.f18w6.cyan100,
+        ),
         backgroundColor: Colors.blueGrey.shade900,
       ),
       body: ListView(
@@ -43,51 +52,21 @@ class _SnapshotViewerState extends State<SnapshotViewer> {
             children: [
               Container(
                 color: Colors.blueGrey.shade50,
-                child: AverageStats(
-                  // isEmpty: isMapEmpty,
-                  collection: [],
-                ),
-              ),
-              Container(
-                color: Colors.blueGrey.shade50,
                 child: SpeedLineExpandable(
                   statsList: statsList,
                 ),
               ),
               Container(
                 color: Colors.blueGrey.shade50,
-                child: SNRMExpandable(
-                  isEmpty: false,
-                  collection: [],
-                ),
+                child: SNRMExpandable(collection: statsList),
               ),
               Container(
                 color: Colors.blueGrey.shade50,
-                child: FECLineExpandable(
-                  isEmpty: false,
-                  collection: [],
-                ),
+                child: FECLineExpandable(collection: statsList),
               ),
               Container(
                 color: Colors.blueGrey.shade50,
-                child: CRCLineExpandable(
-                  isEmpty: false,
-                  collection: [],
-                ),
-              ),
-              Container(
-                color: Colors.blueGrey.shade50,
-                child: ModemLatencyExpandable(
-                  isEmpty: false,
-                  collection: [],
-                ),
-              ),
-              Container(
-                color: Colors.blueGrey.shade50,
-                child: ExternalLatencyExpandable(
-                  isEmpty: false,
-                  collection: [],
-                ),
+                child: CRCLineExpandable(collection: statsList),
               ),
             ],
           ),

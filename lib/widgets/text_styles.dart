@@ -25,6 +25,8 @@ abstract class TextStyles {
 }
 
 extension CS on TextStyle {
+  TextStyle get cyan50 => copyWith(color: Colors.cyan.shade50);
+  TextStyle get cyan100 => copyWith(color: Colors.cyan.shade100);
   TextStyle get blueGrey900 => copyWith(color: Colors.blueGrey.shade800);
   TextStyle get blueGrey800 => copyWith(color: Colors.blueGrey.shade800);
   TextStyle get blueGrey600 => copyWith(color: Colors.blueGrey.shade600);

@@ -167,9 +167,8 @@ class _SNRMState extends State<SNRM> {
 class SNRMExpandable extends StatefulWidget {
   final List<LineStats> collection;
   final Duration? showPeriod;
-  final bool isEmpty;
 
-  const SNRMExpandable({super.key, required this.isEmpty, required this.collection, this.showPeriod});
+  const SNRMExpandable({super.key, required this.collection, this.showPeriod});
 
   @override
   State<SNRMExpandable> createState() => _SNRMExpandableState();

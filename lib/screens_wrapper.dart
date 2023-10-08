@@ -9,6 +9,7 @@ import 'package:move_to_background/move_to_background.dart';
 import 'package:xdslmt/screens/settings/view.dart';
 import 'package:xdslmt/screens/snapshots/binding.dart';
 import 'package:xdslmt/screens/snapshots/view.dart';
+import 'package:xdslmt/widgets/text_styles.dart';
 
 class ScreensWrapper extends StatefulWidget {
   const ScreensWrapper({super.key});
@@ -63,7 +64,7 @@ class _ScreensWrapperState extends State<ScreensWrapper> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(screenName, style: TextStyle(color: Colors.cyan.shade100)),
+          title: Text(screenName, style: TextStyles.f16w6.cyan100),
           actions: [
             IconButton(
               tooltip: 'Minimize app',

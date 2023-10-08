@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:drift/drift.dart';
 import 'package:xdslmt/data/drift/db.dart';
 import 'package:xdslmt/data/drift/stats.dart';
@@ -10,10 +11,13 @@ abstract class StatsRepository {
   Future<List<String>> snapshotIds();
   Future upsertSnapshotStats(SnapshotStats snapshotStats);
   Future<SnapshotStats> snapshotStatsById(String snapshotId);
+  Stream<SnapshotStats> snapshotStatsStreamById(String snapshotId);
+  Future deleteStats(String snapshotId);
 }
 
 class StatsRepositoryDriftImpl implements StatsRepository {
   final StatsDao _dao;
+  final _snapshotStatsBus = StreamController<SnapshotStats>.broadcast();
   StatsRepositoryDriftImpl({required StatsDao dao}) : _dao = dao;
 
   @override
@@ -55,11 +59,21 @@ class StatsRepositoryDriftImpl implements StatsRepository {
   @override
   Future upsertSnapshotStats(SnapshotStats snapshotStats) async {
     await _dao.upsertSnapshotStats(DriftSnapshotStats.fromJson(snapshotStats.toMap()));
+    _snapshotStatsBus.add(snapshotStats);
   }
 
   @override
   Future<SnapshotStats> snapshotStatsById(String snapshotId) async {
     final model = await _dao.snapshotStatsById(snapshotId);
     return SnapshotStats.fromMap(model.toJson());
+  }
+
+  @override
+  Stream<SnapshotStats> snapshotStatsStreamById(String snapshotId) {
+    return _snapshotStatsBus.stream.where((snapshotStats) => snapshotStats.snapshotId == snapshotId);
+  }
+
+  Future deleteStats(String snapshotId) async {
+    await _dao.deleteStats(snapshotId);
   }
 }

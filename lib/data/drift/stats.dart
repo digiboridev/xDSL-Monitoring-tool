@@ -26,6 +26,11 @@ class StatsDao extends DatabaseAccessor<DB> with _$StatsDaoMixin {
   Future<DriftSnapshotStats> snapshotStatsById(String snapshotId) {
     return (select(snapshotStatsTable)..where((tbl) => tbl.snapshotId.equals(snapshotId))).getSingle();
   }
+
+  Future deleteStats(String snapshotId) async {
+    await (delete(snapshotStatsTable)..where((tbl) => tbl.snapshotId.equals(snapshotId))).go();
+    await (delete(lineStatsTable)..where((tbl) => tbl.snapshotId.equals(snapshotId))).go();
+  }
 }
 
 @DataClassName('DriftLineStats')

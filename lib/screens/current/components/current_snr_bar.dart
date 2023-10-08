@@ -122,22 +122,36 @@ class Meter extends StatelessWidget {
           height: 8,
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(6)),
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Colors.blueGrey.shade900, Colors.blueGrey.shade900, Colors.yellow.shade300, Colors.yellow.shade300, Colors.yellow.shade300],
-            ),
+            color: Colors.blueGrey.shade200,
+            borderRadius: BorderRadius.all(Radius.circular(3)),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+          child: Stack(
+            clipBehavior: Clip.none,
             children: [
-              AnimatedContainer(
-                duration: Duration(seconds: 1),
-                curve: Curves.bounceOut,
-                color: Colors.blueGrey.shade200,
-                width: getWidth(),
-                height: 8,
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Colors.blueGrey.shade900,
+                      Colors.blueGrey.shade900,
+                      Colors.yellow.shade300,
+                      Colors.yellow.shade300,
+                      Colors.yellow.shade300,
+                    ],
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: AnimatedContainer(
+                  duration: Duration(seconds: 1),
+                  curve: Curves.elasticOut,
+                  color: Colors.blueGrey.shade200,
+                  width: getWidth(),
+                  height: 8,
+                ),
               ),
             ],
           ),

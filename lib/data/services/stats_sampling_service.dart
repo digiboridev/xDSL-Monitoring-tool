@@ -34,7 +34,7 @@ class StatsSamplingService extends ChangeNotifier {
 
     AppSettings settings = await _settingsRepository.getSettings;
     Duration samplingInterval = settings.samplingInterval;
-    String snapshotId = DateTime.now().toString();
+    String snapshotId = DateTime.now().millisecondsSinceEpoch.toString();
     NetUnitClient client = NetUnitClient.fromSettings(settings, snapshotId);
 
     _snapshotStats = SnapshotStats.create(snapshotId, settings.host, settings.login, settings.pwd);
@@ -64,9 +64,12 @@ class StatsSamplingService extends ChangeNotifier {
     _snapshotStats = _snapshotStats?.copyWithLineStats(lineStats);
     _lastSamples.addLast(lineStats);
     if (_lastSamples.length > 10) _lastSamples.removeFirst();
-    _statsStreamController.add(lineStats);
-    _statsRepository.insert(lineStats);
     notifyListeners();
+
+    _statsStreamController.add(lineStats);
+
+    _statsRepository.insertLineStats(lineStats);
+    _statsRepository.upsertSnapshotStats(_snapshotStats!);
 
     log('Handled lineStats: $lineStats', name: 'StatsSamplingService', time: DateTime.now(), level: 1);
   }

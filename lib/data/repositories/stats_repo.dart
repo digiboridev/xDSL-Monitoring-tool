@@ -2,14 +2,14 @@ import 'package:drift/drift.dart';
 import 'package:xdslmt/data/drift/db.dart';
 import 'package:xdslmt/data/drift/stats.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
+import 'package:xdslmt/data/models/snapshot_stats.dart';
 
 abstract class StatsRepository {
-  Future<void> insert(LineStats sample);
-  Future<LineStats?> getLast();
-  Future<List<LineStats>> getAll();
-  Future<List<LineStats>> getBySnapshot(String snapshotId);
-  Future<List<String>> getSnapshots();
-  Future<void> deleteAll();
+  Future<void> insertLineStats(LineStats lineStats);
+  Future<List<LineStats>> lineStatsBySnapshot(String snapshotId);
+  Future<List<String>> snapshotIds();
+  Future upsertSnapshotStats(SnapshotStats snapshotStats);
+  Future<SnapshotStats> snapshotStatsById(String snapshotId);
 }
 
 class StatsRepositoryDriftImpl implements StatsRepository {
@@ -17,56 +17,49 @@ class StatsRepositoryDriftImpl implements StatsRepository {
   StatsRepositoryDriftImpl({required StatsDao dao}) : _dao = dao;
 
   @override
-  Future<void> insert(LineStats sample) async {
-    await _dao.insert(
+  Future<void> insertLineStats(LineStats lineStats) async {
+    await _dao.insertLineStats(
       LineStatsTableCompanion(
-        time: Value(sample.time),
-        snapshotId: Value(sample.snapshotId),
-        status: Value(sample.status),
-        statusText: Value(sample.statusText),
-        connectionType: Value(sample.connectionType),
-        upAttainableRate: Value(sample.upAttainableRate),
-        downAttainableRate: Value(sample.downAttainableRate),
-        upRate: Value(sample.upRate),
-        downRate: Value(sample.downRate),
-        upMargin: Value(sample.upMargin),
-        downMargin: Value(sample.downMargin),
-        upAttenuation: Value(sample.upAttenuation),
-        downAttenuation: Value(sample.downAttenuation),
-        upCRC: Value(sample.upCRC),
-        downCRC: Value(sample.downCRC),
-        upFEC: Value(sample.upFEC),
-        downFEC: Value(sample.downFEC),
+        time: Value(lineStats.time),
+        snapshotId: Value(lineStats.snapshotId),
+        status: Value(lineStats.status),
+        statusText: Value(lineStats.statusText),
+        connectionType: Value(lineStats.connectionType),
+        upAttainableRate: Value(lineStats.upAttainableRate),
+        downAttainableRate: Value(lineStats.downAttainableRate),
+        upRate: Value(lineStats.upRate),
+        downRate: Value(lineStats.downRate),
+        upMargin: Value(lineStats.upMargin),
+        downMargin: Value(lineStats.downMargin),
+        upAttenuation: Value(lineStats.upAttenuation),
+        downAttenuation: Value(lineStats.downAttenuation),
+        upCRC: Value(lineStats.upCRC),
+        downCRC: Value(lineStats.downCRC),
+        upFEC: Value(lineStats.upFEC),
+        downFEC: Value(lineStats.downFEC),
       ),
     );
   }
 
   @override
-  Future<LineStats?> getLast() async {
-    final model = await _dao.getLast();
-    if (model == null) return null;
-    return LineStats.fromMap(model.toJson());
-  }
-
-  @override
-  Future<List<LineStats>> getAll() async {
-    final models = await _dao.getAll();
+  Future<List<LineStats>> lineStatsBySnapshot(String snapshotId) async {
+    final models = await _dao.lineStatsBySnapshot(snapshotId);
     return models.map((e) => LineStats.fromMap(e.toJson())).toList();
   }
 
   @override
-  Future<List<LineStats>> getBySnapshot(String snapshotId) async {
-    final models = await _dao.getBySnapshot(snapshotId);
-    return models.map((e) => LineStats.fromMap(e.toJson())).toList();
+  Future<List<String>> snapshotIds() {
+    return _dao.snapshotIds();
   }
 
   @override
-  Future<List<String>> getSnapshots() {
-    return _dao.getSnapshots();
+  Future upsertSnapshotStats(SnapshotStats snapshotStats) async {
+    await _dao.upsertSnapshotStats(DriftSnapshotStats.fromJson(snapshotStats.toMap()));
   }
 
   @override
-  Future<void> deleteAll() async {
-    await _dao.deleteAll();
+  Future<SnapshotStats> snapshotStatsById(String snapshotId) async {
+    final model = await _dao.snapshotStatsById(snapshotId);
+    return SnapshotStats.fromMap(model.toJson());
   }
 }

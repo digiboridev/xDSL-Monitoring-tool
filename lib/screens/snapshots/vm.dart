@@ -10,7 +10,7 @@ class SnapshotsScreenViewModel extends ValueNotifier<SnapshotsScreenState> {
   }
 
   _init() async {
-    value = SnapshotsScreenState.loaded(await statsRepository.getSnapshots());
+    value = SnapshotsScreenState.loaded(await statsRepository.snapshotIds());
     log('SnapshotsScreenViewModel: _init()');
   }
 

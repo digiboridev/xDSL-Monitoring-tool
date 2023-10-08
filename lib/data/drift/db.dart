@@ -9,7 +9,7 @@ import 'package:xdslmt/data/models/line_stats.dart';
 
 part 'db.g.dart';
 
-@DriftDatabase(tables: [LineStatsTable], daos: [StatsDao])
+@DriftDatabase(tables: [LineStatsTable, SnapshotStatsTable], daos: [StatsDao])
 class DB extends _$DB {
   DB({QueryExecutor? e}) : super(e ?? _executor);
 

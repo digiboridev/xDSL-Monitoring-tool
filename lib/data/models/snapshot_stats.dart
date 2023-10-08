@@ -1,3 +1,5 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
 import 'package:xdslmt/data/models/line_stats.dart';
 
 class SnapshotStats {
@@ -235,4 +237,241 @@ class SnapshotStats {
       upCrcTotal: ((upCrcTotal ?? 0) + _incrDiff(upCrcLast, stats.upCRC)).toInt(),
     );
   }
+
+  @override
+  bool operator ==(covariant SnapshotStats other) {
+    if (identical(this, other)) return true;
+
+    return other.snapshotId == snapshotId &&
+        other.host == host &&
+        other.login == login &&
+        other.password == password &&
+        other.startTime == startTime &&
+        other.samples == samples &&
+        other.disconnects == disconnects &&
+        other.samplingErrors == samplingErrors &&
+        other.samplingDuration == samplingDuration &&
+        other.uplinkDuration == uplinkDuration &&
+        other.lastSampleStatus == lastSampleStatus &&
+        other.lastSampleTime == lastSampleTime &&
+        other.downRateLast == downRateLast &&
+        other.downRateMin == downRateMin &&
+        other.downRateMax == downRateMax &&
+        other.downRateAvg == downRateAvg &&
+        other.downAttainableRateLast == downAttainableRateLast &&
+        other.downAttainableRateMin == downAttainableRateMin &&
+        other.downAttainableRateMax == downAttainableRateMax &&
+        other.downAttainableRateAvg == downAttainableRateAvg &&
+        other.upRateLast == upRateLast &&
+        other.upRateMin == upRateMin &&
+        other.upRateMax == upRateMax &&
+        other.upRateAvg == upRateAvg &&
+        other.upAttainableRateLast == upAttainableRateLast &&
+        other.upAttainableRateMin == upAttainableRateMin &&
+        other.upAttainableRateMax == upAttainableRateMax &&
+        other.upAttainableRateAvg == upAttainableRateAvg &&
+        other.downSNRmLast == downSNRmLast &&
+        other.downSNRmMin == downSNRmMin &&
+        other.downSNRmMax == downSNRmMax &&
+        other.downSNRmAvg == downSNRmAvg &&
+        other.upSNRmLast == upSNRmLast &&
+        other.upSNRmMin == upSNRmMin &&
+        other.upSNRmMax == upSNRmMax &&
+        other.upSNRmAvg == upSNRmAvg &&
+        other.downAttenuationLast == downAttenuationLast &&
+        other.downAttenuationMin == downAttenuationMin &&
+        other.downAttenuationMax == downAttenuationMax &&
+        other.downAttenuationAvg == downAttenuationAvg &&
+        other.upAttenuationLast == upAttenuationLast &&
+        other.upAttenuationMin == upAttenuationMin &&
+        other.upAttenuationMax == upAttenuationMax &&
+        other.upAttenuationAvg == upAttenuationAvg &&
+        other.downFecLast == downFecLast &&
+        other.downFecTotal == downFecTotal &&
+        other.upFecLast == upFecLast &&
+        other.upFecTotal == upFecTotal &&
+        other.downCrcLast == downCrcLast &&
+        other.downCrcTotal == downCrcTotal &&
+        other.upCrcLast == upCrcLast &&
+        other.upCrcTotal == upCrcTotal;
+  }
+
+  @override
+  int get hashCode {
+    return snapshotId.hashCode ^
+        host.hashCode ^
+        login.hashCode ^
+        password.hashCode ^
+        startTime.hashCode ^
+        samples.hashCode ^
+        disconnects.hashCode ^
+        samplingErrors.hashCode ^
+        samplingDuration.hashCode ^
+        uplinkDuration.hashCode ^
+        lastSampleStatus.hashCode ^
+        lastSampleTime.hashCode ^
+        downRateLast.hashCode ^
+        downRateMin.hashCode ^
+        downRateMax.hashCode ^
+        downRateAvg.hashCode ^
+        downAttainableRateLast.hashCode ^
+        downAttainableRateMin.hashCode ^
+        downAttainableRateMax.hashCode ^
+        downAttainableRateAvg.hashCode ^
+        upRateLast.hashCode ^
+        upRateMin.hashCode ^
+        upRateMax.hashCode ^
+        upRateAvg.hashCode ^
+        upAttainableRateLast.hashCode ^
+        upAttainableRateMin.hashCode ^
+        upAttainableRateMax.hashCode ^
+        upAttainableRateAvg.hashCode ^
+        downSNRmLast.hashCode ^
+        downSNRmMin.hashCode ^
+        downSNRmMax.hashCode ^
+        downSNRmAvg.hashCode ^
+        upSNRmLast.hashCode ^
+        upSNRmMin.hashCode ^
+        upSNRmMax.hashCode ^
+        upSNRmAvg.hashCode ^
+        downAttenuationLast.hashCode ^
+        downAttenuationMin.hashCode ^
+        downAttenuationMax.hashCode ^
+        downAttenuationAvg.hashCode ^
+        upAttenuationLast.hashCode ^
+        upAttenuationMin.hashCode ^
+        upAttenuationMax.hashCode ^
+        upAttenuationAvg.hashCode ^
+        downFecLast.hashCode ^
+        downFecTotal.hashCode ^
+        upFecLast.hashCode ^
+        upFecTotal.hashCode ^
+        downCrcLast.hashCode ^
+        downCrcTotal.hashCode ^
+        upCrcLast.hashCode ^
+        upCrcTotal.hashCode;
+  }
+
+  @override
+  String toString() {
+    return 'SnapshotStats(snapshotId: $snapshotId, host: $host, login: $login, password: $password, startTime: $startTime, samples: $samples, disconnects: $disconnects, samplingErrors: $samplingErrors, samplingDuration: $samplingDuration, uplinkDuration: $uplinkDuration, lastSampleStatus: $lastSampleStatus, lastSampleTime: $lastSampleTime, downRateLast: $downRateLast, downRateMin: $downRateMin, downRateMax: $downRateMax, downRateAvg: $downRateAvg, downAttainableRateLast: $downAttainableRateLast, downAttainableRateMin: $downAttainableRateMin, downAttainableRateMax: $downAttainableRateMax, downAttainableRateAvg: $downAttainableRateAvg, upRateLast: $upRateLast, upRateMin: $upRateMin, upRateMax: $upRateMax, upRateAvg: $upRateAvg, upAttainableRateLast: $upAttainableRateLast, upAttainableRateMin: $upAttainableRateMin, upAttainableRateMax: $upAttainableRateMax, upAttainableRateAvg: $upAttainableRateAvg, downSNRmLast: $downSNRmLast, downSNRmMin: $downSNRmMin, downSNRmMax: $downSNRmMax, downSNRmAvg: $downSNRmAvg, upSNRmLast: $upSNRmLast, upSNRmMin: $upSNRmMin, upSNRmMax: $upSNRmMax, upSNRmAvg: $upSNRmAvg, downAttenuationLast: $downAttenuationLast, downAttenuationMin: $downAttenuationMin, downAttenuationMax: $downAttenuationMax, downAttenuationAvg: $downAttenuationAvg, upAttenuationLast: $upAttenuationLast, upAttenuationMin: $upAttenuationMin, upAttenuationMax: $upAttenuationMax, upAttenuationAvg: $upAttenuationAvg, downFecLast: $downFecLast, downFecTotal: $downFecTotal, upFecLast: $upFecLast, upFecTotal: $upFecTotal, downCrcLast: $downCrcLast, downCrcTotal: $downCrcTotal, upCrcLast: $upCrcLast, upCrcTotal: $upCrcTotal)';
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'snapshotId': snapshotId,
+      'host': host,
+      'login': login,
+      'password': password,
+      'startTime': startTime.millisecondsSinceEpoch,
+      'samples': samples,
+      'disconnects': disconnects,
+      'samplingErrors': samplingErrors,
+      'samplingDuration': samplingDuration.inMilliseconds,
+      'uplinkDuration': uplinkDuration.inMilliseconds,
+      'lastSampleStatus': lastSampleStatus?.name,
+      'lastSampleTime': lastSampleTime?.millisecondsSinceEpoch,
+      'downRateLast': downRateLast,
+      'downRateMin': downRateMin,
+      'downRateMax': downRateMax,
+      'downRateAvg': downRateAvg,
+      'downAttainableRateLast': downAttainableRateLast,
+      'downAttainableRateMin': downAttainableRateMin,
+      'downAttainableRateMax': downAttainableRateMax,
+      'downAttainableRateAvg': downAttainableRateAvg,
+      'upRateLast': upRateLast,
+      'upRateMin': upRateMin,
+      'upRateMax': upRateMax,
+      'upRateAvg': upRateAvg,
+      'upAttainableRateLast': upAttainableRateLast,
+      'upAttainableRateMin': upAttainableRateMin,
+      'upAttainableRateMax': upAttainableRateMax,
+      'upAttainableRateAvg': upAttainableRateAvg,
+      'downSNRmLast': downSNRmLast,
+      'downSNRmMin': downSNRmMin,
+      'downSNRmMax': downSNRmMax,
+      'downSNRmAvg': downSNRmAvg,
+      'upSNRmLast': upSNRmLast,
+      'upSNRmMin': upSNRmMin,
+      'upSNRmMax': upSNRmMax,
+      'upSNRmAvg': upSNRmAvg,
+      'downAttenuationLast': downAttenuationLast,
+      'downAttenuationMin': downAttenuationMin,
+      'downAttenuationMax': downAttenuationMax,
+      'downAttenuationAvg': downAttenuationAvg,
+      'upAttenuationLast': upAttenuationLast,
+      'upAttenuationMin': upAttenuationMin,
+      'upAttenuationMax': upAttenuationMax,
+      'upAttenuationAvg': upAttenuationAvg,
+      'downFecLast': downFecLast,
+      'downFecTotal': downFecTotal,
+      'upFecLast': upFecLast,
+      'upFecTotal': upFecTotal,
+      'downCrcLast': downCrcLast,
+      'downCrcTotal': downCrcTotal,
+      'upCrcLast': upCrcLast,
+      'upCrcTotal': upCrcTotal,
+    };
+  }
+
+  factory SnapshotStats.fromMap(Map<String, dynamic> map) {
+    return SnapshotStats._(
+      snapshotId: map['snapshotId'] as String,
+      host: map['host'] as String,
+      login: map['login'] as String,
+      password: map['password'] as String,
+      startTime: DateTime.fromMillisecondsSinceEpoch(map['startTime'] as int),
+      samples: map['samples'] as int,
+      disconnects: map['disconnects'] as int,
+      samplingErrors: map['samplingErrors'] as int,
+      samplingDuration: Duration(milliseconds: map['samplingDuration'] as int),
+      uplinkDuration: Duration(milliseconds: map['uplinkDuration'] as int),
+      lastSampleStatus: map['lastSampleStatus'] != null ? SampleStatus.values.byName(map['lastSampleStatus'] as String) : null,
+      lastSampleTime: map['lastSampleTime'] != null ? DateTime.fromMillisecondsSinceEpoch(map['lastSampleTime'] as int) : null,
+      downRateLast: map['downRateLast'] != null ? map['downRateLast'] as int : null,
+      downRateMin: map['downRateMin'] != null ? map['downRateMin'] as int : null,
+      downRateMax: map['downRateMax'] != null ? map['downRateMax'] as int : null,
+      downRateAvg: map['downRateAvg'] != null ? map['downRateAvg'] as int : null,
+      downAttainableRateLast: map['downAttainableRateLast'] != null ? map['downAttainableRateLast'] as int : null,
+      downAttainableRateMin: map['downAttainableRateMin'] != null ? map['downAttainableRateMin'] as int : null,
+      downAttainableRateMax: map['downAttainableRateMax'] != null ? map['downAttainableRateMax'] as int : null,
+      downAttainableRateAvg: map['downAttainableRateAvg'] != null ? map['downAttainableRateAvg'] as int : null,
+      upRateLast: map['upRateLast'] != null ? map['upRateLast'] as int : null,
+      upRateMin: map['upRateMin'] != null ? map['upRateMin'] as int : null,
+      upRateMax: map['upRateMax'] != null ? map['upRateMax'] as int : null,
+      upRateAvg: map['upRateAvg'] != null ? map['upRateAvg'] as int : null,
+      upAttainableRateLast: map['upAttainableRateLast'] != null ? map['upAttainableRateLast'] as int : null,
+      upAttainableRateMin: map['upAttainableRateMin'] != null ? map['upAttainableRateMin'] as int : null,
+      upAttainableRateMax: map['upAttainableRateMax'] != null ? map['upAttainableRateMax'] as int : null,
+      upAttainableRateAvg: map['upAttainableRateAvg'] != null ? map['upAttainableRateAvg'] as int : null,
+      downSNRmLast: map['downSNRmLast'] != null ? map['downSNRmLast'] as double : null,
+      downSNRmMin: map['downSNRmMin'] != null ? map['downSNRmMin'] as double : null,
+      downSNRmMax: map['downSNRmMax'] != null ? map['downSNRmMax'] as double : null,
+      downSNRmAvg: map['downSNRmAvg'] != null ? map['downSNRmAvg'] as double : null,
+      upSNRmLast: map['upSNRmLast'] != null ? map['upSNRmLast'] as double : null,
+      upSNRmMin: map['upSNRmMin'] != null ? map['upSNRmMin'] as double : null,
+      upSNRmMax: map['upSNRmMax'] != null ? map['upSNRmMax'] as double : null,
+      upSNRmAvg: map['upSNRmAvg'] != null ? map['upSNRmAvg'] as double : null,
+      downAttenuationLast: map['downAttenuationLast'] != null ? map['downAttenuationLast'] as double : null,
+      downAttenuationMin: map['downAttenuationMin'] != null ? map['downAttenuationMin'] as double : null,
+      downAttenuationMax: map['downAttenuationMax'] != null ? map['downAttenuationMax'] as double : null,
+      downAttenuationAvg: map['downAttenuationAvg'] != null ? map['downAttenuationAvg'] as double : null,
+      upAttenuationLast: map['upAttenuationLast'] != null ? map['upAttenuationLast'] as double : null,
+      upAttenuationMin: map['upAttenuationMin'] != null ? map['upAttenuationMin'] as double : null,
+      upAttenuationMax: map['upAttenuationMax'] != null ? map['upAttenuationMax'] as double : null,
+      upAttenuationAvg: map['upAttenuationAvg'] != null ? map['upAttenuationAvg'] as double : null,
+      downFecLast: map['downFecLast'] != null ? map['downFecLast'] as int : null,
+      downFecTotal: map['downFecTotal'] != null ? map['downFecTotal'] as int : null,
+      upFecLast: map['upFecLast'] != null ? map['upFecLast'] as int : null,
+      upFecTotal: map['upFecTotal'] != null ? map['upFecTotal'] as int : null,
+      downCrcLast: map['downCrcLast'] != null ? map['downCrcLast'] as int : null,
+      downCrcTotal: map['downCrcTotal'] != null ? map['downCrcTotal'] as int : null,
+      upCrcLast: map['upCrcLast'] != null ? map['upCrcLast'] as int : null,
+      upCrcTotal: map['upCrcTotal'] != null ? map['upCrcTotal'] as int : null,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory SnapshotStats.fromJson(String source) => SnapshotStats.fromMap(json.decode(source) as Map<String, dynamic>);
 }

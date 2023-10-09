@@ -40,9 +40,16 @@ class _SnapshotViewerState extends State<SnapshotViewer> {
             color: Colors.cyan.shade100,
           ),
         ],
-        title: Text(
-          'Snapshot: ${widget.snapshotId}',
-          style: TextStyles.f18w6.cyan100,
+        title: Hero(
+          child: Material(
+            key: Key(widget.snapshotId),
+            color: Colors.transparent,
+            child: Text(
+              'Snapshot: ${widget.snapshotId}',
+              style: TextStyles.f18w6.cyan100,
+            ),
+          ),
+          tag: widget.snapshotId,
         ),
         backgroundColor: Colors.blueGrey.shade900,
       ),

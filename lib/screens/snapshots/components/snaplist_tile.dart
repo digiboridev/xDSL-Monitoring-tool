@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/data/models/snapshot_stats.dart';
@@ -7,6 +6,7 @@ import 'package:xdslmt/data/repositories/stats_repo.dart';
 import 'package:xdslmt/screens/snapshots/components/snapshot_viewer.dart';
 import 'package:xdslmt/screens/snapshots/vm.dart';
 import 'package:xdslmt/utils/formatters.dart';
+import 'package:xdslmt/widgets/text_styles.dart';
 
 class SnaplistTile extends StatefulWidget {
   const SnaplistTile({super.key, required this.snapshotId});
@@ -76,7 +76,17 @@ class _SnaplistTileState extends State<SnaplistTile> {
     return ListTile(
       contentPadding: EdgeInsets.all(0),
       onTap: onTap,
-      title: Text('Snapshot: ' + widget.snapshotId),
+      title: Hero(
+        child: Material(
+          key: Key(widget.snapshotId),
+          color: Colors.transparent,
+          child: Text(
+            'Snapshot: ' + widget.snapshotId,
+            style: TextStyles.f16w6.blueGrey900,
+          ),
+        ),
+        tag: widget.snapshotId,
+      ),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

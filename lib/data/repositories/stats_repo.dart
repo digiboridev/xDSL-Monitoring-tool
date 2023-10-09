@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:isolate';
 import 'package:drift/drift.dart';
 import 'package:xdslmt/data/drift/db.dart';
 import 'package:xdslmt/data/drift/stats.dart';
@@ -48,7 +49,8 @@ class StatsRepositoryDriftImpl implements StatsRepository {
   @override
   Future<List<LineStats>> lineStatsBySnapshot(String snapshotId) async {
     final models = await _dao.lineStatsBySnapshot(snapshotId);
-    return models.map((e) => LineStats.fromMap(e.toJson())).toList();
+    List<LineStats> entities = await Isolate.run(() => models.map((e) => LineStats.fromMap(e.toJson())).toList());
+    return entities;
   }
 
   @override
@@ -65,7 +67,8 @@ class StatsRepositoryDriftImpl implements StatsRepository {
   @override
   Future<SnapshotStats> snapshotStatsById(String snapshotId) async {
     final model = await _dao.snapshotStatsById(snapshotId);
-    return SnapshotStats.fromMap(model.toJson());
+    SnapshotStats entity = SnapshotStats.fromMap(model.toJson());
+    return entity;
   }
 
   @override

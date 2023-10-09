@@ -5,14 +5,14 @@ import 'package:xdslmt/data/models/snapshot_stats.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
 import 'package:xdslmt/widgets/text_styles.dart';
 
-class CurrentSpeedBar extends StatefulWidget {
-  const CurrentSpeedBar({super.key});
+class BandwidthBar extends StatefulWidget {
+  const BandwidthBar({super.key});
 
   @override
-  State<CurrentSpeedBar> createState() => _CurrentSpeedBarState();
+  State<BandwidthBar> createState() => _BandwidthBarState();
 }
 
-class _CurrentSpeedBarState extends State<CurrentSpeedBar> with TickerProviderStateMixin {
+class _BandwidthBarState extends State<BandwidthBar> with TickerProviderStateMixin {
   // Values
   int currDown = 0;
   int currUp = 0;

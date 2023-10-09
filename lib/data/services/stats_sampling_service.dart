@@ -70,7 +70,7 @@ class StatsSamplingService extends ChangeNotifier {
     _statsRepository.insertLineStats(lineStats);
     _statsRepository.upsertSnapshotStats(_snapshotStats!);
 
-    debugPrint('Handled lineStats: $lineStats');
+    // debugPrint('Handled lineStats: $lineStats');
   }
 
   @override

@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
 import 'package:xdslmt/widgets/text_styles.dart';
 
-class RsCounters extends StatelessWidget {
-  const RsCounters({super.key});
+class RSCBar extends StatelessWidget {
+  const RSCBar({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:xdslmt/screens/current/components/summary.dart';
 import 'package:xdslmt/widgets/text_styles.dart';
 import 'components/status_bar.dart';
-import 'components/current_speed_bar.dart';
-import 'components/current_snr_bar.dart';
-import 'components/rs_counters.dart';
+import 'components/bandwidth_bar.dart';
+import 'components/snr_bar.dart';
+import 'components/rsc_bar.dart';
 
 class CurrentScreen extends StatelessWidget {
   const CurrentScreen({super.key});
@@ -39,17 +39,17 @@ class CurrentScreen extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
                   physics: const BouncingScrollPhysics(),
                   children: [
-                    Text('Current / Attainable speed rates', style: TextStyles.f16w6.blueGrey900, textAlign: TextAlign.center),
+                    Text('Current / Attainable bandwidth', style: TextStyles.f16w6.blueGrey900, textAlign: TextAlign.center),
                     const SizedBox(height: 16),
-                    const CurrentSpeedBar(),
+                    const BandwidthBar(),
                     const SizedBox(height: 16),
                     Text('SNR Margin / Attenuation', style: TextStyles.f16w6.blueGrey900, textAlign: TextAlign.center),
                     const SizedBox(height: 16),
-                    const CurrentSNRBar(),
+                    const SNRBar(),
                     const SizedBox(height: 16),
                     Text('Error correction', style: TextStyles.f16w6.blueGrey900, textAlign: TextAlign.center),
                     const SizedBox(height: 16),
-                    const RsCounters(),
+                    const RSCBar(),
                     const SizedBox(height: 16),
                     Text('Summary stats', style: TextStyles.f16w6.blueGrey900, textAlign: TextAlign.center),
                     const SizedBox(height: 16),

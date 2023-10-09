@@ -5,8 +5,8 @@ import 'package:xdslmt/data/services/stats_sampling_service.dart';
 import 'package:xdslmt/widgets/line_chart_painter.dart';
 import 'package:xdslmt/widgets/text_styles.dart';
 
-class CurrentSNRBar extends StatelessWidget {
-  const CurrentSNRBar({super.key});
+class SNRBar extends StatelessWidget {
+  const SNRBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +28,9 @@ class CurrentSNRBar extends StatelessWidget {
                     final s = v.map((e) => e.downMargin).toList();
                     if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
                     return Container(
-                      // key: ObjectKey(s),
                       height: 20,
                       width: double.infinity,
+                      padding: EdgeInsets.all(2),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.cyan.shade100),
                         borderRadius: BorderRadius.all(Radius.circular(3)),
@@ -60,9 +60,9 @@ class CurrentSNRBar extends StatelessWidget {
                     final s = v.map((e) => e.upMargin).toList();
                     if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
                     return Container(
-                      // key: ObjectKey(s),
                       height: 20,
                       width: double.infinity,
+                      padding: EdgeInsets.all(2),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.cyan.shade100),
                         borderRadius: BorderRadius.all(Radius.circular(3)),
@@ -98,9 +98,9 @@ class CurrentSNRBar extends StatelessWidget {
                     final s = v.map((e) => e.downAttenuation).toList();
                     if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
                     return Container(
-                      // key: ObjectKey(s),
                       height: 20,
                       width: double.infinity,
+                      padding: EdgeInsets.all(2),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.cyan.shade100),
                         borderRadius: BorderRadius.all(Radius.circular(3)),
@@ -130,9 +130,9 @@ class CurrentSNRBar extends StatelessWidget {
                     final s = v.map((e) => e.upAttenuation).toList();
                     if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
                     return Container(
-                      // key: ObjectKey(s),
                       height: 20,
                       width: double.infinity,
+                      padding: EdgeInsets.all(2),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.cyan.shade100),
                         borderRadius: BorderRadius.all(Radius.circular(3)),

@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:xdslmt/data/models/app_settings.dart';
 import 'package:xdslmt/data/models/network_unit_type.dart';
@@ -19,7 +18,7 @@ class SettingsScreenViewModel extends ValueNotifier<SettingsScreenState> with St
     value = SettingsScreenState.loaded(await settingsRepository.getSettings);
     var sub = settingsRepository.updatesStream.listen((update) => value = SettingsScreenState.loaded(update));
     insert(sub);
-    log('SettingsScreenViewModel: _init()');
+    debugPrint('SettingsScreenViewModel: _init()');
   }
 
   Future<void> _setSettings(AppSettings settings) => settingsRepository.setSettings(settings);

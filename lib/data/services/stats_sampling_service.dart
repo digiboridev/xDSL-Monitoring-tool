@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, unused_field
 import 'dart:async';
 import 'dart:collection';
-import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:xdslmt/data/models/app_settings.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
@@ -63,7 +62,7 @@ class StatsSamplingService extends ChangeNotifier {
   _handleLineStats(LineStats lineStats) {
     _snapshotStats = _snapshotStats?.copyWithLineStats(lineStats);
     _lastSamples.addLast(lineStats);
-    if (_lastSamples.length > 100) _lastSamples.removeFirst();
+    if (_lastSamples.length > 500) _lastSamples.removeFirst();
     notifyListeners();
 
     _statsStreamController.add(lineStats);
@@ -71,7 +70,7 @@ class StatsSamplingService extends ChangeNotifier {
     _statsRepository.insertLineStats(lineStats);
     _statsRepository.upsertSnapshotStats(_snapshotStats!);
 
-    log('Handled lineStats: $lineStats', name: 'StatsSamplingService', time: DateTime.now(), level: 1);
+    debugPrint('Handled lineStats: $lineStats');
   }
 
   @override

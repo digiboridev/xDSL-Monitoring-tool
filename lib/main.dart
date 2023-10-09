@@ -9,7 +9,7 @@ import 'package:xdslmt/data/services/stats_sampling_service.dart';
 import 'package:xdslmt/screens_wrapper.dart';
 
 void main() async {
-  debugRepaintRainbowEnabled = true;
+  debugRepaintRainbowEnabled = false;
   runApp(const App());
 }
 

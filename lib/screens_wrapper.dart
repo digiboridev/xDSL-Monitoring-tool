@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -59,7 +58,7 @@ class _ScreensWrapperState extends State<ScreensWrapper> {
     return WillPopScope(
       onWillPop: () async {
         MoveToBackground.moveTaskToBack();
-        log('Minimized');
+        debugPrint('Minimized');
         return false;
       },
       child: Scaffold(

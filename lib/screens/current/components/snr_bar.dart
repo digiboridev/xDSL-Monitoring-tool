@@ -1,8 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
 import 'package:xdslmt/widgets/line_chart_painter.dart';
+import 'package:xdslmt/widgets/linebar.dart';
 import 'package:xdslmt/widgets/text_styles.dart';
 
 class SNRBar extends StatelessWidget {
@@ -21,7 +23,14 @@ class SNRBar extends StatelessWidget {
                 children: [
                   Builder(builder: (context) {
                     final v = context.select<StatsSamplingService, double?>((s) => s.snapshotStats?.downSNRmLast);
-                    return Text('SNR Down: ${v?.toStringAsFixed(1) ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800);
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('SNR Down: ${v?.toStringAsFixed(1) ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800),
+                        SizedBox(width: 4),
+                        SizedBox(width: 4, height: 14, child: LineBar(value: v ?? 0, min: 0, max: 20)),
+                      ],
+                    );
                   }),
                   Builder(builder: (context) {
                     final v = context.watch<StatsSamplingService>().lastSamples;
@@ -53,7 +62,14 @@ class SNRBar extends StatelessWidget {
                 children: [
                   Builder(builder: (context) {
                     final v = context.select<StatsSamplingService, double?>((s) => s.snapshotStats?.upSNRmLast);
-                    return Text('SNR Up: ${v?.toStringAsFixed(1) ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800);
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('SNR Up: ${v?.toStringAsFixed(1) ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800),
+                        SizedBox(width: 4),
+                        SizedBox(width: 4, height: 14, child: LineBar(value: v ?? 0, min: 0, max: 20)),
+                      ],
+                    );
                   }),
                   Builder(builder: (context) {
                     final v = context.watch<StatsSamplingService>().lastSamples;
@@ -91,7 +107,14 @@ class SNRBar extends StatelessWidget {
                 children: [
                   Builder(builder: (context) {
                     final v = context.select<StatsSamplingService, double?>((s) => s.snapshotStats?.downAttenuationLast);
-                    return Text('Att Down: ${v?.toStringAsFixed(1) ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800);
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Att Down: ${v?.toStringAsFixed(1) ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800),
+                        SizedBox(width: 4),
+                        SizedBox(width: 4, height: 14, child: LineBar(value: 100 - (v ?? 100), min: 0, max: 100)),
+                      ],
+                    );
                   }),
                   Builder(builder: (context) {
                     final v = context.watch<StatsSamplingService>().lastSamples;
@@ -123,7 +146,14 @@ class SNRBar extends StatelessWidget {
                 children: [
                   Builder(builder: (context) {
                     final v = context.select<StatsSamplingService, double?>((s) => s.snapshotStats?.upAttenuationLast);
-                    return Text('Att Up: ${v?.toStringAsFixed(1) ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800);
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Att Up: ${v?.toStringAsFixed(1) ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800),
+                        SizedBox(width: 4),
+                        SizedBox(width: 4, height: 14, child: LineBar(value: 100 - (v ?? 100), min: 0, max: 100)),
+                      ],
+                    );
                   }),
                   Builder(builder: (context) {
                     final v = context.watch<StatsSamplingService>().lastSamples;
@@ -152,32 +182,6 @@ class SNRBar extends StatelessWidget {
           ],
         ),
       ],
-    );
-  }
-}
-
-class Linechart extends StatefulWidget {
-  final List<double?> data;
-  const Linechart({super.key, required this.data});
-
-  @override
-  State<Linechart> createState() => _LinechartState();
-}
-
-class _LinechartState extends State<Linechart> {
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedContainer(
-      padding: EdgeInsets.all(2),
-      clipBehavior: Clip.hardEdge,
-      duration: Duration(seconds: 1),
-      curve: Curves.easeOutCubic,
-      height: widget.data.length < 2 ? 0 : 20,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.cyan.shade100),
-        borderRadius: BorderRadius.all(Radius.circular(3)),
-      ),
-      child: CustomPaint(painter: LineChartPainter(widget.data)),
     );
   }
 }

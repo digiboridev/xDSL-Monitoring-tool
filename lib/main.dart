@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter/rendering.dart';
+import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/data/drift/db.dart';
 import 'package:xdslmt/data/drift/stats.dart';
@@ -9,7 +9,7 @@ import 'package:xdslmt/data/services/stats_sampling_service.dart';
 import 'package:xdslmt/screens_wrapper.dart';
 
 void main() async {
-  // debugRepaintRainbowEnabled = true;
+  debugRepaintRainbowEnabled = true;
   runApp(const App());
 }
 

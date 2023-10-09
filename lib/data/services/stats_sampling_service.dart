@@ -63,7 +63,7 @@ class StatsSamplingService extends ChangeNotifier {
   _handleLineStats(LineStats lineStats) {
     _snapshotStats = _snapshotStats?.copyWithLineStats(lineStats);
     _lastSamples.addLast(lineStats);
-    if (_lastSamples.length > 10) _lastSamples.removeFirst();
+    if (_lastSamples.length > 100) _lastSamples.removeFirst();
     notifyListeners();
 
     _statsStreamController.add(lineStats);

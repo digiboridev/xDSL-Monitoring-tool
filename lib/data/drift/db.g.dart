@@ -77,27 +77,27 @@ class $LineStatsTableTable extends LineStatsTable
   static const VerificationMeta _upMarginMeta =
       const VerificationMeta('upMargin');
   @override
-  late final GeneratedColumn<double> upMargin = GeneratedColumn<double>(
+  late final GeneratedColumn<int> upMargin = GeneratedColumn<int>(
       'up_margin', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _downMarginMeta =
       const VerificationMeta('downMargin');
   @override
-  late final GeneratedColumn<double> downMargin = GeneratedColumn<double>(
+  late final GeneratedColumn<int> downMargin = GeneratedColumn<int>(
       'down_margin', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _upAttenuationMeta =
       const VerificationMeta('upAttenuation');
   @override
-  late final GeneratedColumn<double> upAttenuation = GeneratedColumn<double>(
+  late final GeneratedColumn<int> upAttenuation = GeneratedColumn<int>(
       'up_attenuation', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _downAttenuationMeta =
       const VerificationMeta('downAttenuation');
   @override
-  late final GeneratedColumn<double> downAttenuation = GeneratedColumn<double>(
+  late final GeneratedColumn<int> downAttenuation = GeneratedColumn<int>(
       'down_attenuation', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _upCRCMeta = const VerificationMeta('upCRC');
   @override
   late final GeneratedColumn<int> upCRC = GeneratedColumn<int>(
@@ -272,13 +272,13 @@ class $LineStatsTableTable extends LineStatsTable
       downRate: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}down_rate']),
       upMargin: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}up_margin']),
+          .read(DriftSqlType.int, data['${effectivePrefix}up_margin']),
       downMargin: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}down_margin']),
+          .read(DriftSqlType.int, data['${effectivePrefix}down_margin']),
       upAttenuation: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}up_attenuation']),
-      downAttenuation: attachedDatabase.typeMapping.read(
-          DriftSqlType.double, data['${effectivePrefix}down_attenuation']),
+          .read(DriftSqlType.int, data['${effectivePrefix}up_attenuation']),
+      downAttenuation: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}down_attenuation']),
       upCRC: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}up_c_r_c']),
       downCRC: attachedDatabase.typeMapping
@@ -310,10 +310,10 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
   final int? downAttainableRate;
   final int? upRate;
   final int? downRate;
-  final double? upMargin;
-  final double? downMargin;
-  final double? upAttenuation;
-  final double? downAttenuation;
+  final int? upMargin;
+  final int? downMargin;
+  final int? upAttenuation;
+  final int? downAttenuation;
   final int? upCRC;
   final int? downCRC;
   final int? upFEC;
@@ -364,16 +364,16 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
       map['down_rate'] = Variable<int>(downRate);
     }
     if (!nullToAbsent || upMargin != null) {
-      map['up_margin'] = Variable<double>(upMargin);
+      map['up_margin'] = Variable<int>(upMargin);
     }
     if (!nullToAbsent || downMargin != null) {
-      map['down_margin'] = Variable<double>(downMargin);
+      map['down_margin'] = Variable<int>(downMargin);
     }
     if (!nullToAbsent || upAttenuation != null) {
-      map['up_attenuation'] = Variable<double>(upAttenuation);
+      map['up_attenuation'] = Variable<int>(upAttenuation);
     }
     if (!nullToAbsent || downAttenuation != null) {
-      map['down_attenuation'] = Variable<double>(downAttenuation);
+      map['down_attenuation'] = Variable<int>(downAttenuation);
     }
     if (!nullToAbsent || upCRC != null) {
       map['up_c_r_c'] = Variable<int>(upCRC);
@@ -451,10 +451,10 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
       downAttainableRate: serializer.fromJson<int?>(json['downAttainableRate']),
       upRate: serializer.fromJson<int?>(json['upRate']),
       downRate: serializer.fromJson<int?>(json['downRate']),
-      upMargin: serializer.fromJson<double?>(json['upMargin']),
-      downMargin: serializer.fromJson<double?>(json['downMargin']),
-      upAttenuation: serializer.fromJson<double?>(json['upAttenuation']),
-      downAttenuation: serializer.fromJson<double?>(json['downAttenuation']),
+      upMargin: serializer.fromJson<int?>(json['upMargin']),
+      downMargin: serializer.fromJson<int?>(json['downMargin']),
+      upAttenuation: serializer.fromJson<int?>(json['upAttenuation']),
+      downAttenuation: serializer.fromJson<int?>(json['downAttenuation']),
       upCRC: serializer.fromJson<int?>(json['upCRC']),
       downCRC: serializer.fromJson<int?>(json['downCRC']),
       upFEC: serializer.fromJson<int?>(json['upFEC']),
@@ -476,10 +476,10 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
       'downAttainableRate': serializer.toJson<int?>(downAttainableRate),
       'upRate': serializer.toJson<int?>(upRate),
       'downRate': serializer.toJson<int?>(downRate),
-      'upMargin': serializer.toJson<double?>(upMargin),
-      'downMargin': serializer.toJson<double?>(downMargin),
-      'upAttenuation': serializer.toJson<double?>(upAttenuation),
-      'downAttenuation': serializer.toJson<double?>(downAttenuation),
+      'upMargin': serializer.toJson<int?>(upMargin),
+      'downMargin': serializer.toJson<int?>(downMargin),
+      'upAttenuation': serializer.toJson<int?>(upAttenuation),
+      'downAttenuation': serializer.toJson<int?>(downAttenuation),
       'upCRC': serializer.toJson<int?>(upCRC),
       'downCRC': serializer.toJson<int?>(downCRC),
       'upFEC': serializer.toJson<int?>(upFEC),
@@ -498,10 +498,10 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
           Value<int?> downAttainableRate = const Value.absent(),
           Value<int?> upRate = const Value.absent(),
           Value<int?> downRate = const Value.absent(),
-          Value<double?> upMargin = const Value.absent(),
-          Value<double?> downMargin = const Value.absent(),
-          Value<double?> upAttenuation = const Value.absent(),
-          Value<double?> downAttenuation = const Value.absent(),
+          Value<int?> upMargin = const Value.absent(),
+          Value<int?> downMargin = const Value.absent(),
+          Value<int?> upAttenuation = const Value.absent(),
+          Value<int?> downAttenuation = const Value.absent(),
           Value<int?> upCRC = const Value.absent(),
           Value<int?> downCRC = const Value.absent(),
           Value<int?> upFEC = const Value.absent(),
@@ -614,10 +614,10 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
   final Value<int?> downAttainableRate;
   final Value<int?> upRate;
   final Value<int?> downRate;
-  final Value<double?> upMargin;
-  final Value<double?> downMargin;
-  final Value<double?> upAttenuation;
-  final Value<double?> downAttenuation;
+  final Value<int?> upMargin;
+  final Value<int?> downMargin;
+  final Value<int?> upAttenuation;
+  final Value<int?> downAttenuation;
   final Value<int?> upCRC;
   final Value<int?> downCRC;
   final Value<int?> upFEC;
@@ -676,10 +676,10 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
     Expression<int>? downAttainableRate,
     Expression<int>? upRate,
     Expression<int>? downRate,
-    Expression<double>? upMargin,
-    Expression<double>? downMargin,
-    Expression<double>? upAttenuation,
-    Expression<double>? downAttenuation,
+    Expression<int>? upMargin,
+    Expression<int>? downMargin,
+    Expression<int>? upAttenuation,
+    Expression<int>? downAttenuation,
     Expression<int>? upCRC,
     Expression<int>? downCRC,
     Expression<int>? upFEC,
@@ -719,10 +719,10 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
       Value<int?>? downAttainableRate,
       Value<int?>? upRate,
       Value<int?>? downRate,
-      Value<double?>? upMargin,
-      Value<double?>? downMargin,
-      Value<double?>? upAttenuation,
-      Value<double?>? downAttenuation,
+      Value<int?>? upMargin,
+      Value<int?>? downMargin,
+      Value<int?>? upAttenuation,
+      Value<int?>? downAttenuation,
       Value<int?>? upCRC,
       Value<int?>? downCRC,
       Value<int?>? upFEC,
@@ -784,16 +784,16 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
       map['down_rate'] = Variable<int>(downRate.value);
     }
     if (upMargin.present) {
-      map['up_margin'] = Variable<double>(upMargin.value);
+      map['up_margin'] = Variable<int>(upMargin.value);
     }
     if (downMargin.present) {
-      map['down_margin'] = Variable<double>(downMargin.value);
+      map['down_margin'] = Variable<int>(downMargin.value);
     }
     if (upAttenuation.present) {
-      map['up_attenuation'] = Variable<double>(upAttenuation.value);
+      map['up_attenuation'] = Variable<int>(upAttenuation.value);
     }
     if (downAttenuation.present) {
-      map['down_attenuation'] = Variable<double>(downAttenuation.value);
+      map['down_attenuation'] = Variable<int>(downAttenuation.value);
     }
     if (upCRC.present) {
       map['up_c_r_c'] = Variable<int>(upCRC.value);
@@ -1019,99 +1019,99 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
   static const VerificationMeta _downSNRmLastMeta =
       const VerificationMeta('downSNRmLast');
   @override
-  late final GeneratedColumn<double> downSNRmLast = GeneratedColumn<double>(
+  late final GeneratedColumn<int> downSNRmLast = GeneratedColumn<int>(
       'down_s_n_rm_last', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _downSNRmMinMeta =
       const VerificationMeta('downSNRmMin');
   @override
-  late final GeneratedColumn<double> downSNRmMin = GeneratedColumn<double>(
+  late final GeneratedColumn<int> downSNRmMin = GeneratedColumn<int>(
       'down_s_n_rm_min', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _downSNRmMaxMeta =
       const VerificationMeta('downSNRmMax');
   @override
-  late final GeneratedColumn<double> downSNRmMax = GeneratedColumn<double>(
+  late final GeneratedColumn<int> downSNRmMax = GeneratedColumn<int>(
       'down_s_n_rm_max', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _downSNRmAvgMeta =
       const VerificationMeta('downSNRmAvg');
   @override
-  late final GeneratedColumn<double> downSNRmAvg = GeneratedColumn<double>(
+  late final GeneratedColumn<int> downSNRmAvg = GeneratedColumn<int>(
       'down_s_n_rm_avg', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _upSNRmLastMeta =
       const VerificationMeta('upSNRmLast');
   @override
-  late final GeneratedColumn<double> upSNRmLast = GeneratedColumn<double>(
+  late final GeneratedColumn<int> upSNRmLast = GeneratedColumn<int>(
       'up_s_n_rm_last', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _upSNRmMinMeta =
       const VerificationMeta('upSNRmMin');
   @override
-  late final GeneratedColumn<double> upSNRmMin = GeneratedColumn<double>(
+  late final GeneratedColumn<int> upSNRmMin = GeneratedColumn<int>(
       'up_s_n_rm_min', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _upSNRmMaxMeta =
       const VerificationMeta('upSNRmMax');
   @override
-  late final GeneratedColumn<double> upSNRmMax = GeneratedColumn<double>(
+  late final GeneratedColumn<int> upSNRmMax = GeneratedColumn<int>(
       'up_s_n_rm_max', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _upSNRmAvgMeta =
       const VerificationMeta('upSNRmAvg');
   @override
-  late final GeneratedColumn<double> upSNRmAvg = GeneratedColumn<double>(
+  late final GeneratedColumn<int> upSNRmAvg = GeneratedColumn<int>(
       'up_s_n_rm_avg', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _downAttenuationLastMeta =
       const VerificationMeta('downAttenuationLast');
   @override
-  late final GeneratedColumn<double> downAttenuationLast =
-      GeneratedColumn<double>('down_attenuation_last', aliasedName, true,
-          type: DriftSqlType.double, requiredDuringInsert: false);
+  late final GeneratedColumn<int> downAttenuationLast = GeneratedColumn<int>(
+      'down_attenuation_last', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _downAttenuationMinMeta =
       const VerificationMeta('downAttenuationMin');
   @override
-  late final GeneratedColumn<double> downAttenuationMin =
-      GeneratedColumn<double>('down_attenuation_min', aliasedName, true,
-          type: DriftSqlType.double, requiredDuringInsert: false);
+  late final GeneratedColumn<int> downAttenuationMin = GeneratedColumn<int>(
+      'down_attenuation_min', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _downAttenuationMaxMeta =
       const VerificationMeta('downAttenuationMax');
   @override
-  late final GeneratedColumn<double> downAttenuationMax =
-      GeneratedColumn<double>('down_attenuation_max', aliasedName, true,
-          type: DriftSqlType.double, requiredDuringInsert: false);
+  late final GeneratedColumn<int> downAttenuationMax = GeneratedColumn<int>(
+      'down_attenuation_max', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _downAttenuationAvgMeta =
       const VerificationMeta('downAttenuationAvg');
   @override
-  late final GeneratedColumn<double> downAttenuationAvg =
-      GeneratedColumn<double>('down_attenuation_avg', aliasedName, true,
-          type: DriftSqlType.double, requiredDuringInsert: false);
+  late final GeneratedColumn<int> downAttenuationAvg = GeneratedColumn<int>(
+      'down_attenuation_avg', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _upAttenuationLastMeta =
       const VerificationMeta('upAttenuationLast');
   @override
-  late final GeneratedColumn<double> upAttenuationLast =
-      GeneratedColumn<double>('up_attenuation_last', aliasedName, true,
-          type: DriftSqlType.double, requiredDuringInsert: false);
+  late final GeneratedColumn<int> upAttenuationLast = GeneratedColumn<int>(
+      'up_attenuation_last', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _upAttenuationMinMeta =
       const VerificationMeta('upAttenuationMin');
   @override
-  late final GeneratedColumn<double> upAttenuationMin = GeneratedColumn<double>(
+  late final GeneratedColumn<int> upAttenuationMin = GeneratedColumn<int>(
       'up_attenuation_min', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _upAttenuationMaxMeta =
       const VerificationMeta('upAttenuationMax');
   @override
-  late final GeneratedColumn<double> upAttenuationMax = GeneratedColumn<double>(
+  late final GeneratedColumn<int> upAttenuationMax = GeneratedColumn<int>(
       'up_attenuation_max', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _upAttenuationAvgMeta =
       const VerificationMeta('upAttenuationAvg');
   @override
-  late final GeneratedColumn<double> upAttenuationAvg = GeneratedColumn<double>(
+  late final GeneratedColumn<int> upAttenuationAvg = GeneratedColumn<int>(
       'up_attenuation_avg', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _downFecLastMeta =
       const VerificationMeta('downFecLast');
   @override
@@ -1609,38 +1609,38 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
           DriftSqlType.int, data['${effectivePrefix}up_attainable_rate_max']),
       upAttainableRateAvg: attachedDatabase.typeMapping.read(
           DriftSqlType.int, data['${effectivePrefix}up_attainable_rate_avg']),
-      downSNRmLast: attachedDatabase.typeMapping.read(
-          DriftSqlType.double, data['${effectivePrefix}down_s_n_rm_last']),
+      downSNRmLast: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}down_s_n_rm_last']),
       downSNRmMin: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}down_s_n_rm_min']),
+          .read(DriftSqlType.int, data['${effectivePrefix}down_s_n_rm_min']),
       downSNRmMax: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}down_s_n_rm_max']),
+          .read(DriftSqlType.int, data['${effectivePrefix}down_s_n_rm_max']),
       downSNRmAvg: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}down_s_n_rm_avg']),
+          .read(DriftSqlType.int, data['${effectivePrefix}down_s_n_rm_avg']),
       upSNRmLast: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}up_s_n_rm_last']),
+          .read(DriftSqlType.int, data['${effectivePrefix}up_s_n_rm_last']),
       upSNRmMin: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}up_s_n_rm_min']),
+          .read(DriftSqlType.int, data['${effectivePrefix}up_s_n_rm_min']),
       upSNRmMax: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}up_s_n_rm_max']),
+          .read(DriftSqlType.int, data['${effectivePrefix}up_s_n_rm_max']),
       upSNRmAvg: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}up_s_n_rm_avg']),
+          .read(DriftSqlType.int, data['${effectivePrefix}up_s_n_rm_avg']),
       downAttenuationLast: attachedDatabase.typeMapping.read(
-          DriftSqlType.double, data['${effectivePrefix}down_attenuation_last']),
+          DriftSqlType.int, data['${effectivePrefix}down_attenuation_last']),
       downAttenuationMin: attachedDatabase.typeMapping.read(
-          DriftSqlType.double, data['${effectivePrefix}down_attenuation_min']),
+          DriftSqlType.int, data['${effectivePrefix}down_attenuation_min']),
       downAttenuationMax: attachedDatabase.typeMapping.read(
-          DriftSqlType.double, data['${effectivePrefix}down_attenuation_max']),
+          DriftSqlType.int, data['${effectivePrefix}down_attenuation_max']),
       downAttenuationAvg: attachedDatabase.typeMapping.read(
-          DriftSqlType.double, data['${effectivePrefix}down_attenuation_avg']),
+          DriftSqlType.int, data['${effectivePrefix}down_attenuation_avg']),
       upAttenuationLast: attachedDatabase.typeMapping.read(
-          DriftSqlType.double, data['${effectivePrefix}up_attenuation_last']),
-      upAttenuationMin: attachedDatabase.typeMapping.read(
-          DriftSqlType.double, data['${effectivePrefix}up_attenuation_min']),
-      upAttenuationMax: attachedDatabase.typeMapping.read(
-          DriftSqlType.double, data['${effectivePrefix}up_attenuation_max']),
-      upAttenuationAvg: attachedDatabase.typeMapping.read(
-          DriftSqlType.double, data['${effectivePrefix}up_attenuation_avg']),
+          DriftSqlType.int, data['${effectivePrefix}up_attenuation_last']),
+      upAttenuationMin: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}up_attenuation_min']),
+      upAttenuationMax: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}up_attenuation_max']),
+      upAttenuationAvg: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}up_attenuation_avg']),
       downFecLast: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}down_fec_last']),
       downFecTotal: attachedDatabase.typeMapping
@@ -1703,22 +1703,22 @@ class DriftSnapshotStats extends DataClass
   final int? upAttainableRateMin;
   final int? upAttainableRateMax;
   final int? upAttainableRateAvg;
-  final double? downSNRmLast;
-  final double? downSNRmMin;
-  final double? downSNRmMax;
-  final double? downSNRmAvg;
-  final double? upSNRmLast;
-  final double? upSNRmMin;
-  final double? upSNRmMax;
-  final double? upSNRmAvg;
-  final double? downAttenuationLast;
-  final double? downAttenuationMin;
-  final double? downAttenuationMax;
-  final double? downAttenuationAvg;
-  final double? upAttenuationLast;
-  final double? upAttenuationMin;
-  final double? upAttenuationMax;
-  final double? upAttenuationAvg;
+  final int? downSNRmLast;
+  final int? downSNRmMin;
+  final int? downSNRmMax;
+  final int? downSNRmAvg;
+  final int? upSNRmLast;
+  final int? upSNRmMin;
+  final int? upSNRmMax;
+  final int? upSNRmAvg;
+  final int? downAttenuationLast;
+  final int? downAttenuationMin;
+  final int? downAttenuationMax;
+  final int? downAttenuationAvg;
+  final int? upAttenuationLast;
+  final int? upAttenuationMin;
+  final int? upAttenuationMax;
+  final int? upAttenuationAvg;
   final int? downFecLast;
   final int? downFecTotal;
   final int? upFecLast;
@@ -1850,52 +1850,52 @@ class DriftSnapshotStats extends DataClass
       map['up_attainable_rate_avg'] = Variable<int>(upAttainableRateAvg);
     }
     if (!nullToAbsent || downSNRmLast != null) {
-      map['down_s_n_rm_last'] = Variable<double>(downSNRmLast);
+      map['down_s_n_rm_last'] = Variable<int>(downSNRmLast);
     }
     if (!nullToAbsent || downSNRmMin != null) {
-      map['down_s_n_rm_min'] = Variable<double>(downSNRmMin);
+      map['down_s_n_rm_min'] = Variable<int>(downSNRmMin);
     }
     if (!nullToAbsent || downSNRmMax != null) {
-      map['down_s_n_rm_max'] = Variable<double>(downSNRmMax);
+      map['down_s_n_rm_max'] = Variable<int>(downSNRmMax);
     }
     if (!nullToAbsent || downSNRmAvg != null) {
-      map['down_s_n_rm_avg'] = Variable<double>(downSNRmAvg);
+      map['down_s_n_rm_avg'] = Variable<int>(downSNRmAvg);
     }
     if (!nullToAbsent || upSNRmLast != null) {
-      map['up_s_n_rm_last'] = Variable<double>(upSNRmLast);
+      map['up_s_n_rm_last'] = Variable<int>(upSNRmLast);
     }
     if (!nullToAbsent || upSNRmMin != null) {
-      map['up_s_n_rm_min'] = Variable<double>(upSNRmMin);
+      map['up_s_n_rm_min'] = Variable<int>(upSNRmMin);
     }
     if (!nullToAbsent || upSNRmMax != null) {
-      map['up_s_n_rm_max'] = Variable<double>(upSNRmMax);
+      map['up_s_n_rm_max'] = Variable<int>(upSNRmMax);
     }
     if (!nullToAbsent || upSNRmAvg != null) {
-      map['up_s_n_rm_avg'] = Variable<double>(upSNRmAvg);
+      map['up_s_n_rm_avg'] = Variable<int>(upSNRmAvg);
     }
     if (!nullToAbsent || downAttenuationLast != null) {
-      map['down_attenuation_last'] = Variable<double>(downAttenuationLast);
+      map['down_attenuation_last'] = Variable<int>(downAttenuationLast);
     }
     if (!nullToAbsent || downAttenuationMin != null) {
-      map['down_attenuation_min'] = Variable<double>(downAttenuationMin);
+      map['down_attenuation_min'] = Variable<int>(downAttenuationMin);
     }
     if (!nullToAbsent || downAttenuationMax != null) {
-      map['down_attenuation_max'] = Variable<double>(downAttenuationMax);
+      map['down_attenuation_max'] = Variable<int>(downAttenuationMax);
     }
     if (!nullToAbsent || downAttenuationAvg != null) {
-      map['down_attenuation_avg'] = Variable<double>(downAttenuationAvg);
+      map['down_attenuation_avg'] = Variable<int>(downAttenuationAvg);
     }
     if (!nullToAbsent || upAttenuationLast != null) {
-      map['up_attenuation_last'] = Variable<double>(upAttenuationLast);
+      map['up_attenuation_last'] = Variable<int>(upAttenuationLast);
     }
     if (!nullToAbsent || upAttenuationMin != null) {
-      map['up_attenuation_min'] = Variable<double>(upAttenuationMin);
+      map['up_attenuation_min'] = Variable<int>(upAttenuationMin);
     }
     if (!nullToAbsent || upAttenuationMax != null) {
-      map['up_attenuation_max'] = Variable<double>(upAttenuationMax);
+      map['up_attenuation_max'] = Variable<int>(upAttenuationMax);
     }
     if (!nullToAbsent || upAttenuationAvg != null) {
-      map['up_attenuation_avg'] = Variable<double>(upAttenuationAvg);
+      map['up_attenuation_avg'] = Variable<int>(upAttenuationAvg);
     }
     if (!nullToAbsent || downFecLast != null) {
       map['down_fec_last'] = Variable<int>(downFecLast);
@@ -2106,27 +2106,23 @@ class DriftSnapshotStats extends DataClass
           serializer.fromJson<int?>(json['upAttainableRateMax']),
       upAttainableRateAvg:
           serializer.fromJson<int?>(json['upAttainableRateAvg']),
-      downSNRmLast: serializer.fromJson<double?>(json['downSNRmLast']),
-      downSNRmMin: serializer.fromJson<double?>(json['downSNRmMin']),
-      downSNRmMax: serializer.fromJson<double?>(json['downSNRmMax']),
-      downSNRmAvg: serializer.fromJson<double?>(json['downSNRmAvg']),
-      upSNRmLast: serializer.fromJson<double?>(json['upSNRmLast']),
-      upSNRmMin: serializer.fromJson<double?>(json['upSNRmMin']),
-      upSNRmMax: serializer.fromJson<double?>(json['upSNRmMax']),
-      upSNRmAvg: serializer.fromJson<double?>(json['upSNRmAvg']),
+      downSNRmLast: serializer.fromJson<int?>(json['downSNRmLast']),
+      downSNRmMin: serializer.fromJson<int?>(json['downSNRmMin']),
+      downSNRmMax: serializer.fromJson<int?>(json['downSNRmMax']),
+      downSNRmAvg: serializer.fromJson<int?>(json['downSNRmAvg']),
+      upSNRmLast: serializer.fromJson<int?>(json['upSNRmLast']),
+      upSNRmMin: serializer.fromJson<int?>(json['upSNRmMin']),
+      upSNRmMax: serializer.fromJson<int?>(json['upSNRmMax']),
+      upSNRmAvg: serializer.fromJson<int?>(json['upSNRmAvg']),
       downAttenuationLast:
-          serializer.fromJson<double?>(json['downAttenuationLast']),
-      downAttenuationMin:
-          serializer.fromJson<double?>(json['downAttenuationMin']),
-      downAttenuationMax:
-          serializer.fromJson<double?>(json['downAttenuationMax']),
-      downAttenuationAvg:
-          serializer.fromJson<double?>(json['downAttenuationAvg']),
-      upAttenuationLast:
-          serializer.fromJson<double?>(json['upAttenuationLast']),
-      upAttenuationMin: serializer.fromJson<double?>(json['upAttenuationMin']),
-      upAttenuationMax: serializer.fromJson<double?>(json['upAttenuationMax']),
-      upAttenuationAvg: serializer.fromJson<double?>(json['upAttenuationAvg']),
+          serializer.fromJson<int?>(json['downAttenuationLast']),
+      downAttenuationMin: serializer.fromJson<int?>(json['downAttenuationMin']),
+      downAttenuationMax: serializer.fromJson<int?>(json['downAttenuationMax']),
+      downAttenuationAvg: serializer.fromJson<int?>(json['downAttenuationAvg']),
+      upAttenuationLast: serializer.fromJson<int?>(json['upAttenuationLast']),
+      upAttenuationMin: serializer.fromJson<int?>(json['upAttenuationMin']),
+      upAttenuationMax: serializer.fromJson<int?>(json['upAttenuationMax']),
+      upAttenuationAvg: serializer.fromJson<int?>(json['upAttenuationAvg']),
       downFecLast: serializer.fromJson<int?>(json['downFecLast']),
       downFecTotal: serializer.fromJson<int?>(json['downFecTotal']),
       upFecLast: serializer.fromJson<int?>(json['upFecLast']),
@@ -2171,22 +2167,22 @@ class DriftSnapshotStats extends DataClass
       'upAttainableRateMin': serializer.toJson<int?>(upAttainableRateMin),
       'upAttainableRateMax': serializer.toJson<int?>(upAttainableRateMax),
       'upAttainableRateAvg': serializer.toJson<int?>(upAttainableRateAvg),
-      'downSNRmLast': serializer.toJson<double?>(downSNRmLast),
-      'downSNRmMin': serializer.toJson<double?>(downSNRmMin),
-      'downSNRmMax': serializer.toJson<double?>(downSNRmMax),
-      'downSNRmAvg': serializer.toJson<double?>(downSNRmAvg),
-      'upSNRmLast': serializer.toJson<double?>(upSNRmLast),
-      'upSNRmMin': serializer.toJson<double?>(upSNRmMin),
-      'upSNRmMax': serializer.toJson<double?>(upSNRmMax),
-      'upSNRmAvg': serializer.toJson<double?>(upSNRmAvg),
-      'downAttenuationLast': serializer.toJson<double?>(downAttenuationLast),
-      'downAttenuationMin': serializer.toJson<double?>(downAttenuationMin),
-      'downAttenuationMax': serializer.toJson<double?>(downAttenuationMax),
-      'downAttenuationAvg': serializer.toJson<double?>(downAttenuationAvg),
-      'upAttenuationLast': serializer.toJson<double?>(upAttenuationLast),
-      'upAttenuationMin': serializer.toJson<double?>(upAttenuationMin),
-      'upAttenuationMax': serializer.toJson<double?>(upAttenuationMax),
-      'upAttenuationAvg': serializer.toJson<double?>(upAttenuationAvg),
+      'downSNRmLast': serializer.toJson<int?>(downSNRmLast),
+      'downSNRmMin': serializer.toJson<int?>(downSNRmMin),
+      'downSNRmMax': serializer.toJson<int?>(downSNRmMax),
+      'downSNRmAvg': serializer.toJson<int?>(downSNRmAvg),
+      'upSNRmLast': serializer.toJson<int?>(upSNRmLast),
+      'upSNRmMin': serializer.toJson<int?>(upSNRmMin),
+      'upSNRmMax': serializer.toJson<int?>(upSNRmMax),
+      'upSNRmAvg': serializer.toJson<int?>(upSNRmAvg),
+      'downAttenuationLast': serializer.toJson<int?>(downAttenuationLast),
+      'downAttenuationMin': serializer.toJson<int?>(downAttenuationMin),
+      'downAttenuationMax': serializer.toJson<int?>(downAttenuationMax),
+      'downAttenuationAvg': serializer.toJson<int?>(downAttenuationAvg),
+      'upAttenuationLast': serializer.toJson<int?>(upAttenuationLast),
+      'upAttenuationMin': serializer.toJson<int?>(upAttenuationMin),
+      'upAttenuationMax': serializer.toJson<int?>(upAttenuationMax),
+      'upAttenuationAvg': serializer.toJson<int?>(upAttenuationAvg),
       'downFecLast': serializer.toJson<int?>(downFecLast),
       'downFecTotal': serializer.toJson<int?>(downFecTotal),
       'upFecLast': serializer.toJson<int?>(upFecLast),
@@ -2227,22 +2223,22 @@ class DriftSnapshotStats extends DataClass
           Value<int?> upAttainableRateMin = const Value.absent(),
           Value<int?> upAttainableRateMax = const Value.absent(),
           Value<int?> upAttainableRateAvg = const Value.absent(),
-          Value<double?> downSNRmLast = const Value.absent(),
-          Value<double?> downSNRmMin = const Value.absent(),
-          Value<double?> downSNRmMax = const Value.absent(),
-          Value<double?> downSNRmAvg = const Value.absent(),
-          Value<double?> upSNRmLast = const Value.absent(),
-          Value<double?> upSNRmMin = const Value.absent(),
-          Value<double?> upSNRmMax = const Value.absent(),
-          Value<double?> upSNRmAvg = const Value.absent(),
-          Value<double?> downAttenuationLast = const Value.absent(),
-          Value<double?> downAttenuationMin = const Value.absent(),
-          Value<double?> downAttenuationMax = const Value.absent(),
-          Value<double?> downAttenuationAvg = const Value.absent(),
-          Value<double?> upAttenuationLast = const Value.absent(),
-          Value<double?> upAttenuationMin = const Value.absent(),
-          Value<double?> upAttenuationMax = const Value.absent(),
-          Value<double?> upAttenuationAvg = const Value.absent(),
+          Value<int?> downSNRmLast = const Value.absent(),
+          Value<int?> downSNRmMin = const Value.absent(),
+          Value<int?> downSNRmMax = const Value.absent(),
+          Value<int?> downSNRmAvg = const Value.absent(),
+          Value<int?> upSNRmLast = const Value.absent(),
+          Value<int?> upSNRmMin = const Value.absent(),
+          Value<int?> upSNRmMax = const Value.absent(),
+          Value<int?> upSNRmAvg = const Value.absent(),
+          Value<int?> downAttenuationLast = const Value.absent(),
+          Value<int?> downAttenuationMin = const Value.absent(),
+          Value<int?> downAttenuationMax = const Value.absent(),
+          Value<int?> downAttenuationAvg = const Value.absent(),
+          Value<int?> upAttenuationLast = const Value.absent(),
+          Value<int?> upAttenuationMin = const Value.absent(),
+          Value<int?> upAttenuationMax = const Value.absent(),
+          Value<int?> upAttenuationAvg = const Value.absent(),
           Value<int?> downFecLast = const Value.absent(),
           Value<int?> downFecTotal = const Value.absent(),
           Value<int?> upFecLast = const Value.absent(),
@@ -2545,22 +2541,22 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
   final Value<int?> upAttainableRateMin;
   final Value<int?> upAttainableRateMax;
   final Value<int?> upAttainableRateAvg;
-  final Value<double?> downSNRmLast;
-  final Value<double?> downSNRmMin;
-  final Value<double?> downSNRmMax;
-  final Value<double?> downSNRmAvg;
-  final Value<double?> upSNRmLast;
-  final Value<double?> upSNRmMin;
-  final Value<double?> upSNRmMax;
-  final Value<double?> upSNRmAvg;
-  final Value<double?> downAttenuationLast;
-  final Value<double?> downAttenuationMin;
-  final Value<double?> downAttenuationMax;
-  final Value<double?> downAttenuationAvg;
-  final Value<double?> upAttenuationLast;
-  final Value<double?> upAttenuationMin;
-  final Value<double?> upAttenuationMax;
-  final Value<double?> upAttenuationAvg;
+  final Value<int?> downSNRmLast;
+  final Value<int?> downSNRmMin;
+  final Value<int?> downSNRmMax;
+  final Value<int?> downSNRmAvg;
+  final Value<int?> upSNRmLast;
+  final Value<int?> upSNRmMin;
+  final Value<int?> upSNRmMax;
+  final Value<int?> upSNRmAvg;
+  final Value<int?> downAttenuationLast;
+  final Value<int?> downAttenuationMin;
+  final Value<int?> downAttenuationMax;
+  final Value<int?> downAttenuationAvg;
+  final Value<int?> upAttenuationLast;
+  final Value<int?> upAttenuationMin;
+  final Value<int?> upAttenuationMax;
+  final Value<int?> upAttenuationAvg;
   final Value<int?> downFecLast;
   final Value<int?> downFecTotal;
   final Value<int?> upFecLast;
@@ -2718,22 +2714,22 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
     Expression<int>? upAttainableRateMin,
     Expression<int>? upAttainableRateMax,
     Expression<int>? upAttainableRateAvg,
-    Expression<double>? downSNRmLast,
-    Expression<double>? downSNRmMin,
-    Expression<double>? downSNRmMax,
-    Expression<double>? downSNRmAvg,
-    Expression<double>? upSNRmLast,
-    Expression<double>? upSNRmMin,
-    Expression<double>? upSNRmMax,
-    Expression<double>? upSNRmAvg,
-    Expression<double>? downAttenuationLast,
-    Expression<double>? downAttenuationMin,
-    Expression<double>? downAttenuationMax,
-    Expression<double>? downAttenuationAvg,
-    Expression<double>? upAttenuationLast,
-    Expression<double>? upAttenuationMin,
-    Expression<double>? upAttenuationMax,
-    Expression<double>? upAttenuationAvg,
+    Expression<int>? downSNRmLast,
+    Expression<int>? downSNRmMin,
+    Expression<int>? downSNRmMax,
+    Expression<int>? downSNRmAvg,
+    Expression<int>? upSNRmLast,
+    Expression<int>? upSNRmMin,
+    Expression<int>? upSNRmMax,
+    Expression<int>? upSNRmAvg,
+    Expression<int>? downAttenuationLast,
+    Expression<int>? downAttenuationMin,
+    Expression<int>? downAttenuationMax,
+    Expression<int>? downAttenuationAvg,
+    Expression<int>? upAttenuationLast,
+    Expression<int>? upAttenuationMin,
+    Expression<int>? upAttenuationMax,
+    Expression<int>? upAttenuationAvg,
     Expression<int>? downFecLast,
     Expression<int>? downFecTotal,
     Expression<int>? upFecLast,
@@ -2842,22 +2838,22 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
       Value<int?>? upAttainableRateMin,
       Value<int?>? upAttainableRateMax,
       Value<int?>? upAttainableRateAvg,
-      Value<double?>? downSNRmLast,
-      Value<double?>? downSNRmMin,
-      Value<double?>? downSNRmMax,
-      Value<double?>? downSNRmAvg,
-      Value<double?>? upSNRmLast,
-      Value<double?>? upSNRmMin,
-      Value<double?>? upSNRmMax,
-      Value<double?>? upSNRmAvg,
-      Value<double?>? downAttenuationLast,
-      Value<double?>? downAttenuationMin,
-      Value<double?>? downAttenuationMax,
-      Value<double?>? downAttenuationAvg,
-      Value<double?>? upAttenuationLast,
-      Value<double?>? upAttenuationMin,
-      Value<double?>? upAttenuationMax,
-      Value<double?>? upAttenuationAvg,
+      Value<int?>? downSNRmLast,
+      Value<int?>? downSNRmMin,
+      Value<int?>? downSNRmMax,
+      Value<int?>? downSNRmAvg,
+      Value<int?>? upSNRmLast,
+      Value<int?>? upSNRmMin,
+      Value<int?>? upSNRmMax,
+      Value<int?>? upSNRmAvg,
+      Value<int?>? downAttenuationLast,
+      Value<int?>? downAttenuationMin,
+      Value<int?>? downAttenuationMax,
+      Value<int?>? downAttenuationAvg,
+      Value<int?>? upAttenuationLast,
+      Value<int?>? upAttenuationMin,
+      Value<int?>? upAttenuationMax,
+      Value<int?>? upAttenuationAvg,
       Value<int?>? downFecLast,
       Value<int?>? downFecTotal,
       Value<int?>? upFecLast,
@@ -3023,53 +3019,52 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
       map['up_attainable_rate_avg'] = Variable<int>(upAttainableRateAvg.value);
     }
     if (downSNRmLast.present) {
-      map['down_s_n_rm_last'] = Variable<double>(downSNRmLast.value);
+      map['down_s_n_rm_last'] = Variable<int>(downSNRmLast.value);
     }
     if (downSNRmMin.present) {
-      map['down_s_n_rm_min'] = Variable<double>(downSNRmMin.value);
+      map['down_s_n_rm_min'] = Variable<int>(downSNRmMin.value);
     }
     if (downSNRmMax.present) {
-      map['down_s_n_rm_max'] = Variable<double>(downSNRmMax.value);
+      map['down_s_n_rm_max'] = Variable<int>(downSNRmMax.value);
     }
     if (downSNRmAvg.present) {
-      map['down_s_n_rm_avg'] = Variable<double>(downSNRmAvg.value);
+      map['down_s_n_rm_avg'] = Variable<int>(downSNRmAvg.value);
     }
     if (upSNRmLast.present) {
-      map['up_s_n_rm_last'] = Variable<double>(upSNRmLast.value);
+      map['up_s_n_rm_last'] = Variable<int>(upSNRmLast.value);
     }
     if (upSNRmMin.present) {
-      map['up_s_n_rm_min'] = Variable<double>(upSNRmMin.value);
+      map['up_s_n_rm_min'] = Variable<int>(upSNRmMin.value);
     }
     if (upSNRmMax.present) {
-      map['up_s_n_rm_max'] = Variable<double>(upSNRmMax.value);
+      map['up_s_n_rm_max'] = Variable<int>(upSNRmMax.value);
     }
     if (upSNRmAvg.present) {
-      map['up_s_n_rm_avg'] = Variable<double>(upSNRmAvg.value);
+      map['up_s_n_rm_avg'] = Variable<int>(upSNRmAvg.value);
     }
     if (downAttenuationLast.present) {
-      map['down_attenuation_last'] =
-          Variable<double>(downAttenuationLast.value);
+      map['down_attenuation_last'] = Variable<int>(downAttenuationLast.value);
     }
     if (downAttenuationMin.present) {
-      map['down_attenuation_min'] = Variable<double>(downAttenuationMin.value);
+      map['down_attenuation_min'] = Variable<int>(downAttenuationMin.value);
     }
     if (downAttenuationMax.present) {
-      map['down_attenuation_max'] = Variable<double>(downAttenuationMax.value);
+      map['down_attenuation_max'] = Variable<int>(downAttenuationMax.value);
     }
     if (downAttenuationAvg.present) {
-      map['down_attenuation_avg'] = Variable<double>(downAttenuationAvg.value);
+      map['down_attenuation_avg'] = Variable<int>(downAttenuationAvg.value);
     }
     if (upAttenuationLast.present) {
-      map['up_attenuation_last'] = Variable<double>(upAttenuationLast.value);
+      map['up_attenuation_last'] = Variable<int>(upAttenuationLast.value);
     }
     if (upAttenuationMin.present) {
-      map['up_attenuation_min'] = Variable<double>(upAttenuationMin.value);
+      map['up_attenuation_min'] = Variable<int>(upAttenuationMin.value);
     }
     if (upAttenuationMax.present) {
-      map['up_attenuation_max'] = Variable<double>(upAttenuationMax.value);
+      map['up_attenuation_max'] = Variable<int>(upAttenuationMax.value);
     }
     if (upAttenuationAvg.present) {
-      map['up_attenuation_avg'] = Variable<double>(upAttenuationAvg.value);
+      map['up_attenuation_avg'] = Variable<int>(upAttenuationAvg.value);
     }
     if (downFecLast.present) {
       map['down_fec_last'] = Variable<int>(downFecLast.value);

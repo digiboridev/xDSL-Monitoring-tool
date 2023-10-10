@@ -37,7 +37,7 @@ class _SNRMState extends State<SNRM> {
       downMarginValues.add(
         Entry(
           x: element.time.millisecondsSinceEpoch.toDouble(),
-          y: element.downMargin ?? 0,
+          y: (element.downMargin ?? 0).toDouble(),
         ),
       );
     }
@@ -61,7 +61,7 @@ class _SNRMState extends State<SNRM> {
       upMarginValues.add(
         Entry(
           x: element.time.millisecondsSinceEpoch.toDouble(),
-          y: element.upMargin ?? 0,
+          y: (element.upMargin ?? 0).toDouble(),
         ),
       );
     }

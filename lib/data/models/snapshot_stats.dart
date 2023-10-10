@@ -2,6 +2,13 @@
 import 'dart:convert';
 import 'package:xdslmt/data/models/line_stats.dart';
 
+// Due to int representation of snr and attenuation values, we need to divide them by 10
+// So we add a getter to int to do that quickly
+extension OneFraction on int {
+  double get oneFraction => this / 10;
+  String get oneFrStr => oneFraction.toStringAsFixed(1);
+}
+
 class SnapshotStats {
   final String snapshotId;
   final String host;
@@ -31,22 +38,22 @@ class SnapshotStats {
   final int? upAttainableRateMin;
   final int? upAttainableRateMax;
   final int? upAttainableRateAvg;
-  final double? downSNRmLast;
-  final double? downSNRmMin;
-  final double? downSNRmMax;
-  final double? downSNRmAvg;
-  final double? upSNRmLast;
-  final double? upSNRmMin;
-  final double? upSNRmMax;
-  final double? upSNRmAvg;
-  final double? downAttenuationLast;
-  final double? downAttenuationMin;
-  final double? downAttenuationMax;
-  final double? downAttenuationAvg;
-  final double? upAttenuationLast;
-  final double? upAttenuationMin;
-  final double? upAttenuationMax;
-  final double? upAttenuationAvg;
+  final int? downSNRmLast;
+  final int? downSNRmMin;
+  final int? downSNRmMax;
+  final int? downSNRmAvg;
+  final int? upSNRmLast;
+  final int? upSNRmMin;
+  final int? upSNRmMax;
+  final int? upSNRmAvg;
+  final int? downAttenuationLast;
+  final int? downAttenuationMin;
+  final int? downAttenuationMax;
+  final int? downAttenuationAvg;
+  final int? upAttenuationLast;
+  final int? upAttenuationMin;
+  final int? upAttenuationMax;
+  final int? upAttenuationAvg;
   final int? downFecLast;
   final int? downFecTotal;
   final int? upFecLast;
@@ -132,25 +139,25 @@ class SnapshotStats {
     );
   }
 
-  num? _minVal(num? prev, num? next) {
+  int? _minVal(int? prev, int? next) {
     if (prev == null) return next;
     if (next == null) return prev;
     return prev < next ? prev : next;
   }
 
-  num? _maxVal(num? prev, num? next) {
+  int? _maxVal(int? prev, int? next) {
     if (prev == null) return next;
     if (next == null) return prev;
     return prev > next ? prev : next;
   }
 
-  num? _avgVal(num? prev, num? next) {
+  int? _avgVal(int? prev, int? next) {
     if (prev == null) return next;
     if (next == null) return prev;
-    return (prev + next) / 2;
+    return (prev + next) ~/ 2;
   }
 
-  num _incrDiff(num? prev, num? next) {
+  int _incrDiff(int? prev, int? next) {
     prev ??= 0;
     if (next == null) return prev;
     final diff = next - prev;
@@ -196,45 +203,45 @@ class SnapshotStats {
       lastSampleStatus: stats.status,
       lastSampleTime: stats.time,
       downRateLast: stats.downRate,
-      downRateMin: _minVal(downRateMin, stats.downRate)?.toInt(),
-      downRateMax: _maxVal(downRateMax, stats.downRate)?.toInt(),
-      downRateAvg: _avgVal(downRateAvg, stats.downRate)?.toInt(),
+      downRateMin: _minVal(downRateMin, stats.downRate),
+      downRateMax: _maxVal(downRateMax, stats.downRate),
+      downRateAvg: _avgVal(downRateAvg, stats.downRate),
       downAttainableRateLast: stats.downAttainableRate,
-      downAttainableRateMin: _minVal(downAttainableRateMin, stats.downAttainableRate)?.toInt(),
-      downAttainableRateMax: _maxVal(downAttainableRateMax, stats.downAttainableRate)?.toInt(),
-      downAttainableRateAvg: _avgVal(downAttainableRateAvg, stats.downAttainableRate)?.toInt(),
+      downAttainableRateMin: _minVal(downAttainableRateMin, stats.downAttainableRate),
+      downAttainableRateMax: _maxVal(downAttainableRateMax, stats.downAttainableRate),
+      downAttainableRateAvg: _avgVal(downAttainableRateAvg, stats.downAttainableRate),
       upRateLast: stats.upRate,
-      upRateMin: _minVal(upRateMin, stats.upRate)?.toInt(),
-      upRateMax: _maxVal(upRateMax, stats.upRate)?.toInt(),
-      upRateAvg: _avgVal(upRateAvg, stats.upRate)?.toInt(),
+      upRateMin: _minVal(upRateMin, stats.upRate),
+      upRateMax: _maxVal(upRateMax, stats.upRate),
+      upRateAvg: _avgVal(upRateAvg, stats.upRate),
       upAttainableRateLast: stats.upAttainableRate,
-      upAttainableRateMin: _minVal(upAttainableRateMin, stats.upAttainableRate)?.toInt(),
-      upAttainableRateMax: _maxVal(upAttainableRateMax, stats.upAttainableRate)?.toInt(),
-      upAttainableRateAvg: _avgVal(upAttainableRateAvg, stats.upAttainableRate)?.toInt(),
+      upAttainableRateMin: _minVal(upAttainableRateMin, stats.upAttainableRate),
+      upAttainableRateMax: _maxVal(upAttainableRateMax, stats.upAttainableRate),
+      upAttainableRateAvg: _avgVal(upAttainableRateAvg, stats.upAttainableRate),
       downSNRmLast: stats.downMargin,
-      downSNRmMin: _minVal(downSNRmMin, stats.downMargin)?.toDouble(),
-      downSNRmMax: _maxVal(downSNRmMax, stats.downMargin)?.toDouble(),
-      downSNRmAvg: _avgVal(downSNRmAvg, stats.downMargin)?.toDouble(),
+      downSNRmMin: _minVal(downSNRmMin, stats.downMargin),
+      downSNRmMax: _maxVal(downSNRmMax, stats.downMargin),
+      downSNRmAvg: _avgVal(downSNRmAvg, stats.downMargin),
       upSNRmLast: stats.upMargin,
-      upSNRmMin: _minVal(upSNRmMin, stats.upMargin)?.toDouble(),
-      upSNRmMax: _maxVal(upSNRmMax, stats.upMargin)?.toDouble(),
-      upSNRmAvg: _avgVal(upSNRmAvg, stats.upMargin)?.toDouble(),
+      upSNRmMin: _minVal(upSNRmMin, stats.upMargin),
+      upSNRmMax: _maxVal(upSNRmMax, stats.upMargin),
+      upSNRmAvg: _avgVal(upSNRmAvg, stats.upMargin),
       downAttenuationLast: stats.downAttenuation,
-      downAttenuationMin: _minVal(downAttenuationMin, stats.downAttenuation)?.toDouble(),
-      downAttenuationMax: _maxVal(downAttenuationMax, stats.downAttenuation)?.toDouble(),
-      downAttenuationAvg: _avgVal(downAttenuationAvg, stats.downAttenuation)?.toDouble(),
+      downAttenuationMin: _minVal(downAttenuationMin, stats.downAttenuation),
+      downAttenuationMax: _maxVal(downAttenuationMax, stats.downAttenuation),
+      downAttenuationAvg: _avgVal(downAttenuationAvg, stats.downAttenuation),
       upAttenuationLast: stats.upAttenuation,
-      upAttenuationMin: _minVal(upAttenuationMin, stats.upAttenuation)?.toDouble(),
-      upAttenuationMax: _maxVal(upAttenuationMax, stats.upAttenuation)?.toDouble(),
-      upAttenuationAvg: _avgVal(upAttenuationAvg, stats.upAttenuation)?.toDouble(),
+      upAttenuationMin: _minVal(upAttenuationMin, stats.upAttenuation),
+      upAttenuationMax: _maxVal(upAttenuationMax, stats.upAttenuation),
+      upAttenuationAvg: _avgVal(upAttenuationAvg, stats.upAttenuation),
       downFecLast: stats.downFEC,
-      downFecTotal: ((downFecTotal ?? 0) + _incrDiff(downFecLast, stats.downFEC)).toInt(),
+      downFecTotal: ((downFecTotal ?? 0) + _incrDiff(downFecLast, stats.downFEC)),
       upFecLast: stats.upFEC,
-      upFecTotal: ((upFecTotal ?? 0) + _incrDiff(upFecLast, stats.upFEC)).toInt(),
+      upFecTotal: ((upFecTotal ?? 0) + _incrDiff(upFecLast, stats.upFEC)),
       downCrcLast: stats.downCRC,
-      downCrcTotal: ((downCrcTotal ?? 0) + _incrDiff(downCrcLast, stats.downCRC)).toInt(),
+      downCrcTotal: ((downCrcTotal ?? 0) + _incrDiff(downCrcLast, stats.downCRC)),
       upCrcLast: stats.upCRC,
-      upCrcTotal: ((upCrcTotal ?? 0) + _incrDiff(upCrcLast, stats.upCRC)).toInt(),
+      upCrcTotal: ((upCrcTotal ?? 0) + _incrDiff(upCrcLast, stats.upCRC)),
     );
   }
 
@@ -444,22 +451,22 @@ class SnapshotStats {
       upAttainableRateMin: map['upAttainableRateMin'] != null ? map['upAttainableRateMin'] as int : null,
       upAttainableRateMax: map['upAttainableRateMax'] != null ? map['upAttainableRateMax'] as int : null,
       upAttainableRateAvg: map['upAttainableRateAvg'] != null ? map['upAttainableRateAvg'] as int : null,
-      downSNRmLast: map['downSNRmLast'] != null ? map['downSNRmLast'] as double : null,
-      downSNRmMin: map['downSNRmMin'] != null ? map['downSNRmMin'] as double : null,
-      downSNRmMax: map['downSNRmMax'] != null ? map['downSNRmMax'] as double : null,
-      downSNRmAvg: map['downSNRmAvg'] != null ? map['downSNRmAvg'] as double : null,
-      upSNRmLast: map['upSNRmLast'] != null ? map['upSNRmLast'] as double : null,
-      upSNRmMin: map['upSNRmMin'] != null ? map['upSNRmMin'] as double : null,
-      upSNRmMax: map['upSNRmMax'] != null ? map['upSNRmMax'] as double : null,
-      upSNRmAvg: map['upSNRmAvg'] != null ? map['upSNRmAvg'] as double : null,
-      downAttenuationLast: map['downAttenuationLast'] != null ? map['downAttenuationLast'] as double : null,
-      downAttenuationMin: map['downAttenuationMin'] != null ? map['downAttenuationMin'] as double : null,
-      downAttenuationMax: map['downAttenuationMax'] != null ? map['downAttenuationMax'] as double : null,
-      downAttenuationAvg: map['downAttenuationAvg'] != null ? map['downAttenuationAvg'] as double : null,
-      upAttenuationLast: map['upAttenuationLast'] != null ? map['upAttenuationLast'] as double : null,
-      upAttenuationMin: map['upAttenuationMin'] != null ? map['upAttenuationMin'] as double : null,
-      upAttenuationMax: map['upAttenuationMax'] != null ? map['upAttenuationMax'] as double : null,
-      upAttenuationAvg: map['upAttenuationAvg'] != null ? map['upAttenuationAvg'] as double : null,
+      downSNRmLast: map['downSNRmLast'] != null ? map['downSNRmLast'] as int : null,
+      downSNRmMin: map['downSNRmMin'] != null ? map['downSNRmMin'] as int : null,
+      downSNRmMax: map['downSNRmMax'] != null ? map['downSNRmMax'] as int : null,
+      downSNRmAvg: map['downSNRmAvg'] != null ? map['downSNRmAvg'] as int : null,
+      upSNRmLast: map['upSNRmLast'] != null ? map['upSNRmLast'] as int : null,
+      upSNRmMin: map['upSNRmMin'] != null ? map['upSNRmMin'] as int : null,
+      upSNRmMax: map['upSNRmMax'] != null ? map['upSNRmMax'] as int : null,
+      upSNRmAvg: map['upSNRmAvg'] != null ? map['upSNRmAvg'] as int : null,
+      downAttenuationLast: map['downAttenuationLast'] != null ? map['downAttenuationLast'] as int : null,
+      downAttenuationMin: map['downAttenuationMin'] != null ? map['downAttenuationMin'] as int : null,
+      downAttenuationMax: map['downAttenuationMax'] != null ? map['downAttenuationMax'] as int : null,
+      downAttenuationAvg: map['downAttenuationAvg'] != null ? map['downAttenuationAvg'] as int : null,
+      upAttenuationLast: map['upAttenuationLast'] != null ? map['upAttenuationLast'] as int : null,
+      upAttenuationMin: map['upAttenuationMin'] != null ? map['upAttenuationMin'] as int : null,
+      upAttenuationMax: map['upAttenuationMax'] != null ? map['upAttenuationMax'] as int : null,
+      upAttenuationAvg: map['upAttenuationAvg'] != null ? map['upAttenuationAvg'] as int : null,
       downFecLast: map['downFecLast'] != null ? map['downFecLast'] as int : null,
       downFecTotal: map['downFecTotal'] != null ? map['downFecTotal'] as int : null,
       upFecLast: map['upFecLast'] != null ? map['upFecLast'] as int : null,

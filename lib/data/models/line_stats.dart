@@ -1,6 +1,12 @@
 import 'dart:convert';
 
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// Due to int representation of snr and attenuation values, we need to divide them by 10
+// So we add a getter to int to do that quickly
+extension OneFraction on int {
+  double get oneFraction => this / 10;
+  String get oneFrStr => oneFraction.toStringAsFixed(1);
+}
+
 enum SampleStatus {
   samplingError,
   connectionDown,
@@ -18,10 +24,10 @@ class LineStats {
   final int? downAttainableRate;
   final int? upRate;
   final int? downRate;
-  final double? upMargin;
-  final double? downMargin;
-  final double? upAttenuation;
-  final double? downAttenuation;
+  final int? upMargin;
+  final int? downMargin;
+  final int? upAttenuation;
+  final int? downAttenuation;
   final int? upCRC;
   final int? downCRC;
   final int? upFEC;
@@ -73,10 +79,10 @@ class LineStats {
     required int downAttainableRate,
     required int upRate,
     required int downRate,
-    required double upMargin,
-    required double downMargin,
-    required double upAttenuation,
-    required double downAttenuation,
+    required int upMargin,
+    required int downMargin,
+    required int upAttenuation,
+    required int downAttenuation,
     required int upCRC,
     required int downCRC,
     required int upFEC,
@@ -185,10 +191,10 @@ class LineStats {
       downAttainableRate: map['downAttainableRate'] != null ? map['downAttainableRate'] as int : null,
       upRate: map['upRate'] != null ? map['upRate'] as int : null,
       downRate: map['downRate'] != null ? map['downRate'] as int : null,
-      upMargin: map['upMargin'] != null ? map['upMargin'] as double : null,
-      downMargin: map['downMargin'] != null ? map['downMargin'] as double : null,
-      upAttenuation: map['upAttenuation'] != null ? map['upAttenuation'] as double : null,
-      downAttenuation: map['downAttenuation'] != null ? map['downAttenuation'] as double : null,
+      upMargin: map['upMargin'] != null ? map['upMargin'] as int : null,
+      downMargin: map['downMargin'] != null ? map['downMargin'] as int : null,
+      upAttenuation: map['upAttenuation'] != null ? map['upAttenuation'] as int : null,
+      downAttenuation: map['downAttenuation'] != null ? map['downAttenuation'] as int : null,
       upCRC: map['upCRC'] != null ? map['upCRC'] as int : null,
       downCRC: map['downCRC'] != null ? map['downCRC'] as int : null,
       upFEC: map['upFEC'] != null ? map['upFEC'] as int : null,

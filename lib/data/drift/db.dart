@@ -21,18 +21,27 @@ class DB extends _$DB {
       });
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 1;
 
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
       onCreate: (migrator) => migrator.createAll(),
+      beforeOpen: (openingDetails) async {
+        if (kDebugMode) {
+          print('drift beforeOpen');
+          final m = this.createMigrator(); // changed to this
+          for (final table in allTables) {
+            await m.deleteTable(table.actualTableName);
+            await m.createTable(table);
+          }
+        }
+      },
       onUpgrade: (migrator, from, to) async {
         debugPrint('onUpgrade: $from -> $to');
-        if (from < 4) {
-          await migrator.drop(lineStatsTable);
-          await migrator.createTable(lineStatsTable);
-        }
+        // if (from < 2) {
+        // blabla
+        // }
       },
     );
   }

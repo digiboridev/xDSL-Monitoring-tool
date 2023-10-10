@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class LineBar extends StatefulWidget {
-  final double value;
-  final double min;
-  final double max;
+  final num value;
+  final num min;
+  final num max;
   const LineBar({
     super.key,
     required this.value,
@@ -25,7 +25,7 @@ class _LineBarState extends State<LineBar> with TickerProviderStateMixin {
     super.initState();
     controller.addListener(() => setState(() {}));
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      tween.end = (widget.value - widget.min) / (widget.max - widget.min);
+      tween.end = _calcFill(widget.min, widget.max, widget.value);
       controller.forward();
     });
   }
@@ -33,11 +33,13 @@ class _LineBarState extends State<LineBar> with TickerProviderStateMixin {
   @override
   void didUpdateWidget(covariant LineBar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    tween.begin = (oldWidget.value - oldWidget.min) / (oldWidget.max - oldWidget.min);
-    tween.end = (widget.value - widget.min) / (widget.max - widget.min);
+    tween.begin = _calcFill(oldWidget.min, oldWidget.max, oldWidget.value);
+    tween.end = _calcFill(widget.min, widget.max, widget.value);
     controller.reset();
     controller.forward();
   }
+
+  double _calcFill(num min, num max, num value) => ((value - min) / (max - min)).clamp(0, 1);
 
   @override
   void dispose() {

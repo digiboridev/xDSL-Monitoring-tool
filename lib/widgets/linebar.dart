@@ -43,8 +43,8 @@ class _LineBarState extends State<LineBar> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    super.dispose();
     controller.dispose();
+    super.dispose();
   }
 
   @override

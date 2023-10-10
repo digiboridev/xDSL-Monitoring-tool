@@ -23,7 +23,7 @@ class CurrentScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            StatusBar(),
+            RepaintBoundary(child: StatusBar()),
             Expanded(
               child: ShaderMask(
                 shaderCallback: (Rect rect) {

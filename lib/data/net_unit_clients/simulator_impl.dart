@@ -38,10 +38,14 @@ final class ClientSimulator extends NetUnitClient {
 
   // Reduce stats to half of the current value, like if the line has impulse drops
   _reduceStatsHalfway() {
-    _mrU = (_mrU.abs() + _bmrU) / 2;
-    _mrD = (_mrD.abs() + _bmrD) / 2;
-    _attU = (_attU.abs() + _battU) / 2;
-    _attD = (_attD.abs() + _battD) / 2;
+    _upRate = (_upRate + _bupRate) ~/ 2;
+    _downRate = (_downRate + _bdownRate) ~/ 2;
+    _upAttainableRate = (_upAttainableRate + _bupAttainableRate) ~/ 2;
+    _downAttainableRate = (_downAttainableRate + _bdownAttainableRate) ~/ 2;
+    _mrU = (_mrU + _bmrU) / 2;
+    _mrD = (_mrD + _bmrD) / 2;
+    _attU = (_attU + _battU) / 2;
+    _attD = (_attD + _battD) / 2;
     _fecU = 0;
     _fecD = 0;
     _crcU = 0;
@@ -54,43 +58,41 @@ final class ClientSimulator extends NetUnitClient {
   Future<LineStats> fetchStats() async {
     await Future.delayed(Duration(milliseconds: Random().nextInt(1000)));
 
-    // 1% chance of fetch failure
+    // chance of fetch failure
     if (_rndChance <= 1) {
       return LineStats.errored(snapshotId: snapshotId, statusText: 'Connection failed');
     }
 
-    // 1% chance of connection down
+    // chance of connection down
     if (_rndChance <= 1) {
       _reduceStatsHalfway();
       return LineStats.connectionDown(snapshotId: snapshotId, statusText: 'Down');
     }
 
-    // 5% chance of donwstream stats drift
-    if (_rndChance <= 5) {
+    // chance of donwstream stats drift
+    if (_rndChance <= 10) {
       int sigDrift = Random().nextInt(200) - 100;
       int unsigDrift = sigDrift.abs();
 
-      _downRate += sigDrift * 8;
-      _downAttainableRate += sigDrift * 8;
+      _downRate = (_downRate + (sigDrift * 4)).clamp(2000, 23000);
+      _downAttainableRate = (_downAttainableRate + (sigDrift * 4)).clamp(3000, 24000);
 
-      _mrD += sigDrift / 100;
-      _attD += sigDrift / 100;
+      _mrD = (_mrD + (sigDrift / 100)).clamp(0, 30);
+      _attD = (_attD + (sigDrift / 100)).clamp(0, 100);
       _fecD += unsigDrift * 8;
       _crcD += unsigDrift * 4;
-
-      // TODO max values limit
     }
 
-    // 5% chance of upstream stats drift
-    if (_rndChance <= 5) {
+    // chance of upstream stats drift
+    if (_rndChance <= 10) {
       int sigDrift = Random().nextInt(200) - 100;
       int unsigDrift = sigDrift.abs();
 
-      _upRate += sigDrift * 2;
-      _upAttainableRate += sigDrift * 2;
+      _upRate = (_upRate + (sigDrift * 4)).clamp(250, 2000);
+      _upAttainableRate = (_upAttainableRate + (sigDrift * 4)).clamp(500, 3000);
 
-      _mrU += sigDrift / 100;
-      _attU += sigDrift / 100;
+      _mrU = (_mrU + (sigDrift / 100)).clamp(0, 30);
+      _attU = (_attU + (sigDrift / 100)).clamp(0, 100);
       _fecU += unsigDrift * 4;
       _crcU += unsigDrift * 2;
     }

@@ -1,8 +1,8 @@
-import 'dart:math';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:xdslmt/data/models/snapshot_stats.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
+import 'package:xdslmt/widgets/bandwidth_painter.dart';
 import 'package:xdslmt/widgets/text_styles.dart';
 
 class BandwidthBar extends StatefulWidget {
@@ -88,7 +88,7 @@ class _BandwidthBarState extends State<BandwidthBar> with TickerProviderStateMix
           height: 150,
           width: 150,
           child: CustomPaint(
-            painter: SpdPainter(curr: currDownAnimation.value, attainable: attainableDownAnimation.value, max: 24000),
+            painter: BandwPainter(curr: currDownAnimation.value, attainable: attainableDownAnimation.value, max: 24000),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -104,7 +104,7 @@ class _BandwidthBarState extends State<BandwidthBar> with TickerProviderStateMix
           height: 150,
           width: 150,
           child: CustomPaint(
-            painter: SpdPainter(curr: currUpAnimation.value, attainable: attainableUpAnimation.value, max: 3000),
+            painter: BandwPainter(curr: currUpAnimation.value, attainable: attainableUpAnimation.value, max: 3000),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -119,64 +119,4 @@ class _BandwidthBarState extends State<BandwidthBar> with TickerProviderStateMix
       ],
     );
   }
-}
-
-//Current speed animater circles paiter
-class SpdPainter extends CustomPainter {
-  final int curr;
-  final int attainable;
-  final int max;
-
-  SpdPainter({required this.curr, required this.attainable, required this.max});
-
-  double percentageCurr() {
-    return curr > max ? _sweepAngle : _sweepAngle * curr / max;
-  }
-
-  double percentageAtta() {
-    return attainable > max ? _sweepAngle : _sweepAngle * attainable / max;
-  }
-
-  static const double _startAngle = 5 * pi / 8;
-  static const double _sweepAngle = 14 * pi / 8;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    Rect rect = Offset(6, 6) & Size(size.width - 12, size.height - 12); // -12 to make room for the stroke
-    canvas.drawArc(
-      rect,
-      _startAngle,
-      _sweepAngle,
-      false,
-      Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 12
-        ..color = Colors.blueGrey.shade200,
-    );
-    canvas.drawArc(
-      rect,
-      _startAngle,
-      percentageAtta(),
-      false,
-      Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 8
-        ..color = Colors.yellow.shade400,
-    );
-    canvas.drawArc(
-      rect,
-      _startAngle,
-      percentageCurr(),
-      false,
-      Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 8
-        ..color = Colors.blueGrey.shade800,
-    );
-  }
-
-  @override
-  bool shouldRepaint(SpdPainter oldDelegate) => false;
-  @override
-  bool shouldRebuildSemantics(SpdPainter oldDelegate) => false;
 }

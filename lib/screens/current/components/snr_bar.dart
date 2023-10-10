@@ -21,38 +21,35 @@ class SNRBar extends StatelessWidget {
               width: 150,
               child: Column(
                 children: [
-                  Builder(builder: (context) {
-                    final v = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downSNRmLast);
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('SNR Down: ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800),
-                        SizedBox(width: 4),
-                        SizedBox(width: 4, height: 14, child: LineBar(value: v ?? 0, min: 0, max: 160)),
-                      ],
-                    );
-                  }),
-                  Builder(builder: (context) {
-                    final v = context.watch<StatsSamplingService>().lastSamples;
-                    final s = v.map((e) => e.downMargin).toList();
-                    if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
-                    return Container(
-                      height: 20,
-                      width: double.infinity,
-                      padding: EdgeInsets.all(2),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.cyan.shade100),
-                        borderRadius: BorderRadius.all(Radius.circular(3)),
-                      ),
-                      child: CustomPaint(painter: LineChartPainter(s)),
-                    );
-                  }),
-                  Builder(builder: (context) {
-                    final min = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downSNRmMin);
-                    final max = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downSNRmMax);
-                    final avg = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downSNRmAvg);
-                    return MinMaxAvgRow(min: min, max: max, avg: avg);
-                  }),
+                  RepaintBoundary(
+                    child: Builder(builder: (context) {
+                      final v = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downSNRmLast);
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('SNR Down: ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800),
+                          SizedBox(width: 4),
+                          SizedBox(width: 4, height: 14, child: LineBar(value: v ?? 0, min: 0, max: 160)),
+                        ],
+                      );
+                    }),
+                  ),
+                  RepaintBoundary(
+                    child: Builder(builder: (context) {
+                      final v = context.watch<StatsSamplingService>().lastSamples;
+                      final s = v.map((e) => e.downMargin).toList();
+                      if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
+                      return LineChart(s: s);
+                    }),
+                  ),
+                  RepaintBoundary(
+                    child: Builder(builder: (context) {
+                      final min = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downSNRmMin);
+                      final max = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downSNRmMax);
+                      final avg = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downSNRmAvg);
+                      return MinMaxAvgRow(min: min, max: max, avg: avg);
+                    }),
+                  ),
                 ],
               ),
             ),
@@ -60,38 +57,35 @@ class SNRBar extends StatelessWidget {
               width: 150,
               child: Column(
                 children: [
-                  Builder(builder: (context) {
-                    final v = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upSNRmLast);
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('SNR Up: ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800),
-                        SizedBox(width: 4),
-                        SizedBox(width: 4, height: 14, child: LineBar(value: v ?? 0, min: 0, max: 160)),
-                      ],
-                    );
-                  }),
-                  Builder(builder: (context) {
-                    final v = context.watch<StatsSamplingService>().lastSamples;
-                    final s = v.map((e) => e.upMargin).toList();
-                    if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
-                    return Container(
-                      height: 20,
-                      width: double.infinity,
-                      padding: EdgeInsets.all(2),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.cyan.shade100),
-                        borderRadius: BorderRadius.all(Radius.circular(3)),
-                      ),
-                      child: CustomPaint(painter: LineChartPainter(s)),
-                    );
-                  }),
-                  Builder(builder: (context) {
-                    final min = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upSNRmMin);
-                    final max = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upSNRmMax);
-                    final avg = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upSNRmAvg);
-                    return MinMaxAvgRow(min: min, max: max, avg: avg);
-                  }),
+                  RepaintBoundary(
+                    child: Builder(builder: (context) {
+                      final v = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upSNRmLast);
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('SNR Up: ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800),
+                          SizedBox(width: 4),
+                          SizedBox(width: 4, height: 14, child: LineBar(value: v ?? 0, min: 0, max: 160)),
+                        ],
+                      );
+                    }),
+                  ),
+                  RepaintBoundary(
+                    child: Builder(builder: (context) {
+                      final v = context.watch<StatsSamplingService>().lastSamples;
+                      final s = v.map((e) => e.upMargin).toList();
+                      if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
+                      return LineChart(s: s);
+                    }),
+                  ),
+                  RepaintBoundary(
+                    child: Builder(builder: (context) {
+                      final min = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upSNRmMin);
+                      final max = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upSNRmMax);
+                      final avg = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upSNRmAvg);
+                      return MinMaxAvgRow(min: min, max: max, avg: avg);
+                    }),
+                  ),
                 ],
               ),
             ),
@@ -105,38 +99,35 @@ class SNRBar extends StatelessWidget {
               width: 150,
               child: Column(
                 children: [
-                  Builder(builder: (context) {
-                    final v = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downAttenuationLast);
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Att Down: ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800),
-                        SizedBox(width: 4),
-                        SizedBox(width: 4, height: 14, child: LineBar(value: 1000 - (v ?? 1000), min: 0, max: 1000)),
-                      ],
-                    );
-                  }),
-                  Builder(builder: (context) {
-                    final v = context.watch<StatsSamplingService>().lastSamples;
-                    final s = v.map((e) => e.downAttenuation).toList();
-                    if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
-                    return Container(
-                      height: 20,
-                      width: double.infinity,
-                      padding: EdgeInsets.all(2),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.cyan.shade100),
-                        borderRadius: BorderRadius.all(Radius.circular(3)),
-                      ),
-                      child: CustomPaint(painter: LineChartPainter(s)),
-                    );
-                  }),
-                  Builder(builder: (context) {
-                    final min = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downAttenuationMin);
-                    final max = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downAttenuationMax);
-                    final avg = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downAttenuationAvg);
-                    return MinMaxAvgRow(min: min, max: max, avg: avg);
-                  }),
+                  RepaintBoundary(
+                    child: Builder(builder: (context) {
+                      final v = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downAttenuationLast);
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Att Down: ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800),
+                          SizedBox(width: 4),
+                          SizedBox(width: 4, height: 14, child: LineBar(value: 1000 - (v ?? 1000), min: 0, max: 1000)),
+                        ],
+                      );
+                    }),
+                  ),
+                  RepaintBoundary(
+                    child: Builder(builder: (context) {
+                      final v = context.watch<StatsSamplingService>().lastSamples;
+                      final s = v.map((e) => e.downAttenuation).toList();
+                      if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
+                      return LineChart(s: s);
+                    }),
+                  ),
+                  RepaintBoundary(
+                    child: Builder(builder: (context) {
+                      final min = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downAttenuationMin);
+                      final max = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downAttenuationMax);
+                      final avg = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downAttenuationAvg);
+                      return MinMaxAvgRow(min: min, max: max, avg: avg);
+                    }),
+                  ),
                 ],
               ),
             ),
@@ -144,44 +135,64 @@ class SNRBar extends StatelessWidget {
               width: 150,
               child: Column(
                 children: [
-                  Builder(builder: (context) {
-                    final v = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upAttenuationLast);
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Att Up: ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800),
-                        SizedBox(width: 4),
-                        SizedBox(width: 4, height: 14, child: LineBar(value: 1000 - (v ?? 1000), min: 0, max: 1000)),
-                      ],
-                    );
-                  }),
-                  Builder(builder: (context) {
-                    final v = context.watch<StatsSamplingService>().lastSamples;
-                    final s = v.map((e) => e.upAttenuation).toList();
-                    if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
-                    return Container(
-                      height: 20,
-                      width: double.infinity,
-                      padding: EdgeInsets.all(2),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.cyan.shade100),
-                        borderRadius: BorderRadius.all(Radius.circular(3)),
-                      ),
-                      child: CustomPaint(painter: LineChartPainter(s)),
-                    );
-                  }),
-                  Builder(builder: (context) {
-                    final min = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upAttenuationMin);
-                    final max = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upAttenuationMax);
-                    final avg = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upAttenuationAvg);
-                    return MinMaxAvgRow(min: min, max: max, avg: avg);
-                  }),
+                  RepaintBoundary(
+                    child: Builder(builder: (context) {
+                      final v = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upAttenuationLast);
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Att Up: ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800),
+                          SizedBox(width: 4),
+                          SizedBox(width: 4, height: 14, child: LineBar(value: 1000 - (v ?? 1000), min: 0, max: 1000)),
+                        ],
+                      );
+                    }),
+                  ),
+                  RepaintBoundary(
+                    child: Builder(builder: (context) {
+                      final v = context.watch<StatsSamplingService>().lastSamples;
+                      final s = v.map((e) => e.upAttenuation).toList();
+                      if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
+                      return LineChart(s: s);
+                    }),
+                  ),
+                  RepaintBoundary(
+                    child: Builder(builder: (context) {
+                      final min = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upAttenuationMin);
+                      final max = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upAttenuationMax);
+                      final avg = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upAttenuationAvg);
+                      return MinMaxAvgRow(min: min, max: max, avg: avg);
+                    }),
+                  ),
                 ],
               ),
             ),
           ],
         ),
       ],
+    );
+  }
+}
+
+class LineChart extends StatelessWidget {
+  const LineChart({
+    super.key,
+    required this.s,
+  });
+
+  final List<int?> s;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 20,
+      width: double.infinity,
+      padding: EdgeInsets.all(2),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.cyan.shade100),
+        borderRadius: BorderRadius.all(Radius.circular(3)),
+      ),
+      child: CustomPaint(painter: LineChartPainter(s)),
     );
   }
 }

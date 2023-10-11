@@ -2,10 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class LineChartPainter extends CustomPainter {
-  final Color lineColor;
-  final double lineWidth;
   final List<int?> data;
-  LineChartPainter(this.data, {this.lineColor = Colors.blueGrey, this.lineWidth = 1});
+  LineChartPainter(this.data);
 
   @override
   bool shouldRepaint(LineChartPainter oldDelegate) {
@@ -14,6 +12,19 @@ class LineChartPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    // Draw mesh
+    final double hmstep = size.width / 7;
+    for (int i = 0; i < 6; i++) {
+      final double x = i * hmstep + hmstep;
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), _meshPaint);
+    }
+    final double vmstep = size.height / 3;
+    for (int i = 0; i < 4; i++) {
+      final double y = i * vmstep;
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), _meshPaint);
+    }
+
+    // Draw data
     final List<int> nonNulls = data.nonNulls.toList();
     if (nonNulls.isEmpty) return;
     final double step = size.width / data.length;
@@ -37,6 +48,7 @@ class LineChartPainter extends CustomPainter {
   double _calcScale(num min, num max, num value) => ((value - min) / (max - min)).clamp(0, 1);
 
   Paint get _linePaint => Paint()
-    ..color = lineColor
-    ..strokeWidth = lineWidth;
+    ..color = Colors.blueGrey.shade800
+    ..strokeWidth = 1;
+  Paint get _meshPaint => Paint()..color = Colors.blueGrey.shade100;
 }

@@ -28,7 +28,7 @@ class SNRBar extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('SNRM Down: ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800),
+                          Text('SNRM Down: ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f12),
                           Text('dB', style: TextStyles.f10w3.blueGrey800),
                           SizedBox(width: 4),
                           SizedBox(width: 4, height: 16, child: LineBar(value: v ?? 0, min: 0, max: 160)),
@@ -36,6 +36,7 @@ class SNRBar extends StatelessWidget {
                       );
                     }),
                   ),
+                  SizedBox(height: 4),
                   RepaintBoundary(
                     child: Builder(builder: (context) {
                       final v = context.watch<StatsSamplingService>().lastSamples;
@@ -44,6 +45,7 @@ class SNRBar extends StatelessWidget {
                       return LineChart(s: s);
                     }),
                   ),
+                  SizedBox(height: 4),
                   RepaintBoundary(
                     child: Builder(builder: (context) {
                       final min = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downSNRmMin);
@@ -66,7 +68,7 @@ class SNRBar extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('SNRM Up: ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800),
+                          Text('SNRM Up: ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f12),
                           Text('dB', style: TextStyles.f10w3.blueGrey800),
                           SizedBox(width: 4),
                           SizedBox(width: 4, height: 16, child: LineBar(value: v ?? 0, min: 0, max: 160)),
@@ -74,6 +76,7 @@ class SNRBar extends StatelessWidget {
                       );
                     }),
                   ),
+                  SizedBox(height: 4),
                   RepaintBoundary(
                     child: Builder(builder: (context) {
                       final v = context.watch<StatsSamplingService>().lastSamples;
@@ -82,6 +85,7 @@ class SNRBar extends StatelessWidget {
                       return LineChart(s: s);
                     }),
                   ),
+                  SizedBox(height: 4),
                   RepaintBoundary(
                     child: Builder(builder: (context) {
                       final min = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upSNRmMin);
@@ -110,7 +114,7 @@ class SNRBar extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('ATN Down:  ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800),
+                          Text('ATN Down:  ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f12),
                           Text('dB', style: TextStyles.f10w3.blueGrey800),
                           SizedBox(width: 4),
                           SizedBox(width: 4, height: 16, child: LineBar(value: 1000 - (v ?? 1000), min: 0, max: 1000)),
@@ -118,6 +122,7 @@ class SNRBar extends StatelessWidget {
                       );
                     }),
                   ),
+                  SizedBox(height: 4),
                   RepaintBoundary(
                     child: Builder(builder: (context) {
                       final v = context.watch<StatsSamplingService>().lastSamples;
@@ -126,6 +131,7 @@ class SNRBar extends StatelessWidget {
                       return LineChart(s: s);
                     }),
                   ),
+                  SizedBox(height: 4),
                   RepaintBoundary(
                     child: Builder(builder: (context) {
                       final min = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downAttenuationMin);
@@ -148,7 +154,7 @@ class SNRBar extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('ATN Up:  ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800),
+                          Text('ATN Up:  ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f12),
                           Text('dB', style: TextStyles.f10w3.blueGrey800),
                           SizedBox(width: 4),
                           SizedBox(width: 4, height: 16, child: LineBar(value: 1000 - (v ?? 1000), min: 0, max: 1000)),
@@ -156,6 +162,7 @@ class SNRBar extends StatelessWidget {
                       );
                     }),
                   ),
+                  SizedBox(height: 4),
                   RepaintBoundary(
                     child: Builder(builder: (context) {
                       final v = context.watch<StatsSamplingService>().lastSamples;
@@ -164,6 +171,7 @@ class SNRBar extends StatelessWidget {
                       return LineChart(s: s);
                     }),
                   ),
+                  SizedBox(height: 4),
                   RepaintBoundary(
                     child: Builder(builder: (context) {
                       final min = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upAttenuationMin);

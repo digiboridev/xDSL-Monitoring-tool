@@ -3,6 +3,13 @@ import 'dart:math';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 
+/// This class represents a client simulator for a network unit.
+/// It extends the [NetUnitClient] class and overrides the [fetchStats] method to simulate network stats.
+/// The class contains base speed rates, base line values, current speed rates, current line stats, and current error counters.
+/// It also has a method to reduce stats to half of the current value, like if the line has impulse drops.
+/// The [fetchStats] method simulates the network stats by introducing chances of fetch failure, connection down, downstream stats drift, and upstream stats drift.
+/// It returns a [LineStats] object with the simulated stats.
+
 final class ClientSimulator extends NetUnitClient {
   ClientSimulator({required super.snapshotId}) : super(ip: '_', login: '_', password: '_');
 
@@ -69,32 +76,31 @@ final class ClientSimulator extends NetUnitClient {
       return LineStats.connectionDown(snapshotId: snapshotId, statusText: 'Down');
     }
 
+    // common stats drift
+    // to simulate an ustable but sincronized stats drift
+    int sigDrift = Random().nextInt(200) - 100;
+    int unsigDrift = sigDrift.abs();
+
     // chance of donwstream stats drift
     if (_rndChance <= 10) {
-      int sigDrift = Random().nextInt(200) - 100;
-      int unsigDrift = sigDrift.abs();
+      _downRate = (_downRate + ((sigDrift + Random().nextInt(25)) * 4)).clamp(2000, 23000);
+      _downAttainableRate = (_downAttainableRate + ((sigDrift + Random().nextInt(25)) * 4)).clamp(3000, 24000);
 
-      _downRate = (_downRate + (sigDrift * 4)).clamp(2000, 23000);
-      _downAttainableRate = (_downAttainableRate + (sigDrift * 4)).clamp(3000, 24000);
-
-      _mrD = (_mrD + (sigDrift / 100)).clamp(0, 30);
-      _attD = (_attD + (sigDrift / 100)).clamp(0, 100);
-      _fecD += unsigDrift * 8;
-      _crcD += unsigDrift * 4;
+      _mrD = (_mrD + ((sigDrift + Random().nextInt(100)) / 100)).clamp(0, 30);
+      _attD = (_attD + ((sigDrift + Random().nextInt(100)) / 100)).clamp(0, 100);
+      _fecD += (unsigDrift + Random().nextInt(50).abs()) * 8;
+      _crcD += (unsigDrift + Random().nextInt(50).abs()) * 4;
     }
 
     // chance of upstream stats drift
     if (_rndChance <= 10) {
-      int sigDrift = Random().nextInt(200) - 100;
-      int unsigDrift = sigDrift.abs();
+      _upRate = (_upRate + ((sigDrift + Random().nextInt(5)) * 4)).clamp(250, 2000);
+      _upAttainableRate = (_upAttainableRate + ((sigDrift + Random().nextInt(5)) * 4)).clamp(500, 3000);
 
-      _upRate = (_upRate + (sigDrift * 4)).clamp(250, 2000);
-      _upAttainableRate = (_upAttainableRate + (sigDrift * 4)).clamp(500, 3000);
-
-      _mrU = (_mrU + (sigDrift / 100)).clamp(0, 30);
-      _attU = (_attU + (sigDrift / 100)).clamp(0, 100);
-      _fecU += unsigDrift * 4;
-      _crcU += unsigDrift * 2;
+      _mrU = (_mrU + ((sigDrift + Random().nextInt(100)) / 100)).clamp(0, 30);
+      _attU = (_attU + ((sigDrift + Random().nextInt(100)) / 100)).clamp(0, 100);
+      _fecU += (unsigDrift + Random().nextInt(50).abs()) * 4;
+      _crcU += (unsigDrift + Random().nextInt(50).abs()) * 2;
     }
 
     return LineStats.connectionUp(

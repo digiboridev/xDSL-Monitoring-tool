@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/data/models/snapshot_stats.dart';
@@ -47,21 +48,24 @@ class _SnaplistTileState extends State<SnaplistTile> {
   onDelete() async {
     final bool? result = await showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Delete snapshot?'),
-        content: Text('This will delete all data associated with this snapshot.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context, true);
-            },
-            child: Text('Delete'),
-          ),
-        ],
+      builder: (context) => BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+        child: AlertDialog(
+          title: Text('Delete snapshot?'),
+          content: Text('This will delete all data associated with this snapshot.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+              child: Text('Delete'),
+            ),
+          ],
+        ),
       ),
     );
 

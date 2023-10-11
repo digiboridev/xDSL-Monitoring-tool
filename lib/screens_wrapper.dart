@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:xdslmt/data/repositories/settings_repo.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
 import 'package:xdslmt/screens/current/current_screen.dart';
 import 'package:xdslmt/screens/settings/binding.dart';
@@ -24,12 +26,11 @@ class _ScreensWrapperState extends State<ScreensWrapper> {
     SettingsScreenBinding(child: SettingsScreenView()),
   ];
 
-  int _screenIndex = 0;
-
-  void selectScreen(int index) => setState(() => _screenIndex = index);
+  int screenIndex = 0;
+  selectScreen(int index) => setState(() => screenIndex = index);
 
   String get screenName {
-    switch (_screenIndex) {
+    switch (screenIndex) {
       case 0:
         return 'Monitoring';
       case 1:
@@ -41,28 +42,42 @@ class _ScreensWrapperState extends State<ScreensWrapper> {
     }
   }
 
+  setupOrient() async {
+    set(bool orientLock) {
+      if (orientLock) {
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.portraitUp,
+          DeviceOrientation.portraitDown,
+        ]);
+      } else {
+        SystemChrome.setPreferredOrientations(
+            [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown, DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+      }
+    }
+
+    final srepo = context.read<SettingsRepository>();
+    final settings = await srepo.getSettings;
+    set(settings.orientLock);
+    srepo.updatesStream.map((settings) => settings.orientLock).distinct().listen((orientLock) => set(orientLock));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setupOrient();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // TODO - fix orientation
-    // if (context.watch<SettingsModel>().getOrient) {
-    //   SystemChrome.setPreferredOrientations([
-    //     DeviceOrientation.portraitUp,
-    //     DeviceOrientation.portraitDown,
-    //   ]);
-    // } else {
-    //   SystemChrome.setPreferredOrientations(
-    //     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown, DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight],
-    //   );
-    // }
-
     return WillPopScope(
       onWillPop: () async {
-        MethodChannel('main').invokeMethod('minimize');
-        return false;
+        bool sampling = context.read<StatsSamplingService>().sampling;
+        if (sampling) MethodChannel('main').invokeMethod('minimize');
+        return !sampling;
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(screenName, style: TextStyles.f16w6.cyan100),
+          title: Text(screenName, style: TextStyles.f18w6.cyan100),
           actions: [
             IconButton(
               tooltip: 'Minimize app',
@@ -84,37 +99,15 @@ class _ScreensWrapperState extends State<ScreensWrapper> {
           backgroundColor: Colors.blueGrey.shade900,
         ),
         // body: screens[_screenIndex],
-        body: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 200),
-          child: screens[_screenIndex],
-        ),
-        floatingActionButton: _screenIndex == 2 ? null : FloatButton(),
+        body: AnimatedSwitcher(duration: const Duration(milliseconds: 200), child: screens[screenIndex]),
+        floatingActionButton: screenIndex == 2 ? null : FloatButton(),
         bottomNavigationBar: BottomNavigationBar(
-          // backgroundColor: Colors.blueGrey.shade900,
-          currentIndex: _screenIndex,
+          currentIndex: screenIndex,
           onTap: selectScreen,
           items: [
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.timeline,
-                // color: Colors.blueGrey.shade50,
-              ),
-              label: 'Monitoring',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.history,
-                // color: Colors.blueGrey.shade50,
-              ),
-              label: 'Snapshots',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.settings,
-                // color: Colors.blueGrey.shade50,
-              ),
-              label: 'Settings',
-            ),
+            BottomNavigationBarItem(icon: Icon(Icons.timeline), label: 'Monitoring'),
+            BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Snapshots'),
+            BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
           ],
         ),
       ),

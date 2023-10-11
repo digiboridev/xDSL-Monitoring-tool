@@ -26,10 +26,12 @@ class SNRBar extends StatelessWidget {
                       final v = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downSNRmLast);
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('SNR Down: ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800),
+                          Text('SNRM Down: ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800),
+                          Text('dB', style: TextStyles.f10w3.blueGrey800),
                           SizedBox(width: 4),
-                          SizedBox(width: 4, height: 14, child: LineBar(value: v ?? 0, min: 0, max: 160)),
+                          SizedBox(width: 4, height: 16, child: LineBar(value: v ?? 0, min: 0, max: 160)),
                         ],
                       );
                     }),
@@ -62,10 +64,12 @@ class SNRBar extends StatelessWidget {
                       final v = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upSNRmLast);
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('SNR Up: ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800),
+                          Text('SNRM Up: ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800),
+                          Text('dB', style: TextStyles.f10w3.blueGrey800),
                           SizedBox(width: 4),
-                          SizedBox(width: 4, height: 14, child: LineBar(value: v ?? 0, min: 0, max: 160)),
+                          SizedBox(width: 4, height: 16, child: LineBar(value: v ?? 0, min: 0, max: 160)),
                         ],
                       );
                     }),
@@ -104,10 +108,12 @@ class SNRBar extends StatelessWidget {
                       final v = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downAttenuationLast);
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Att Down: ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800),
+                          Text('ATN Down:  ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800),
+                          Text('dB', style: TextStyles.f10w3.blueGrey800),
                           SizedBox(width: 4),
-                          SizedBox(width: 4, height: 14, child: LineBar(value: 1000 - (v ?? 1000), min: 0, max: 1000)),
+                          SizedBox(width: 4, height: 16, child: LineBar(value: 1000 - (v ?? 1000), min: 0, max: 1000)),
                         ],
                       );
                     }),
@@ -140,10 +146,12 @@ class SNRBar extends StatelessWidget {
                       final v = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upAttenuationLast);
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Att Up: ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800),
+                          Text('ATN Up:  ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f14w3.blueGrey800),
+                          Text('dB', style: TextStyles.f10w3.blueGrey800),
                           SizedBox(width: 4),
-                          SizedBox(width: 4, height: 14, child: LineBar(value: 1000 - (v ?? 1000), min: 0, max: 1000)),
+                          SizedBox(width: 4, height: 16, child: LineBar(value: 1000 - (v ?? 1000), min: 0, max: 1000)),
                         ],
                       );
                     }),

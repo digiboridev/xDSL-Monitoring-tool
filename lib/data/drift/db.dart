@@ -28,7 +28,7 @@ class DB extends _$DB {
     return MigrationStrategy(
       onCreate: (migrator) => migrator.createAll(),
       beforeOpen: (openingDetails) async {
-        if (kDebugMode) {
+        if (kDebugMode && openingDetails.hadUpgrade) {
           print('drift beforeOpen');
           final m = this.createMigrator(); // changed to this
           for (final table in allTables) {

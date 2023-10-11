@@ -116,3 +116,6 @@
 //     }
 //   }
 // }
+
+
+// TODO common BCM63xx and trendchip parser

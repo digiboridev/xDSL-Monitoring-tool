@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
 import 'package:xdslmt/screens/current/current_screen.dart';
 import 'package:xdslmt/screens/settings/binding.dart';
-import 'package:move_to_background/move_to_background.dart';
 import 'package:xdslmt/screens/settings/view.dart';
 import 'package:xdslmt/screens/snapshots/binding.dart';
 import 'package:xdslmt/screens/snapshots/view.dart';
@@ -57,8 +57,7 @@ class _ScreensWrapperState extends State<ScreensWrapper> {
 
     return WillPopScope(
       onWillPop: () async {
-        MoveToBackground.moveTaskToBack();
-        debugPrint('Minimized');
+        MethodChannel('main').invokeMethod('minimize');
         return false;
       },
       child: Scaffold(
@@ -69,8 +68,7 @@ class _ScreensWrapperState extends State<ScreensWrapper> {
               tooltip: 'Minimize app',
               icon: Icon(Icons.minimize, color: Colors.cyan.shade100),
               onPressed: () {
-                MoveToBackground.moveTaskToBack();
-                debugPrint('minimized');
+                MethodChannel('main').invokeMethod('minimize');
               },
             ),
             IconButton(
@@ -132,8 +130,6 @@ class FloatButton extends StatefulWidget {
 }
 
 class _FloatButtonState extends State<FloatButton> {
-  // late StatsSamplingService samplingService = SL().statsSamplingService;
-
   void toogleSampling(BuildContext context) async {
     final samplingService = context.read<StatsSamplingService>();
 

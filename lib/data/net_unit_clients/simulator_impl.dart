@@ -9,7 +9,6 @@ import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 /// It also has a method to reduce stats to half of the current value, like if the line has impulse drops.
 /// The [fetchStats] method simulates the network stats by introducing chances of fetch failure, connection down, downstream stats drift, and upstream stats drift.
 /// It returns a [LineStats] object with the simulated stats.
-
 final class ClientSimulator extends NetUnitClient {
   ClientSimulator({required super.snapshotId}) : super(ip: '_', login: '_', password: '_');
 
@@ -43,6 +42,8 @@ final class ClientSimulator extends NetUnitClient {
   late int _crcU = 0;
   late int _crcD = 0;
 
+  LineStats? _prevStats;
+
   // Reduce stats to half of the current value, like if the line has impulse drops
   _reduceStatsHalfway() {
     _upRate = (_upRate + _bupRate) ~/ 2;
@@ -60,6 +61,13 @@ final class ClientSimulator extends NetUnitClient {
   }
 
   int get _rndChance => Random().nextInt(100);
+
+  int _incrDiff(int? prev, int? next) {
+    prev ??= 0;
+    if (next == null) return 0;
+    final diff = next - prev;
+    return diff > 0 ? diff : 0;
+  }
 
   @override
   Future<LineStats> fetchStats() async {
@@ -103,7 +111,7 @@ final class ClientSimulator extends NetUnitClient {
       _crcU += (unsigDrift + Random().nextInt(50).abs()) * 2;
     }
 
-    return LineStats.connectionUp(
+    final nextStats = LineStats.connectionUp(
       snapshotId: snapshotId,
       statusText: 'Up',
       connectionType: 'ADSL2+',
@@ -119,6 +127,13 @@ final class ClientSimulator extends NetUnitClient {
       downCRC: _crcD,
       upFEC: _fecU,
       downFEC: _fecD,
+      upCRCIncr: _incrDiff(_prevStats?.upCRC, _crcU),
+      downCRCIncr: _incrDiff(_prevStats?.downCRC, _crcD),
+      upFECIncr: _incrDiff(_prevStats?.upFEC, _fecU),
+      downFECIncr: _incrDiff(_prevStats?.downFEC, _fecD),
     );
+
+    _prevStats = nextStats;
+    return nextStats;
   }
 }

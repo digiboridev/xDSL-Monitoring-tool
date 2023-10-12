@@ -53,6 +53,10 @@ class LineStatsTable extends Table {
   IntColumn get downCRC => integer().nullable()();
   IntColumn get upFEC => integer().nullable()();
   IntColumn get downFEC => integer().nullable()();
+  IntColumn get upCRCIncr => integer().nullable()();
+  IntColumn get downCRCIncr => integer().nullable()();
+  IntColumn get upFECIncr => integer().nullable()();
+  IntColumn get downFECIncr => integer().nullable()();
 }
 
 @DataClassName('DriftSnapshotStats')

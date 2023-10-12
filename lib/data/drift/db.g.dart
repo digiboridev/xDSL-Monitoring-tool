@@ -120,6 +120,30 @@ class $LineStatsTableTable extends LineStatsTable
   late final GeneratedColumn<int> downFEC = GeneratedColumn<int>(
       'down_f_e_c', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _upCRCIncrMeta =
+      const VerificationMeta('upCRCIncr');
+  @override
+  late final GeneratedColumn<int> upCRCIncr = GeneratedColumn<int>(
+      'up_c_r_c_incr', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _downCRCIncrMeta =
+      const VerificationMeta('downCRCIncr');
+  @override
+  late final GeneratedColumn<int> downCRCIncr = GeneratedColumn<int>(
+      'down_c_r_c_incr', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _upFECIncrMeta =
+      const VerificationMeta('upFECIncr');
+  @override
+  late final GeneratedColumn<int> upFECIncr = GeneratedColumn<int>(
+      'up_f_e_c_incr', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _downFECIncrMeta =
+      const VerificationMeta('downFECIncr');
+  @override
+  late final GeneratedColumn<int> downFECIncr = GeneratedColumn<int>(
+      'down_f_e_c_incr', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -139,7 +163,11 @@ class $LineStatsTableTable extends LineStatsTable
         upCRC,
         downCRC,
         upFEC,
-        downFEC
+        downFEC,
+        upCRCIncr,
+        downCRCIncr,
+        upFECIncr,
+        downFECIncr
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -241,6 +269,30 @@ class $LineStatsTableTable extends LineStatsTable
       context.handle(_downFECMeta,
           downFEC.isAcceptableOrUnknown(data['down_f_e_c']!, _downFECMeta));
     }
+    if (data.containsKey('up_c_r_c_incr')) {
+      context.handle(
+          _upCRCIncrMeta,
+          upCRCIncr.isAcceptableOrUnknown(
+              data['up_c_r_c_incr']!, _upCRCIncrMeta));
+    }
+    if (data.containsKey('down_c_r_c_incr')) {
+      context.handle(
+          _downCRCIncrMeta,
+          downCRCIncr.isAcceptableOrUnknown(
+              data['down_c_r_c_incr']!, _downCRCIncrMeta));
+    }
+    if (data.containsKey('up_f_e_c_incr')) {
+      context.handle(
+          _upFECIncrMeta,
+          upFECIncr.isAcceptableOrUnknown(
+              data['up_f_e_c_incr']!, _upFECIncrMeta));
+    }
+    if (data.containsKey('down_f_e_c_incr')) {
+      context.handle(
+          _downFECIncrMeta,
+          downFECIncr.isAcceptableOrUnknown(
+              data['down_f_e_c_incr']!, _downFECIncrMeta));
+    }
     return context;
   }
 
@@ -287,6 +339,14 @@ class $LineStatsTableTable extends LineStatsTable
           .read(DriftSqlType.int, data['${effectivePrefix}up_f_e_c']),
       downFEC: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}down_f_e_c']),
+      upCRCIncr: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}up_c_r_c_incr']),
+      downCRCIncr: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}down_c_r_c_incr']),
+      upFECIncr: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}up_f_e_c_incr']),
+      downFECIncr: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}down_f_e_c_incr']),
     );
   }
 
@@ -318,6 +378,10 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
   final int? downCRC;
   final int? upFEC;
   final int? downFEC;
+  final int? upCRCIncr;
+  final int? downCRCIncr;
+  final int? upFECIncr;
+  final int? downFECIncr;
   const DriftLineStats(
       {required this.id,
       required this.time,
@@ -336,7 +400,11 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
       this.upCRC,
       this.downCRC,
       this.upFEC,
-      this.downFEC});
+      this.downFEC,
+      this.upCRCIncr,
+      this.downCRCIncr,
+      this.upFECIncr,
+      this.downFECIncr});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -387,6 +455,18 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
     if (!nullToAbsent || downFEC != null) {
       map['down_f_e_c'] = Variable<int>(downFEC);
     }
+    if (!nullToAbsent || upCRCIncr != null) {
+      map['up_c_r_c_incr'] = Variable<int>(upCRCIncr);
+    }
+    if (!nullToAbsent || downCRCIncr != null) {
+      map['down_c_r_c_incr'] = Variable<int>(downCRCIncr);
+    }
+    if (!nullToAbsent || upFECIncr != null) {
+      map['up_f_e_c_incr'] = Variable<int>(upFECIncr);
+    }
+    if (!nullToAbsent || downFECIncr != null) {
+      map['down_f_e_c_incr'] = Variable<int>(downFECIncr);
+    }
     return map;
   }
 
@@ -433,6 +513,18 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
       downFEC: downFEC == null && nullToAbsent
           ? const Value.absent()
           : Value(downFEC),
+      upCRCIncr: upCRCIncr == null && nullToAbsent
+          ? const Value.absent()
+          : Value(upCRCIncr),
+      downCRCIncr: downCRCIncr == null && nullToAbsent
+          ? const Value.absent()
+          : Value(downCRCIncr),
+      upFECIncr: upFECIncr == null && nullToAbsent
+          ? const Value.absent()
+          : Value(upFECIncr),
+      downFECIncr: downFECIncr == null && nullToAbsent
+          ? const Value.absent()
+          : Value(downFECIncr),
     );
   }
 
@@ -459,6 +551,10 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
       downCRC: serializer.fromJson<int?>(json['downCRC']),
       upFEC: serializer.fromJson<int?>(json['upFEC']),
       downFEC: serializer.fromJson<int?>(json['downFEC']),
+      upCRCIncr: serializer.fromJson<int?>(json['upCRCIncr']),
+      downCRCIncr: serializer.fromJson<int?>(json['downCRCIncr']),
+      upFECIncr: serializer.fromJson<int?>(json['upFECIncr']),
+      downFECIncr: serializer.fromJson<int?>(json['downFECIncr']),
     );
   }
   @override
@@ -484,6 +580,10 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
       'downCRC': serializer.toJson<int?>(downCRC),
       'upFEC': serializer.toJson<int?>(upFEC),
       'downFEC': serializer.toJson<int?>(downFEC),
+      'upCRCIncr': serializer.toJson<int?>(upCRCIncr),
+      'downCRCIncr': serializer.toJson<int?>(downCRCIncr),
+      'upFECIncr': serializer.toJson<int?>(upFECIncr),
+      'downFECIncr': serializer.toJson<int?>(downFECIncr),
     };
   }
 
@@ -505,7 +605,11 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
           Value<int?> upCRC = const Value.absent(),
           Value<int?> downCRC = const Value.absent(),
           Value<int?> upFEC = const Value.absent(),
-          Value<int?> downFEC = const Value.absent()}) =>
+          Value<int?> downFEC = const Value.absent(),
+          Value<int?> upCRCIncr = const Value.absent(),
+          Value<int?> downCRCIncr = const Value.absent(),
+          Value<int?> upFECIncr = const Value.absent(),
+          Value<int?> downFECIncr = const Value.absent()}) =>
       DriftLineStats(
         id: id ?? this.id,
         time: time ?? this.time,
@@ -533,6 +637,10 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
         downCRC: downCRC.present ? downCRC.value : this.downCRC,
         upFEC: upFEC.present ? upFEC.value : this.upFEC,
         downFEC: downFEC.present ? downFEC.value : this.downFEC,
+        upCRCIncr: upCRCIncr.present ? upCRCIncr.value : this.upCRCIncr,
+        downCRCIncr: downCRCIncr.present ? downCRCIncr.value : this.downCRCIncr,
+        upFECIncr: upFECIncr.present ? upFECIncr.value : this.upFECIncr,
+        downFECIncr: downFECIncr.present ? downFECIncr.value : this.downFECIncr,
       );
   @override
   String toString() {
@@ -554,31 +662,40 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
           ..write('upCRC: $upCRC, ')
           ..write('downCRC: $downCRC, ')
           ..write('upFEC: $upFEC, ')
-          ..write('downFEC: $downFEC')
+          ..write('downFEC: $downFEC, ')
+          ..write('upCRCIncr: $upCRCIncr, ')
+          ..write('downCRCIncr: $downCRCIncr, ')
+          ..write('upFECIncr: $upFECIncr, ')
+          ..write('downFECIncr: $downFECIncr')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      id,
-      time,
-      snapshotId,
-      status,
-      statusText,
-      connectionType,
-      upAttainableRate,
-      downAttainableRate,
-      upRate,
-      downRate,
-      upMargin,
-      downMargin,
-      upAttenuation,
-      downAttenuation,
-      upCRC,
-      downCRC,
-      upFEC,
-      downFEC);
+  int get hashCode => Object.hashAll([
+        id,
+        time,
+        snapshotId,
+        status,
+        statusText,
+        connectionType,
+        upAttainableRate,
+        downAttainableRate,
+        upRate,
+        downRate,
+        upMargin,
+        downMargin,
+        upAttenuation,
+        downAttenuation,
+        upCRC,
+        downCRC,
+        upFEC,
+        downFEC,
+        upCRCIncr,
+        downCRCIncr,
+        upFECIncr,
+        downFECIncr
+      ]);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -600,7 +717,11 @@ class DriftLineStats extends DataClass implements Insertable<DriftLineStats> {
           other.upCRC == this.upCRC &&
           other.downCRC == this.downCRC &&
           other.upFEC == this.upFEC &&
-          other.downFEC == this.downFEC);
+          other.downFEC == this.downFEC &&
+          other.upCRCIncr == this.upCRCIncr &&
+          other.downCRCIncr == this.downCRCIncr &&
+          other.upFECIncr == this.upFECIncr &&
+          other.downFECIncr == this.downFECIncr);
 }
 
 class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
@@ -622,6 +743,10 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
   final Value<int?> downCRC;
   final Value<int?> upFEC;
   final Value<int?> downFEC;
+  final Value<int?> upCRCIncr;
+  final Value<int?> downCRCIncr;
+  final Value<int?> upFECIncr;
+  final Value<int?> downFECIncr;
   const LineStatsTableCompanion({
     this.id = const Value.absent(),
     this.time = const Value.absent(),
@@ -641,6 +766,10 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
     this.downCRC = const Value.absent(),
     this.upFEC = const Value.absent(),
     this.downFEC = const Value.absent(),
+    this.upCRCIncr = const Value.absent(),
+    this.downCRCIncr = const Value.absent(),
+    this.upFECIncr = const Value.absent(),
+    this.downFECIncr = const Value.absent(),
   });
   LineStatsTableCompanion.insert({
     this.id = const Value.absent(),
@@ -661,6 +790,10 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
     this.downCRC = const Value.absent(),
     this.upFEC = const Value.absent(),
     this.downFEC = const Value.absent(),
+    this.upCRCIncr = const Value.absent(),
+    this.downCRCIncr = const Value.absent(),
+    this.upFECIncr = const Value.absent(),
+    this.downFECIncr = const Value.absent(),
   })  : time = Value(time),
         snapshotId = Value(snapshotId),
         status = Value(status),
@@ -684,6 +817,10 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
     Expression<int>? downCRC,
     Expression<int>? upFEC,
     Expression<int>? downFEC,
+    Expression<int>? upCRCIncr,
+    Expression<int>? downCRCIncr,
+    Expression<int>? upFECIncr,
+    Expression<int>? downFECIncr,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -705,6 +842,10 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
       if (downCRC != null) 'down_c_r_c': downCRC,
       if (upFEC != null) 'up_f_e_c': upFEC,
       if (downFEC != null) 'down_f_e_c': downFEC,
+      if (upCRCIncr != null) 'up_c_r_c_incr': upCRCIncr,
+      if (downCRCIncr != null) 'down_c_r_c_incr': downCRCIncr,
+      if (upFECIncr != null) 'up_f_e_c_incr': upFECIncr,
+      if (downFECIncr != null) 'down_f_e_c_incr': downFECIncr,
     });
   }
 
@@ -726,7 +867,11 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
       Value<int?>? upCRC,
       Value<int?>? downCRC,
       Value<int?>? upFEC,
-      Value<int?>? downFEC}) {
+      Value<int?>? downFEC,
+      Value<int?>? upCRCIncr,
+      Value<int?>? downCRCIncr,
+      Value<int?>? upFECIncr,
+      Value<int?>? downFECIncr}) {
     return LineStatsTableCompanion(
       id: id ?? this.id,
       time: time ?? this.time,
@@ -746,6 +891,10 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
       downCRC: downCRC ?? this.downCRC,
       upFEC: upFEC ?? this.upFEC,
       downFEC: downFEC ?? this.downFEC,
+      upCRCIncr: upCRCIncr ?? this.upCRCIncr,
+      downCRCIncr: downCRCIncr ?? this.downCRCIncr,
+      upFECIncr: upFECIncr ?? this.upFECIncr,
+      downFECIncr: downFECIncr ?? this.downFECIncr,
     );
   }
 
@@ -807,6 +956,18 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
     if (downFEC.present) {
       map['down_f_e_c'] = Variable<int>(downFEC.value);
     }
+    if (upCRCIncr.present) {
+      map['up_c_r_c_incr'] = Variable<int>(upCRCIncr.value);
+    }
+    if (downCRCIncr.present) {
+      map['down_c_r_c_incr'] = Variable<int>(downCRCIncr.value);
+    }
+    if (upFECIncr.present) {
+      map['up_f_e_c_incr'] = Variable<int>(upFECIncr.value);
+    }
+    if (downFECIncr.present) {
+      map['down_f_e_c_incr'] = Variable<int>(downFECIncr.value);
+    }
     return map;
   }
 
@@ -830,7 +991,11 @@ class LineStatsTableCompanion extends UpdateCompanion<DriftLineStats> {
           ..write('upCRC: $upCRC, ')
           ..write('downCRC: $downCRC, ')
           ..write('upFEC: $upFEC, ')
-          ..write('downFEC: $downFEC')
+          ..write('downFEC: $downFEC, ')
+          ..write('upCRCIncr: $upCRCIncr, ')
+          ..write('downCRCIncr: $downCRCIncr, ')
+          ..write('upFECIncr: $upFECIncr, ')
+          ..write('downFECIncr: $downFECIncr')
           ..write(')'))
         .toString();
   }

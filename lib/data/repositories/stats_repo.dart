@@ -42,6 +42,10 @@ class StatsRepositoryDriftImpl implements StatsRepository {
         downCRC: Value(lineStats.downCRC),
         upFEC: Value(lineStats.upFEC),
         downFEC: Value(lineStats.downFEC),
+        upCRCIncr: Value(lineStats.upCRCIncr),
+        downCRCIncr: Value(lineStats.downCRCIncr),
+        upFECIncr: Value(lineStats.upFECIncr),
+        downFECIncr: Value(lineStats.downFECIncr),
       ),
     );
   }

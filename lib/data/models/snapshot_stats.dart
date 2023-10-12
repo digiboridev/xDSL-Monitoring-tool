@@ -154,14 +154,15 @@ class SnapshotStats {
   int? _avgVal(int? prev, int? next) {
     if (prev == null) return next;
     if (next == null) return prev;
-    return (prev + next) ~/ 2;
+    return ((prev * 9) + next) ~/ 10;
   }
 
+  @Deprecated('incr from line stats instead')
   int _incrDiff(int? prev, int? next) {
     prev ??= 0;
-    if (next == null) return prev;
+    if (next == null) return 0;
     final diff = next - prev;
-    return diff > 0 ? diff : prev;
+    return diff > 0 ? diff : 0;
   }
 
   bool _isDisconnect(SampleStatus newStatus) {
@@ -234,14 +235,14 @@ class SnapshotStats {
       upAttenuationMin: _minVal(upAttenuationMin, stats.upAttenuation),
       upAttenuationMax: _maxVal(upAttenuationMax, stats.upAttenuation),
       upAttenuationAvg: _avgVal(upAttenuationAvg, stats.upAttenuation),
-      downFecLast: stats.downFEC,
-      downFecTotal: ((downFecTotal ?? 0) + _incrDiff(downFecLast, stats.downFEC)),
-      upFecLast: stats.upFEC,
-      upFecTotal: ((upFecTotal ?? 0) + _incrDiff(upFecLast, stats.upFEC)),
-      downCrcLast: stats.downCRC,
-      downCrcTotal: ((downCrcTotal ?? 0) + _incrDiff(downCrcLast, stats.downCRC)),
-      upCrcLast: stats.upCRC,
-      upCrcTotal: ((upCrcTotal ?? 0) + _incrDiff(upCrcLast, stats.upCRC)),
+      downFecTotal: (downFecTotal ?? 0) + (stats.downFECIncr ?? 0),
+      downFecLast: stats.downFECIncr,
+      upFecTotal: (upFecTotal ?? 0) + (stats.upFECIncr ?? 0),
+      upFecLast: stats.upFECIncr,
+      downCrcTotal: (downCrcTotal ?? 0) + (stats.downCRCIncr ?? 0),
+      downCrcLast: stats.downCRCIncr,
+      upCrcTotal: (upCrcTotal ?? 0) + (stats.upCRCIncr ?? 0),
+      upCrcLast: stats.upCRCIncr,
     );
   }
 

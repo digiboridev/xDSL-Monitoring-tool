@@ -101,12 +101,16 @@ class RSCBar extends StatelessWidget {
             child: Builder(
               builder: (context) {
                 final downFecLast = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downFecLast);
-
+                final downFecTotal = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downFecTotal);
+                final downFecTotalExp = downFecTotal?.toStringAsPrecision(3);
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('FEC D', style: TextStyles.f12),
-                    Text('${downFecLast ?? 'n/a'}', style: TextStyles.f14w3),
+                    Text('FEC D', style: TextStyles.f12w6),
+                    Text('Total', style: TextStyles.f10),
+                    Text('${downFecTotalExp ?? 'n/a'}', style: TextStyles.f12w3),
+                    Text('Impulse', style: TextStyles.f10),
+                    Text('${downFecLast ?? 'n/a'}', style: TextStyles.f12w3),
                   ],
                 );
               },
@@ -119,12 +123,17 @@ class RSCBar extends StatelessWidget {
             child: Builder(
               builder: (context) {
                 final downCrcLast = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downCrcLast);
+                final downCrcTotal = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downCrcTotal);
+                final downCrcTotalExp = downCrcTotal?.toStringAsPrecision(3);
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('CDC D', style: TextStyles.f12),
-                    Text('${downCrcLast ?? 'n/a'}', style: TextStyles.f14w3),
+                    Text('CRC D', style: TextStyles.f12w6),
+                    Text('Total', style: TextStyles.f10),
+                    Text('${downCrcTotalExp ?? 'n/a'}', style: TextStyles.f12w3),
+                    Text('Impulse', style: TextStyles.f10),
+                    Text('${downCrcLast ?? 'n/a'}', style: TextStyles.f12w3),
                   ],
                 );
               },
@@ -137,12 +146,17 @@ class RSCBar extends StatelessWidget {
             child: Builder(
               builder: (context) {
                 final upFecLast = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upFecLast);
+                final upFecTotal = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upFecTotal);
+                final upFecTotalExp = upFecTotal?.toStringAsPrecision(3);
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('FEC U', style: TextStyles.f12),
-                    Text('${upFecLast ?? 'n/a'}', style: TextStyles.f14w3),
+                    Text('FEC U', style: TextStyles.f12w6),
+                    Text('Total', style: TextStyles.f10),
+                    Text('${upFecTotalExp ?? 'n/a'}', style: TextStyles.f12w3),
+                    Text('Impulse', style: TextStyles.f10),
+                    Text('${upFecLast ?? 'n/a'}', style: TextStyles.f12w3),
                   ],
                 );
               },
@@ -155,12 +169,17 @@ class RSCBar extends StatelessWidget {
             child: Builder(
               builder: (context) {
                 final upCrcLast = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upCrcLast);
+                final upCrcTotal = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upCrcTotal);
+                final upCrcTotalExp = upCrcTotal?.toStringAsPrecision(3);
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('CRC U', style: TextStyles.f12),
-                    Text('${upCrcLast ?? 'n/a'}', style: TextStyles.f14w3),
+                    Text('CRC U', style: TextStyles.f12w6),
+                    Text('Total', style: TextStyles.f10),
+                    Text('${upCrcTotalExp ?? 'n/a'}', style: TextStyles.f12w3),
+                    Text('Impulse', style: TextStyles.f10),
+                    Text('${upCrcLast ?? 'n/a'}', style: TextStyles.f12w3),
                   ],
                 );
               },

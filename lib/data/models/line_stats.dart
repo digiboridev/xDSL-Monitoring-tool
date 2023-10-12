@@ -32,6 +32,10 @@ class LineStats {
   final int? downCRC;
   final int? upFEC;
   final int? downFEC;
+  final int? upCRCIncr;
+  final int? downCRCIncr;
+  final int? upFECIncr;
+  final int? downFECIncr;
 
   const LineStats._({
     required this.time,
@@ -51,6 +55,10 @@ class LineStats {
     this.downCRC,
     this.upFEC,
     this.downFEC,
+    this.upCRCIncr,
+    this.downCRCIncr,
+    this.upFECIncr,
+    this.downFECIncr,
   });
 
   factory LineStats.errored({required String snapshotId, required String statusText}) {
@@ -87,6 +95,10 @@ class LineStats {
     required int downCRC,
     required int upFEC,
     required int downFEC,
+    required int upCRCIncr,
+    required int downCRCIncr,
+    required int upFECIncr,
+    required int downFECIncr,
   }) {
     return LineStats._(
       time: DateTime.now(),
@@ -106,6 +118,10 @@ class LineStats {
       downCRC: downCRC,
       upFEC: upFEC,
       downFEC: downFEC,
+      upCRCIncr: upCRCIncr,
+      downCRCIncr: downCRCIncr,
+      upFECIncr: upFECIncr,
+      downFECIncr: downFECIncr,
     );
   }
 
@@ -129,7 +145,11 @@ class LineStats {
         other.upCRC == upCRC &&
         other.downCRC == downCRC &&
         other.upFEC == upFEC &&
-        other.downFEC == downFEC;
+        other.downFEC == downFEC &&
+        other.upCRCIncr == upCRCIncr &&
+        other.downCRCIncr == downCRCIncr &&
+        other.upFECIncr == upFECIncr &&
+        other.downFECIncr == downFECIncr;
   }
 
   @override
@@ -150,12 +170,16 @@ class LineStats {
         upCRC.hashCode ^
         downCRC.hashCode ^
         upFEC.hashCode ^
-        downFEC.hashCode;
+        downFEC.hashCode ^
+        upCRCIncr.hashCode ^
+        downCRCIncr.hashCode ^
+        upFECIncr.hashCode ^
+        downFECIncr.hashCode;
   }
 
   @override
   String toString() {
-    return 'LineStats(time: $time, snapshotId: $snapshotId, status: $status, statusText: $statusText, connectionType: $connectionType, upAttainableRate: $upAttainableRate, downAttainableRate: $downAttainableRate, upRate: $upRate, downRate: $downRate, upMargin: $upMargin, downMargin: $downMargin, upAttenuation: $upAttenuation, downAttenuation: $downAttenuation, upCRC: $upCRC, downCRC: $downCRC, upFEC: $upFEC, downFEC: $downFEC)';
+    return 'LineStats(time: $time, snapshotId: $snapshotId, status: $status, statusText: $statusText, connectionType: $connectionType, upAttainableRate: $upAttainableRate, downAttainableRate: $downAttainableRate, upRate: $upRate, downRate: $downRate, upMargin: $upMargin, downMargin: $downMargin, upAttenuation: $upAttenuation, downAttenuation: $downAttenuation, upCRC: $upCRC, downCRC: $downCRC, upFEC: $upFEC, downFEC: $downFEC, upCRCIncr: $upCRCIncr, downCRCIncr: $downCRCIncr, upFECIncr: $upFECIncr, downFECIncr: $downFECIncr)';
   }
 
   Map<String, dynamic> toMap() {
@@ -177,6 +201,10 @@ class LineStats {
       'downCRC': downCRC,
       'upFEC': upFEC,
       'downFEC': downFEC,
+      'upCRCIncr': upCRCIncr,
+      'downCRCIncr': downCRCIncr,
+      'upFECIncr': upFECIncr,
+      'downFECIncr': downFECIncr,
     };
   }
 
@@ -199,6 +227,10 @@ class LineStats {
       downCRC: map['downCRC'] != null ? map['downCRC'] as int : null,
       upFEC: map['upFEC'] != null ? map['upFEC'] as int : null,
       downFEC: map['downFEC'] != null ? map['downFEC'] as int : null,
+      upCRCIncr: map['upCRCIncr'] != null ? map['upCRCIncr'] as int : null,
+      downCRCIncr: map['downCRCIncr'] != null ? map['downCRCIncr'] as int : null,
+      upFECIncr: map['upFECIncr'] != null ? map['upFECIncr'] as int : null,
+      downFECIncr: map['downFECIncr'] != null ? map['downFECIncr'] as int : null,
     );
   }
 

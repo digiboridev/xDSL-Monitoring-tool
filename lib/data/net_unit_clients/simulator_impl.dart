@@ -76,19 +76,25 @@ final class ClientSimulator extends NetUnitClient {
     // chance of connection recovery
     if (_prevStats?.status == SampleStatus.connectionDown) {
       if (_rndChance <= 90) {
-        return LineStats.connectionDown(snapshotId: snapshotId, statusText: 'Down');
+        final newStats = LineStats.connectionDown(snapshotId: snapshotId, statusText: 'Down');
+        _prevStats = newStats;
+        return newStats;
       }
     }
 
     // chance of fetch failure
     if (_rndChance <= 1) {
-      return LineStats.errored(snapshotId: snapshotId, statusText: 'Connection failed');
+      final newStats = LineStats.errored(snapshotId: snapshotId, statusText: 'Connection failed');
+      _prevStats = newStats;
+      return newStats;
     }
 
     // chance of connection down
     if (_rndChance <= 1) {
       _reduceStatsHalfway();
-      return LineStats.connectionDown(snapshotId: snapshotId, statusText: 'Down');
+      final newStats = LineStats.connectionDown(snapshotId: snapshotId, statusText: 'Down');
+      _prevStats = newStats;
+      return newStats;
     }
 
     // common stats drift
@@ -97,7 +103,7 @@ final class ClientSimulator extends NetUnitClient {
     int unsigDrift = sigDrift.abs();
 
     // chance of donwstream stats drift
-    if (_rndChance <= 40) {
+    if (_rndChance <= 10) {
       _downRate = (_downRate + ((sigDrift + Random().nextInt(25)) * 4)).clamp(2000, 23000);
       _downAttainableRate = (_downAttainableRate + ((sigDrift + Random().nextInt(25)) * 4)).clamp(3000, 24000);
 
@@ -108,7 +114,7 @@ final class ClientSimulator extends NetUnitClient {
     }
 
     // chance of upstream stats drift
-    if (_rndChance <= 40) {
+    if (_rndChance <= 10) {
       _upRate = (_upRate + ((sigDrift + Random().nextInt(5)) * 4)).clamp(250, 2000);
       _upAttainableRate = (_upAttainableRate + ((sigDrift + Random().nextInt(5)) * 4)).clamp(500, 3000);
 

@@ -10,8 +10,8 @@ extension FormatDate on DateTime {
 
   String get ymdhms => this.formatter.format(this);
 
-  String get numhms => '${this.hour}:${this.minute}:${this.second}';
-  String get numymd => '${this.year}-${this.month}-${this.day}';
+  String get numhms => '${this.hour.toString().padLeft(2, '0')}:${this.minute.toString().padLeft(2, '0')}:${this.second.toString().padLeft(2, '0')}';
+  String get numymd => '${this.year}-${this.month.toString().padLeft(2, '0')}-${this.day.toString().padLeft(2, '0')}';
 }
 
 extension FormatDuration on Duration {

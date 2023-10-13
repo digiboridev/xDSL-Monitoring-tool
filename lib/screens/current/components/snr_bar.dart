@@ -42,7 +42,7 @@ class SNRBar extends StatelessWidget {
                       final v = context.watch<StatsSamplingService>().lastSamples;
                       final s = v.map((e) => e.downMargin).toList();
                       if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
-                      return LineChart(s: s);
+                      return LineChart(s: s, invert: false);
                     }),
                   ),
                   SizedBox(height: 4),
@@ -82,7 +82,7 @@ class SNRBar extends StatelessWidget {
                       final v = context.watch<StatsSamplingService>().lastSamples;
                       final s = v.map((e) => e.upMargin).toList();
                       if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
-                      return LineChart(s: s);
+                      return LineChart(s: s, invert: false);
                     }),
                   ),
                   SizedBox(height: 4),
@@ -128,7 +128,7 @@ class SNRBar extends StatelessWidget {
                       final v = context.watch<StatsSamplingService>().lastSamples;
                       final s = v.map((e) => e.downAttenuation).toList();
                       if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
-                      return LineChart(s: s);
+                      return LineChart(s: s, invert: true);
                     }),
                   ),
                   SizedBox(height: 4),
@@ -168,7 +168,7 @@ class SNRBar extends StatelessWidget {
                       final v = context.watch<StatsSamplingService>().lastSamples;
                       final s = v.map((e) => e.upAttenuation).toList();
                       if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
-                      return LineChart(s: s);
+                      return LineChart(s: s, invert: true);
                     }),
                   ),
                   SizedBox(height: 4),
@@ -191,12 +191,10 @@ class SNRBar extends StatelessWidget {
 }
 
 class LineChart extends StatelessWidget {
-  const LineChart({
-    super.key,
-    required this.s,
-  });
+  const LineChart({super.key, required this.s, required this.invert});
 
   final List<int?> s;
+  final bool invert;
 
   @override
   Widget build(BuildContext context) {
@@ -208,7 +206,7 @@ class LineChart extends StatelessWidget {
         border: Border.all(color: Colors.cyan.shade100),
         borderRadius: BorderRadius.all(Radius.circular(3)),
       ),
-      child: CustomPaint(painter: LineChartPainter(s)),
+      child: CustomPaint(painter: LineChartPainter(s, invert)),
     );
   }
 }

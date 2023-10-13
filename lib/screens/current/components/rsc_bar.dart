@@ -28,10 +28,10 @@ class RSCBar extends StatelessWidget {
         List<int> ucrc = [];
 
         for (final s in v) {
-          dfec.add(s.downFEC ?? 0);
-          ufec.add(s.upFEC ?? 0);
-          dcrc.add(s.downCRC ?? 0);
-          ucrc.add(s.upCRC ?? 0);
+          dfec.add(s.downFECIncr ?? 0);
+          ufec.add(s.upFECIncr ?? 0);
+          dcrc.add(s.downCRCIncr ?? 0);
+          ucrc.add(s.upCRCIncr ?? 0);
         }
 
         return Row(
@@ -46,7 +46,7 @@ class RSCBar extends StatelessWidget {
                   border: Border.all(color: Colors.blueGrey.shade100),
                   borderRadius: BorderRadius.circular(3),
                 ),
-                child: CustomPaint(painter: BarChartPainter(data: dfec)),
+                child: CustomPaint(painter: BarChartPainter(max: 1000, increasedData: dfec)),
               ),
             ),
             Container(
@@ -58,7 +58,11 @@ class RSCBar extends StatelessWidget {
                   border: Border.all(color: Colors.blueGrey.shade100),
                   borderRadius: BorderRadius.circular(3),
                 ),
-                child: CustomPaint(painter: BarChartPainter(data: dcrc)),
+                child: CustomPaint(
+                    painter: BarChartPainter(
+                  max: 1000,
+                  increasedData: dcrc,
+                )),
               ),
             ),
             Container(
@@ -70,7 +74,7 @@ class RSCBar extends StatelessWidget {
                   border: Border.all(color: Colors.blueGrey.shade100),
                   borderRadius: BorderRadius.circular(3),
                 ),
-                child: CustomPaint(painter: BarChartPainter(data: ufec)),
+                child: CustomPaint(painter: BarChartPainter(max: 1000, increasedData: ufec)),
               ),
             ),
             Container(
@@ -82,7 +86,7 @@ class RSCBar extends StatelessWidget {
                   border: Border.all(color: Colors.blueGrey.shade100),
                   borderRadius: BorderRadius.circular(3),
                 ),
-                child: CustomPaint(painter: BarChartPainter(data: ucrc)),
+                child: CustomPaint(painter: BarChartPainter(max: 1000, increasedData: ucrc)),
               ),
             ),
           ],

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 class LineChartPainter extends CustomPainter {
   final List<int?> data;
-  LineChartPainter(this.data);
+  final bool invert;
+  LineChartPainter(this.data, this.invert);
 
   @override
   bool shouldRepaint(LineChartPainter oldDelegate) {
@@ -36,10 +37,15 @@ class LineChartPainter extends CustomPainter {
       final val2 = data[i + 1];
       final bool validPair = _validPair(val1, val2);
       if (!validPair) continue;
+
       final double x1 = i * step;
-      final double y1 = _calcScale(min, max, val1!) * size.height;
+      final double scale1 = _calcScale(min, max, val1!);
+      final double y1 = invert ? scale1 * size.height : size.height - scale1 * size.height;
+
       final double x2 = (i + 1) * step;
-      final double y2 = _calcScale(min, max, val2!) * size.height;
+      final double scale2 = _calcScale(min, max, val2!);
+      final double y2 = invert ? scale2 * size.height : size.height - scale2 * size.height;
+
       canvas.drawLine(Offset(x1, y1), Offset(x2, y2), _linePaint);
     }
   }
@@ -50,5 +56,7 @@ class LineChartPainter extends CustomPainter {
   Paint get _linePaint => Paint()
     ..color = Colors.blueGrey.shade800
     ..strokeWidth = 1;
-  Paint get _meshPaint => Paint()..color = Colors.blueGrey.shade100;
+  Paint get _meshPaint => Paint()
+    ..color = Colors.blueGrey.shade100
+    ..strokeWidth = 0.5;
 }

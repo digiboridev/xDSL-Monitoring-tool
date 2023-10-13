@@ -29,7 +29,7 @@ class DB extends _$DB {
       onCreate: (migrator) => migrator.createAll(),
       beforeOpen: (openingDetails) async {
         if (kDebugMode && openingDetails.hadUpgrade) {
-          print('drift beforeOpen');
+          debugPrint('drift beforeOpen');
           final m = this.createMigrator(); // changed to this
           for (final table in allTables) {
             await m.deleteTable(table.actualTableName);

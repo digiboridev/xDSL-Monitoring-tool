@@ -326,7 +326,7 @@ class TimelinePainter extends CustomPainter {
       datePainter.paint(canvas, Offset(x - 20, 20));
     }
 
-    print('TimelinePainter: ${DateTime.now().difference(paintTime).inMicroseconds}us');
+    debugPrint('TimelinePainter: ${DateTime.now().difference(paintTime).inMicroseconds}us');
   }
 }
 
@@ -385,7 +385,7 @@ class StatusPainter extends CustomPainter {
       }
     }
 
-    print('StatusPainter: ${DateTime.now().difference(paintTime).inMicroseconds}us');
+    debugPrint('StatusPainter: ${DateTime.now().difference(paintTime).inMicroseconds}us');
   }
 }
 
@@ -443,6 +443,6 @@ class RSCPainter extends CustomPainter {
       canvas.drawLine(Offset(x, halfHeight + y / 2), Offset(x, halfHeight - y / 2), paint);
     }
 
-    print('RSCPainter: ${DateTime.now().difference(paintTime).inMicroseconds}us');
+    debugPrint('RSCPainter: ${DateTime.now().difference(paintTime).inMicroseconds}us');
   }
 }

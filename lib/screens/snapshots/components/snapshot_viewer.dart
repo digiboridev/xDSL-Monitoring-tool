@@ -1,11 +1,10 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:xdslmt/components/crc_line.dart';
-import 'package:xdslmt/components/fec_line.dart';
-import 'package:xdslmt/components/snrm.dart';
-import 'package:xdslmt/components/speed_line.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
+import 'package:xdslmt/data/models/snapshot_stats.dart';
 import 'package:xdslmt/data/repositories/stats_repo.dart';
+import 'package:xdslmt/utils/formatters.dart';
 import 'package:xdslmt/widgets/text_styles.dart';
 
 class SnapshotViewer extends StatefulWidget {
@@ -19,12 +18,16 @@ class SnapshotViewer extends StatefulWidget {
 class _SnapshotViewerState extends State<SnapshotViewer> {
   late final statsRepository = context.read<StatsRepository>();
   List<LineStats> statsList = [];
+  SnapshotStats? snapshotStats;
 
   @override
   void initState() {
     super.initState();
     statsRepository.lineStatsBySnapshot(widget.snapshotId).then((data) {
       if (mounted) setState(() => statsList = data);
+    });
+    statsRepository.snapshotStatsById(widget.snapshotId).then((data) {
+      if (mounted) setState(() => snapshotStats = data);
     });
   }
 
@@ -53,32 +56,393 @@ class _SnapshotViewerState extends State<SnapshotViewer> {
         ),
         backgroundColor: Colors.blueGrey.shade900,
       ),
-      body: ListView(
-        children: [
-          Column(
-            children: [
-              Container(
-                color: Colors.blueGrey.shade50,
-                child: SpeedLineExpandable(
-                  statsList: statsList,
-                ),
-              ),
-              Container(
-                color: Colors.blueGrey.shade50,
-                child: SNRMExpandable(collection: statsList),
-              ),
-              Container(
-                color: Colors.blueGrey.shade50,
-                child: FECLineExpandable(collection: statsList),
-              ),
-              Container(
-                color: Colors.blueGrey.shade50,
-                child: CRCLineExpandable(collection: statsList),
-              ),
-            ],
-          ),
-        ],
+      body: SizedBox.expand(
+        child: body(),
       ),
     );
+  }
+
+  Widget body() {
+    return Column(
+      children: [
+        if (statsList.isNotEmpty) InteractiveChart(statsList: statsList),
+      ],
+    );
+  }
+}
+
+class InteractiveChart extends StatefulWidget {
+  final List<LineStats> statsList;
+  const InteractiveChart({
+    Key? key,
+    required this.statsList,
+  }) : super(key: key);
+
+  @override
+  State<InteractiveChart> createState() => _InteractiveChartState();
+}
+
+class _InteractiveChartState extends State<InteractiveChart> with TickerProviderStateMixin {
+  double scale = 1.0;
+  double offset = 0.0;
+  double pScale = 1.0;
+  double pOffset = 0.0;
+
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double scaledOffset = offset * scale;
+    int startStamp = widget.statsList.first.time.millisecondsSinceEpoch;
+    int endStamp = widget.statsList.last.time.millisecondsSinceEpoch;
+    int tDiff = endStamp - startStamp;
+    double widthInTime = width / tDiff * scale;
+
+    return SizedBox(
+      // height: 200,
+      width: double.infinity,
+      child: GestureDetector(
+        onScaleStart: (details) {
+          pScale = scale;
+          pOffset = offset;
+        },
+        onScaleUpdate: (details) {
+          setState(() {
+            scale = pScale * details.scale;
+            offset = offset + details.focalPointDelta.dx / scale;
+            if (offset > width) offset = width;
+            if (offset < 0 - width) offset = 0 - width;
+            if (scale < 1.0) scale = 1;
+          });
+        },
+        child: Column(
+          children: [
+            RepaintBoundary(
+              child: Container(
+                color: Colors.blueGrey.shade900,
+                height: 75,
+                width: double.infinity,
+                child: CustomPaint(
+                  painter: TimelinePainter(
+                    start: widget.statsList.first.time,
+                    end: widget.statsList.last.time,
+                    scale: scale,
+                    offset: offset,
+                    scaledOffset: scaledOffset,
+                    startStamp: startStamp,
+                    endStamp: endStamp,
+                    tDiff: tDiff,
+                    widthInTime: widthInTime,
+                  ),
+                ),
+              ),
+            ),
+            RepaintBoundary(
+              child: Container(
+                color: Colors.blueGrey.shade900,
+                height: 75,
+                width: double.infinity,
+                child: CustomPaint(
+                  painter: StatusPainter(
+                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, s: e.status)),
+                    scale: scale,
+                    offset: offset,
+                    scaledOffset: scaledOffset,
+                    startStamp: startStamp,
+                    endStamp: endStamp,
+                    tDiff: tDiff,
+                    widthInTime: widthInTime,
+                  ),
+                ),
+              ),
+            ),
+            RepaintBoundary(
+              child: Container(
+                color: Colors.blueGrey.shade900,
+                height: 50,
+                width: double.infinity,
+                child: CustomPaint(
+                  painter: RSCPainter(
+                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downFECIncr ?? 0)),
+                    scale: scale,
+                    offset: offset,
+                    scaledOffset: scaledOffset,
+                    startStamp: startStamp,
+                    endStamp: endStamp,
+                    tDiff: tDiff,
+                    widthInTime: widthInTime,
+                  ),
+                ),
+              ),
+            ),
+            RepaintBoundary(
+              child: Container(
+                color: Colors.blueGrey.shade900,
+                height: 50,
+                width: double.infinity,
+                child: CustomPaint(
+                  painter: RSCPainter(
+                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downCRCIncr ?? 0)),
+                    scale: scale,
+                    offset: offset,
+                    scaledOffset: scaledOffset,
+                    startStamp: startStamp,
+                    endStamp: endStamp,
+                    tDiff: tDiff,
+                    widthInTime: widthInTime,
+                  ),
+                ),
+              ),
+            ),
+            RepaintBoundary(
+              child: Container(
+                color: Colors.blueGrey.shade900,
+                height: 50,
+                width: double.infinity,
+                child: CustomPaint(
+                  painter: RSCPainter(
+                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upFECIncr ?? 0)),
+                    scale: scale,
+                    offset: offset,
+                    scaledOffset: scaledOffset,
+                    startStamp: startStamp,
+                    endStamp: endStamp,
+                    tDiff: tDiff,
+                    widthInTime: widthInTime,
+                  ),
+                ),
+              ),
+            ),
+            RepaintBoundary(
+              child: Container(
+                color: Colors.blueGrey.shade900,
+                height: 50,
+                width: double.infinity,
+                child: CustomPaint(
+                  painter: RSCPainter(
+                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upCRCIncr ?? 0)),
+                    scale: scale,
+                    offset: offset,
+                    scaledOffset: scaledOffset,
+                    startStamp: startStamp,
+                    endStamp: endStamp,
+                    tDiff: tDiff,
+                    widthInTime: widthInTime,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Timestamp and value
+typedef TimeValue = ({int t, int v});
+
+class TimelinePainter extends CustomPainter {
+  final DateTime start;
+  final DateTime end;
+  final double scale;
+  final double offset;
+  final double scaledOffset;
+  final int startStamp;
+  final int endStamp;
+  final int tDiff;
+  final double widthInTime;
+  TimelinePainter({
+    required this.start,
+    required this.end,
+    required this.scale,
+    required this.offset,
+    required this.scaledOffset,
+    required this.startStamp,
+    required this.endStamp,
+    required this.tDiff,
+    required this.widthInTime,
+  });
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paintTime = DateTime.now();
+
+    final paint = Paint()
+      ..color = Colors.cyan.shade100
+      ..strokeWidth = 1
+      ..style = PaintingStyle.stroke;
+
+    final double halfHeight = size.height / 2;
+    int ceilScale = scale.floor();
+    int scaleSteps = 100 * ceilScale;
+    int timeSteps = 4 * ceilScale;
+
+    for (int i = 0; i < scaleSteps; i++) {
+      final double x = tDiff / scaleSteps * i * widthInTime + scaledOffset;
+      final double y = 10;
+
+      // skip offscreen points render
+      if (x < 0) continue;
+      if (x > size.width) continue;
+
+      // draw line
+      canvas.drawLine(Offset(x, halfHeight + y / 2), Offset(x, halfHeight - y / 2), paint);
+    }
+
+    for (int i = 0; i <= timeSteps; i++) {
+      final double x = tDiff / timeSteps * i * widthInTime + scaledOffset;
+      final double y = 20;
+
+      // skip offscreen points render
+      if (x < 0) continue;
+      if (x > size.width) continue;
+
+      final DateTime timePoint = DateTime.fromMillisecondsSinceEpoch((startStamp + tDiff / 4 * i).toInt());
+
+      canvas.drawLine(Offset(x, halfHeight + y / 2), Offset(x, halfHeight - y / 2), paint);
+
+      // draw time
+      final timePainter = TextPainter(
+        text: TextSpan(
+          text: timePoint.numhms,
+          style: TextStyle(color: Colors.cyan.shade100, fontSize: 8),
+        ),
+        textDirection: TextDirection.ltr,
+      );
+      final datePainter = TextPainter(
+        text: TextSpan(
+          text: timePoint.numymd,
+          style: TextStyle(color: Colors.cyan.shade100, fontSize: 8),
+        ),
+        textDirection: TextDirection.ltr,
+      );
+
+      timePainter.layout();
+      timePainter.paint(canvas, Offset(x - 15, 10));
+      datePainter.layout();
+      datePainter.paint(canvas, Offset(x - 20, 20));
+    }
+
+    print('TimelinePainter: ${DateTime.now().difference(paintTime).inMicroseconds}us');
+  }
+}
+
+/// Timestamp and status
+typedef TimeStatus = ({int t, SampleStatus s});
+
+class StatusPainter extends CustomPainter {
+  final Iterable<TimeStatus> data;
+  final double scale;
+  final double offset;
+  final double scaledOffset;
+  final int startStamp;
+  final int endStamp;
+  final int tDiff;
+  final double widthInTime;
+  StatusPainter({
+    required this.data,
+    required this.scale,
+    required this.offset,
+    required this.scaledOffset,
+    required this.startStamp,
+    required this.endStamp,
+    required this.tDiff,
+    required this.widthInTime,
+  });
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paintTime = DateTime.now();
+
+    for (int i = 0; i < data.length - 1; i++) {
+      final val = data.elementAt(i);
+      final next = data.elementAt(i + 1);
+      final double halfHeight = size.height / 2;
+      final double x = (val.t - startStamp) * widthInTime + scaledOffset;
+      final double x2 = (next.t - startStamp) * widthInTime + scaledOffset;
+
+      // skip offscreen points render
+      if (x < 0) continue;
+      if (x > size.width) continue;
+
+      final paint = Paint()
+        ..strokeWidth = 10
+        ..style = PaintingStyle.stroke;
+
+      final status = val.s;
+      if (status == SampleStatus.samplingError) {
+        canvas.drawLine(Offset(x, halfHeight), Offset(x2, halfHeight), paint..color = Colors.red);
+      } else if (status == SampleStatus.connectionDown) {
+        canvas.drawLine(Offset(x, halfHeight), Offset(x2, halfHeight), paint..color = Colors.black);
+      } else {
+        canvas.drawLine(Offset(x, halfHeight), Offset(x2, halfHeight), paint..color = Colors.cyan.shade100);
+      }
+    }
+
+    print('StatusPainter: ${DateTime.now().difference(paintTime).inMicroseconds}us');
+  }
+}
+
+class RSCPainter extends CustomPainter {
+  final Iterable<TimeValue> data;
+  final double scale;
+  final double offset;
+  final double scaledOffset;
+  final int startStamp;
+  final int endStamp;
+  final int tDiff;
+  final double widthInTime;
+  RSCPainter({
+    required this.data,
+    required this.scale,
+    required this.offset,
+    required this.scaledOffset,
+    required this.startStamp,
+    required this.endStamp,
+    required this.tDiff,
+    required this.widthInTime,
+  });
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (data.isEmpty) return;
+
+    final paintTime = DateTime.now();
+
+    final paint = Paint()
+      ..color = Colors.cyan.shade100.withOpacity(0.5)
+      ..strokeWidth = 1
+      ..style = PaintingStyle.stroke;
+
+    final double halfHeight = size.height / 2;
+
+    canvas.drawLine(Offset(scaledOffset, halfHeight), Offset(scaledOffset + size.width * scale, halfHeight), paint);
+
+    // int maxH = data.map((e) => e.v).reduce((value, element) => value > element ? value : element);
+    // TODO maxH should be calculated from data
+    int maxH = 1000;
+    for (int i = 0; i < data.length - 1; i++) {
+      final val = data.elementAt(i);
+      final double x = (val.t - startStamp) * widthInTime + scaledOffset;
+      final double y = (val.v / maxH).clamp(0, 1) * size.height;
+
+      // skip offscreen points render
+      if (x < 0) continue;
+      if (x > size.width) continue;
+
+      // draw line
+      canvas.drawLine(Offset(x, halfHeight + y / 2), Offset(x, halfHeight - y / 2), paint);
+    }
+
+    print('RSCPainter: ${DateTime.now().difference(paintTime).inMicroseconds}us');
   }
 }

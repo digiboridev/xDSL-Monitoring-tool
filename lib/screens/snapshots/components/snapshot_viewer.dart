@@ -63,10 +63,14 @@ class _SnapshotViewerState extends State<SnapshotViewer> {
   }
 
   Widget body() {
-    return Column(
-      children: [
-        if (statsList.isNotEmpty) InteractiveChart(statsList: statsList),
-      ],
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Column(
+        children: [
+          SizedBox(height: 200),
+          if (statsList.isNotEmpty) InteractiveChart(statsList: statsList),
+        ],
+      ),
     );
   }
 }
@@ -112,19 +116,16 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
             if (offset > width) offset = width;
             if (offset < 0 - width) offset = 0 - width;
             if (scale < 1.0) scale = 1;
-            print(scale);
-            print(offset);
+            // print(scale);
+            // print(offset);
           });
         },
         child: Column(
           children: [
-            SizedBox(
-              height: 200,
-            ),
             RepaintBoundary(
               child: Container(
                 color: Colors.blueGrey.shade900,
-                height: 75,
+                height: 50,
                 width: double.infinity,
                 child: CustomPaint(
                   painter: TimelinePainter(
@@ -166,15 +167,11 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                 height: 50,
                 width: double.infinity,
                 child: CustomPaint(
-                  painter: RSCPainter(
+                  painter: RSCPathPainter(
                     data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downFECIncr ?? 0)),
                     scale: scale,
                     offset: offset,
-                    scaledOffset: scaledOffset,
-                    startStamp: startStamp,
-                    endStamp: endStamp,
-                    tDiff: tDiff,
-                    widthInTime: widthInTime,
+                    key: 'downFECIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
                   ),
                 ),
               ),
@@ -186,10 +183,40 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                 width: double.infinity,
                 child: CustomPaint(
                   painter: RSCPathPainter(
-                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downFECIncr ?? 0)),
+                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upFECIncr ?? 0)),
                     scale: scale,
                     offset: offset,
-                    key: 'downFECIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                    key: 'upFECIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                  ),
+                ),
+              ),
+            ),
+            RepaintBoundary(
+              child: Container(
+                color: Colors.blueGrey.shade900,
+                height: 50,
+                width: double.infinity,
+                child: CustomPaint(
+                  painter: RSCPathPainter(
+                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downCRCIncr ?? 0)),
+                    scale: scale,
+                    offset: offset,
+                    key: 'downCRCIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                  ),
+                ),
+              ),
+            ),
+            RepaintBoundary(
+              child: Container(
+                color: Colors.blueGrey.shade900,
+                height: 50,
+                width: double.infinity,
+                child: CustomPaint(
+                  painter: RSCPathPainter(
+                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upCRCIncr ?? 0)),
+                    scale: scale,
+                    offset: offset,
+                    key: 'upCRCIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
                   ),
                 ),
               ),
@@ -238,55 +265,50 @@ class TimelinePainter extends CustomPainter {
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
 
-    final double halfHeight = size.height / 2;
+    final double baseLine = size.height / 2.5;
     int ceilScale = scale.floor();
     int scaleSteps = 100 * ceilScale;
     int timeSteps = 4 * ceilScale;
+    double timeStep = tDiff / timeSteps;
 
+    // Scale steps
     for (int i = 0; i < scaleSteps; i++) {
       final double x = tDiff / scaleSteps * i * widthInTime + scaledOffset;
-      final double y = 10;
+      final double y = size.height / 8;
 
       // skip offscreen points render
       if (x < 0) continue;
       if (x > size.width) continue;
 
-      // draw line
-      canvas.drawLine(Offset(x, halfHeight + y / 2), Offset(x, halfHeight - y / 2), paint);
+      // draw scale step line
+      canvas.drawLine(Offset(x, baseLine + y / 2), Offset(x, baseLine - y / 2), paint);
     }
 
+    // Time steps
     for (int i = 0; i <= timeSteps; i++) {
-      final double x = tDiff / timeSteps * i * widthInTime + scaledOffset;
-      final double y = 20;
+      final double curTimeStep = timeStep * i;
+      final double x = curTimeStep * widthInTime + scaledOffset;
+      final double y = size.height / 4;
 
       // skip offscreen points render
       if (x < 0) continue;
       if (x > size.width) continue;
 
-      final DateTime timePoint = DateTime.fromMillisecondsSinceEpoch((startStamp + tDiff / 4 * i).toInt());
-
-      canvas.drawLine(Offset(x, halfHeight + y / 2), Offset(x, halfHeight - y / 2), paint);
+      // draw accent scale step line
+      canvas.drawLine(Offset(x, baseLine + y / 2), Offset(x, baseLine - y / 2), paint);
 
       // draw time
+      final curTimeDate = DateTime.fromMillisecondsSinceEpoch((startStamp + curTimeStep).toInt());
       final timePainter = TextPainter(
-        text: TextSpan(
-          text: timePoint.numhms,
-          style: TextStyle(color: Colors.cyan.shade100, fontSize: 8),
-        ),
-        textDirection: TextDirection.ltr,
-      );
-      final datePainter = TextPainter(
-        text: TextSpan(
-          text: timePoint.numymd,
-          style: TextStyle(color: Colors.cyan.shade100, fontSize: 8),
-        ),
-        textDirection: TextDirection.ltr,
-      );
+          text: TextSpan(
+            text: curTimeDate.numhms + '\n' + curTimeDate.numymd,
+            style: TextStyle(color: Colors.cyan.shade100, fontSize: 8),
+          ),
+          textDirection: TextDirection.ltr,
+          textAlign: TextAlign.center);
 
       timePainter.layout();
-      timePainter.paint(canvas, Offset(x - 15, 10));
-      datePainter.layout();
-      datePainter.paint(canvas, Offset(x - 20, 20));
+      timePainter.paint(canvas, Offset(x - 20, y / 2 + baseLine));
     }
 
     debugPrint('TimelinePainter: ${DateTime.now().difference(paintTime).inMicroseconds}us');

@@ -112,10 +112,15 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
             if (offset > width) offset = width;
             if (offset < 0 - width) offset = 0 - width;
             if (scale < 1.0) scale = 1;
+            print(scale);
+            print(offset);
           });
         },
         child: Column(
           children: [
+            SizedBox(
+              height: 200,
+            ),
             RepaintBoundary(
               child: Container(
                 color: Colors.blueGrey.shade900,
@@ -180,46 +185,8 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                 height: 50,
                 width: double.infinity,
                 child: CustomPaint(
-                  painter: RSCPainter(
-                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downCRCIncr ?? 0)),
-                    scale: scale,
-                    offset: offset,
-                    scaledOffset: scaledOffset,
-                    startStamp: startStamp,
-                    endStamp: endStamp,
-                    tDiff: tDiff,
-                    widthInTime: widthInTime,
-                  ),
-                ),
-              ),
-            ),
-            RepaintBoundary(
-              child: Container(
-                color: Colors.blueGrey.shade900,
-                height: 50,
-                width: double.infinity,
-                child: CustomPaint(
-                  painter: RSCPainter(
-                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upFECIncr ?? 0)),
-                    scale: scale,
-                    offset: offset,
-                    scaledOffset: scaledOffset,
-                    startStamp: startStamp,
-                    endStamp: endStamp,
-                    tDiff: tDiff,
-                    widthInTime: widthInTime,
-                  ),
-                ),
-              ),
-            ),
-            RepaintBoundary(
-              child: Container(
-                color: Colors.blueGrey.shade900,
-                height: 50,
-                width: double.infinity,
-                child: CustomPaint(
-                  painter: RSCPainter(
-                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upCRCIncr ?? 0)),
+                  painter: RSCPathPainter(
+                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downFECIncr ?? 0)),
                     scale: scale,
                     offset: offset,
                     scaledOffset: scaledOffset,
@@ -444,5 +411,73 @@ class RSCPainter extends CustomPainter {
     }
 
     debugPrint('RSCPainter: ${DateTime.now().difference(paintTime).inMicroseconds}us');
+  }
+}
+
+class RSCPathPainter extends CustomPainter {
+  final Iterable<TimeValue> data;
+  final double scale;
+  final double offset;
+  final double scaledOffset;
+  final int startStamp;
+  final int endStamp;
+  final int tDiff;
+  final double widthInTime;
+  RSCPathPainter({
+    required this.data,
+    required this.scale,
+    required this.offset,
+    required this.scaledOffset,
+    required this.startStamp,
+    required this.endStamp,
+    required this.tDiff,
+    required this.widthInTime,
+  });
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (data.isEmpty) return;
+
+    final paintTime = DateTime.now();
+
+    final paint = Paint()
+      ..color = Colors.cyan.shade100.withOpacity(1)
+      ..strokeWidth = 1
+      ..style = PaintingStyle.stroke;
+
+    final double halfHeight = size.height / 2;
+
+    canvas.drawLine(Offset(scaledOffset, halfHeight), Offset(scaledOffset + size.width * scale, halfHeight), paint);
+
+    final path = Path();
+    int maxV = 1;
+
+    for (int i = 0; i < data.length; i++) {
+      final v1 = data.elementAt(i);
+      final x1 = v1.t - startStamp;
+      final y1 = v1.v;
+
+      path.moveTo(x1.toDouble(), 0 - y1 / 2);
+      path.lineTo(x1.toDouble(), 0 + y1 / 2);
+
+      if (v1.v > maxV) maxV = v1.v;
+    }
+
+    final clampMatrix = Matrix4.identity();
+    clampMatrix.scale(1 / tDiff, 1 / maxV);
+    clampMatrix.translate(1.0, maxV / 2);
+    final clampedPath = path.transform(clampMatrix.storage);
+
+    final displayMatrix = Matrix4.identity();
+    displayMatrix.scale(size.width, size.height);
+    displayMatrix.scale(scale, 1.0);
+    displayMatrix.translate(offset / size.width, 0.0);
+    final displayPath = clampedPath.transform(displayMatrix.storage);
+
+    canvas.drawPath(displayPath, paint);
+    debugPrint('RSCPathPainter: ${DateTime.now().difference(paintTime).inMicroseconds}us');
   }
 }

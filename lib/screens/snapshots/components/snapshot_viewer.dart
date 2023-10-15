@@ -65,11 +65,15 @@ class _SnapshotViewerState extends State<SnapshotViewer> {
   Widget body() {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
-      child: Column(
-        children: [
-          SizedBox(height: 200),
-          if (statsList.isNotEmpty) InteractiveChart(statsList: statsList),
-        ],
+      child: Container(
+        color: Colors.blueGrey.shade900,
+        padding: EdgeInsets.symmetric(horizontal: 8),
+        child: Column(
+          children: [
+            SizedBox(height: 200),
+            if (statsList.isNotEmpty) InteractiveChart(statsList: statsList),
+          ],
+        ),
       ),
     );
   }
@@ -94,17 +98,9 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double scaledOffset = offset * scale;
-    int startStamp = widget.statsList.first.time.millisecondsSinceEpoch;
-    int endStamp = widget.statsList.last.time.millisecondsSinceEpoch;
-    int tDiff = endStamp - startStamp;
-    double widthInTime = width / tDiff * scale;
-
-    return SizedBox(
-      // height: 200,
-      width: double.infinity,
-      child: GestureDetector(
+    return LayoutBuilder(builder: (_, c) {
+      double width = c.maxWidth;
+      return GestureDetector(
         onScaleStart: (details) {
           pScale = scale;
           pOffset = offset;
@@ -113,18 +109,23 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
           setState(() {
             scale = pScale * details.scale;
             offset = offset + details.focalPointDelta.dx / scale;
-            if (offset > width) offset = width;
-            if (offset < 0 - width) offset = 0 - width;
+
+            // Prevent scrolling out of bounds
+            if (offset > width / scale - width / scale) offset = width / scale - width / scale;
+            if (offset < 0 - (width - (width / scale))) offset = 0 - (width - (width / scale));
+
+            // Prevent scaling out of bounds
             if (scale < 1.0) scale = 1;
-            // print(scale);
-            // print(offset);
+            if (scale == 1.0 && offset != 1) offset = 1;
+
+            debugPrint(scale.toString());
+            debugPrint(offset.toString());
           });
         },
         child: Column(
           children: [
             RepaintBoundary(
               child: Container(
-                color: Colors.blueGrey.shade900,
                 height: 50,
                 width: double.infinity,
                 child: CustomPaint(
@@ -133,37 +134,26 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     end: widget.statsList.last.time,
                     scale: scale,
                     offset: offset,
-                    scaledOffset: scaledOffset,
-                    startStamp: startStamp,
-                    endStamp: endStamp,
-                    tDiff: tDiff,
-                    widthInTime: widthInTime,
                   ),
                 ),
               ),
             ),
             RepaintBoundary(
               child: Container(
-                color: Colors.blueGrey.shade900,
-                height: 75,
+                height: 16,
                 width: double.infinity,
                 child: CustomPaint(
-                  painter: StatusPainter(
+                  painter: StatusPathPainter(
                     data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, s: e.status)),
                     scale: scale,
                     offset: offset,
-                    scaledOffset: scaledOffset,
-                    startStamp: startStamp,
-                    endStamp: endStamp,
-                    tDiff: tDiff,
-                    widthInTime: widthInTime,
+                    key: 'status' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
                   ),
                 ),
               ),
             ),
             RepaintBoundary(
               child: Container(
-                color: Colors.blueGrey.shade900,
                 height: 50,
                 width: double.infinity,
                 child: CustomPaint(
@@ -178,7 +168,6 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
             ),
             RepaintBoundary(
               child: Container(
-                color: Colors.blueGrey.shade900,
                 height: 50,
                 width: double.infinity,
                 child: CustomPaint(
@@ -193,7 +182,6 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
             ),
             RepaintBoundary(
               child: Container(
-                color: Colors.blueGrey.shade900,
                 height: 50,
                 width: double.infinity,
                 child: CustomPaint(
@@ -208,7 +196,6 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
             ),
             RepaintBoundary(
               child: Container(
-                color: Colors.blueGrey.shade900,
                 height: 50,
                 width: double.infinity,
                 child: CustomPaint(
@@ -223,8 +210,8 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
             ),
           ],
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -236,25 +223,7 @@ class TimelinePainter extends CustomPainter {
   final DateTime end;
   final double scale;
   final double offset;
-  final double scaledOffset;
-  final int startStamp;
-  final int endStamp;
-  final int tDiff;
-  final double widthInTime;
-  TimelinePainter({
-    required this.start,
-    required this.end,
-    required this.scale,
-    required this.offset,
-    required this.scaledOffset,
-    required this.startStamp,
-    required this.endStamp,
-    required this.tDiff,
-    required this.widthInTime,
-  });
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+  TimelinePainter({required this.start, required this.end, required this.scale, required this.offset});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -262,8 +231,11 @@ class TimelinePainter extends CustomPainter {
 
     final paint = Paint()
       ..color = Colors.cyan.shade100
-      ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
+    final int tDiff = end.millisecondsSinceEpoch - start.millisecondsSinceEpoch;
+    final double scaledOffset = offset * scale;
+    final double widthInTime = size.width / tDiff * scale;
+    final int startStamp = start.millisecondsSinceEpoch;
 
     final double baseLine = size.height / 2.5;
     int ceilScale = scale.floor();
@@ -277,8 +249,8 @@ class TimelinePainter extends CustomPainter {
       final double y = size.height / 8;
 
       // skip offscreen points render
-      if (x < 0) continue;
-      if (x > size.width) continue;
+      if (x < 0 - 20) continue;
+      if (x > size.width + 20) continue;
 
       // draw scale step line
       canvas.drawLine(Offset(x, baseLine + y / 2), Offset(x, baseLine - y / 2), paint);
@@ -291,33 +263,56 @@ class TimelinePainter extends CustomPainter {
       final double y = size.height / 4;
 
       // skip offscreen points render
-      if (x < 0) continue;
-      if (x > size.width) continue;
+      // + 20px margin to prevent cutting time on the edges
+      if (x < 0 - 20) continue;
+      if (x > size.width + 20) continue;
 
       // draw accent scale step line
       canvas.drawLine(Offset(x, baseLine + y / 2), Offset(x, baseLine - y / 2), paint);
 
-      // draw time
+      // Make time painter
       final curTimeDate = DateTime.fromMillisecondsSinceEpoch((startStamp + curTimeStep).toInt());
       final timePainter = TextPainter(
-          text: TextSpan(
-            text: curTimeDate.numhms + '\n' + curTimeDate.numymd,
-            style: TextStyle(color: Colors.cyan.shade100, fontSize: 8),
-          ),
-          textDirection: TextDirection.ltr,
-          textAlign: TextAlign.center);
-
+        text: TextSpan(
+          text: curTimeDate.numhms + '\n' + curTimeDate.numymd,
+          style: TextStyle(color: Colors.cyan.shade100, fontSize: 8),
+        ),
+        textDirection: TextDirection.ltr,
+        textAlign: TextAlign.center,
+      );
       timePainter.layout();
-      timePainter.paint(canvas, Offset(x - 20, y / 2 + baseLine));
+
+      // Draw first and last time inside scale bounds
+      if (i == 0) {
+        timePainter.paint(canvas, Offset(x, y / 2 + baseLine));
+        continue;
+      }
+      if (i == timeSteps) {
+        timePainter.paint(canvas, Offset(x - timePainter.width, y / 2 + baseLine));
+        continue;
+      }
+
+      // Draw time in the middle of the step
+      timePainter.paint(canvas, Offset(x - timePainter.width / 2, y / 2 + baseLine));
     }
 
     debugPrint('TimelinePainter: ${DateTime.now().difference(paintTime).inMicroseconds}us');
+  }
+
+  @override
+  bool shouldRepaint(covariant TimelinePainter oldDelegate) {
+    bool sameStart = start == oldDelegate.start;
+    bool sameEnd = end == oldDelegate.end;
+    bool sameScale = scale == oldDelegate.scale;
+    bool sameOffset = offset == oldDelegate.offset;
+    return !(sameStart && sameEnd && sameScale && sameOffset);
   }
 }
 
 /// Timestamp and status
 typedef TimeStatus = ({int t, SampleStatus s});
 
+@deprecated
 class StatusPainter extends CustomPainter {
   final Iterable<TimeStatus> data;
   final double scale;
@@ -374,6 +369,7 @@ class StatusPainter extends CustomPainter {
   }
 }
 
+@deprecated
 class RSCPainter extends CustomPainter {
   final Iterable<TimeValue> data;
   final double scale;
@@ -440,8 +436,7 @@ class RSCPathPainter extends CustomPainter {
 
   static final Map<String, Path> pathsPool = {};
   static final p = Paint()
-    ..color = Colors.cyan.shade100.withOpacity(1)
-    ..strokeWidth = 1
+    ..color = Colors.cyan.shade100
     ..style = PaintingStyle.stroke;
   int get startStamp => data.first.t;
   int get tDiff => data.last.t - data.first.t;
@@ -487,6 +482,7 @@ class RSCPathPainter extends CustomPainter {
     canvas.drawLine(lineStart, lineEnd, p);
 
     // Draw data
+    // pathsPool.clear();
     final Path dataPath = pathsPool.putIfAbsent(key, _makeDataPath);
     final Matrix4 displayMatrix = Matrix4.identity();
     displayMatrix.scale(size.width, size.height);
@@ -502,6 +498,93 @@ class RSCPathPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(RSCPathPainter oldDelegate) {
+    bool sameData = data.length == oldDelegate.data.length;
+    bool sameScale = scale == oldDelegate.scale;
+    bool sameOffset = offset == oldDelegate.offset;
+    bool sameKey = key == oldDelegate.key;
+    return !(sameData && sameScale && sameOffset && sameKey);
+  }
+}
+
+class StatusPathPainter extends CustomPainter {
+  final Iterable<({int t, SampleStatus s})> data;
+  final double scale;
+  final double offset;
+  final String key;
+  StatusPathPainter({required this.data, required this.scale, required this.offset, required this.key});
+
+  static final Map<String, ({Path u, Path d, Path e})> pathsPool = {};
+  static final p = Paint()..style = PaintingStyle.stroke;
+  int get startStamp => data.first.t;
+  int get tDiff => data.last.t - data.first.t;
+
+  ({Path u, Path d, Path e}) _makeDataPath() {
+    debugPrint('new path: $key');
+
+    Path pathUp = Path();
+    Path pathDown = Path();
+    Path pathError = Path();
+
+    // Layout data as three lines on the timeline (x: time)
+    for (int i = 0; i < data.length; i++) {
+      final e = data.elementAt(i);
+      final x = e.t - data.first.t;
+      final SampleStatus status = e.s;
+
+      if (status == SampleStatus.connectionUp) {
+        pathUp.moveTo(x.toDouble(), 0);
+        pathUp.lineTo(x.toDouble(), 1);
+      }
+      if (status == SampleStatus.connectionDown) {
+        pathDown.moveTo(x.toDouble(), 0);
+        pathDown.lineTo(x.toDouble(), 1);
+      }
+      if (status == SampleStatus.samplingError) {
+        pathError.moveTo(x.toDouble(), 0);
+        pathError.lineTo(x.toDouble(), 1);
+      }
+    }
+
+    // Clamp path to 0-1 range
+    // Makes it more universal to draw and independent of the view
+    // So it can be coputed once, memozied or even cached
+    final Matrix4 clampMatrix = Matrix4.identity();
+    clampMatrix.scale(1 / tDiff, 1);
+    pathUp = pathUp.transform(clampMatrix.storage);
+    pathDown = pathDown.transform(clampMatrix.storage);
+    pathError = pathError.transform(clampMatrix.storage);
+
+    return (u: pathUp, d: pathDown, e: pathError);
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // Debug
+    final paintStart = DateTime.now();
+
+    // Draw data
+    // pathsPool.clear();
+    // final ({Path u, Path d, Path e}) dataPath = _makeDataPath();
+    final ({Path u, Path d, Path e}) dataPath = pathsPool.putIfAbsent(key, _makeDataPath);
+    final Matrix4 displayMatrix = Matrix4.identity();
+    displayMatrix.scale(size.width, size.height);
+    displayMatrix.scale(scale, 1.0);
+    displayMatrix.translate(offset / size.width, 0.0);
+
+    final Path pathU = dataPath.u.transform(displayMatrix.storage);
+    canvas.drawPath(pathU, p..color = Colors.cyan.shade100);
+    final Path pathD = dataPath.d.transform(displayMatrix.storage);
+    canvas.drawPath(pathD, p..color = Colors.black);
+    final Path pathE = dataPath.e.transform(displayMatrix.storage);
+    canvas.drawPath(pathE, p..color = Colors.red);
+
+    // Debug
+    final paintEnd = DateTime.now();
+    debugPrint('StatusPathPainter: ${paintEnd.difference(paintStart).inMicroseconds}us');
+  }
+
+  @override
+  bool shouldRepaint(StatusPathPainter oldDelegate) {
     bool sameData = data.length == oldDelegate.data.length;
     bool sameScale = scale == oldDelegate.scale;
     bool sameOffset = offset == oldDelegate.offset;

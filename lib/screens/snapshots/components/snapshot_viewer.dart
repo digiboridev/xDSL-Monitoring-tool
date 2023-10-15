@@ -4,6 +4,7 @@ import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/models/snapshot_stats.dart';
 import 'package:xdslmt/data/repositories/stats_repo.dart';
 import 'package:xdslmt/utils/formatters.dart';
+import 'package:xdslmt/widgets/charts/path_factory.dart';
 import 'package:xdslmt/widgets/text_styles.dart';
 
 class SnapshotViewer extends StatefulWidget {
@@ -248,9 +249,6 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
   }
 }
 
-/// Timestamp and value
-typedef TimeValue = ({int t, int v});
-
 class TimelinePainter extends CustomPainter {
   final DateTime start;
   final DateTime end;
@@ -352,41 +350,9 @@ class RSCPathPainter extends CustomPainter {
   final String key;
   RSCPathPainter({required this.data, required this.scale, required this.offset, required this.key});
 
-  static final Map<String, Path> pathsPool = {};
-  static final p = Paint()
+  Paint get p => Paint()
     ..color = Colors.cyan.shade100
     ..style = PaintingStyle.stroke;
-  int get startStamp => data.first.t;
-  int get tDiff => data.last.t - data.first.t;
-
-  Path _makeDataPath() {
-    debugPrint('new path: $key');
-
-    final path = Path();
-
-    // Layout data as it is on the timeline (x: time, y: value)
-    int maxY = 1; // save max value for normalize y
-    for (int i = 0; i < data.length; i++) {
-      final e = data.elementAt(i);
-      final x = e.t - data.first.t;
-      final y = e.v;
-
-      path.moveTo(x.toDouble(), 0 - y / 2);
-      path.lineTo(x.toDouble(), 0 + y / 2);
-
-      if (y > maxY) maxY = y;
-    }
-
-    // Clamp path to 0-1 range
-    // Makes it more universal to draw and independent of the view
-    // So it can be coputed once, memozied or even cached
-    final Matrix4 clampMatrix = Matrix4.identity();
-    clampMatrix.scale(1 / tDiff, 1 / maxY);
-    clampMatrix.translate(1.0, maxY / 2);
-    final Path clampedPath = path.transform(clampMatrix.storage);
-
-    return clampedPath;
-  }
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -399,9 +365,10 @@ class RSCPathPainter extends CustomPainter {
     final Offset lineEnd = Offset((offset + size.width) * scale, halfHeight);
     canvas.drawLine(lineStart, lineEnd, p);
 
+    // Create data path
+    final Path dataPath = PathFactory.makeWaveFormPath(data, key);
+
     // Draw data
-    // pathsPool.clear();
-    final Path dataPath = pathsPool.putIfAbsent(key, _makeDataPath);
     final Matrix4 displayMatrix = Matrix4.identity();
     displayMatrix.scale(size.width, size.height);
     displayMatrix.scale(scale, 1.0);
@@ -431,57 +398,17 @@ class StatusPathPainter extends CustomPainter {
   final String key;
   StatusPathPainter({required this.data, required this.scale, required this.offset, required this.key});
 
-  static final Map<String, ({Path u, Path d, Path e})> pathsPool = {};
-  static final p = Paint()..style = PaintingStyle.stroke;
-  int get startStamp => data.first.t;
-  int get tDiff => data.last.t - data.first.t;
-
-  ({Path u, Path d, Path e}) _makeDataPath() {
-    debugPrint('new path: $key');
-
-    Path pathUp = Path();
-    Path pathDown = Path();
-    Path pathError = Path();
-
-    // Layout data as three lines on the timeline (x: time)
-    for (int i = 0; i < data.length; i++) {
-      final e = data.elementAt(i);
-      final x = e.t - data.first.t;
-      final SampleStatus status = e.s;
-
-      if (status == SampleStatus.connectionUp) {
-        pathUp.moveTo(x.toDouble(), 0);
-        pathUp.lineTo(x.toDouble(), 1);
-      }
-      if (status == SampleStatus.connectionDown) {
-        pathDown.moveTo(x.toDouble(), 0);
-        pathDown.lineTo(x.toDouble(), 1);
-      }
-      if (status == SampleStatus.samplingError) {
-        pathError.moveTo(x.toDouble(), 0);
-        pathError.lineTo(x.toDouble(), 1);
-      }
-    }
-
-    // Clamp path to 0-1 range
-    // Makes it more universal to draw and independent of the view
-    // So it can be coputed once, memozied or even cached
-    final Matrix4 clampMatrix = Matrix4.identity();
-    clampMatrix.scale(1 / tDiff, 1);
-    pathUp = pathUp.transform(clampMatrix.storage);
-    pathDown = pathDown.transform(clampMatrix.storage);
-    pathError = pathError.transform(clampMatrix.storage);
-
-    return (u: pathUp, d: pathDown, e: pathError);
-  }
+  Paint get p => Paint()..style = PaintingStyle.stroke;
 
   @override
   void paint(Canvas canvas, Size size) {
     // Debug
     final paintStart = DateTime.now();
 
+    // Create data path
+    final dataPath = PathFactory.makeStatusLinePath(data, key);
+
     // Draw data
-    final ({Path u, Path d, Path e}) dataPath = pathsPool.putIfAbsent(key, _makeDataPath);
     final Matrix4 displayMatrix = Matrix4.identity();
     displayMatrix.scale(size.width, size.height);
     displayMatrix.scale(scale, 1.0);
@@ -516,47 +443,19 @@ class LinePathPainter extends CustomPainter {
   final String key;
   LinePathPainter({required this.data, required this.scale, required this.offset, required this.key});
 
-  static final Map<String, Path> pathsPool = {};
-  static final p = Paint()
+  Paint get p => Paint()
     ..color = Colors.cyan.shade100
     ..style = PaintingStyle.fill;
-  int get startStamp => data.first.t;
-  int get tDiff => data.last.t - data.first.t;
-
-  Path _makeDataPath() {
-    debugPrint('new path: $key');
-
-    final path = Path();
-
-    // Layout data as it is on the timeline (x: time, y: value)
-    int maxY = 1; // save max value for normalize y
-    for (int i = 0; i < data.length; i++) {
-      final e = data.elementAt(i);
-      final x = e.t - data.first.t;
-      final y = e.v;
-
-      path.lineTo(x.toDouble(), 0 - y.toDouble());
-
-      if (y > maxY) maxY = y;
-    }
-
-    // Clamp path to 0-1 range
-    // Makes it more universal to draw and independent of the view
-    // So it can be coputed once, memozied or even cached
-    final Matrix4 clampMatrix = Matrix4.identity();
-    clampMatrix.scale(1 / tDiff, 1 / maxY);
-    clampMatrix.translate(1.0, maxY.toDouble());
-    final Path clampedPath = path.transform(clampMatrix.storage);
-    return clampedPath;
-  }
 
   @override
   void paint(Canvas canvas, Size size) {
     // Debug
     final paintStart = DateTime.now();
 
+    // Create data path
+    final Path dataPath = PathFactory.makeFilledLinePath(data, key);
+
     // Draw data
-    final Path dataPath = pathsPool.putIfAbsent(key, _makeDataPath);
     final Matrix4 displayMatrix = Matrix4.identity();
     displayMatrix.scale(size.width, size.height);
     displayMatrix.scale(scale, 1.0);

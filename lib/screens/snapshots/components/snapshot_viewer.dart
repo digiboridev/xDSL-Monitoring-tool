@@ -152,6 +152,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                 ),
               ),
             ),
+            SizedBox(height: 8),
             RepaintBoundary(
               child: Container(
                 height: 50,
@@ -166,6 +167,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                 ),
               ),
             ),
+            SizedBox(height: 8),
             RepaintBoundary(
               child: Container(
                 height: 50,
@@ -180,6 +182,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                 ),
               ),
             ),
+            SizedBox(height: 8),
             RepaintBoundary(
               child: Container(
                 height: 50,
@@ -194,6 +197,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                 ),
               ),
             ),
+            SizedBox(height: 8),
             RepaintBoundary(
               child: Container(
                 height: 50,
@@ -204,6 +208,36 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     scale: scale,
                     offset: offset,
                     key: 'upCRCIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 8),
+            RepaintBoundary(
+              child: Container(
+                height: 50,
+                width: double.infinity,
+                child: CustomPaint(
+                  painter: LinePathPainter(
+                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downMargin ?? 0)),
+                    scale: scale,
+                    offset: offset,
+                    key: 'downMargin' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 8),
+            RepaintBoundary(
+              child: Container(
+                height: 50,
+                width: double.infinity,
+                child: CustomPaint(
+                  painter: LinePathPainter(
+                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upMargin ?? 0)),
+                    scale: scale,
+                    offset: offset,
+                    key: 'upMargin' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
                   ),
                 ),
               ),
@@ -447,7 +481,7 @@ class RSCPathPainter extends CustomPainter {
     final path = Path();
 
     // Layout data as it is on the timeline (x: time, y: value)
-    int maxV = 1; // save max value normalize y
+    int maxY = 1; // save max value for normalize y
     for (int i = 0; i < data.length; i++) {
       final e = data.elementAt(i);
       final x = e.t - data.first.t;
@@ -456,15 +490,15 @@ class RSCPathPainter extends CustomPainter {
       path.moveTo(x.toDouble(), 0 - y / 2);
       path.lineTo(x.toDouble(), 0 + y / 2);
 
-      if (e.v > maxV) maxV = e.v;
+      if (y > maxY) maxY = y;
     }
 
     // Clamp path to 0-1 range
     // Makes it more universal to draw and independent of the view
     // So it can be coputed once, memozied or even cached
     final Matrix4 clampMatrix = Matrix4.identity();
-    clampMatrix.scale(1 / tDiff, 1 / maxV);
-    clampMatrix.translate(1.0, maxV / 2);
+    clampMatrix.scale(1 / tDiff, 1 / maxY);
+    clampMatrix.translate(1.0, maxY / 2);
     final Path clampedPath = path.transform(clampMatrix.storage);
 
     return clampedPath;
@@ -563,8 +597,6 @@ class StatusPathPainter extends CustomPainter {
     final paintStart = DateTime.now();
 
     // Draw data
-    // pathsPool.clear();
-    // final ({Path u, Path d, Path e}) dataPath = _makeDataPath();
     final ({Path u, Path d, Path e}) dataPath = pathsPool.putIfAbsent(key, _makeDataPath);
     final Matrix4 displayMatrix = Matrix4.identity();
     displayMatrix.scale(size.width, size.height);
@@ -585,6 +617,76 @@ class StatusPathPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(StatusPathPainter oldDelegate) {
+    bool sameData = data.length == oldDelegate.data.length;
+    bool sameScale = scale == oldDelegate.scale;
+    bool sameOffset = offset == oldDelegate.offset;
+    bool sameKey = key == oldDelegate.key;
+    return !(sameData && sameScale && sameOffset && sameKey);
+  }
+}
+
+class LinePathPainter extends CustomPainter {
+  final Iterable<({int t, int v})> data;
+  final double scale;
+  final double offset;
+  final String key;
+  LinePathPainter({required this.data, required this.scale, required this.offset, required this.key});
+
+  static final Map<String, Path> pathsPool = {};
+  static final p = Paint()
+    ..color = Colors.cyan.shade100
+    ..style = PaintingStyle.fill;
+  int get startStamp => data.first.t;
+  int get tDiff => data.last.t - data.first.t;
+
+  Path _makeDataPath() {
+    debugPrint('new path: $key');
+
+    final path = Path();
+
+    // Layout data as it is on the timeline (x: time, y: value)
+    int maxY = 1; // save max value for normalize y
+    for (int i = 0; i < data.length; i++) {
+      final e = data.elementAt(i);
+      final x = e.t - data.first.t;
+      final y = e.v;
+
+      path.lineTo(x.toDouble(), 0 - y.toDouble());
+
+      if (y > maxY) maxY = y;
+    }
+
+    // Clamp path to 0-1 range
+    // Makes it more universal to draw and independent of the view
+    // So it can be coputed once, memozied or even cached
+    final Matrix4 clampMatrix = Matrix4.identity();
+    clampMatrix.scale(1 / tDiff, 1 / maxY);
+    clampMatrix.translate(1.0, maxY.toDouble());
+    final Path clampedPath = path.transform(clampMatrix.storage);
+    return clampedPath;
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // Debug
+    final paintStart = DateTime.now();
+
+    // Draw data
+    final Path dataPath = pathsPool.putIfAbsent(key, _makeDataPath);
+    final Matrix4 displayMatrix = Matrix4.identity();
+    displayMatrix.scale(size.width, size.height);
+    displayMatrix.scale(scale, 1.0);
+    displayMatrix.translate(offset / size.width, 0.0);
+    final Path displayPath = dataPath.transform(displayMatrix.storage);
+    canvas.drawPath(displayPath, p);
+
+    // Debug
+    final paintEnd = DateTime.now();
+    debugPrint('RSCPathPainter: ${paintEnd.difference(paintStart).inMicroseconds}us');
+  }
+
+  @override
+  bool shouldRepaint(LinePathPainter oldDelegate) {
     bool sameData = data.length == oldDelegate.data.length;
     bool sameScale = scale == oldDelegate.scale;
     bool sameOffset = offset == oldDelegate.offset;

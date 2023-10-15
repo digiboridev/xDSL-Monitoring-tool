@@ -20,8 +20,8 @@ final class SL {
 
   late final _drift = DB();
 
-  late final StatsRepository statsRepository = StatsRepositoryDriftImpl(dao: StatsDao(_drift));
   late final SettingsRepository settingsRepository = SettingsRepositoryPrefsImpl();
+  late final StatsRepository statsRepository = StatsRepositoryDriftImpl(dao: StatsDao(_drift));
 
   StatsSamplingService get statsSamplingService => StatsSamplingService(statsRepository, settingsRepository);
 }
@@ -33,7 +33,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<SettingsRepository>(create: (_) => SettingsRepositoryPrefsImpl()),
+        Provider<SettingsRepository>(create: (_) => SL().settingsRepository),
         Provider<StatsRepository>(create: (_) => SL().statsRepository),
         ChangeNotifierProvider<StatsSamplingService>(create: (_) => SL().statsSamplingService),
       ],
@@ -41,11 +41,6 @@ class App extends StatelessWidget {
         title: 'xDSL Monitoring Tool',
         theme: ThemeData(
           useMaterial3: true,
-          // colorScheme: ColorScheme.fromSwatch(
-          //   primarySwatch: Colors.blueGrey,
-          //   // accentColor: Colors.yellow,
-          //   backgroundColor: Colors.cyan.shade50,
-          // ),
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
         ),
         home: const ScreensWrapper(),

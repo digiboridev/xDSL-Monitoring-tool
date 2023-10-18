@@ -22,6 +22,12 @@ abstract class TextStyles {
   static TextStyle f10 = TextStyle(fontSize: 10);
   static TextStyle f10w3 = TextStyle(fontSize: 10, fontWeight: FontWeight.w300);
   static TextStyle f10w6 = TextStyle(fontSize: 10, fontWeight: FontWeight.w600);
+  static TextStyle f8 = TextStyle(fontSize: 8);
+  static TextStyle f8w3 = TextStyle(fontSize: 8, fontWeight: FontWeight.w300);
+  static TextStyle f8w6 = TextStyle(fontSize: 8, fontWeight: FontWeight.w600);
+
+  // Charts
+  static TextStyle f8hc100 = TextStyle(fontSize: 8, height: 1, color: Colors.cyan.shade100);
 }
 
 extension CS on TextStyle {

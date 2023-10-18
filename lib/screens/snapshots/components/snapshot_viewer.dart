@@ -63,17 +63,15 @@ class _SnapshotViewerState extends State<SnapshotViewer> {
   }
 
   Widget body() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Container(
-        color: Colors.blueGrey.shade900,
-        padding: EdgeInsets.symmetric(horizontal: 8),
-        child: Column(
-          children: [
-            SizedBox(height: 200),
-            if (statsList.isNotEmpty) InteractiveChart(statsList: statsList),
-          ],
-        ),
+    if (snapshotStats == null) return Center(child: CircularProgressIndicator());
+    if (statsList.isEmpty) return Center(child: CircularProgressIndicator());
+
+    return Container(
+      color: Colors.blueGrey.shade900,
+      padding: EdgeInsets.symmetric(horizontal: 8),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: InteractiveChart(statsList: statsList, snapshotStats: snapshotStats!),
       ),
     );
   }
@@ -81,10 +79,9 @@ class _SnapshotViewerState extends State<SnapshotViewer> {
 
 class InteractiveChart extends StatefulWidget {
   final List<LineStats> statsList;
-  const InteractiveChart({
-    Key? key,
-    required this.statsList,
-  }) : super(key: key);
+  final SnapshotStats snapshotStats;
+
+  const InteractiveChart({Key? key, required this.statsList, required this.snapshotStats}) : super(key: key);
 
   @override
   State<InteractiveChart> createState() => _InteractiveChartState();
@@ -101,6 +98,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
     return LayoutBuilder(builder: (_, c) {
       double width = c.maxWidth;
       return GestureDetector(
+        behavior: HitTestBehavior.deferToChild,
         onScaleStart: (details) {
           pScale = scale;
           pOffset = offset;
@@ -122,113 +120,216 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
             // debugPrint(offset.toString());
           });
         },
-        child: Column(
-          children: [
-            Container(
-              height: 50,
-              width: double.infinity,
-              child: CustomPaint(
-                painter: TimelinePainter(
-                  start: widget.statsList.first.time,
-                  end: widget.statsList.last.time,
-                  scale: scale,
-                  offset: offset,
+        child: Container(
+          color: Colors.blueGrey.shade900,
+          child: Column(
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: Row(
+                  children: [
+                    Text('Timeline', style: TextStyles.f16w6.cyan100),
+                    Spacer(),
+                    Text('TOTAL: ' + widget.snapshotStats.samplingDuration.hms, style: TextStyles.f8hc100),
+                    SizedBox(width: 4),
+                    Text('UP: ' + widget.snapshotStats.uplinkDuration.hms, style: TextStyles.f8hc100),
+                  ],
                 ),
               ),
-            ),
-            Container(
-              height: 16,
-              width: double.infinity,
-              child: CustomPaint(
-                painter: StatusPathPainter(
-                  data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, s: e.status)),
-                  scale: scale,
-                  offset: offset,
-                  key: 'status' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+              Container(
+                height: 50,
+                width: double.infinity,
+                child: CustomPaint(
+                  painter: TimelinePainter(
+                    start: widget.statsList.first.time,
+                    end: widget.statsList.last.time,
+                    scale: scale,
+                    offset: offset,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 8),
-            Container(
-              height: 50,
-              width: double.infinity,
-              child: CustomPaint(
-                painter: RSCPathPainter(
-                  data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downFECIncr ?? 0)),
-                  scale: scale,
-                  offset: offset,
-                  key: 'downFECIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+              SizedBox(
+                width: double.infinity,
+                child: Row(
+                  children: [
+                    Text('Status events', style: TextStyles.f16w6.cyan100),
+                    Spacer(),
+                    Container(width: 16, height: 8, color: Colors.cyan),
+                    SizedBox(width: 4),
+                    Text('UP', style: TextStyles.f8hc100),
+                    SizedBox(width: 4),
+                    Container(width: 16, height: 8, color: Colors.black),
+                    SizedBox(width: 4),
+                    Text('DOWN', style: TextStyles.f8hc100),
+                    SizedBox(width: 4),
+                    Container(width: 16, height: 8, color: Colors.red),
+                    SizedBox(width: 4),
+                    Text('ERROR', style: TextStyles.f8hc100),
+                  ],
                 ),
               ),
-            ),
-            SizedBox(height: 8),
-            Container(
-              height: 50,
-              width: double.infinity,
-              child: CustomPaint(
-                painter: RSCPathPainter(
-                  data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upFECIncr ?? 0)),
-                  scale: scale,
-                  offset: offset,
-                  key: 'upFECIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+              Container(
+                height: 16,
+                width: double.infinity,
+                child: CustomPaint(
+                  painter: StatusPathPainter(
+                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, s: e.status)),
+                    scale: scale,
+                    offset: offset,
+                    key: 'status' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 8),
-            Container(
-              height: 50,
-              width: double.infinity,
-              child: CustomPaint(
-                painter: RSCPathPainter(
-                  data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downCRCIncr ?? 0)),
-                  scale: scale,
-                  offset: offset,
-                  key: 'downCRCIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+              SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: Row(
+                  children: [
+                    Text('Donwstream FEC', style: TextStyles.f16w6.cyan100),
+                    Spacer(),
+                    Text('TOTAL: ' + widget.snapshotStats.downFecTotal.toString(), style: TextStyles.f8hc100),
+                  ],
                 ),
               ),
-            ),
-            SizedBox(height: 8),
-            Container(
-              height: 50,
-              width: double.infinity,
-              child: CustomPaint(
-                painter: RSCPathPainter(
-                  data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upCRCIncr ?? 0)),
-                  scale: scale,
-                  offset: offset,
-                  key: 'upCRCIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+              Container(
+                height: 50,
+                width: double.infinity,
+                child: CustomPaint(
+                  painter: RSCPathPainter(
+                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downFECIncr ?? 0)),
+                    scale: scale,
+                    offset: offset,
+                    key: 'downFECIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 8),
-            Container(
-              height: 50,
-              width: double.infinity,
-              child: CustomPaint(
-                painter: LinePathPainter(
-                  data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downMargin ?? 0)),
-                  scale: scale,
-                  offset: offset,
-                  key: 'downMargin' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                  scaleFormat: (d) => (d / 10).toStringAsFixed(1),
+              SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: Row(
+                  children: [
+                    Text('Upstream FEC', style: TextStyles.f16w6.cyan100),
+                    Spacer(),
+                    Text('TOTAL: ' + widget.snapshotStats.upFecTotal.toString(), style: TextStyles.f8hc100),
+                  ],
                 ),
               ),
-            ),
-            SizedBox(height: 8),
-            Container(
-              height: 50,
-              width: double.infinity,
-              child: CustomPaint(
-                painter: LinePathPainter(
-                  data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upMargin ?? 0)),
-                  scale: scale,
-                  offset: offset,
-                  key: 'upMargin' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                  scaleFormat: (d) => (d / 10).toStringAsFixed(1),
+              Container(
+                height: 50,
+                width: double.infinity,
+                child: CustomPaint(
+                  painter: RSCPathPainter(
+                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upFECIncr ?? 0)),
+                    scale: scale,
+                    offset: offset,
+                    key: 'upFECIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                  ),
                 ),
               ),
-            ),
-          ],
+              SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: Row(
+                  children: [
+                    Text('Donwstream CRC', style: TextStyles.f16w6.cyan100),
+                    Spacer(),
+                    Text('TOTAL: ' + widget.snapshotStats.downCrcTotal.toString(), style: TextStyles.f8hc100),
+                  ],
+                ),
+              ),
+              Container(
+                height: 50,
+                width: double.infinity,
+                child: CustomPaint(
+                  painter: RSCPathPainter(
+                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downCRCIncr ?? 0)),
+                    scale: scale,
+                    offset: offset,
+                    key: 'downCRCIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                  ),
+                ),
+              ),
+              SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: Row(
+                  children: [
+                    Text('Upstream CRC', style: TextStyles.f16w6.cyan100),
+                    Spacer(),
+                    Text('TOTAL: ' + widget.snapshotStats.upCrcTotal.toString(), style: TextStyles.f8hc100),
+                  ],
+                ),
+              ),
+              Container(
+                height: 50,
+                width: double.infinity,
+                child: CustomPaint(
+                  painter: RSCPathPainter(
+                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upCRCIncr ?? 0)),
+                    scale: scale,
+                    offset: offset,
+                    key: 'upCRCIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                  ),
+                ),
+              ),
+              SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: Row(
+                  children: [
+                    Text('Downstream SRNM', style: TextStyles.f16w6.cyan100),
+                    Spacer(),
+                    Text('MIN: ' + ((widget.snapshotStats.downSNRmMin ?? 0) / 10).toStringAsFixed(1), style: TextStyles.f8hc100),
+                    SizedBox(width: 4),
+                    Text('MAX: ' + ((widget.snapshotStats.downSNRmMax ?? 0) / 10).toStringAsFixed(1), style: TextStyles.f8hc100),
+                    SizedBox(width: 4),
+                    Text('AVG: ' + ((widget.snapshotStats.downSNRmAvg ?? 0) / 10).toStringAsFixed(1), style: TextStyles.f8hc100),
+                  ],
+                ),
+              ),
+              Container(
+                height: 50,
+                width: double.infinity,
+                child: CustomPaint(
+                  painter: LinePathPainter(
+                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downMargin ?? 0)),
+                    scale: scale,
+                    offset: offset,
+                    key: 'downMargin' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                    scaleFormat: (d) => (d / 10).toStringAsFixed(1),
+                  ),
+                ),
+              ),
+              SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: Row(
+                  children: [
+                    Text('Upstream SRNM', style: TextStyles.f16w6.cyan100),
+                    Spacer(),
+                    Text('MIN: ' + ((widget.snapshotStats.upSNRmMin ?? 0) / 10).toStringAsFixed(1), style: TextStyles.f8hc100),
+                    SizedBox(width: 4),
+                    Text('MAX: ' + ((widget.snapshotStats.upSNRmMax ?? 0) / 10).toStringAsFixed(1), style: TextStyles.f8hc100),
+                    SizedBox(width: 4),
+                    Text('AVG: ' + ((widget.snapshotStats.upSNRmAvg ?? 0) / 10).toStringAsFixed(1), style: TextStyles.f8hc100),
+                  ],
+                ),
+              ),
+              Container(
+                height: 50,
+                width: double.infinity,
+                child: CustomPaint(
+                  painter: LinePathPainter(
+                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upMargin ?? 0)),
+                    scale: scale,
+                    offset: offset,
+                    key: 'upMargin' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                    scaleFormat: (d) => (d / 10).toStringAsFixed(1),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       );
     });
@@ -366,6 +467,11 @@ class RSCPathPainter extends CustomPainter {
     final int vMax = metadata.vMax;
     final int meshSteps = 3;
     final double meshStep = size.height / meshSteps;
+    canvas.drawLine(
+      Offset(0, size.height / 2),
+      Offset(size.width, size.height / 2),
+      Paint()..color = Colors.cyan.shade200.withOpacity(0.25),
+    );
     for (int i = 0; i < meshSteps; i++) {
       final double y = meshStep * i;
       final double x = size.width;

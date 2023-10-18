@@ -118,127 +118,113 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
             if (scale < 1.0) scale = 1;
             if (scale == 1.0 && offset != 1) offset = 1;
 
-            debugPrint(scale.toString());
-            debugPrint(offset.toString());
+            // debugPrint(scale.toString());
+            // debugPrint(offset.toString());
           });
         },
         child: Column(
           children: [
-            RepaintBoundary(
-              child: Container(
-                height: 50,
-                width: double.infinity,
-                child: CustomPaint(
-                  painter: TimelinePainter(
-                    start: widget.statsList.first.time,
-                    end: widget.statsList.last.time,
-                    scale: scale,
-                    offset: offset,
-                  ),
+            Container(
+              height: 50,
+              width: double.infinity,
+              child: CustomPaint(
+                painter: TimelinePainter(
+                  start: widget.statsList.first.time,
+                  end: widget.statsList.last.time,
+                  scale: scale,
+                  offset: offset,
                 ),
               ),
             ),
-            RepaintBoundary(
-              child: Container(
-                height: 16,
-                width: double.infinity,
-                child: CustomPaint(
-                  painter: StatusPathPainter(
-                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, s: e.status)),
-                    scale: scale,
-                    offset: offset,
-                    key: 'status' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                  ),
+            Container(
+              height: 16,
+              width: double.infinity,
+              child: CustomPaint(
+                painter: StatusPathPainter(
+                  data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, s: e.status)),
+                  scale: scale,
+                  offset: offset,
+                  key: 'status' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
                 ),
               ),
             ),
             SizedBox(height: 8),
-            RepaintBoundary(
-              child: Container(
-                height: 50,
-                width: double.infinity,
-                child: CustomPaint(
-                  painter: RSCPathPainter(
-                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downFECIncr ?? 0)),
-                    scale: scale,
-                    offset: offset,
-                    key: 'downFECIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                  ),
+            Container(
+              height: 50,
+              width: double.infinity,
+              child: CustomPaint(
+                painter: RSCPathPainter(
+                  data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downFECIncr ?? 0)),
+                  scale: scale,
+                  offset: offset,
+                  key: 'downFECIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
                 ),
               ),
             ),
             SizedBox(height: 8),
-            RepaintBoundary(
-              child: Container(
-                height: 50,
-                width: double.infinity,
-                child: CustomPaint(
-                  painter: RSCPathPainter(
-                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upFECIncr ?? 0)),
-                    scale: scale,
-                    offset: offset,
-                    key: 'upFECIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                  ),
+            Container(
+              height: 50,
+              width: double.infinity,
+              child: CustomPaint(
+                painter: RSCPathPainter(
+                  data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upFECIncr ?? 0)),
+                  scale: scale,
+                  offset: offset,
+                  key: 'upFECIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
                 ),
               ),
             ),
             SizedBox(height: 8),
-            RepaintBoundary(
-              child: Container(
-                height: 50,
-                width: double.infinity,
-                child: CustomPaint(
-                  painter: RSCPathPainter(
-                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downCRCIncr ?? 0)),
-                    scale: scale,
-                    offset: offset,
-                    key: 'downCRCIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                  ),
+            Container(
+              height: 50,
+              width: double.infinity,
+              child: CustomPaint(
+                painter: RSCPathPainter(
+                  data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downCRCIncr ?? 0)),
+                  scale: scale,
+                  offset: offset,
+                  key: 'downCRCIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
                 ),
               ),
             ),
             SizedBox(height: 8),
-            RepaintBoundary(
-              child: Container(
-                height: 50,
-                width: double.infinity,
-                child: CustomPaint(
-                  painter: RSCPathPainter(
-                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upCRCIncr ?? 0)),
-                    scale: scale,
-                    offset: offset,
-                    key: 'upCRCIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                  ),
+            Container(
+              height: 50,
+              width: double.infinity,
+              child: CustomPaint(
+                painter: RSCPathPainter(
+                  data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upCRCIncr ?? 0)),
+                  scale: scale,
+                  offset: offset,
+                  key: 'upCRCIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
                 ),
               ),
             ),
             SizedBox(height: 8),
-            RepaintBoundary(
-              child: Container(
-                height: 50,
-                width: double.infinity,
-                child: CustomPaint(
-                  painter: LinePathPainter(
-                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downMargin ?? 0)),
-                    scale: scale,
-                    offset: offset,
-                    key: 'downMargin' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                  ),
+            Container(
+              height: 50,
+              width: double.infinity,
+              child: CustomPaint(
+                painter: LinePathPainter(
+                  data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downMargin ?? 0)),
+                  scale: scale,
+                  offset: offset,
+                  key: 'downMargin' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                  scaleFormat: (d) => (d / 10).toStringAsFixed(1),
                 ),
               ),
             ),
             SizedBox(height: 8),
-            RepaintBoundary(
-              child: Container(
-                height: 50,
-                width: double.infinity,
-                child: CustomPaint(
-                  painter: LinePathPainter(
-                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upMargin ?? 0)),
-                    scale: scale,
-                    offset: offset,
-                    key: 'upMargin' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                  ),
+            Container(
+              height: 50,
+              width: double.infinity,
+              child: CustomPaint(
+                painter: LinePathPainter(
+                  data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upMargin ?? 0)),
+                  scale: scale,
+                  offset: offset,
+                  key: 'upMargin' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                  scaleFormat: (d) => (d / 10).toStringAsFixed(1),
                 ),
               ),
             ),
@@ -273,6 +259,8 @@ class TimelinePainter extends CustomPainter {
     int scaleSteps = 100 * ceilScale;
     int timeSteps = 4 * ceilScale;
     double timeStep = tDiff / timeSteps;
+
+    canvas.clipPath(Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height)));
 
     // Scale steps
     for (int i = 0; i < scaleSteps; i++) {
@@ -340,9 +328,6 @@ class TimelinePainter extends CustomPainter {
   }
 }
 
-/// Timestamp and status
-typedef TimeStatus = ({int t, SampleStatus s});
-
 class RSCPathPainter extends CustomPainter {
   final Iterable<({int t, int v})> data;
   final double scale;
@@ -359,22 +344,59 @@ class RSCPathPainter extends CustomPainter {
     // Debug
     final paintStart = DateTime.now();
 
-    // Draw center line
-    final double halfHeight = size.height / 2;
-    final Offset lineStart = Offset(offset * scale, halfHeight);
-    final Offset lineEnd = Offset((offset + size.width) * scale, halfHeight);
-    canvas.drawLine(lineStart, lineEnd, p);
-
     // Create data path
-    final Path dataPath = PathFactory.makeWaveFormPath(data, key);
+    final cp = PathFactory.makeWaveFormPath(data, key);
+    final Path dataPath = cp.path;
+    final PathMetadata metadata = cp.metadata;
+
+    canvas.save(); // save canvas state before data clipping
 
     // Draw data
     final Matrix4 displayMatrix = Matrix4.identity();
     displayMatrix.scale(size.width, size.height);
     displayMatrix.scale(scale, 1.0);
     displayMatrix.translate(offset / size.width, 0.0);
-    final Path displayPath = dataPath.transform(displayMatrix.storage);
-    canvas.drawPath(displayPath, p);
+    canvas.clipPath(Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height)));
+    canvas.transform(displayMatrix.storage);
+    canvas.drawPath(dataPath, p);
+
+    canvas.restore(); // restore canvas state after clipping (so it doesn't affect other painters)
+
+    // Draw vMax vertical mesh
+    final int vMax = metadata.vMax;
+    final int meshSteps = 3;
+    final double meshStep = size.height / meshSteps;
+    for (int i = 0; i < meshSteps; i++) {
+      final double y = meshStep * i;
+      final double x = size.width;
+      final text = TextPainter(
+        text: TextSpan(
+          text: (vMax / meshSteps * (meshSteps - i)).toStringAsFixed(1),
+          style: TextStyle(
+            color: Colors.cyan.shade50,
+            fontSize: 6,
+            shadows: [
+              Shadow(blurRadius: 2, color: Colors.black),
+              Shadow(blurRadius: 8, color: Colors.blueGrey.shade800),
+            ],
+          ),
+        ),
+        textDirection: TextDirection.ltr,
+        textAlign: TextAlign.center,
+      );
+      text.layout();
+      text.paint(canvas, Offset(x - text.width, y / 2 - text.height / 2));
+      canvas.drawLine(
+        Offset(0, y / 2),
+        Offset(x - text.width - 4, y / 2),
+        Paint()..color = Colors.cyan.shade200.withOpacity(0.25),
+      );
+      canvas.drawLine(
+        Offset(0, size.height - y / 2),
+        Offset(x, size.height - y / 2),
+        Paint()..color = Colors.cyan.shade200.withOpacity(0.25),
+      );
+    }
 
     // Debug
     final paintEnd = DateTime.now();
@@ -413,13 +435,11 @@ class StatusPathPainter extends CustomPainter {
     displayMatrix.scale(size.width, size.height);
     displayMatrix.scale(scale, 1.0);
     displayMatrix.translate(offset / size.width, 0.0);
-
-    final Path pathU = dataPath.u.transform(displayMatrix.storage);
-    canvas.drawPath(pathU, p..color = Colors.cyan.shade100);
-    final Path pathD = dataPath.d.transform(displayMatrix.storage);
-    canvas.drawPath(pathD, p..color = Colors.black);
-    final Path pathE = dataPath.e.transform(displayMatrix.storage);
-    canvas.drawPath(pathE, p..color = Colors.red);
+    canvas.clipPath(Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height)));
+    canvas.transform(displayMatrix.storage);
+    canvas.drawPath(dataPath.u, p..color = Colors.cyan.shade100);
+    canvas.drawPath(dataPath.d, p..color = Colors.black);
+    canvas.drawPath(dataPath.e, p..color = Colors.red);
 
     // Debug
     final paintEnd = DateTime.now();
@@ -441,7 +461,8 @@ class LinePathPainter extends CustomPainter {
   final double scale;
   final double offset;
   final String key;
-  LinePathPainter({required this.data, required this.scale, required this.offset, required this.key});
+  final String Function(double d) scaleFormat;
+  LinePathPainter({required this.data, required this.scale, required this.offset, required this.key, required this.scaleFormat});
 
   Paint get p => Paint()
     ..color = Colors.cyan.shade100
@@ -453,15 +474,53 @@ class LinePathPainter extends CustomPainter {
     final paintStart = DateTime.now();
 
     // Create data path
-    final Path dataPath = PathFactory.makeFilledLinePath(data, key);
+    final cp = PathFactory.makeLinePath(data, key);
+    final Path dataPath = cp.path;
+    final PathMetadata metadata = cp.metadata;
+
+    canvas.save(); // save canvas state before data clipping
 
     // Draw data
     final Matrix4 displayMatrix = Matrix4.identity();
     displayMatrix.scale(size.width, size.height);
     displayMatrix.scale(scale, 1.0);
     displayMatrix.translate(offset / size.width, 0.0);
-    final Path displayPath = dataPath.transform(displayMatrix.storage);
-    canvas.drawPath(displayPath, p);
+    canvas.clipPath(Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height)));
+    canvas.transform(displayMatrix.storage);
+    canvas.drawPath(dataPath, p);
+
+    canvas.restore(); // restore canvas state after clipping (so it doesn't affect other painters)
+
+    // Draw vMax vertical mesh
+    final int vMax = metadata.vMax;
+    final int meshSteps = 5;
+    final double meshStep = size.height / meshSteps;
+    for (int i = 0; i < meshSteps; i++) {
+      final double y = meshStep * i;
+      final double x = size.width;
+      final text = TextPainter(
+        text: TextSpan(
+          text: scaleFormat(vMax / meshSteps * (meshSteps - i)),
+          style: TextStyle(
+            color: Colors.cyan.shade50,
+            fontSize: 6,
+            shadows: [
+              Shadow(blurRadius: 2, color: Colors.black),
+              Shadow(blurRadius: 8, color: Colors.blueGrey.shade800),
+            ],
+          ),
+        ),
+        textDirection: TextDirection.ltr,
+        textAlign: TextAlign.center,
+      );
+      text.layout();
+      text.paint(canvas, Offset(x - text.width, y - text.height / 2));
+      canvas.drawLine(
+        Offset(0, y),
+        Offset(x - text.width - 4, y),
+        Paint()..color = Colors.cyan.shade200.withOpacity(0.25),
+      );
+    }
 
     // Debug
     final paintEnd = DateTime.now();

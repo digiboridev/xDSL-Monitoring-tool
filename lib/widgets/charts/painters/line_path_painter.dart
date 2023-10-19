@@ -16,7 +16,7 @@ class LinePathPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     // Debug
-    final paintStart = DateTime.now();
+    // final paintStart = DateTime.now();
 
     // Create data path
     final cp = PathFactory.makeLinePath(data, key);
@@ -68,8 +68,8 @@ class LinePathPainter extends CustomPainter {
     }
 
     // Debug
-    final paintEnd = DateTime.now();
-    debugPrint('WaveFormPainter: ${paintEnd.difference(paintStart).inMicroseconds}us');
+    // final paintEnd = DateTime.now();
+    // debugPrint('WaveFormPainter: ${paintEnd.difference(paintStart).inMicroseconds}us');
   }
 
   @override

@@ -10,7 +10,7 @@ class TimelinePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paintTime = DateTime.now();
+    // final paintTime = DateTime.now();
 
     final paint = Paint()
       ..color = Colors.cyan.shade100
@@ -81,7 +81,7 @@ class TimelinePainter extends CustomPainter {
       timePainter.paint(canvas, Offset(x - timePainter.width / 2, y / 2 + baseLine));
     }
 
-    debugPrint('TimelinePainter: ${DateTime.now().difference(paintTime).inMicroseconds}us');
+    // debugPrint('TimelinePainter: ${DateTime.now().difference(paintTime).inMicroseconds}us');
   }
 
   @override

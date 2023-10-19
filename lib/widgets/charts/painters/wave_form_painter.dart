@@ -15,7 +15,7 @@ class WaveFormPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     // Debug
-    final paintStart = DateTime.now();
+    // final paintStart = DateTime.now();
 
     // Create data path
     final cp = PathFactory.makeWaveFormPath(data, key);
@@ -77,8 +77,8 @@ class WaveFormPainter extends CustomPainter {
     }
 
     // Debug
-    final paintEnd = DateTime.now();
-    debugPrint('WaveFormPainter: ${paintEnd.difference(paintStart).inMicroseconds}us');
+    // final paintEnd = DateTime.now();
+    // debugPrint('WaveFormPainter: ${paintEnd.difference(paintStart).inMicroseconds}us');
   }
 
   @override

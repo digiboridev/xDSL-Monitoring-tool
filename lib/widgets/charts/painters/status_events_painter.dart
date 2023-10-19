@@ -14,7 +14,7 @@ class StatusEventsPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     // Debug
-    final paintStart = DateTime.now();
+    // final paintStart = DateTime.now();
 
     // Create data path
     final dataPath = PathFactory.makeStatusLinePath(data, key);
@@ -31,8 +31,8 @@ class StatusEventsPainter extends CustomPainter {
     canvas.drawPath(dataPath.e, p..color = Colors.red);
 
     // Debug
-    final paintEnd = DateTime.now();
-    debugPrint('StatusEventsPainter: ${paintEnd.difference(paintStart).inMicroseconds}us');
+    // final paintEnd = DateTime.now();
+    // debugPrint('StatusEventsPainter: ${paintEnd.difference(paintStart).inMicroseconds}us');
   }
 
   @override

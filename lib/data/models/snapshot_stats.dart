@@ -2,13 +2,6 @@
 import 'dart:convert';
 import 'package:xdslmt/data/models/line_stats.dart';
 
-// Due to int representation of snr and attenuation values, we need to divide them by 10
-// So we add a getter to int to do that quickly
-extension OneFraction on int {
-  double get oneFraction => this / 10;
-  String get oneFrStr => oneFraction.toStringAsFixed(1);
-}
-
 class SnapshotStats {
   final String snapshotId;
   final String host;

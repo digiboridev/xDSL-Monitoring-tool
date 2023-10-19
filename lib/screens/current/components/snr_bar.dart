@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
-import 'package:xdslmt/widgets/line_chart_painter.dart';
-import 'package:xdslmt/widgets/linebar.dart';
+import 'package:xdslmt/screens/current/components/painters/timeless_linepath_painter.dart';
+import 'package:xdslmt/screens/current/components/painters/linebar_painter.dart';
 import 'package:xdslmt/widgets/text_styles.dart';
 
 class SNRBar extends StatelessWidget {
@@ -206,7 +206,7 @@ class LineChart extends StatelessWidget {
         border: Border.all(color: Colors.cyan.shade100),
         borderRadius: BorderRadius.all(Radius.circular(3)),
       ),
-      child: CustomPaint(painter: LineChartPainter(s, invert)),
+      child: CustomPaint(painter: TimelessLinePathPainter(s, invert)),
     );
   }
 }
@@ -229,5 +229,58 @@ class MinMaxAvgRow extends StatelessWidget {
         Text('${avg?.oneFrStr ?? 'N/A'} AVG', style: TextStyles.f10.blueGrey600),
       ],
     );
+  }
+}
+
+class LineBar extends StatefulWidget {
+  final num value;
+  final num min;
+  final num max;
+  const LineBar({
+    super.key,
+    required this.value,
+    required this.min,
+    required this.max,
+  });
+
+  @override
+  State<LineBar> createState() => _LineBarState();
+}
+
+class _LineBarState extends State<LineBar> with TickerProviderStateMixin {
+  late final controller = AnimationController(vsync: this, duration: Duration(seconds: 1));
+  late final curvedAnimation = CurvedAnimation(parent: controller, curve: Curves.easeInOutCubicEmphasized);
+  late final tween = Tween(begin: 0.0, end: 1.0);
+  late final anim = tween.animate(curvedAnimation);
+  @override
+  void initState() {
+    super.initState();
+    controller.addListener(() => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      tween.end = _calcFill(widget.min, widget.max, widget.value);
+      controller.forward();
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant LineBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    tween.begin = _calcFill(oldWidget.min, oldWidget.max, oldWidget.value);
+    tween.end = _calcFill(widget.min, widget.max, widget.value);
+    controller.reset();
+    controller.forward();
+  }
+
+  double _calcFill(num min, num max, num value) => ((value - min) / (max - min)).clamp(0, 1);
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(painter: LineBarPainter(fill: anim.value));
   }
 }

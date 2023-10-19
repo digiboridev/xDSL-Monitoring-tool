@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
-import 'package:xdslmt/widgets/bar_chart_painter.dart';
+import 'package:xdslmt/screens/current/components/painters/timeless_waveform_painter.dart';
 import 'package:xdslmt/widgets/text_styles.dart';
 
 class RSCBar extends StatelessWidget {
@@ -46,7 +46,7 @@ class RSCBar extends StatelessWidget {
                   border: Border.all(color: Colors.blueGrey.shade100),
                   borderRadius: BorderRadius.circular(3),
                 ),
-                child: CustomPaint(painter: BarChartPainter(max: 1000, increasedData: dfec)),
+                child: CustomPaint(painter: WaveFormTimelessPainter(max: 1000, increasedData: dfec)),
               ),
             ),
             Container(
@@ -59,7 +59,7 @@ class RSCBar extends StatelessWidget {
                   borderRadius: BorderRadius.circular(3),
                 ),
                 child: CustomPaint(
-                    painter: BarChartPainter(
+                    painter: WaveFormTimelessPainter(
                   max: 1000,
                   increasedData: dcrc,
                 )),
@@ -74,7 +74,7 @@ class RSCBar extends StatelessWidget {
                   border: Border.all(color: Colors.blueGrey.shade100),
                   borderRadius: BorderRadius.circular(3),
                 ),
-                child: CustomPaint(painter: BarChartPainter(max: 1000, increasedData: ufec)),
+                child: CustomPaint(painter: WaveFormTimelessPainter(max: 1000, increasedData: ufec)),
               ),
             ),
             Container(
@@ -86,7 +86,7 @@ class RSCBar extends StatelessWidget {
                   border: Border.all(color: Colors.blueGrey.shade100),
                   borderRadius: BorderRadius.circular(3),
                 ),
-                child: CustomPaint(painter: BarChartPainter(max: 1000, increasedData: ucrc)),
+                child: CustomPaint(painter: WaveFormTimelessPainter(max: 1000, increasedData: ucrc)),
               ),
             ),
           ],

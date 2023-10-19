@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:xdslmt/widgets/charts/path_factory.dart';
+import 'package:xdslmt/screens/snapshots/components/chart/path_factory.dart';
 
 @deprecated
 class RSCPainter extends CustomPainter {

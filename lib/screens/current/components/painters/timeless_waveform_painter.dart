@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 
-class BarChartPainter extends CustomPainter {
+class WaveFormTimelessPainter extends CustomPainter {
   final List<int> increasedData;
   final int max;
-  BarChartPainter({required this.increasedData, required this.max});
+  WaveFormTimelessPainter({required this.increasedData, required this.max});
 
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
-  }
+  Paint get _barPaint => Paint()
+    ..color = Colors.blueGrey.shade900.withOpacity(0.5)
+    ..strokeWidth = 1;
+  Paint get _meshPaint => Paint()
+    ..color = Colors.blueGrey.shade100
+    ..strokeWidth = 0.5;
+  Paint get _linePaint => Paint()
+    ..color = Colors.blueGrey.shade600
+    ..strokeWidth = 1;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -39,13 +44,6 @@ class BarChartPainter extends CustomPainter {
     }
   }
 
-  Paint get _barPaint => Paint()
-    ..color = Colors.blueGrey.shade900.withOpacity(0.5)
-    ..strokeWidth = 1;
-  Paint get _meshPaint => Paint()
-    ..color = Colors.blueGrey.shade100
-    ..strokeWidth = 0.5;
-  Paint get _linePaint => Paint()
-    ..color = Colors.blueGrey.shade600
-    ..strokeWidth = 1;
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }

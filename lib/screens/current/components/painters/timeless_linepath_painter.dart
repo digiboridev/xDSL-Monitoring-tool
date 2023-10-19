@@ -1,15 +1,16 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class LineChartPainter extends CustomPainter {
+class TimelessLinePathPainter extends CustomPainter {
   final List<int?> data;
   final bool invert;
-  LineChartPainter(this.data, this.invert);
+  TimelessLinePathPainter(this.data, this.invert);
 
-  @override
-  bool shouldRepaint(LineChartPainter oldDelegate) {
-    return !listEquals(data, oldDelegate.data);
-  }
+  Paint get _linePaint => Paint()
+    ..color = Colors.blueGrey.shade800
+    ..strokeWidth = 1;
+  Paint get _meshPaint => Paint()
+    ..color = Colors.blueGrey.shade100
+    ..strokeWidth = 0.5;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -53,10 +54,6 @@ class LineChartPainter extends CustomPainter {
   bool _validPair(int? a, int? b) => a != null && b != null && a >= 0 && b >= 0;
   double _calcScale(num min, num max, num value) => ((value - min) / (max - min)).clamp(0, 1);
 
-  Paint get _linePaint => Paint()
-    ..color = Colors.blueGrey.shade800
-    ..strokeWidth = 1;
-  Paint get _meshPaint => Paint()
-    ..color = Colors.blueGrey.shade100
-    ..strokeWidth = 0.5;
+  @override
+  bool shouldRepaint(TimelessLinePathPainter oldDelegate) => true;
 }

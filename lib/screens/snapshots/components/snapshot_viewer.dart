@@ -73,6 +73,7 @@ class _SnapshotViewerState extends State<SnapshotViewer> {
       color: Colors.blueGrey.shade900,
       padding: EdgeInsets.symmetric(horizontal: 8),
       child: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         scrollDirection: Axis.vertical,
         child: InteractiveChart(statsList: statsList, snapshotStats: snapshotStats!),
       ),
@@ -140,6 +141,88 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
           color: Colors.blueGrey.shade900,
           child: Column(
             children: [
+              SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                child: Text(
+                  'Summary',
+                  style: TextStyles.f18w6.cyan100,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('SnapshotID', style: TextStyles.f14.cyan100),
+                        Text(widget.snapshotStats.snapshotId, style: TextStyles.f14.cyan100),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Host', style: TextStyles.f14.cyan100),
+                        Text(widget.snapshotStats.host, style: TextStyles.f14.cyan100),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Login', style: TextStyles.f14.cyan100),
+                        Text(widget.snapshotStats.login, style: TextStyles.f14.cyan100),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Password', style: TextStyles.f14.cyan100),
+                        Text(widget.snapshotStats.password, style: TextStyles.f14.cyan100),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Total samples', style: TextStyles.f14.cyan100),
+                        Text(widget.snapshotStats.samples.toString(), style: TextStyles.f14.cyan100),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Errored samples', style: TextStyles.f14.cyan100),
+                        Text(widget.snapshotStats.samplingErrors.toString(), style: TextStyles.f14.cyan100),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Line disconnects', style: TextStyles.f14.cyan100),
+                        Text(widget.snapshotStats.disconnects.toString(), style: TextStyles.f14.cyan100),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Start date', style: TextStyles.f14.cyan100),
+                        Text(widget.snapshotStats.startTime.ymdhms, style: TextStyles.f14.cyan100),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                child: Text(
+                  'Interactive view',
+                  style: TextStyles.f18w6.cyan100,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(height: 8),
               SizedBox(
                 width: double.infinity,
                 child: Row(
@@ -155,12 +238,14 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
               SizedBox(
                 height: 50,
                 width: double.infinity,
-                child: CustomPaint(
-                  painter: TimelinePainter(
-                    start: widget.statsList.first.time,
-                    end: widget.statsList.last.time,
-                    scale: scale,
-                    offset: offset,
+                child: RepaintBoundary(
+                  child: CustomPaint(
+                    painter: TimelinePainter(
+                      start: widget.statsList.first.time,
+                      end: widget.statsList.last.time,
+                      scale: scale,
+                      offset: offset,
+                    ),
                   ),
                 ),
               ),
@@ -187,12 +272,14 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
               SizedBox(
                 height: 16,
                 width: double.infinity,
-                child: CustomPaint(
-                  painter: StatusEventsPainter(
-                    data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, s: e.status)),
-                    scale: scale,
-                    offset: offset,
-                    key: 'status' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                child: RepaintBoundary(
+                  child: CustomPaint(
+                    painter: StatusEventsPainter(
+                      data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, s: e.status)),
+                      scale: scale,
+                      offset: offset,
+                      key: 'status' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                    ),
                   ),
                 ),
               ),
@@ -219,13 +306,15 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                 SizedBox(
                   height: 50,
                   width: double.infinity,
-                  child: CustomPaint(
-                    painter: LinePathPainter(
-                      data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downRate ?? 0)),
-                      scale: scale,
-                      offset: offset,
-                      key: 'downRate' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                      scaleFormat: (d) => d.toStringAsFixed(1),
+                  child: RepaintBoundary(
+                    child: CustomPaint(
+                      painter: LinePathPainter(
+                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downRate ?? 0)),
+                        scale: scale,
+                        offset: offset,
+                        key: 'downRate' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                        scaleFormat: (d) => d.toStringAsFixed(1),
+                      ),
                     ),
                   ),
                 ),
@@ -252,13 +341,15 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                 SizedBox(
                   height: 50,
                   width: double.infinity,
-                  child: CustomPaint(
-                    painter: LinePathPainter(
-                      data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upRate ?? 0)),
-                      scale: scale,
-                      offset: offset,
-                      key: 'upRate' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                      scaleFormat: (d) => d.toStringAsFixed(1),
+                  child: RepaintBoundary(
+                    child: CustomPaint(
+                      painter: LinePathPainter(
+                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upRate ?? 0)),
+                        scale: scale,
+                        offset: offset,
+                        key: 'upRate' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                        scaleFormat: (d) => d.toStringAsFixed(1),
+                      ),
                     ),
                   ),
                 ),
@@ -285,13 +376,15 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                 SizedBox(
                   height: 50,
                   width: double.infinity,
-                  child: CustomPaint(
-                    painter: LinePathPainter(
-                      data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downAttainableRate ?? 0)),
-                      scale: scale,
-                      offset: offset,
-                      key: 'downAttainableRate' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                      scaleFormat: (d) => d.toStringAsFixed(1),
+                  child: RepaintBoundary(
+                    child: CustomPaint(
+                      painter: LinePathPainter(
+                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downAttainableRate ?? 0)),
+                        scale: scale,
+                        offset: offset,
+                        key: 'downAttainableRate' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                        scaleFormat: (d) => d.toStringAsFixed(1),
+                      ),
                     ),
                   ),
                 ),
@@ -318,13 +411,15 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                 SizedBox(
                   height: 50,
                   width: double.infinity,
-                  child: CustomPaint(
-                    painter: LinePathPainter(
-                      data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upAttainableRate ?? 0)),
-                      scale: scale,
-                      offset: offset,
-                      key: 'upAttainableRate' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                      scaleFormat: (d) => d.toStringAsFixed(1),
+                  child: RepaintBoundary(
+                    child: CustomPaint(
+                      painter: LinePathPainter(
+                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upAttainableRate ?? 0)),
+                        scale: scale,
+                        offset: offset,
+                        key: 'upAttainableRate' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                        scaleFormat: (d) => d.toStringAsFixed(1),
+                      ),
                     ),
                   ),
                 ),
@@ -347,12 +442,14 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                 SizedBox(
                   height: 50,
                   width: double.infinity,
-                  child: CustomPaint(
-                    painter: WaveFormPainter(
-                      data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downFECIncr ?? 0)),
-                      scale: scale,
-                      offset: offset,
-                      key: 'downFECIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                  child: RepaintBoundary(
+                    child: CustomPaint(
+                      painter: WaveFormPainter(
+                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downFECIncr ?? 0)),
+                        scale: scale,
+                        offset: offset,
+                        key: 'downFECIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                      ),
                     ),
                   ),
                 ),
@@ -375,12 +472,14 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                 SizedBox(
                   height: 50,
                   width: double.infinity,
-                  child: CustomPaint(
-                    painter: WaveFormPainter(
-                      data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upFECIncr ?? 0)),
-                      scale: scale,
-                      offset: offset,
-                      key: 'upFECIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                  child: RepaintBoundary(
+                    child: CustomPaint(
+                      painter: WaveFormPainter(
+                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upFECIncr ?? 0)),
+                        scale: scale,
+                        offset: offset,
+                        key: 'upFECIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                      ),
                     ),
                   ),
                 ),
@@ -403,12 +502,14 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                 SizedBox(
                   height: 50,
                   width: double.infinity,
-                  child: CustomPaint(
-                    painter: WaveFormPainter(
-                      data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downCRCIncr ?? 0)),
-                      scale: scale,
-                      offset: offset,
-                      key: 'downCRCIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                  child: RepaintBoundary(
+                    child: CustomPaint(
+                      painter: WaveFormPainter(
+                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downCRCIncr ?? 0)),
+                        scale: scale,
+                        offset: offset,
+                        key: 'downCRCIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                      ),
                     ),
                   ),
                 ),
@@ -431,12 +532,14 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                 SizedBox(
                   height: 50,
                   width: double.infinity,
-                  child: CustomPaint(
-                    painter: WaveFormPainter(
-                      data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upCRCIncr ?? 0)),
-                      scale: scale,
-                      offset: offset,
-                      key: 'upCRCIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                  child: RepaintBoundary(
+                    child: CustomPaint(
+                      painter: WaveFormPainter(
+                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upCRCIncr ?? 0)),
+                        scale: scale,
+                        offset: offset,
+                        key: 'upCRCIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                      ),
                     ),
                   ),
                 ),
@@ -463,13 +566,15 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                 SizedBox(
                   height: 50,
                   width: double.infinity,
-                  child: CustomPaint(
-                    painter: LinePathPainter(
-                      data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downMargin ?? 0)),
-                      scale: scale,
-                      offset: offset,
-                      key: 'downMargin' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                      scaleFormat: (d) => (d / 10).toStringAsFixed(1),
+                  child: RepaintBoundary(
+                    child: CustomPaint(
+                      painter: LinePathPainter(
+                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downMargin ?? 0)),
+                        scale: scale,
+                        offset: offset,
+                        key: 'downMargin' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                        scaleFormat: (d) => (d / 10).toStringAsFixed(1),
+                      ),
                     ),
                   ),
                 ),
@@ -496,13 +601,15 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                 SizedBox(
                   height: 50,
                   width: double.infinity,
-                  child: CustomPaint(
-                    painter: LinePathPainter(
-                      data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upMargin ?? 0)),
-                      scale: scale,
-                      offset: offset,
-                      key: 'upMargin' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                      scaleFormat: (d) => (d / 10).toStringAsFixed(1),
+                  child: RepaintBoundary(
+                    child: CustomPaint(
+                      painter: LinePathPainter(
+                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upMargin ?? 0)),
+                        scale: scale,
+                        offset: offset,
+                        key: 'upMargin' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                        scaleFormat: (d) => (d / 10).toStringAsFixed(1),
+                      ),
                     ),
                   ),
                 ),
@@ -529,13 +636,15 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                 SizedBox(
                   height: 50,
                   width: double.infinity,
-                  child: CustomPaint(
-                    painter: LinePathPainter(
-                      data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downAttenuation ?? 0)),
-                      scale: scale,
-                      offset: offset,
-                      key: 'downAttenuation' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                      scaleFormat: (d) => (d / 10).toStringAsFixed(1),
+                  child: RepaintBoundary(
+                    child: CustomPaint(
+                      painter: LinePathPainter(
+                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downAttenuation ?? 0)),
+                        scale: scale,
+                        offset: offset,
+                        key: 'downAttenuation' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                        scaleFormat: (d) => (d / 10).toStringAsFixed(1),
+                      ),
                     ),
                   ),
                 ),
@@ -562,17 +671,19 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                 SizedBox(
                   height: 50,
                   width: double.infinity,
-                  child: CustomPaint(
-                    painter: LinePathPainter(
-                      data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upAttenuation ?? 0)),
-                      scale: scale,
-                      offset: offset,
-                      key: 'upAttenuation' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                      scaleFormat: (d) => (d / 10).toStringAsFixed(1),
+                  child: RepaintBoundary(
+                    child: CustomPaint(
+                      painter: LinePathPainter(
+                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upAttenuation ?? 0)),
+                        scale: scale,
+                        offset: offset,
+                        key: 'upAttenuation' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                        scaleFormat: (d) => (d / 10).toStringAsFixed(1),
+                      ),
                     ),
                   ),
                 ),
-              SizedBox(height: 8),
+              SizedBox(height: 32),
             ],
           ),
         ),

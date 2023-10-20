@@ -150,14 +150,6 @@ class SnapshotStats {
     return ((prev * 9) + next) ~/ 10;
   }
 
-  @Deprecated('incr from line stats instead')
-  int _incrDiff(int? prev, int? next) {
-    prev ??= 0;
-    if (next == null) return 0;
-    final diff = next - prev;
-    return diff > 0 ? diff : 0;
-  }
-
   bool _isDisconnect(SampleStatus newStatus) {
     if (lastSampleStatus == SampleStatus.connectionUp && newStatus == SampleStatus.connectionDown) {
       return true;

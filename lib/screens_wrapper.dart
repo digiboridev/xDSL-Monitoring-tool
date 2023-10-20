@@ -89,8 +89,6 @@ class _ScreensWrapperState extends State<ScreensWrapper> {
               tooltip: 'Close app',
               icon: Icon(Icons.power_settings_new, color: Colors.cyan.shade100),
               onPressed: () {
-                // TODO
-                // FlutterForegroundPlugin.stopForegroundService();
                 exit(0);
               },
             ),
@@ -127,8 +125,12 @@ class _FloatButtonState extends State<FloatButton> {
 
     if (samplingService.sampling) {
       samplingService.stopSampling();
+      MethodChannel('main').invokeMethod('stopForegroundService');
+      MethodChannel('main').invokeMethod('stopWakeLock');
     } else {
       samplingService.runSampling();
+      MethodChannel('main').invokeMethod('startForegroundService');
+      MethodChannel('main').invokeMethod('startWakeLock');
     }
   }
 

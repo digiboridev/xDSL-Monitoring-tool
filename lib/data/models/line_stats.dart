@@ -13,7 +13,6 @@ enum SampleStatus {
   connectionUp,
 }
 
-// TODO err increase
 class LineStats {
   final DateTime time;
   final String snapshotId;

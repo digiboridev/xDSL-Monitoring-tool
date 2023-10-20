@@ -70,7 +70,7 @@ class _ScreensWrapperState extends State<ScreensWrapper> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        bool sampling = context.read<StatsSamplingService>().sampling;
+        bool sampling = context.read<StatsSamplingService>().samplingActive;
         if (sampling) MethodChannel('main').invokeMethod('minimize');
         return !sampling;
       },
@@ -120,10 +120,14 @@ class FloatButton extends StatefulWidget {
 }
 
 class _FloatButtonState extends State<FloatButton> {
+  bool busy = false;
+
   void toogleSampling(BuildContext context) async {
+    if (busy) return;
+
     final samplingService = context.read<StatsSamplingService>();
 
-    if (samplingService.sampling) {
+    if (samplingService.samplingActive) {
       samplingService.stopSampling();
       MethodChannel('main').invokeMethod('stopForegroundService');
       MethodChannel('main').invokeMethod('stopWakeLock');
@@ -132,10 +136,14 @@ class _FloatButtonState extends State<FloatButton> {
       MethodChannel('main').invokeMethod('startForegroundService');
       MethodChannel('main').invokeMethod('startWakeLock');
     }
+
+    setState(() => busy = true);
+    await Future.delayed(Duration(milliseconds: 1000));
+    setState(() => busy = false);
   }
 
   Icon get getIcon {
-    bool sampling = context.select<StatsSamplingService, bool>((value) => value.sampling);
+    bool sampling = context.select<StatsSamplingService, bool>((value) => value.samplingActive);
 
     if (sampling) {
       return Icon(Icons.stop, color: Colors.white, key: Key('stop'));
@@ -147,7 +155,7 @@ class _FloatButtonState extends State<FloatButton> {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      backgroundColor: Colors.blueGrey.shade900.withOpacity(0.75),
+      backgroundColor: busy ? Colors.cyan.shade600 : Colors.blueGrey.shade900.withOpacity(0.75),
       onPressed: () => toogleSampling(context),
       hoverColor: Colors.amber[100],
       child: AnimatedSwitcher(

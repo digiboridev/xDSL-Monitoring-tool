@@ -12,38 +12,35 @@ import 'package:xdslmt/data/repositories/settings_repo.dart';
 class StatsSamplingService extends ChangeNotifier {
   final SettingsRepository _settingsRepository;
   final StatsRepository _statsRepository;
-
-  final _statsStreamController = StreamController<LineStats>.broadcast();
-
-  StatsSamplingService(this._statsRepository, this._settingsRepository) {
-    debugPrint('SamplingService init');
-  }
+  StatsSamplingService(this._statsRepository, this._settingsRepository);
 
   SnapshotStats? _snapshotStats;
-  final _lastSamples = Queue<LineStats>();
-
-  bool get sampling => _snapshotStats != null;
-  Queue<LineStats> get lastSamples => _lastSamples;
-  Stream<LineStats> get statsStream => _statsStreamController.stream;
-
   SnapshotStats? get snapshotStats => _snapshotStats;
+  bool get samplingActive => _snapshotStats != null;
 
+  final _samplesQueue = Queue<LineStats>();
+  List<LineStats> get lastSamples => List.unmodifiable(_samplesQueue);
+
+  /// Start Network Unit stats sampling using the current settings
   runSampling() async {
-    if (sampling) return;
+    if (samplingActive) return;
 
     AppSettings settings = await _settingsRepository.getSettings;
     Duration samplingInterval = settings.samplingInterval;
     String snapshotId = DateTime.now().millisecondsSinceEpoch.toString();
-    NetUnitClient client = NetUnitClient.fromSettings(settings, snapshotId);
 
-    _snapshotStats = SnapshotStats.create(snapshotId, settings.host, settings.login, settings.pwd);
+    final client = NetUnitClient.fromSettings(settings, snapshotId);
+    final statsBlank = SnapshotStats.create(snapshotId, settings.host, settings.login, settings.pwd);
+    _snapshotStats = statsBlank;
     notifyListeners();
 
+    // Enqueue the sampling
     tick() async {
       LineStats lineStats = await client.fetchStats();
 
-      // drop results if sampling was stopped
-      if (!sampling) return;
+      // If sampling was stopped or changed while waiting for the response
+      // drop responce and break the loop
+      if (lineStats.snapshotId != _snapshotStats?.snapshotId) return;
 
       _handleLineStats(lineStats);
       Timer(samplingInterval, () => tick());
@@ -52,34 +49,33 @@ class StatsSamplingService extends ChangeNotifier {
     tick();
   }
 
+  /// Stop Network Unit stats sampling
   stopSampling() {
-    if (!sampling) return;
-    _lastSamples.clear();
+    _samplesQueue.clear();
     _snapshotStats = null;
     notifyListeners();
   }
 
+  /// Handle a new line stats sample
   _handleLineStats(LineStats lineStats) {
     _snapshotStats = _snapshotStats?.copyWithLineStats(lineStats);
-    _lastSamples.addLast(lineStats);
-    if (_lastSamples.length > 500) _lastSamples.removeFirst();
+    _addToQueue(lineStats);
     notifyListeners();
-
-    _statsStreamController.add(lineStats);
 
     _statsRepository.insertLineStats(lineStats);
     _statsRepository.upsertSnapshotStats(_snapshotStats!);
 
     debugPrint('Handled stats at: ${DateTime.now()}, count: ${_snapshotStats?.samples ?? 0}');
+  }
 
-    // debugPrint('Handled snapshotStats: $_snapshotStats');
-    // debugPrint('Handled lineStats: $lineStats');
+  _addToQueue(LineStats value) {
+    _samplesQueue.addLast(value);
+    if (_samplesQueue.length > 500) _samplesQueue.removeFirst();
   }
 
   @override
   void dispose() {
-    _statsStreamController.close();
-    _snapshotStats = null;
+    stopSampling();
     super.dispose();
   }
 }

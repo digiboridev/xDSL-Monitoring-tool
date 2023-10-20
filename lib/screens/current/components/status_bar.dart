@@ -11,7 +11,7 @@ class StatusBar extends StatelessWidget {
     StatsSamplingService samplingService = context.watch<StatsSamplingService>();
     LineStats? lastSample = samplingService.lastSamples.lastOrNull;
 
-    bool sampling = samplingService.sampling;
+    bool sampling = samplingService.samplingActive;
     bool netUnitConnected = lastSample is LineStats && lastSample.status != SampleStatus.samplingError;
     bool connectionUp = lastSample is LineStats && lastSample.status == SampleStatus.connectionUp;
 
@@ -159,12 +159,14 @@ class _ProgressLineState extends State<ProgressLine> with TickerProviderStateMix
 
     StatsSamplingService samplingService = context.read<StatsSamplingService>();
 
-    samplingService.statsStream.forEach((_) {
-      if (!mounted) return;
-      animTween.begin = 0;
-      animTween.end = 1;
-      controller.reset();
-      controller.forward();
+    samplingService.addListener(() {
+      {
+        if (!mounted) return;
+        animTween.begin = 0;
+        animTween.end = 1;
+        controller.reset();
+        controller.forward();
+      }
     });
   }
 

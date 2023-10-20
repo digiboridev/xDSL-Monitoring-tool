@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/data/models/snapshot_stats.dart';
 import 'package:xdslmt/data/repositories/stats_repo.dart';
+import 'package:xdslmt/data/services/stats_sampling_service.dart';
 import 'package:xdslmt/screens/snapshots/components/snapshot_viewer.dart';
 import 'package:xdslmt/screens/snapshots/vm.dart';
 import 'package:xdslmt/utils/formatters.dart';
@@ -39,6 +40,11 @@ class _SnaplistTileState extends State<SnaplistTile> {
   void dispose() {
     super.dispose();
     updSub.cancel();
+  }
+
+  bool get isActiveSnapshot {
+    final samplingService = context.read<StatsSamplingService>();
+    return samplingService.snapshotStats?.snapshotId == widget.snapshotId;
   }
 
   onTap() {
@@ -112,10 +118,12 @@ class _SnaplistTileState extends State<SnaplistTile> {
           ],
         ),
       ),
-      trailing: IconButton(
-        icon: Icon(Icons.playlist_remove_sharp),
-        onPressed: onDelete,
-      ),
+      trailing: isActiveSnapshot
+          ? null
+          : IconButton(
+              icon: Icon(Icons.playlist_remove_sharp),
+              onPressed: onDelete,
+            ),
     );
   }
 }

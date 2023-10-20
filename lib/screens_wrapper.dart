@@ -97,7 +97,7 @@ class _ScreensWrapperState extends State<ScreensWrapper> {
         ),
         // body: screens[_screenIndex],
         body: AnimatedSwitcher(duration: const Duration(milliseconds: 200), child: screens[screenIndex]),
-        floatingActionButton: screenIndex == 2 ? null : FloatButton(),
+        floatingActionButton: screenIndex == 0 ? FloatButton() : null,
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: screenIndex,
           onTap: selectScreen,

@@ -27,6 +27,7 @@ class StatsSamplingService extends ChangeNotifier {
 
     AppSettings settings = await _settingsRepository.getSettings;
     Duration samplingInterval = settings.samplingInterval;
+    Duration splitInterval = settings.splitInterval;
     String snapshotId = DateTime.now().millisecondsSinceEpoch.toString();
 
     final client = NetUnitClient.fromSettings(settings, snapshotId);
@@ -43,6 +44,14 @@ class StatsSamplingService extends ChangeNotifier {
       if (lineStats.snapshotId != _snapshotStats?.snapshotId) return;
 
       _handleLineStats(lineStats);
+
+      // Restart sampling if the split interval has passed, without wiping the queue
+      if (_snapshotStats!.samplingDuration > splitInterval) {
+        _snapshotStats = null;
+        runSampling();
+        return;
+      }
+
       Timer(samplingInterval, () => tick());
     }
 

@@ -48,3 +48,5 @@ class App extends StatelessWidget {
     );
   }
 }
+
+// TODO settings text, ext host remove, wakelock and fore switch

@@ -26,8 +26,6 @@ class TimelinePainter extends CustomPainter {
     int timeSteps = 4 * ceilScale;
     double timeStep = tDiff / timeSteps;
 
-    canvas.clipPath(Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height)));
-
     // Scale steps
     for (int i = 0; i < scaleSteps; i++) {
       final double x = tDiff / scaleSteps * i * widthInTime + scaledOffset;

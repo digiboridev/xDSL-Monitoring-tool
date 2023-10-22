@@ -24,11 +24,11 @@ abstract class PathFactory {
 
   static clearPool() => _pathsPool.clear();
 
-  static ClampedPath makeLinePath(Iterable<TimeValue> data, String key) {
-    return _pathsPool.putIfAbsent(key, () => _makeLinePath(data));
+  static ClampedPath makeLinePath(Iterable<TimeValue> data, Size size, String key) {
+    return _pathsPool.putIfAbsent(key, () => _makeLinePath(data, size));
   }
 
-  static ClampedPath _makeLinePath(Iterable<TimeValue> data) {
+  static ClampedPath _makeLinePath(Iterable<TimeValue> data, Size size) {
     final path = Path();
     final tStart = data.first.t;
     final tDiff = data.last.t - data.first.t;
@@ -46,11 +46,11 @@ abstract class PathFactory {
     }
     path.lineTo(tDiff.toDouble(), 0);
 
-    // Clamp path to 0-1 range
+    // Clamp path to desired dimensions from `size`
     // Makes it more universal to draw and independent of the view
     // So it can be coputed once, memozied or even cached
     final Matrix4 clampMatrix = Matrix4.identity();
-    clampMatrix.scale(1 / tDiff, 1 / vMax);
+    clampMatrix.scale(1 / tDiff * size.width, 1 / vMax * size.height);
     clampMatrix.translate(1.0, vMax.toDouble());
 
     final ClampedPath clampedPath = (
@@ -64,11 +64,11 @@ abstract class PathFactory {
     return clampedPath;
   }
 
-  static ClampedPath makeWaveFormPath(Iterable<TimeValue> data, String key) {
-    return _pathsPool.putIfAbsent(key, () => _makeWaveFormPath(data));
+  static ClampedPath makeWaveFormPath(Iterable<TimeValue> data, Size size, String key) {
+    return _pathsPool.putIfAbsent(key, () => _makeWaveFormPath(data, size));
   }
 
-  static ClampedPath _makeWaveFormPath(Iterable<TimeValue> data) {
+  static ClampedPath _makeWaveFormPath(Iterable<TimeValue> data, Size size) {
     final tStart = data.first.t;
     final tDiff = data.last.t - data.first.t;
     final path = Path();
@@ -86,11 +86,11 @@ abstract class PathFactory {
       if (y > vMax) vMax = y;
     }
 
-    // Clamp path to 0-1 range
+    // Clamp path to desired dimensions from `size`
     // Makes it more universal to draw and independent of the view
     // So it can be coputed once, memozied or even cached
     final Matrix4 clampMatrix = Matrix4.identity();
-    clampMatrix.scale(1 / tDiff, 1 / vMax);
+    clampMatrix.scale(1 / tDiff * size.width, 1 / vMax * size.height);
     clampMatrix.translate(1.0, vMax / 2);
     final ClampedPath clampedPath = (
       path: path.transform(clampMatrix.storage),
@@ -104,11 +104,11 @@ abstract class PathFactory {
     return clampedPath;
   }
 
-  static ({Path u, Path d, Path e}) makeStatusLinePath(Iterable<TimeStatus> data, String key) {
-    return _pathsPool.putIfAbsent(key, () => _makeStatusLinePath(data));
+  static ({Path u, Path d, Path e}) makeStatusLinePath(Iterable<TimeStatus> data, Size size, String key) {
+    return _pathsPool.putIfAbsent(key, () => _makeStatusLinePath(data, size));
   }
 
-  static ({Path u, Path d, Path e}) _makeStatusLinePath(Iterable<TimeStatus> data) {
+  static ({Path u, Path d, Path e}) _makeStatusLinePath(Iterable<TimeStatus> data, Size size) {
     final tDiff = data.last.t - data.first.t;
     Path pathUp = Path();
     Path pathDown = Path();
@@ -133,11 +133,11 @@ abstract class PathFactory {
         pathError.lineTo(x.toDouble(), 1);
       }
     }
-    // Clamp path to 0-1 range
+    // Clamp path to desired dimensions from `size`
     // Makes it more universal to draw and independent of the view
     // So it can be coputed once, memozied or even cached
     final Matrix4 clampMatrix = Matrix4.identity();
-    clampMatrix.scale(1 / tDiff, 1);
+    clampMatrix.scale(1 / tDiff * size.width, 1 * size.height);
     pathUp = pathUp.transform(clampMatrix.storage);
     pathDown = pathDown.transform(clampMatrix.storage);
     pathError = pathError.transform(clampMatrix.storage);

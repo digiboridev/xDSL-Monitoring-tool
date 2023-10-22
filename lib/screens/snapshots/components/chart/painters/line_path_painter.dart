@@ -9,9 +9,9 @@ class LinePathPainter extends CustomPainter {
   final String Function(double d) scaleFormat;
   LinePathPainter({required this.data, required this.scale, required this.offset, required this.key, required this.scaleFormat});
 
-  Paint get p => Paint()
-    ..color = Colors.cyan.shade100
-    ..style = PaintingStyle.fill;
+  static final Paint p = Paint()
+    ..colorFilter = ColorFilter.mode(Colors.cyan.shade100, BlendMode.srcOver)
+    ..style = PaintingStyle.stroke;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -19,7 +19,7 @@ class LinePathPainter extends CustomPainter {
     // final paintStart = DateTime.now();
 
     // Create data path
-    final cp = PathFactory.makeLinePath(data, key);
+    final cp = PathFactory.makeLinePath(data, size, '$key ${size.width}');
     final Path dataPath = cp.path;
     final PathMetadata metadata = cp.metadata;
 
@@ -27,10 +27,8 @@ class LinePathPainter extends CustomPainter {
 
     // Draw data
     final Matrix4 displayMatrix = Matrix4.identity();
-    displayMatrix.scale(size.width, size.height);
     displayMatrix.scale(scale, 1.0);
-    displayMatrix.translate(offset / size.width, 0.0);
-    canvas.clipPath(Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height)));
+    displayMatrix.translate(offset, 0.0);
     canvas.transform(displayMatrix.storage);
     canvas.drawPath(dataPath, p);
 

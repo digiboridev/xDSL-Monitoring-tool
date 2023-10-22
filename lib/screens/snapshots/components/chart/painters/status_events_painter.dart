@@ -9,7 +9,15 @@ class StatusEventsPainter extends CustomPainter {
   final String key;
   StatusEventsPainter({required this.data, required this.scale, required this.offset, required this.key});
 
-  Paint get p => Paint()..style = PaintingStyle.stroke;
+  static final Paint pu = Paint()
+    ..colorFilter = ColorFilter.mode(Colors.cyan.shade100, BlendMode.srcOver)
+    ..style = PaintingStyle.stroke;
+  static final Paint pd = Paint()
+    ..colorFilter = ColorFilter.mode(Colors.black, BlendMode.srcOver)
+    ..style = PaintingStyle.stroke;
+  static final Paint pe = Paint()
+    ..colorFilter = ColorFilter.mode(Colors.red, BlendMode.srcOver)
+    ..style = PaintingStyle.stroke;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -17,18 +25,16 @@ class StatusEventsPainter extends CustomPainter {
     // final paintStart = DateTime.now();
 
     // Create data path
-    final dataPath = PathFactory.makeStatusLinePath(data, key);
+    final dataPath = PathFactory.makeStatusLinePath(data, size, '$key ${size.width}');
 
     // Draw data
     final Matrix4 displayMatrix = Matrix4.identity();
-    displayMatrix.scale(size.width, size.height);
     displayMatrix.scale(scale, 1.0);
-    displayMatrix.translate(offset / size.width, 0.0);
-    canvas.clipPath(Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height)));
+    displayMatrix.translate(offset, 0.0);
     canvas.transform(displayMatrix.storage);
-    canvas.drawPath(dataPath.u, p..color = Colors.cyan.shade100);
-    canvas.drawPath(dataPath.d, p..color = Colors.black);
-    canvas.drawPath(dataPath.e, p..color = Colors.red);
+    canvas.drawPath(dataPath.u, pu);
+    canvas.drawPath(dataPath.d, pd);
+    canvas.drawPath(dataPath.e, pe);
 
     // Debug
     // final paintEnd = DateTime.now();

@@ -34,6 +34,7 @@ class _SnapshotViewerState extends State<SnapshotViewer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.blueGrey900,
       appBar: AppBar(
         leading: const SizedBox(),
         actions: [
@@ -57,23 +58,23 @@ class _SnapshotViewerState extends State<SnapshotViewer> {
         backgroundColor: AppColors.blueGrey900,
       ),
       body: SizedBox.expand(
-        child: body(),
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          child: body(),
+        ),
       ),
     );
   }
 
   Widget body() {
-    if (snapshotStats == null) return const Center(child: CircularProgressIndicator());
-    if (statsList.isEmpty) return const Center(child: CircularProgressIndicator());
+    if (snapshotStats == null) return const Align(alignment: Alignment.topCenter, child: LinearProgressIndicator());
+    if (statsList.isEmpty) return const Align(alignment: Alignment.topCenter, child: LinearProgressIndicator());
 
-    return Container(
-      color: AppColors.blueGrey900,
+    return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        child: InteractiveChart(statsList: statsList, snapshotStats: snapshotStats!),
-      ),
+      physics: const BouncingScrollPhysics(),
+      scrollDirection: Axis.vertical,
+      child: InteractiveChart(statsList: statsList, snapshotStats: snapshotStats!),
     );
   }
 }

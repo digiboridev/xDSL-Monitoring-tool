@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/material.dart';
-
 abstract class AppColors {
   static const Color cyan50 = Color.fromARGB(255, 224, 247, 250);
   static const Color cyan100 = Color.fromARGB(255, 178, 235, 242);

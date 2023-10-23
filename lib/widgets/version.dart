@@ -20,7 +20,7 @@ class AppVersion extends StatelessWidget {
             style: textStyle,
           );
         }
-        return SizedBox();
+        return const SizedBox();
       },
     );
   }

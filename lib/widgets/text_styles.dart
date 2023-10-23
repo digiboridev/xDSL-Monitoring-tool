@@ -7,24 +7,24 @@ abstract class TextStyles {
   static const TextStyle subtitle = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 
   // Specific
-  static TextStyle f18 = TextStyle(fontSize: 18);
-  static TextStyle f18w3 = TextStyle(fontSize: 18, fontWeight: FontWeight.w300);
-  static TextStyle f18w6 = TextStyle(fontSize: 18, fontWeight: FontWeight.w600);
-  static TextStyle f16 = TextStyle(fontSize: 16);
-  static TextStyle f16w3 = TextStyle(fontSize: 16, fontWeight: FontWeight.w300);
-  static TextStyle f16w6 = TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
-  static TextStyle f14 = TextStyle(fontSize: 14);
-  static TextStyle f14w3 = TextStyle(fontSize: 14, fontWeight: FontWeight.w300);
-  static TextStyle f14w6 = TextStyle(fontSize: 14, fontWeight: FontWeight.w600);
-  static TextStyle f12 = TextStyle(fontSize: 12);
-  static TextStyle f12w3 = TextStyle(fontSize: 12, fontWeight: FontWeight.w300);
-  static TextStyle f12w6 = TextStyle(fontSize: 12, fontWeight: FontWeight.w600);
-  static TextStyle f10 = TextStyle(fontSize: 10);
-  static TextStyle f10w3 = TextStyle(fontSize: 10, fontWeight: FontWeight.w300);
-  static TextStyle f10w6 = TextStyle(fontSize: 10, fontWeight: FontWeight.w600);
-  static TextStyle f8 = TextStyle(fontSize: 8);
-  static TextStyle f8w3 = TextStyle(fontSize: 8, fontWeight: FontWeight.w300);
-  static TextStyle f8w6 = TextStyle(fontSize: 8, fontWeight: FontWeight.w600);
+  static const TextStyle f18 = TextStyle(fontSize: 18);
+  static const TextStyle f18w3 = TextStyle(fontSize: 18, fontWeight: FontWeight.w300);
+  static const TextStyle f18w6 = TextStyle(fontSize: 18, fontWeight: FontWeight.w600);
+  static const TextStyle f16 = TextStyle(fontSize: 16);
+  static const TextStyle f16w3 = TextStyle(fontSize: 16, fontWeight: FontWeight.w300);
+  static const TextStyle f16w6 = TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
+  static const TextStyle f14 = TextStyle(fontSize: 14);
+  static const TextStyle f14w3 = TextStyle(fontSize: 14, fontWeight: FontWeight.w300);
+  static const TextStyle f14w6 = TextStyle(fontSize: 14, fontWeight: FontWeight.w600);
+  static const TextStyle f12 = TextStyle(fontSize: 12);
+  static const TextStyle f12w3 = TextStyle(fontSize: 12, fontWeight: FontWeight.w300);
+  static const TextStyle f12w6 = TextStyle(fontSize: 12, fontWeight: FontWeight.w600);
+  static const TextStyle f10 = TextStyle(fontSize: 10);
+  static const TextStyle f10w3 = TextStyle(fontSize: 10, fontWeight: FontWeight.w300);
+  static const TextStyle f10w6 = TextStyle(fontSize: 10, fontWeight: FontWeight.w600);
+  static const TextStyle f8 = TextStyle(fontSize: 8);
+  static const TextStyle f8w3 = TextStyle(fontSize: 8, fontWeight: FontWeight.w300);
+  static const TextStyle f8w6 = TextStyle(fontSize: 8, fontWeight: FontWeight.w600);
 
   // Charts
   static TextStyle f8hc100 = TextStyle(fontSize: 8, height: 1, color: Colors.cyan.shade100);

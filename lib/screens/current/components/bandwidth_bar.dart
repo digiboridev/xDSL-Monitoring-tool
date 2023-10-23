@@ -20,7 +20,7 @@ class _BandwidthBarState extends State<BandwidthBar> with TickerProviderStateMix
   int attainableUp = 0;
 
   //Animation vars
-  late final AnimationController controller = AnimationController(vsync: this, duration: Duration(seconds: 1));
+  late final AnimationController controller = AnimationController(vsync: this, duration: const Duration(seconds: 1));
   late final curvedAnimation = CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn, reverseCurve: Curves.easeOut);
   late final curvedAnimationAlt = CurvedAnimation(parent: controller, curve: Curves.bounceInOut, reverseCurve: Curves.easeOut);
 

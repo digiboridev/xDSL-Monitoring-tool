@@ -1,0 +1,13 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer: 
+  exclude: 
+    - lib/bak/**
+
+linter:
+  rules:
+    prefer_single_quotes: true
+    require_trailing_commas: true
+    package_prefixed_library_names: true
+    # prefer_const_constructors: false // dev
+    # avoid_print: false // dev

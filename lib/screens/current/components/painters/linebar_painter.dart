@@ -15,7 +15,7 @@ class LineBarPainter extends CustomPainter {
     Paint pfill = Paint()
       // ..color = Colors.blueGrey
       ..style = PaintingStyle.fill
-      ..shader = LinearGradient(
+      ..shader = const LinearGradient(
         colors: [Colors.black, Colors.yellow],
         begin: Alignment.bottomCenter,
         end: Alignment.topCenter,
@@ -28,7 +28,7 @@ class LineBarPainter extends CustomPainter {
         ),
       );
 
-    canvas.drawRRect(RRect.fromLTRBR(0, 0, size.width, size.height, Radius.circular(3)), p);
-    canvas.drawRRect(RRect.fromLTRBR(0, size.height - (size.height * fill), size.width, size.height, Radius.circular(3)), pfill);
+    canvas.drawRRect(RRect.fromLTRBR(0, 0, size.width, size.height, const Radius.circular(3)), p);
+    canvas.drawRRect(RRect.fromLTRBR(0, size.height - (size.height * fill), size.width, size.height, const Radius.circular(3)), pfill);
   }
 }

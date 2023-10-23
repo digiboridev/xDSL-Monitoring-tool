@@ -39,582 +39,584 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (_, c) {
-      double width = c.maxWidth;
-      return GestureDetector(
-        behavior: HitTestBehavior.deferToChild,
-        onScaleStart: (details) {
-          pScale = scale;
-          pOffset = offset;
-        },
-        onScaleUpdate: (details) {
-          setState(() {
-            scale = pScale * details.scale;
-            offset = offset + details.focalPointDelta.dx / scale;
+    return LayoutBuilder(
+      builder: (_, c) {
+        double width = c.maxWidth;
+        return GestureDetector(
+          behavior: HitTestBehavior.deferToChild,
+          onScaleStart: (details) {
+            pScale = scale;
+            pOffset = offset;
+          },
+          onScaleUpdate: (details) {
+            setState(() {
+              scale = pScale * details.scale;
+              offset = offset + details.focalPointDelta.dx / scale;
 
-            // Prevent scrolling out of bounds
-            if (offset > width / scale - width / scale) offset = width / scale - width / scale;
-            if (offset < 0 - (width - (width / scale))) offset = 0 - (width - (width / scale));
+              // Prevent scrolling out of bounds
+              if (offset > width / scale - width / scale) offset = width / scale - width / scale;
+              if (offset < 0 - (width - (width / scale))) offset = 0 - (width - (width / scale));
 
-            // Prevent scaling out of bounds
-            if (scale < 1.0) scale = 1;
-            if (scale == 1.0 && offset != 1) offset = 1;
+              // Prevent scaling out of bounds
+              if (scale < 1.0) scale = 1;
+              if (scale == 1.0 && offset != 1) offset = 1;
 
-            // debugPrint(scale.toString());
-            // debugPrint(offset.toString());
-          });
-        },
-        child: Container(
-          color: Colors.blueGrey.shade900,
-          child: Column(
-            children: [
-              SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: Text(
-                  'Summary',
-                  style: TextStyles.f18w6.cyan100,
-                  textAlign: TextAlign.center,
+              // debugPrint(scale.toString());
+              // debugPrint(offset.toString());
+            });
+          },
+          child: Container(
+            color: Colors.blueGrey.shade900,
+            child: Column(
+              children: [
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    'Summary',
+                    style: TextStyles.f18w6.cyan100,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('SnapshotID', style: TextStyles.f14.cyan100),
+                          Text(widget.snapshotStats.snapshotId, style: TextStyles.f14.cyan100),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Host', style: TextStyles.f14.cyan100),
+                          Text(widget.snapshotStats.host, style: TextStyles.f14.cyan100),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Login', style: TextStyles.f14.cyan100),
+                          Text(widget.snapshotStats.login, style: TextStyles.f14.cyan100),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Password', style: TextStyles.f14.cyan100),
+                          Text(widget.snapshotStats.password, style: TextStyles.f14.cyan100),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Total samples', style: TextStyles.f14.cyan100),
+                          Text(widget.snapshotStats.samples.toString(), style: TextStyles.f14.cyan100),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Errored samples', style: TextStyles.f14.cyan100),
+                          Text(widget.snapshotStats.samplingErrors.toString(), style: TextStyles.f14.cyan100),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Line disconnects', style: TextStyles.f14.cyan100),
+                          Text(widget.snapshotStats.disconnects.toString(), style: TextStyles.f14.cyan100),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Start date', style: TextStyles.f14.cyan100),
+                          Text(widget.snapshotStats.startTime.ymdhms, style: TextStyles.f14.cyan100),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    'Interactive view',
+                    style: TextStyles.f18w6.cyan100,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  child: Row(
+                    children: [
+                      Text('Timeline', style: TextStyles.f16w6.cyan100),
+                      const Spacer(),
+                      Text('TOTAL: ${widget.snapshotStats.samplingDuration.hms}', style: TextStyles.f8hc100),
+                      const SizedBox(width: 4),
+                      Text('UP: ${widget.snapshotStats.uplinkDuration.hms}', style: TextStyles.f8hc100),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 50,
+                  width: double.infinity,
+                  child: RepaintBoundary(
+                    child: CustomPaint(
+                      painter: TimelinePainter(
+                        start: widget.statsList.first.time,
+                        end: widget.statsList.last.time,
+                        scale: scale,
+                        offset: offset,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: Row(
+                    children: [
+                      Text('Status events', style: TextStyles.f16w6.cyan100),
+                      const Spacer(),
+                      Container(width: 16, height: 8, color: Colors.cyan),
+                      const SizedBox(width: 4),
+                      Text('UP', style: TextStyles.f8hc100),
+                      const SizedBox(width: 4),
+                      Container(width: 16, height: 8, color: Colors.black),
+                      const SizedBox(width: 4),
+                      Text('DOWN', style: TextStyles.f8hc100),
+                      const SizedBox(width: 4),
+                      Container(width: 16, height: 8, color: Colors.red),
+                      const SizedBox(width: 4),
+                      Text('ERROR', style: TextStyles.f8hc100),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 16,
+                  width: double.infinity,
+                  child: RepaintBoundary(
+                    child: CustomPaint(
+                      painter: StatusEventsPainter(
+                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, s: e.status)),
+                        scale: scale,
+                        offset: offset,
+                        key: 'status${widget.statsList.last.time.millisecondsSinceEpoch}',
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  child: GestureDetector(
+                    onTap: () => setState(() => downRate = !downRate),
+                    child: Row(
                       children: [
-                        Text('SnapshotID', style: TextStyles.f14.cyan100),
-                        Text(widget.snapshotStats.snapshotId, style: TextStyles.f14.cyan100),
+                        Text('Downstream Rate', style: TextStyles.f16w6.cyan100),
+                        Icon(downRate ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
+                        const Spacer(),
+                        Text('MIN: ${widget.snapshotStats.downRateMin ?? 0}', style: TextStyles.f8hc100),
+                        const SizedBox(width: 4),
+                        Text('MAX: ${widget.snapshotStats.downRateMax ?? 0}', style: TextStyles.f8hc100),
+                        const SizedBox(width: 4),
+                        Text('AVG: ${widget.snapshotStats.downRateAvg ?? 0}', style: TextStyles.f8hc100),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                ),
+                if (downRate)
+                  SizedBox(
+                    height: 50,
+                    width: double.infinity,
+                    child: RepaintBoundary(
+                      child: CustomPaint(
+                        painter: LinePathPainter(
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downRate ?? 0)),
+                          scale: scale,
+                          offset: offset,
+                          key: 'downRate${widget.statsList.last.time.millisecondsSinceEpoch}',
+                          scaleFormat: (d) => d.toStringAsFixed(1),
+                        ),
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  child: GestureDetector(
+                    onTap: () => setState(() => upRate = !upRate),
+                    child: Row(
                       children: [
-                        Text('Host', style: TextStyles.f14.cyan100),
-                        Text(widget.snapshotStats.host, style: TextStyles.f14.cyan100),
+                        Text('Upstream Rate', style: TextStyles.f16w6.cyan100),
+                        Icon(upRate ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
+                        const Spacer(),
+                        Text('MIN: ${widget.snapshotStats.upRateMin ?? 0}', style: TextStyles.f8hc100),
+                        const SizedBox(width: 4),
+                        Text('MAX: ${widget.snapshotStats.upRateMax ?? 0}', style: TextStyles.f8hc100),
+                        const SizedBox(width: 4),
+                        Text('AVG: ${widget.snapshotStats.upRateAvg ?? 0}', style: TextStyles.f8hc100),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                ),
+                if (upRate)
+                  SizedBox(
+                    height: 50,
+                    width: double.infinity,
+                    child: RepaintBoundary(
+                      child: CustomPaint(
+                        painter: LinePathPainter(
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upRate ?? 0)),
+                          scale: scale,
+                          offset: offset,
+                          key: 'upRate${widget.statsList.last.time.millisecondsSinceEpoch}',
+                          scaleFormat: (d) => d.toStringAsFixed(1),
+                        ),
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  child: GestureDetector(
+                    onTap: () => setState(() => downAttainableRate = !downAttainableRate),
+                    child: Row(
                       children: [
-                        Text('Login', style: TextStyles.f14.cyan100),
-                        Text(widget.snapshotStats.login, style: TextStyles.f14.cyan100),
+                        Text('Downstream Attainable Rate', style: TextStyles.f16w6.cyan100),
+                        Icon(downAttainableRate ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
+                        const Spacer(),
+                        Text('MIN: ${widget.snapshotStats.downAttainableRateMin ?? 0}', style: TextStyles.f8hc100),
+                        const SizedBox(width: 4),
+                        Text('MAX: ${widget.snapshotStats.downAttainableRateMax ?? 0}', style: TextStyles.f8hc100),
+                        const SizedBox(width: 4),
+                        Text('AVG: ${widget.snapshotStats.downAttainableRateAvg ?? 0}', style: TextStyles.f8hc100),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                ),
+                if (downAttainableRate)
+                  SizedBox(
+                    height: 50,
+                    width: double.infinity,
+                    child: RepaintBoundary(
+                      child: CustomPaint(
+                        painter: LinePathPainter(
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downAttainableRate ?? 0)),
+                          scale: scale,
+                          offset: offset,
+                          key: 'downAttainableRate${widget.statsList.last.time.millisecondsSinceEpoch}',
+                          scaleFormat: (d) => d.toStringAsFixed(1),
+                        ),
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  child: GestureDetector(
+                    onTap: () => setState(() => upAttainableRate = !upAttainableRate),
+                    child: Row(
                       children: [
-                        Text('Password', style: TextStyles.f14.cyan100),
-                        Text(widget.snapshotStats.password, style: TextStyles.f14.cyan100),
+                        Text('Upstream Attainable Rate', style: TextStyles.f16w6.cyan100),
+                        Icon(upAttainableRate ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
+                        const Spacer(),
+                        Text('MIN: ${widget.snapshotStats.upAttainableRateMin ?? 0}', style: TextStyles.f8hc100),
+                        const SizedBox(width: 4),
+                        Text('MAX: ${widget.snapshotStats.upAttainableRateMax ?? 0}', style: TextStyles.f8hc100),
+                        const SizedBox(width: 4),
+                        Text('AVG: ${widget.snapshotStats.upAttainableRateAvg ?? 0}', style: TextStyles.f8hc100),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                ),
+                if (upAttainableRate)
+                  SizedBox(
+                    height: 50,
+                    width: double.infinity,
+                    child: RepaintBoundary(
+                      child: CustomPaint(
+                        painter: LinePathPainter(
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upAttainableRate ?? 0)),
+                          scale: scale,
+                          offset: offset,
+                          key: 'upAttainableRate${widget.statsList.last.time.millisecondsSinceEpoch}',
+                          scaleFormat: (d) => d.toStringAsFixed(1),
+                        ),
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  child: GestureDetector(
+                    onTap: () => setState(() => downFec = !downFec),
+                    child: Row(
                       children: [
-                        Text('Total samples', style: TextStyles.f14.cyan100),
-                        Text(widget.snapshotStats.samples.toString(), style: TextStyles.f14.cyan100),
+                        Text('Donwstream FEC', style: TextStyles.f16w6.cyan100),
+                        Icon(downFec ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
+                        const Spacer(),
+                        Text('TOTAL: ${widget.snapshotStats.downFecTotal}', style: TextStyles.f8hc100),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                ),
+                if (downFec)
+                  SizedBox(
+                    height: 50,
+                    width: double.infinity,
+                    child: RepaintBoundary(
+                      child: CustomPaint(
+                        painter: WaveFormPainter(
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downFECIncr ?? 0)),
+                          scale: scale,
+                          offset: offset,
+                          key: 'downFECIncr${widget.statsList.last.time.millisecondsSinceEpoch}',
+                        ),
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  child: GestureDetector(
+                    onTap: () => setState(() => upFec = !upFec),
+                    child: Row(
                       children: [
-                        Text('Errored samples', style: TextStyles.f14.cyan100),
-                        Text(widget.snapshotStats.samplingErrors.toString(), style: TextStyles.f14.cyan100),
+                        Text('Upstream FEC', style: TextStyles.f16w6.cyan100),
+                        Icon(upFec ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
+                        const Spacer(),
+                        Text('TOTAL: ${widget.snapshotStats.upFecTotal}', style: TextStyles.f8hc100),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                ),
+                if (upFec)
+                  SizedBox(
+                    height: 50,
+                    width: double.infinity,
+                    child: RepaintBoundary(
+                      child: CustomPaint(
+                        painter: WaveFormPainter(
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upFECIncr ?? 0)),
+                          scale: scale,
+                          offset: offset,
+                          key: 'upFECIncr${widget.statsList.last.time.millisecondsSinceEpoch}',
+                        ),
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  child: GestureDetector(
+                    onTap: () => setState(() => downCrc = !downCrc),
+                    child: Row(
                       children: [
-                        Text('Line disconnects', style: TextStyles.f14.cyan100),
-                        Text(widget.snapshotStats.disconnects.toString(), style: TextStyles.f14.cyan100),
+                        Text('Donwstream CRC', style: TextStyles.f16w6.cyan100),
+                        Icon(downCrc ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
+                        const Spacer(),
+                        Text('TOTAL: ${widget.snapshotStats.downCrcTotal}', style: TextStyles.f8hc100),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                ),
+                if (downCrc)
+                  SizedBox(
+                    height: 50,
+                    width: double.infinity,
+                    child: RepaintBoundary(
+                      child: CustomPaint(
+                        painter: WaveFormPainter(
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downCRCIncr ?? 0)),
+                          scale: scale,
+                          offset: offset,
+                          key: 'downCRCIncr${widget.statsList.last.time.millisecondsSinceEpoch}',
+                        ),
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  child: GestureDetector(
+                    onTap: () => setState(() => upCrc = !upCrc),
+                    child: Row(
                       children: [
-                        Text('Start date', style: TextStyles.f14.cyan100),
-                        Text(widget.snapshotStats.startTime.ymdhms, style: TextStyles.f14.cyan100),
+                        Text('Upstream CRC', style: TextStyles.f16w6.cyan100),
+                        Icon(upCrc ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
+                        const Spacer(),
+                        Text('TOTAL: ${widget.snapshotStats.upCrcTotal}', style: TextStyles.f8hc100),
                       ],
                     ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: Text(
-                  'Interactive view',
-                  style: TextStyles.f18w6.cyan100,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: Row(
-                  children: [
-                    Text('Timeline', style: TextStyles.f16w6.cyan100),
-                    Spacer(),
-                    Text('TOTAL: ' + widget.snapshotStats.samplingDuration.hms, style: TextStyles.f8hc100),
-                    SizedBox(width: 4),
-                    Text('UP: ' + widget.snapshotStats.uplinkDuration.hms, style: TextStyles.f8hc100),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 50,
-                width: double.infinity,
-                child: RepaintBoundary(
-                  child: CustomPaint(
-                    painter: TimelinePainter(
-                      start: widget.statsList.first.time,
-                      end: widget.statsList.last.time,
-                      scale: scale,
-                      offset: offset,
-                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: Row(
-                  children: [
-                    Text('Status events', style: TextStyles.f16w6.cyan100),
-                    Spacer(),
-                    Container(width: 16, height: 8, color: Colors.cyan),
-                    SizedBox(width: 4),
-                    Text('UP', style: TextStyles.f8hc100),
-                    SizedBox(width: 4),
-                    Container(width: 16, height: 8, color: Colors.black),
-                    SizedBox(width: 4),
-                    Text('DOWN', style: TextStyles.f8hc100),
-                    SizedBox(width: 4),
-                    Container(width: 16, height: 8, color: Colors.red),
-                    SizedBox(width: 4),
-                    Text('ERROR', style: TextStyles.f8hc100),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 16,
-                width: double.infinity,
-                child: RepaintBoundary(
-                  child: CustomPaint(
-                    painter: StatusEventsPainter(
-                      data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, s: e.status)),
-                      scale: scale,
-                      offset: offset,
-                      key: 'status' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: GestureDetector(
-                  onTap: () => setState(() => downRate = !downRate),
-                  child: Row(
-                    children: [
-                      Text('Downstream Rate', style: TextStyles.f16w6.cyan100),
-                      Icon(downRate ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
-                      Spacer(),
-                      Text('MIN: ' + (widget.snapshotStats.downRateMin ?? 0).toString(), style: TextStyles.f8hc100),
-                      SizedBox(width: 4),
-                      Text('MAX: ' + (widget.snapshotStats.downRateMax ?? 0).toString(), style: TextStyles.f8hc100),
-                      SizedBox(width: 4),
-                      Text('AVG: ' + (widget.snapshotStats.downRateAvg ?? 0).toString(), style: TextStyles.f8hc100),
-                    ],
-                  ),
-                ),
-              ),
-              if (downRate)
-                SizedBox(
-                  height: 50,
-                  width: double.infinity,
-                  child: RepaintBoundary(
-                    child: CustomPaint(
-                      painter: LinePathPainter(
-                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downRate ?? 0)),
-                        scale: scale,
-                        offset: offset,
-                        key: 'downRate' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                        scaleFormat: (d) => d.toStringAsFixed(1),
+                if (upCrc)
+                  SizedBox(
+                    height: 50,
+                    width: double.infinity,
+                    child: RepaintBoundary(
+                      child: CustomPaint(
+                        painter: WaveFormPainter(
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upCRCIncr ?? 0)),
+                          scale: scale,
+                          offset: offset,
+                          key: 'upCRCIncr${widget.statsList.last.time.millisecondsSinceEpoch}',
+                        ),
                       ),
                     ),
                   ),
-                ),
-              SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: GestureDetector(
-                  onTap: () => setState(() => upRate = !upRate),
-                  child: Row(
-                    children: [
-                      Text('Upstream Rate', style: TextStyles.f16w6.cyan100),
-                      Icon(upRate ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
-                      Spacer(),
-                      Text('MIN: ' + (widget.snapshotStats.upRateMin ?? 0).toString(), style: TextStyles.f8hc100),
-                      SizedBox(width: 4),
-                      Text('MAX: ' + (widget.snapshotStats.upRateMax ?? 0).toString(), style: TextStyles.f8hc100),
-                      SizedBox(width: 4),
-                      Text('AVG: ' + (widget.snapshotStats.upRateAvg ?? 0).toString(), style: TextStyles.f8hc100),
-                    ],
-                  ),
-                ),
-              ),
-              if (upRate)
+                const SizedBox(height: 8),
                 SizedBox(
-                  height: 50,
                   width: double.infinity,
-                  child: RepaintBoundary(
-                    child: CustomPaint(
-                      painter: LinePathPainter(
-                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upRate ?? 0)),
-                        scale: scale,
-                        offset: offset,
-                        key: 'upRate' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                        scaleFormat: (d) => d.toStringAsFixed(1),
-                      ),
+                  child: GestureDetector(
+                    onTap: () => setState(() => downMargin = !downMargin),
+                    child: Row(
+                      children: [
+                        Text('Downstream SRNM', style: TextStyles.f16w6.cyan100),
+                        Icon(downMargin ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
+                        const Spacer(),
+                        Text('MIN: ${((widget.snapshotStats.downSNRmMin ?? 0) / 10).toStringAsFixed(1)}', style: TextStyles.f8hc100),
+                        const SizedBox(width: 4),
+                        Text('MAX: ${((widget.snapshotStats.downSNRmMax ?? 0) / 10).toStringAsFixed(1)}', style: TextStyles.f8hc100),
+                        const SizedBox(width: 4),
+                        Text('AVG: ${((widget.snapshotStats.downSNRmAvg ?? 0) / 10).toStringAsFixed(1)}', style: TextStyles.f8hc100),
+                      ],
                     ),
                   ),
                 ),
-              SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: GestureDetector(
-                  onTap: () => setState(() => downAttainableRate = !downAttainableRate),
-                  child: Row(
-                    children: [
-                      Text('Downstream Attainable Rate', style: TextStyles.f16w6.cyan100),
-                      Icon(downAttainableRate ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
-                      Spacer(),
-                      Text('MIN: ' + (widget.snapshotStats.downAttainableRateMin ?? 0).toString(), style: TextStyles.f8hc100),
-                      SizedBox(width: 4),
-                      Text('MAX: ' + (widget.snapshotStats.downAttainableRateMax ?? 0).toString(), style: TextStyles.f8hc100),
-                      SizedBox(width: 4),
-                      Text('AVG: ' + (widget.snapshotStats.downAttainableRateAvg ?? 0).toString(), style: TextStyles.f8hc100),
-                    ],
-                  ),
-                ),
-              ),
-              if (downAttainableRate)
-                SizedBox(
-                  height: 50,
-                  width: double.infinity,
-                  child: RepaintBoundary(
-                    child: CustomPaint(
-                      painter: LinePathPainter(
-                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downAttainableRate ?? 0)),
-                        scale: scale,
-                        offset: offset,
-                        key: 'downAttainableRate' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                        scaleFormat: (d) => d.toStringAsFixed(1),
+                if (downMargin)
+                  SizedBox(
+                    height: 50,
+                    width: double.infinity,
+                    child: RepaintBoundary(
+                      child: CustomPaint(
+                        painter: LinePathPainter(
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downMargin ?? 0)),
+                          scale: scale,
+                          offset: offset,
+                          key: 'downMargin${widget.statsList.last.time.millisecondsSinceEpoch}',
+                          scaleFormat: (d) => (d / 10).toStringAsFixed(1),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: GestureDetector(
-                  onTap: () => setState(() => upAttainableRate = !upAttainableRate),
-                  child: Row(
-                    children: [
-                      Text('Upstream Attainable Rate', style: TextStyles.f16w6.cyan100),
-                      Icon(upAttainableRate ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
-                      Spacer(),
-                      Text('MIN: ' + (widget.snapshotStats.upAttainableRateMin ?? 0).toString(), style: TextStyles.f8hc100),
-                      SizedBox(width: 4),
-                      Text('MAX: ' + (widget.snapshotStats.upAttainableRateMax ?? 0).toString(), style: TextStyles.f8hc100),
-                      SizedBox(width: 4),
-                      Text('AVG: ' + (widget.snapshotStats.upAttainableRateAvg ?? 0).toString(), style: TextStyles.f8hc100),
-                    ],
-                  ),
-                ),
-              ),
-              if (upAttainableRate)
+                const SizedBox(height: 8),
                 SizedBox(
-                  height: 50,
                   width: double.infinity,
-                  child: RepaintBoundary(
-                    child: CustomPaint(
-                      painter: LinePathPainter(
-                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upAttainableRate ?? 0)),
-                        scale: scale,
-                        offset: offset,
-                        key: 'upAttainableRate' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                        scaleFormat: (d) => d.toStringAsFixed(1),
-                      ),
+                  child: GestureDetector(
+                    onTap: () => setState(() => upMargin = !upMargin),
+                    child: Row(
+                      children: [
+                        Text('Upstream SRNM', style: TextStyles.f16w6.cyan100),
+                        Icon(upMargin ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
+                        const Spacer(),
+                        Text('MIN: ${((widget.snapshotStats.upSNRmMin ?? 0) / 10).toStringAsFixed(1)}', style: TextStyles.f8hc100),
+                        const SizedBox(width: 4),
+                        Text('MAX: ${((widget.snapshotStats.upSNRmMax ?? 0) / 10).toStringAsFixed(1)}', style: TextStyles.f8hc100),
+                        const SizedBox(width: 4),
+                        Text('AVG: ${((widget.snapshotStats.upSNRmAvg ?? 0) / 10).toStringAsFixed(1)}', style: TextStyles.f8hc100),
+                      ],
                     ),
                   ),
                 ),
-              SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: GestureDetector(
-                  onTap: () => setState(() => downFec = !downFec),
-                  child: Row(
-                    children: [
-                      Text('Donwstream FEC', style: TextStyles.f16w6.cyan100),
-                      Icon(downFec ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
-                      Spacer(),
-                      Text('TOTAL: ' + widget.snapshotStats.downFecTotal.toString(), style: TextStyles.f8hc100),
-                    ],
-                  ),
-                ),
-              ),
-              if (downFec)
-                SizedBox(
-                  height: 50,
-                  width: double.infinity,
-                  child: RepaintBoundary(
-                    child: CustomPaint(
-                      painter: WaveFormPainter(
-                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downFECIncr ?? 0)),
-                        scale: scale,
-                        offset: offset,
-                        key: 'downFECIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                if (upMargin)
+                  SizedBox(
+                    height: 50,
+                    width: double.infinity,
+                    child: RepaintBoundary(
+                      child: CustomPaint(
+                        painter: LinePathPainter(
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upMargin ?? 0)),
+                          scale: scale,
+                          offset: offset,
+                          key: 'upMargin${widget.statsList.last.time.millisecondsSinceEpoch}',
+                          scaleFormat: (d) => (d / 10).toStringAsFixed(1),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: GestureDetector(
-                  onTap: () => setState(() => upFec = !upFec),
-                  child: Row(
-                    children: [
-                      Text('Upstream FEC', style: TextStyles.f16w6.cyan100),
-                      Icon(upFec ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
-                      Spacer(),
-                      Text('TOTAL: ' + widget.snapshotStats.upFecTotal.toString(), style: TextStyles.f8hc100),
-                    ],
-                  ),
-                ),
-              ),
-              if (upFec)
+                const SizedBox(height: 8),
                 SizedBox(
-                  height: 50,
                   width: double.infinity,
-                  child: RepaintBoundary(
-                    child: CustomPaint(
-                      painter: WaveFormPainter(
-                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upFECIncr ?? 0)),
-                        scale: scale,
-                        offset: offset,
-                        key: 'upFECIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                      ),
+                  child: GestureDetector(
+                    onTap: () => setState(() => downAttn = !downAttn),
+                    child: Row(
+                      children: [
+                        Text('Downstream ATTN', style: TextStyles.f16w6.cyan100),
+                        Icon(downAttn ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
+                        const Spacer(),
+                        Text('MIN: ${((widget.snapshotStats.downAttenuationMin ?? 0) / 10).toStringAsFixed(1)}', style: TextStyles.f8hc100),
+                        const SizedBox(width: 4),
+                        Text('MAX: ${((widget.snapshotStats.downAttenuationMax ?? 0) / 10).toStringAsFixed(1)}', style: TextStyles.f8hc100),
+                        const SizedBox(width: 4),
+                        Text('AVG: ${((widget.snapshotStats.downAttenuationAvg ?? 0) / 10).toStringAsFixed(1)}', style: TextStyles.f8hc100),
+                      ],
                     ),
                   ),
                 ),
-              SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: GestureDetector(
-                  onTap: () => setState(() => downCrc = !downCrc),
-                  child: Row(
-                    children: [
-                      Text('Donwstream CRC', style: TextStyles.f16w6.cyan100),
-                      Icon(downCrc ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
-                      Spacer(),
-                      Text('TOTAL: ' + widget.snapshotStats.downCrcTotal.toString(), style: TextStyles.f8hc100),
-                    ],
-                  ),
-                ),
-              ),
-              if (downCrc)
-                SizedBox(
-                  height: 50,
-                  width: double.infinity,
-                  child: RepaintBoundary(
-                    child: CustomPaint(
-                      painter: WaveFormPainter(
-                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downCRCIncr ?? 0)),
-                        scale: scale,
-                        offset: offset,
-                        key: 'downCRCIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
+                if (downAttn)
+                  SizedBox(
+                    height: 50,
+                    width: double.infinity,
+                    child: RepaintBoundary(
+                      child: CustomPaint(
+                        painter: LinePathPainter(
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downAttenuation ?? 0)),
+                          scale: scale,
+                          offset: offset,
+                          key: 'downAttenuation${widget.statsList.last.time.millisecondsSinceEpoch}',
+                          scaleFormat: (d) => (d / 10).toStringAsFixed(1),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: GestureDetector(
-                  onTap: () => setState(() => upCrc = !upCrc),
-                  child: Row(
-                    children: [
-                      Text('Upstream CRC', style: TextStyles.f16w6.cyan100),
-                      Icon(upCrc ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
-                      Spacer(),
-                      Text('TOTAL: ' + widget.snapshotStats.upCrcTotal.toString(), style: TextStyles.f8hc100),
-                    ],
-                  ),
-                ),
-              ),
-              if (upCrc)
+                const SizedBox(height: 8),
                 SizedBox(
-                  height: 50,
                   width: double.infinity,
-                  child: RepaintBoundary(
-                    child: CustomPaint(
-                      painter: WaveFormPainter(
-                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upCRCIncr ?? 0)),
-                        scale: scale,
-                        offset: offset,
-                        key: 'upCRCIncr' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                      ),
+                  child: GestureDetector(
+                    onTap: () => setState(() => upAttn = !upAttn),
+                    child: Row(
+                      children: [
+                        Text('Upstream ATTN', style: TextStyles.f16w6.cyan100),
+                        Icon(upAttn ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
+                        const Spacer(),
+                        Text('MIN: ${((widget.snapshotStats.upAttenuationMin ?? 0) / 10).toStringAsFixed(1)}', style: TextStyles.f8hc100),
+                        const SizedBox(width: 4),
+                        Text('MAX: ${((widget.snapshotStats.upAttenuationMax ?? 0) / 10).toStringAsFixed(1)}', style: TextStyles.f8hc100),
+                        const SizedBox(width: 4),
+                        Text('AVG: ${((widget.snapshotStats.upAttenuationAvg ?? 0) / 10).toStringAsFixed(1)}', style: TextStyles.f8hc100),
+                      ],
                     ),
                   ),
                 ),
-              SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: GestureDetector(
-                  onTap: () => setState(() => downMargin = !downMargin),
-                  child: Row(
-                    children: [
-                      Text('Downstream SRNM', style: TextStyles.f16w6.cyan100),
-                      Icon(downMargin ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
-                      Spacer(),
-                      Text('MIN: ' + ((widget.snapshotStats.downSNRmMin ?? 0) / 10).toStringAsFixed(1), style: TextStyles.f8hc100),
-                      SizedBox(width: 4),
-                      Text('MAX: ' + ((widget.snapshotStats.downSNRmMax ?? 0) / 10).toStringAsFixed(1), style: TextStyles.f8hc100),
-                      SizedBox(width: 4),
-                      Text('AVG: ' + ((widget.snapshotStats.downSNRmAvg ?? 0) / 10).toStringAsFixed(1), style: TextStyles.f8hc100),
-                    ],
-                  ),
-                ),
-              ),
-              if (downMargin)
-                SizedBox(
-                  height: 50,
-                  width: double.infinity,
-                  child: RepaintBoundary(
-                    child: CustomPaint(
-                      painter: LinePathPainter(
-                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downMargin ?? 0)),
-                        scale: scale,
-                        offset: offset,
-                        key: 'downMargin' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                        scaleFormat: (d) => (d / 10).toStringAsFixed(1),
+                if (upAttn)
+                  SizedBox(
+                    height: 50,
+                    width: double.infinity,
+                    child: RepaintBoundary(
+                      child: CustomPaint(
+                        painter: LinePathPainter(
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upAttenuation ?? 0)),
+                          scale: scale,
+                          offset: offset,
+                          key: 'upAttenuation${widget.statsList.last.time.millisecondsSinceEpoch}',
+                          scaleFormat: (d) => (d / 10).toStringAsFixed(1),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: GestureDetector(
-                  onTap: () => setState(() => upMargin = !upMargin),
-                  child: Row(
-                    children: [
-                      Text('Upstream SRNM', style: TextStyles.f16w6.cyan100),
-                      Icon(upMargin ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
-                      Spacer(),
-                      Text('MIN: ' + ((widget.snapshotStats.upSNRmMin ?? 0) / 10).toStringAsFixed(1), style: TextStyles.f8hc100),
-                      SizedBox(width: 4),
-                      Text('MAX: ' + ((widget.snapshotStats.upSNRmMax ?? 0) / 10).toStringAsFixed(1), style: TextStyles.f8hc100),
-                      SizedBox(width: 4),
-                      Text('AVG: ' + ((widget.snapshotStats.upSNRmAvg ?? 0) / 10).toStringAsFixed(1), style: TextStyles.f8hc100),
-                    ],
-                  ),
-                ),
-              ),
-              if (upMargin)
-                SizedBox(
-                  height: 50,
-                  width: double.infinity,
-                  child: RepaintBoundary(
-                    child: CustomPaint(
-                      painter: LinePathPainter(
-                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upMargin ?? 0)),
-                        scale: scale,
-                        offset: offset,
-                        key: 'upMargin' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                        scaleFormat: (d) => (d / 10).toStringAsFixed(1),
-                      ),
-                    ),
-                  ),
-                ),
-              SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: GestureDetector(
-                  onTap: () => setState(() => downAttn = !downAttn),
-                  child: Row(
-                    children: [
-                      Text('Downstream ATTN', style: TextStyles.f16w6.cyan100),
-                      Icon(downAttn ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
-                      Spacer(),
-                      Text('MIN: ' + ((widget.snapshotStats.downAttenuationMin ?? 0) / 10).toStringAsFixed(1), style: TextStyles.f8hc100),
-                      SizedBox(width: 4),
-                      Text('MAX: ' + ((widget.snapshotStats.downAttenuationMax ?? 0) / 10).toStringAsFixed(1), style: TextStyles.f8hc100),
-                      SizedBox(width: 4),
-                      Text('AVG: ' + ((widget.snapshotStats.downAttenuationAvg ?? 0) / 10).toStringAsFixed(1), style: TextStyles.f8hc100),
-                    ],
-                  ),
-                ),
-              ),
-              if (downAttn)
-                SizedBox(
-                  height: 50,
-                  width: double.infinity,
-                  child: RepaintBoundary(
-                    child: CustomPaint(
-                      painter: LinePathPainter(
-                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downAttenuation ?? 0)),
-                        scale: scale,
-                        offset: offset,
-                        key: 'downAttenuation' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                        scaleFormat: (d) => (d / 10).toStringAsFixed(1),
-                      ),
-                    ),
-                  ),
-                ),
-              SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: GestureDetector(
-                  onTap: () => setState(() => upAttn = !upAttn),
-                  child: Row(
-                    children: [
-                      Text('Upstream ATTN', style: TextStyles.f16w6.cyan100),
-                      Icon(upAttn ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
-                      Spacer(),
-                      Text('MIN: ' + ((widget.snapshotStats.upAttenuationMin ?? 0) / 10).toStringAsFixed(1), style: TextStyles.f8hc100),
-                      SizedBox(width: 4),
-                      Text('MAX: ' + ((widget.snapshotStats.upAttenuationMax ?? 0) / 10).toStringAsFixed(1), style: TextStyles.f8hc100),
-                      SizedBox(width: 4),
-                      Text('AVG: ' + ((widget.snapshotStats.upAttenuationAvg ?? 0) / 10).toStringAsFixed(1), style: TextStyles.f8hc100),
-                    ],
-                  ),
-                ),
-              ),
-              if (upAttn)
-                SizedBox(
-                  height: 50,
-                  width: double.infinity,
-                  child: RepaintBoundary(
-                    child: CustomPaint(
-                      painter: LinePathPainter(
-                        data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upAttenuation ?? 0)),
-                        scale: scale,
-                        offset: offset,
-                        key: 'upAttenuation' + widget.statsList.last.time.millisecondsSinceEpoch.toString(),
-                        scaleFormat: (d) => (d / 10).toStringAsFixed(1),
-                      ),
-                    ),
-                  ),
-                ),
-              SizedBox(height: 32),
-            ],
+                const SizedBox(height: 32),
+              ],
+            ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }

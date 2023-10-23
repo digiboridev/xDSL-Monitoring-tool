@@ -29,7 +29,7 @@ class LoadingWrapper extends StatelessWidget {
               alignment: Alignment.center,
               child: const CircularProgressIndicator(),
             ),
-          )
+          ),
       ],
     );
   }

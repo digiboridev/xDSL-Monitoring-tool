@@ -80,6 +80,7 @@ class StatsRepositoryDriftImpl implements StatsRepository {
     return _snapshotStatsBus.stream.where((snapshotStats) => snapshotStats.snapshotId == snapshotId);
   }
 
+  @override
   Future deleteStats(String snapshotId) async {
     await _dao.deleteStats(snapshotId);
   }

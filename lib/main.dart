@@ -50,6 +50,7 @@ class App extends StatelessWidget {
 }
 
 // TODO settings text, ext host remove, wakelock and fore switch
+// TODO painters colors from constructor
 // TODO nu clients restore
 // TODO sign
 // TODO release

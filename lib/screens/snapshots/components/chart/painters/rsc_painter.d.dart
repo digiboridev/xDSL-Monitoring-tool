@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/path_factory.dart';
 
-@deprecated
+@Deprecated('backup')
 class RSCPainter extends CustomPainter {
   final Iterable<TimeValue> data;
   final double scale;

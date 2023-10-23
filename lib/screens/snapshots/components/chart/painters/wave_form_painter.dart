@@ -35,7 +35,7 @@ class WaveFormPainter extends CustomPainter {
 
     // Draw vMax vertical mesh
     final int vMax = metadata.vMax;
-    final int meshSteps = 3;
+    const int meshSteps = 3;
     final double meshStep = size.height / meshSteps;
     canvas.drawLine(
       Offset(0, size.height / 2),
@@ -52,7 +52,7 @@ class WaveFormPainter extends CustomPainter {
             color: Colors.cyan.shade50,
             fontSize: 6,
             shadows: [
-              Shadow(blurRadius: 2, color: Colors.black),
+              const Shadow(blurRadius: 2, color: Colors.black),
               Shadow(blurRadius: 8, color: Colors.blueGrey.shade800),
             ],
           ),

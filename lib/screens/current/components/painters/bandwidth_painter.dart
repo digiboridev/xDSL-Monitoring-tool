@@ -36,7 +36,7 @@ class BandwPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    Rect rect = Offset(6, 6) & Size(size.width - 12, size.height - 12); // -12 to make room for the stroke
+    Rect rect = const Offset(6, 6) & Size(size.width - 12, size.height - 12); // -12 to make room for the stroke
     canvas.drawArc(rect, _startAngle, _sweepAngle, false, _bgPaint);
     canvas.drawArc(rect, _startAngle, _aAngle, false, _attPaint);
     canvas.drawArc(rect, _startAngle, _cAngle, false, _currPaint);

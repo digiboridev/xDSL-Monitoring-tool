@@ -36,7 +36,7 @@ class LinePathPainter extends CustomPainter {
 
     // Draw vMax vertical mesh
     final int vMax = metadata.vMax;
-    final int meshSteps = 5;
+    const int meshSteps = 5;
     final double meshStep = size.height / meshSteps;
     for (int i = 0; i < meshSteps; i++) {
       final double y = meshStep * i;
@@ -48,7 +48,7 @@ class LinePathPainter extends CustomPainter {
             color: Colors.cyan.shade50,
             fontSize: 6,
             shadows: [
-              Shadow(blurRadius: 2, color: Colors.black),
+              const Shadow(blurRadius: 2, color: Colors.black),
               Shadow(blurRadius: 8, color: Colors.blueGrey.shade800),
             ],
           ),

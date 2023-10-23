@@ -16,7 +16,7 @@ class Summary extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Column(
+          const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Start time:', style: TextStyles.f14w3, overflow: TextOverflow.ellipsis),
@@ -33,13 +33,13 @@ class Summary extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text('${stats?.startTime.ymdhms ?? 'N/A'}', style: TextStyles.f14, overflow: TextOverflow.ellipsis),
-                Text('${stats?.lastSampleTime?.ymdhms ?? 'N/A'}', style: TextStyles.f14, overflow: TextOverflow.ellipsis),
-                Text('${stats?.samplingDuration.hms ?? 'N/A'}', style: TextStyles.f14, overflow: TextOverflow.ellipsis),
-                Text('${stats?.uplinkDuration.hms ?? 'N/A'}', style: TextStyles.f14, overflow: TextOverflow.ellipsis),
-                Text('${stats?.disconnects ?? 'N/A'}', style: TextStyles.f14, overflow: TextOverflow.ellipsis),
-                Text('${stats?.samples ?? 'N/A'}', style: TextStyles.f14, overflow: TextOverflow.ellipsis),
-                Text('${stats?.samplingErrors ?? 'N/A'}', style: TextStyles.f14, overflow: TextOverflow.ellipsis),
+                Text(stats?.startTime.ymdhms ?? 'N/A', style: TextStyles.f14, overflow: TextOverflow.ellipsis),
+                Text(stats?.lastSampleTime?.ymdhms ?? 'N/A', style: TextStyles.f14, overflow: TextOverflow.ellipsis),
+                Text(stats?.samplingDuration.hms ?? 'N/A', style: TextStyles.f14, overflow: TextOverflow.ellipsis),
+                Text(stats?.uplinkDuration.hms ?? 'N/A', style: TextStyles.f14, overflow: TextOverflow.ellipsis),
+                Text(stats?.disconnects.toString() ?? 'N/A', style: TextStyles.f14, overflow: TextOverflow.ellipsis),
+                Text(stats?.samples.toString() ?? 'N/A', style: TextStyles.f14, overflow: TextOverflow.ellipsis),
+                Text(stats?.samplingErrors.toString() ?? 'N/A', style: TextStyles.f14, overflow: TextOverflow.ellipsis),
               ],
             ),
           ),

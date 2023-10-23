@@ -57,7 +57,7 @@ class TimelinePainter extends CustomPainter {
       final curTimeDate = DateTime.fromMillisecondsSinceEpoch((startStamp + curTimeStep).toInt());
       final timePainter = TextPainter(
         text: TextSpan(
-          text: curTimeDate.numhms + '\n' + curTimeDate.numymd,
+          text: '${curTimeDate.numhms}\n${curTimeDate.numymd}',
           style: TextStyle(color: Colors.cyan.shade100, fontSize: 8),
         ),
         textDirection: TextDirection.ltr,

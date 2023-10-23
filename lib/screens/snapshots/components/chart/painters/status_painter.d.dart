@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/path_factory.dart';
 
-@deprecated
+@Deprecated('backup')
 class StatusPainter extends CustomPainter {
   final Iterable<TimeStatus> data;
   final double scale;

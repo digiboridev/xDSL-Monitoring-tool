@@ -34,15 +34,16 @@ class _SnapshotViewerState extends State<SnapshotViewer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: SizedBox(),
+        leading: const SizedBox(),
         actions: [
           IconButton(
             onPressed: () => Navigator.pop(context),
-            icon: Icon(Icons.close),
+            icon: const Icon(Icons.close),
             color: Colors.cyan.shade100,
           ),
         ],
         title: Hero(
+          tag: widget.snapshotId,
           child: Material(
             key: Key(widget.snapshotId),
             color: Colors.transparent,
@@ -51,7 +52,6 @@ class _SnapshotViewerState extends State<SnapshotViewer> {
               style: TextStyles.f18w6.cyan100,
             ),
           ),
-          tag: widget.snapshotId,
         ),
         backgroundColor: Colors.blueGrey.shade900,
       ),
@@ -62,14 +62,14 @@ class _SnapshotViewerState extends State<SnapshotViewer> {
   }
 
   Widget body() {
-    if (snapshotStats == null) return Center(child: CircularProgressIndicator());
-    if (statsList.isEmpty) return Center(child: CircularProgressIndicator());
+    if (snapshotStats == null) return const Center(child: CircularProgressIndicator());
+    if (statsList.isEmpty) return const Center(child: CircularProgressIndicator());
 
     return Container(
       color: Colors.blueGrey.shade900,
-      padding: EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.vertical,
         child: InteractiveChart(statsList: statsList, snapshotStats: snapshotStats!),
       ),

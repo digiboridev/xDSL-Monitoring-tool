@@ -20,9 +20,9 @@ class ScreensWrapper extends StatefulWidget {
 
 class _ScreensWrapperState extends State<ScreensWrapper> {
   late final List screens = [
-    CurrentScreen(),
-    SnapshotsScreenBinding(child: SnapshotsScreenView()),
-    SettingsScreenBinding(child: SettingsScreenView()),
+    const CurrentScreen(),
+    const SnapshotsScreenBinding(child: SnapshotsScreenView()),
+    const SettingsScreenBinding(child: SettingsScreenView()),
   ];
 
   int screenIndex = 0;
@@ -50,7 +50,13 @@ class _ScreensWrapperState extends State<ScreensWrapper> {
         ]);
       } else {
         SystemChrome.setPreferredOrientations(
-            [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown, DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+          [
+            DeviceOrientation.portraitUp,
+            DeviceOrientation.portraitDown,
+            DeviceOrientation.landscapeLeft,
+            DeviceOrientation.landscapeRight,
+          ],
+        );
       }
     }
 
@@ -71,7 +77,7 @@ class _ScreensWrapperState extends State<ScreensWrapper> {
     return WillPopScope(
       onWillPop: () async {
         bool sampling = context.read<StatsSamplingService>().samplingActive;
-        if (sampling) MethodChannel('main').invokeMethod('minimize');
+        if (sampling) const MethodChannel('main').invokeMethod('minimize');
         return !sampling;
       },
       child: Scaffold(
@@ -82,7 +88,7 @@ class _ScreensWrapperState extends State<ScreensWrapper> {
               tooltip: 'Minimize app',
               icon: Icon(Icons.minimize, color: Colors.cyan.shade100),
               onPressed: () {
-                MethodChannel('main').invokeMethod('minimize');
+                const MethodChannel('main').invokeMethod('minimize');
               },
             ),
             IconButton(
@@ -97,11 +103,11 @@ class _ScreensWrapperState extends State<ScreensWrapper> {
         ),
         // body: screens[_screenIndex],
         body: AnimatedSwitcher(duration: const Duration(milliseconds: 200), child: screens[screenIndex]),
-        floatingActionButton: screenIndex == 0 ? FloatButton() : null,
+        floatingActionButton: screenIndex == 0 ? const FloatButton() : null,
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: screenIndex,
           onTap: selectScreen,
-          items: [
+          items: const [
             BottomNavigationBarItem(icon: Icon(Icons.timeline), label: 'Monitoring'),
             BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Snapshots'),
             BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
@@ -129,16 +135,16 @@ class _FloatButtonState extends State<FloatButton> {
 
     if (samplingService.samplingActive) {
       samplingService.stopSampling();
-      MethodChannel('main').invokeMethod('stopForegroundService');
-      MethodChannel('main').invokeMethod('stopWakeLock');
+      const MethodChannel('main').invokeMethod('stopForegroundService');
+      const MethodChannel('main').invokeMethod('stopWakeLock');
     } else {
       samplingService.runSampling();
-      MethodChannel('main').invokeMethod('startForegroundService');
-      MethodChannel('main').invokeMethod('startWakeLock');
+      const MethodChannel('main').invokeMethod('startForegroundService');
+      const MethodChannel('main').invokeMethod('startWakeLock');
     }
 
     setState(() => busy = true);
-    await Future.delayed(Duration(milliseconds: 1000));
+    await Future.delayed(const Duration(milliseconds: 1000));
     setState(() => busy = false);
   }
 
@@ -146,9 +152,9 @@ class _FloatButtonState extends State<FloatButton> {
     bool sampling = context.select<StatsSamplingService, bool>((value) => value.samplingActive);
 
     if (sampling) {
-      return Icon(Icons.stop, color: Colors.white, key: Key('stop'));
+      return const Icon(Icons.stop, color: Colors.white, key: Key('stop'));
     } else {
-      return Icon(Icons.play_arrow, color: Colors.white, key: Key('play'));
+      return const Icon(Icons.play_arrow, color: Colors.white, key: Key('play'));
     }
   }
 
@@ -159,7 +165,7 @@ class _FloatButtonState extends State<FloatButton> {
       onPressed: () => toogleSampling(context),
       hoverColor: Colors.amber[100],
       child: AnimatedSwitcher(
-        duration: Duration(milliseconds: 1000),
+        duration: const Duration(milliseconds: 1000),
         switchInCurve: Curves.elasticOut,
         switchOutCurve: Curves.ease,
         child: getIcon,

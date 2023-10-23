@@ -13,10 +13,10 @@ class StatusEventsPainter extends CustomPainter {
     ..colorFilter = ColorFilter.mode(Colors.cyan.shade100, BlendMode.srcOver)
     ..style = PaintingStyle.stroke;
   static final Paint pd = Paint()
-    ..colorFilter = ColorFilter.mode(Colors.black, BlendMode.srcOver)
+    ..colorFilter = const ColorFilter.mode(Colors.black, BlendMode.srcOver)
     ..style = PaintingStyle.stroke;
   static final Paint pe = Paint()
-    ..colorFilter = ColorFilter.mode(Colors.red, BlendMode.srcOver)
+    ..colorFilter = const ColorFilter.mode(Colors.red, BlendMode.srcOver)
     ..style = PaintingStyle.stroke;
 
   @override

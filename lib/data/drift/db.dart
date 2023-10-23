@@ -30,7 +30,7 @@ class DB extends _$DB {
       beforeOpen: (openingDetails) async {
         if (kDebugMode && openingDetails.hadUpgrade) {
           debugPrint('drift beforeOpen');
-          final m = this.createMigrator(); // changed to this
+          final m = createMigrator();
           for (final table in allTables) {
             await m.deleteTable(table.actualTableName);
             await m.createTable(table);

@@ -13,7 +13,7 @@ class FillableScrollableWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox.expand(
       child: CustomScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         slivers: [
           SliverFillRemaining(
             hasScrollBody: false,

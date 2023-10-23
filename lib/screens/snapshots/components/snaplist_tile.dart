@@ -57,18 +57,18 @@ class _SnaplistTileState extends State<SnaplistTile> {
       builder: (context) => BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
         child: AlertDialog(
-          title: Text('Delete snapshot?'),
-          content: Text('This will delete all data associated with this snapshot.'),
+          title: const Text('Delete snapshot?'),
+          content: const Text('This will delete all data associated with this snapshot.'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
                 Navigator.pop(context, true);
               },
-              child: Text('Delete'),
+              child: const Text('Delete'),
             ),
           ],
         ),
@@ -77,6 +77,7 @@ class _SnaplistTileState extends State<SnaplistTile> {
 
     if (result == true) {
       await statsRepository.deleteStats(widget.snapshotId);
+      if (!mounted) return;
       context.read<SnapshotsScreenViewModel>().refresh();
     }
   }
@@ -84,25 +85,25 @@ class _SnaplistTileState extends State<SnaplistTile> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: EdgeInsets.all(0),
+      contentPadding: const EdgeInsets.all(0),
       onTap: onTap,
       title: Hero(
+        tag: widget.snapshotId,
         child: Material(
           key: Key(widget.snapshotId),
           color: Colors.transparent,
           child: Text(
-            'Snapshot: ' + widget.snapshotId,
+            'Snapshot: ${widget.snapshotId}',
             style: TextStyles.f16w6.blueGrey900,
           ),
         ),
-        tag: widget.snapshotId,
       ),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (snapshotStats != null) ...[
             Text(snapshotStats!.startTime.ymdhms),
-            Text('T: ' + snapshotStats!.samplingDuration.hms + '  ' + 'UP: ' + snapshotStats!.uplinkDuration.hms)
+            Text('T: ${snapshotStats!.samplingDuration.hms}  UP: ${snapshotStats!.uplinkDuration.hms}'),
           ],
         ],
       ),
@@ -110,18 +111,18 @@ class _SnaplistTileState extends State<SnaplistTile> {
         width: 50,
         child: Column(
           children: [
-            Icon(Icons.bar_chart),
+            const Icon(Icons.bar_chart),
             if (snapshotStats != null) ...[
-              Text('S:' + snapshotStats!.samples.toString()),
-              Text('D:' + snapshotStats!.samplingErrors.toString()),
-            ]
+              Text('S:${snapshotStats!.samples}'),
+              Text('D:${snapshotStats!.samplingErrors}'),
+            ],
           ],
         ),
       ),
       trailing: isActiveSnapshot
           ? null
           : IconButton(
-              icon: Icon(Icons.playlist_remove_sharp),
+              icon: const Icon(Icons.playlist_remove_sharp),
               onPressed: onDelete,
             ),
     );

@@ -23,7 +23,7 @@ class CurrentScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            RepaintBoundary(child: StatusBar()),
+            const RepaintBoundary(child: StatusBar()),
             Expanded(
               child: ShaderMask(
                 shaderCallback: (Rect rect) {
@@ -36,7 +36,7 @@ class CurrentScreen extends StatelessWidget {
                 },
                 blendMode: BlendMode.dstOut,
                 child: ListView(
-                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
                   physics: const BouncingScrollPhysics(),
                   children: [
                     Text('Current / Attainable bandwidth', style: TextStyles.f16w6.blueGrey900, textAlign: TextAlign.center),

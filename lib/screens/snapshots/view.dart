@@ -36,7 +36,7 @@ class SnapshotsScreenView extends StatelessWidget {
               final snapshots = context.select<SnapshotsScreenViewModel, List<String>>((vm) => vm.snapshots);
               if (snapshots.isNotEmpty) {
                 return ListView.builder(
-                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
                   itemBuilder: (context, index) {
                     final snapshotId = snapshots[index];
                     return SnaplistTile(snapshotId: snapshotId, key: ValueKey(snapshotId));
@@ -44,7 +44,7 @@ class SnapshotsScreenView extends StatelessWidget {
                   itemCount: snapshots.length,
                 );
               }
-              return Center(
+              return const Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [Icon(Icons.data_array), SizedBox(width: 8), Text('Nothing captured yet...')],

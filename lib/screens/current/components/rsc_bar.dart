@@ -20,78 +20,81 @@ class RSCBar extends StatelessWidget {
 
   Widget bars() {
     return RepaintBoundary(
-      child: Builder(builder: (context) {
-        final v = context.watch<StatsSamplingService>().lastSamples;
-        List<int> dfec = [];
-        List<int> ufec = [];
-        List<int> dcrc = [];
-        List<int> ucrc = [];
+      child: Builder(
+        builder: (context) {
+          final v = context.watch<StatsSamplingService>().lastSamples;
+          List<int> dfec = [];
+          List<int> ufec = [];
+          List<int> dcrc = [];
+          List<int> ucrc = [];
 
-        for (final s in v) {
-          dfec.add(s.downFECIncr ?? 0);
-          ufec.add(s.upFECIncr ?? 0);
-          dcrc.add(s.downCRCIncr ?? 0);
-          ucrc.add(s.upCRCIncr ?? 0);
-        }
+          for (final s in v) {
+            dfec.add(s.downFECIncr ?? 0);
+            ufec.add(s.upFECIncr ?? 0);
+            dcrc.add(s.downCRCIncr ?? 0);
+            ucrc.add(s.upCRCIncr ?? 0);
+          }
 
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Container(
-              width: 75,
-              height: 50,
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.blueGrey.shade100),
-                  borderRadius: BorderRadius.circular(3),
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                width: 75,
+                height: 50,
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.blueGrey.shade100),
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                  child: CustomPaint(painter: WaveFormTimelessPainter(max: 1000, increasedData: dfec)),
                 ),
-                child: CustomPaint(painter: WaveFormTimelessPainter(max: 1000, increasedData: dfec)),
               ),
-            ),
-            Container(
-              width: 75,
-              height: 50,
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.blueGrey.shade100),
-                  borderRadius: BorderRadius.circular(3),
-                ),
-                child: CustomPaint(
+              Container(
+                width: 75,
+                height: 50,
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.blueGrey.shade100),
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                  child: CustomPaint(
                     painter: WaveFormTimelessPainter(
-                  max: 1000,
-                  increasedData: dcrc,
-                )),
-              ),
-            ),
-            Container(
-              width: 75,
-              height: 50,
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.blueGrey.shade100),
-                  borderRadius: BorderRadius.circular(3),
+                      max: 1000,
+                      increasedData: dcrc,
+                    ),
+                  ),
                 ),
-                child: CustomPaint(painter: WaveFormTimelessPainter(max: 1000, increasedData: ufec)),
               ),
-            ),
-            Container(
-              width: 75,
-              height: 50,
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.blueGrey.shade100),
-                  borderRadius: BorderRadius.circular(3),
+              Container(
+                width: 75,
+                height: 50,
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.blueGrey.shade100),
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                  child: CustomPaint(painter: WaveFormTimelessPainter(max: 1000, increasedData: ufec)),
                 ),
-                child: CustomPaint(painter: WaveFormTimelessPainter(max: 1000, increasedData: ucrc)),
               ),
-            ),
-          ],
-        );
-      }),
+              Container(
+                width: 75,
+                height: 50,
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.blueGrey.shade100),
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                  child: CustomPaint(painter: WaveFormTimelessPainter(max: 1000, increasedData: ucrc)),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 
@@ -110,10 +113,10 @@ class RSCBar extends StatelessWidget {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('FEC D', style: TextStyles.f12w6),
-                    Text('Total', style: TextStyles.f10),
-                    Text('${downFecTotalExp ?? 'n/a'}', style: TextStyles.f12w3),
-                    Text('Impulse', style: TextStyles.f10),
+                    const Text('FEC D', style: TextStyles.f12w6),
+                    const Text('Total', style: TextStyles.f10),
+                    Text(downFecTotalExp ?? 'n/a', style: TextStyles.f12w3),
+                    const Text('Impulse', style: TextStyles.f10),
                     Text('${downFecLast ?? 'n/a'}', style: TextStyles.f12w3),
                   ],
                 );
@@ -133,10 +136,10 @@ class RSCBar extends StatelessWidget {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('CRC D', style: TextStyles.f12w6),
-                    Text('Total', style: TextStyles.f10),
-                    Text('${downCrcTotalExp ?? 'n/a'}', style: TextStyles.f12w3),
-                    Text('Impulse', style: TextStyles.f10),
+                    const Text('CRC D', style: TextStyles.f12w6),
+                    const Text('Total', style: TextStyles.f10),
+                    Text(downCrcTotalExp ?? 'n/a', style: TextStyles.f12w3),
+                    const Text('Impulse', style: TextStyles.f10),
                     Text('${downCrcLast ?? 'n/a'}', style: TextStyles.f12w3),
                   ],
                 );
@@ -156,10 +159,10 @@ class RSCBar extends StatelessWidget {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('FEC U', style: TextStyles.f12w6),
-                    Text('Total', style: TextStyles.f10),
-                    Text('${upFecTotalExp ?? 'n/a'}', style: TextStyles.f12w3),
-                    Text('Impulse', style: TextStyles.f10),
+                    const Text('FEC U', style: TextStyles.f12w6),
+                    const Text('Total', style: TextStyles.f10),
+                    Text(upFecTotalExp ?? 'n/a', style: TextStyles.f12w3),
+                    const Text('Impulse', style: TextStyles.f10),
                     Text('${upFecLast ?? 'n/a'}', style: TextStyles.f12w3),
                   ],
                 );
@@ -179,10 +182,10 @@ class RSCBar extends StatelessWidget {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('CRC U', style: TextStyles.f12w6),
-                    Text('Total', style: TextStyles.f10),
-                    Text('${upCrcTotalExp ?? 'n/a'}', style: TextStyles.f12w3),
-                    Text('Impulse', style: TextStyles.f10),
+                    const Text('CRC U', style: TextStyles.f12w6),
+                    const Text('Total', style: TextStyles.f10),
+                    Text(upCrcTotalExp ?? 'n/a', style: TextStyles.f12w3),
+                    const Text('Impulse', style: TextStyles.f10),
                     Text('${upCrcLast ?? 'n/a'}', style: TextStyles.f12w3),
                   ],
                 );

@@ -25,10 +25,7 @@ class SamplingInterval extends StatelessWidget {
             data: SliderThemeData(
               trackHeight: 2,
               thumbColor: Colors.blueGrey.shade900,
-              thumbShape: RoundSliderThumbShape(
-                enabledThumbRadius: 8,
-                pressedElevation: 10,
-              ),
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8, pressedElevation: 10),
             ),
             child: Slider(
               value: _watchSamplingInterval(context).inSeconds.toDouble(),

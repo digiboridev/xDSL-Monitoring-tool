@@ -17,7 +17,7 @@ class AnimationSwitch extends StatelessWidget {
       child: Row(
         children: [
           Text('Animations', style: TextStyles.f16w6.blueGrey800),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           SizedBox(
             height: 28,
             child: FittedBox(

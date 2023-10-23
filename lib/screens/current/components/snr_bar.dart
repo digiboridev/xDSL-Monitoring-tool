@@ -22,37 +22,43 @@ class SNRBar extends StatelessWidget {
               child: Column(
                 children: [
                   RepaintBoundary(
-                    child: Builder(builder: (context) {
-                      final v = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downSNRmLast);
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('SNRM Down: ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f12),
-                          Text('dB', style: TextStyles.f10w3.blueGrey800),
-                          SizedBox(width: 4),
-                          SizedBox(width: 4, height: 16, child: LineBar(value: v ?? 0, min: 0, max: 160)),
-                        ],
-                      );
-                    }),
+                    child: Builder(
+                      builder: (context) {
+                        final v = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downSNRmLast);
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('SNRM Down: ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f12),
+                            Text('dB', style: TextStyles.f10w3.blueGrey800),
+                            const SizedBox(width: 4),
+                            SizedBox(width: 4, height: 16, child: LineBar(value: v ?? 0, min: 0, max: 160)),
+                          ],
+                        );
+                      },
+                    ),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   RepaintBoundary(
-                    child: Builder(builder: (context) {
-                      final v = context.watch<StatsSamplingService>().lastSamples;
-                      final s = v.map((e) => e.downMargin).toList();
-                      if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
-                      return LineChart(s: s, invert: false);
-                    }),
+                    child: Builder(
+                      builder: (context) {
+                        final v = context.watch<StatsSamplingService>().lastSamples;
+                        final s = v.map((e) => e.downMargin).toList();
+                        if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
+                        return LineChart(s: s, invert: false);
+                      },
+                    ),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   RepaintBoundary(
-                    child: Builder(builder: (context) {
-                      final min = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downSNRmMin);
-                      final max = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downSNRmMax);
-                      final avg = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downSNRmAvg);
-                      return MinMaxAvgRow(min: min, max: max, avg: avg);
-                    }),
+                    child: Builder(
+                      builder: (context) {
+                        final min = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downSNRmMin);
+                        final max = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downSNRmMax);
+                        final avg = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downSNRmAvg);
+                        return MinMaxAvgRow(min: min, max: max, avg: avg);
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -62,44 +68,50 @@ class SNRBar extends StatelessWidget {
               child: Column(
                 children: [
                   RepaintBoundary(
-                    child: Builder(builder: (context) {
-                      final v = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upSNRmLast);
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('SNRM Up: ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f12),
-                          Text('dB', style: TextStyles.f10w3.blueGrey800),
-                          SizedBox(width: 4),
-                          SizedBox(width: 4, height: 16, child: LineBar(value: v ?? 0, min: 0, max: 160)),
-                        ],
-                      );
-                    }),
+                    child: Builder(
+                      builder: (context) {
+                        final v = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upSNRmLast);
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('SNRM Up: ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f12),
+                            Text('dB', style: TextStyles.f10w3.blueGrey800),
+                            const SizedBox(width: 4),
+                            SizedBox(width: 4, height: 16, child: LineBar(value: v ?? 0, min: 0, max: 160)),
+                          ],
+                        );
+                      },
+                    ),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   RepaintBoundary(
-                    child: Builder(builder: (context) {
-                      final v = context.watch<StatsSamplingService>().lastSamples;
-                      final s = v.map((e) => e.upMargin).toList();
-                      if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
-                      return LineChart(s: s, invert: false);
-                    }),
+                    child: Builder(
+                      builder: (context) {
+                        final v = context.watch<StatsSamplingService>().lastSamples;
+                        final s = v.map((e) => e.upMargin).toList();
+                        if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
+                        return LineChart(s: s, invert: false);
+                      },
+                    ),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   RepaintBoundary(
-                    child: Builder(builder: (context) {
-                      final min = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upSNRmMin);
-                      final max = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upSNRmMax);
-                      final avg = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upSNRmAvg);
-                      return MinMaxAvgRow(min: min, max: max, avg: avg);
-                    }),
+                    child: Builder(
+                      builder: (context) {
+                        final min = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upSNRmMin);
+                        final max = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upSNRmMax);
+                        final avg = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upSNRmAvg);
+                        return MinMaxAvgRow(min: min, max: max, avg: avg);
+                      },
+                    ),
                   ),
                 ],
               ),
             ),
           ],
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -108,37 +120,43 @@ class SNRBar extends StatelessWidget {
               child: Column(
                 children: [
                   RepaintBoundary(
-                    child: Builder(builder: (context) {
-                      final v = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downAttenuationLast);
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('ATN Down:  ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f12),
-                          Text('dB', style: TextStyles.f10w3.blueGrey800),
-                          SizedBox(width: 4),
-                          SizedBox(width: 4, height: 16, child: LineBar(value: 1000 - (v ?? 1000), min: 0, max: 1000)),
-                        ],
-                      );
-                    }),
+                    child: Builder(
+                      builder: (context) {
+                        final v = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downAttenuationLast);
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('ATN Down:  ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f12),
+                            Text('dB', style: TextStyles.f10w3.blueGrey800),
+                            const SizedBox(width: 4),
+                            SizedBox(width: 4, height: 16, child: LineBar(value: 1000 - (v ?? 1000), min: 0, max: 1000)),
+                          ],
+                        );
+                      },
+                    ),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   RepaintBoundary(
-                    child: Builder(builder: (context) {
-                      final v = context.watch<StatsSamplingService>().lastSamples;
-                      final s = v.map((e) => e.downAttenuation).toList();
-                      if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
-                      return LineChart(s: s, invert: true);
-                    }),
+                    child: Builder(
+                      builder: (context) {
+                        final v = context.watch<StatsSamplingService>().lastSamples;
+                        final s = v.map((e) => e.downAttenuation).toList();
+                        if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
+                        return LineChart(s: s, invert: true);
+                      },
+                    ),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   RepaintBoundary(
-                    child: Builder(builder: (context) {
-                      final min = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downAttenuationMin);
-                      final max = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downAttenuationMax);
-                      final avg = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downAttenuationAvg);
-                      return MinMaxAvgRow(min: min, max: max, avg: avg);
-                    }),
+                    child: Builder(
+                      builder: (context) {
+                        final min = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downAttenuationMin);
+                        final max = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downAttenuationMax);
+                        final avg = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downAttenuationAvg);
+                        return MinMaxAvgRow(min: min, max: max, avg: avg);
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -148,37 +166,43 @@ class SNRBar extends StatelessWidget {
               child: Column(
                 children: [
                   RepaintBoundary(
-                    child: Builder(builder: (context) {
-                      final v = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upAttenuationLast);
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('ATN Up:  ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f12),
-                          Text('dB', style: TextStyles.f10w3.blueGrey800),
-                          SizedBox(width: 4),
-                          SizedBox(width: 4, height: 16, child: LineBar(value: 1000 - (v ?? 1000), min: 0, max: 1000)),
-                        ],
-                      );
-                    }),
+                    child: Builder(
+                      builder: (context) {
+                        final v = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upAttenuationLast);
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('ATN Up:  ${v?.oneFrStr ?? 'N/A'}', style: TextStyles.f12),
+                            Text('dB', style: TextStyles.f10w3.blueGrey800),
+                            const SizedBox(width: 4),
+                            SizedBox(width: 4, height: 16, child: LineBar(value: 1000 - (v ?? 1000), min: 0, max: 1000)),
+                          ],
+                        );
+                      },
+                    ),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   RepaintBoundary(
-                    child: Builder(builder: (context) {
-                      final v = context.watch<StatsSamplingService>().lastSamples;
-                      final s = v.map((e) => e.upAttenuation).toList();
-                      if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
-                      return LineChart(s: s, invert: true);
-                    }),
+                    child: Builder(
+                      builder: (context) {
+                        final v = context.watch<StatsSamplingService>().lastSamples;
+                        final s = v.map((e) => e.upAttenuation).toList();
+                        if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
+                        return LineChart(s: s, invert: true);
+                      },
+                    ),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   RepaintBoundary(
-                    child: Builder(builder: (context) {
-                      final min = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upAttenuationMin);
-                      final max = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upAttenuationMax);
-                      final avg = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upAttenuationAvg);
-                      return MinMaxAvgRow(min: min, max: max, avg: avg);
-                    }),
+                    child: Builder(
+                      builder: (context) {
+                        final min = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upAttenuationMin);
+                        final max = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upAttenuationMax);
+                        final avg = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upAttenuationAvg);
+                        return MinMaxAvgRow(min: min, max: max, avg: avg);
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -201,10 +225,10 @@ class LineChart extends StatelessWidget {
     return Container(
       height: 20,
       width: double.infinity,
-      padding: EdgeInsets.all(2),
+      padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.cyan.shade100),
-        borderRadius: BorderRadius.all(Radius.circular(3)),
+        borderRadius: const BorderRadius.all(Radius.circular(3)),
       ),
       child: CustomPaint(painter: TimelessLinePathPainter(s, invert)),
     );
@@ -223,9 +247,9 @@ class MinMaxAvgRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text('${min?.oneFrStr ?? 'N/A'} MIN', style: TextStyles.f10.blueGrey600),
-        SizedBox(width: 4),
+        const SizedBox(width: 4),
         Text('${max?.oneFrStr ?? 'N/A'} MAX', style: TextStyles.f10.blueGrey600),
-        SizedBox(width: 4),
+        const SizedBox(width: 4),
         Text('${avg?.oneFrStr ?? 'N/A'} AVG', style: TextStyles.f10.blueGrey600),
       ],
     );
@@ -248,7 +272,7 @@ class LineBar extends StatefulWidget {
 }
 
 class _LineBarState extends State<LineBar> with TickerProviderStateMixin {
-  late final controller = AnimationController(vsync: this, duration: Duration(seconds: 1));
+  late final controller = AnimationController(vsync: this, duration: const Duration(seconds: 1));
   late final curvedAnimation = CurvedAnimation(parent: controller, curve: Curves.easeInOutCubicEmphasized);
   late final tween = Tween(begin: 0.0, end: 1.0);
   late final anim = tween.animate(curvedAnimation);

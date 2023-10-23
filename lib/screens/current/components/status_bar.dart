@@ -24,15 +24,15 @@ class StatusBar extends StatelessWidget {
             child: Row(
               children: [
                 Flexible(fit: FlexFit.loose, child: indicators(sampling, netUnitConnected, connectionUp)),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Flexible(fit: FlexFit.tight, child: statusText(sampling, lastSample)),
-                SizedBox(width: 4),
-                Icon(Icons.chevron_left_sharp, color: Colors.white, size: 16),
+                const SizedBox(width: 4),
+                const Icon(Icons.chevron_left_sharp, color: Colors.white, size: 16),
               ],
             ),
           ),
         ),
-        ProgressLine(),
+        const ProgressLine(),
       ],
     );
   }
@@ -52,12 +52,12 @@ class StatusBar extends StatelessWidget {
     return Tooltip(
       message: 'Current execution status or error messages',
       child: AnimatedSwitcher(
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         switchInCurve: Curves.elasticOut,
         switchOutCurve: Curves.easeIn,
         transitionBuilder: (child, animation) {
           return SlideTransition(
-            position: Tween<Offset>(begin: Offset(0.1, 0), end: Offset(0, 0)).animate(animation),
+            position: Tween<Offset>(begin: const Offset(0.1, 0), end: const Offset(0, 0)).animate(animation),
             child: FadeTransition(
               opacity: Tween<double>(begin: -1, end: 1).animate(animation),
               child: child,
@@ -69,7 +69,7 @@ class StatusBar extends StatelessWidget {
           alignment: Alignment.centerRight,
           child: Text(
             statusText,
-            style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w300),
+            style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w300),
             overflow: TextOverflow.ellipsis,
             // key: Key(statusText),
             // key: UniqueKey(),
@@ -84,15 +84,15 @@ class StatusBar extends StatelessWidget {
       message: 'Sampling active / Connected to network unit / DSL connection up',
       child: Row(
         children: [
-          Text(
+          const Text(
             'S/C/DSL',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300),
           ),
           AnimatedContainer(
-            duration: Duration(milliseconds: 400),
+            duration: const Duration(milliseconds: 400),
             curve: Curves.easeInOutBack,
             width: 10,
-            margin: EdgeInsets.only(left: 8),
+            margin: const EdgeInsets.only(left: 8),
             decoration: BoxDecoration(
               border: Border.all(
                 color: sampling ? Colors.yellow : Colors.black,
@@ -102,10 +102,10 @@ class StatusBar extends StatelessWidget {
             ),
           ),
           AnimatedContainer(
-            duration: Duration(milliseconds: 400),
+            duration: const Duration(milliseconds: 400),
             curve: Curves.easeInOutBack,
             width: 10,
-            margin: EdgeInsets.only(left: 4),
+            margin: const EdgeInsets.only(left: 4),
             decoration: BoxDecoration(
               border: Border.all(
                 color: netUnitConnected ? Colors.yellow : Colors.black,
@@ -115,10 +115,10 @@ class StatusBar extends StatelessWidget {
             ),
           ),
           AnimatedContainer(
-            duration: Duration(milliseconds: 400),
+            duration: const Duration(milliseconds: 400),
             curve: Curves.easeInOutBack,
             width: 10,
-            margin: EdgeInsets.only(left: 4),
+            margin: const EdgeInsets.only(left: 4),
             decoration: BoxDecoration(
               border: Border.all(
                 color: connectionUp ? Colors.yellow : Colors.black,
@@ -142,7 +142,7 @@ class ProgressLine extends StatefulWidget {
 }
 
 class _ProgressLineState extends State<ProgressLine> with TickerProviderStateMixin {
-  late final AnimationController controller = AnimationController(vsync: this, duration: Duration(seconds: 1));
+  late final AnimationController controller = AnimationController(vsync: this, duration: const Duration(seconds: 1));
   late final curvedAnimation = CurvedAnimation(parent: controller, curve: Curves.ease, reverseCurve: Curves.ease);
   late final Tween<double> animTween = Tween(begin: 0, end: 0);
   late final Animation<double> animation = animTween.animate(curvedAnimation);

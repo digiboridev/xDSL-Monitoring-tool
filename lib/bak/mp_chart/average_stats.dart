@@ -311,13 +311,13 @@
 //     //Check for computing data
 //     if (avgStatsData == null) {
 //       return Container(
-//         color: Colors.white,
+//         color: AppColors.cyan50,
 //         height: 200,
 //         child: Center(child: CircularProgressIndicator()),
 //       );
 //     } else {
 //       return Container(
-//         color: Colors.white,
+//         color: AppColors.cyan50,
 //         width: double.infinity,
 //         padding: EdgeInsets.all(16),
 //         child: Column(

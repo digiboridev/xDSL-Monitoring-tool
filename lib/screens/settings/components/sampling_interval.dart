@@ -20,7 +20,7 @@ class SamplingInterval extends StatelessWidget {
         children: [
           Text(
             'Sampling every ${_watchSamplingInterval(context).inSeconds} (s)',
-            style: TextStyles.f16w6.blueGrey800,
+            style: TextStyles.f16w6.blueGrey900,
           ),
           SliderTheme(
             data: const SliderThemeData(

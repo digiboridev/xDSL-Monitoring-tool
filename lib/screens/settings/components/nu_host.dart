@@ -34,14 +34,8 @@ class NuHost extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(
-                'Network unit host',
-                style: TextStyles.f16w6.blueGrey800,
-              ),
-              Text(
-                _watchHost(context),
-                style: TextStyles.f12.blueGrey600,
-              ),
+              Text('Network unit host', style: TextStyles.f16w6.blueGrey900),
+              Text(_watchHost(context), style: TextStyles.f12.blueGrey600),
             ],
           ),
         ),

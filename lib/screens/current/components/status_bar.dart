@@ -28,7 +28,7 @@ class StatusBar extends StatelessWidget {
                 const SizedBox(width: 8),
                 Flexible(fit: FlexFit.tight, child: statusText(sampling, lastSample)),
                 const SizedBox(width: 4),
-                const Icon(Icons.chevron_left_sharp, color: Colors.white, size: 16),
+                const Icon(Icons.chevron_left_sharp, color: AppColors.cyan50, size: 16),
               ],
             ),
           ),
@@ -70,7 +70,7 @@ class StatusBar extends StatelessWidget {
           alignment: Alignment.centerRight,
           child: Text(
             statusText,
-            style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w300),
+            style: const TextStyle(color: AppColors.cyan50, fontSize: 14, fontWeight: FontWeight.w300),
             overflow: TextOverflow.ellipsis,
             // key: Key(statusText),
             // key: UniqueKey(),
@@ -87,7 +87,7 @@ class StatusBar extends StatelessWidget {
         children: [
           const Text(
             'S/C/DSL',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300),
+            style: TextStyle(color: AppColors.cyan50, fontWeight: FontWeight.w300),
           ),
           AnimatedContainer(
             duration: const Duration(milliseconds: 400),

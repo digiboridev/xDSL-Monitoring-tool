@@ -210,7 +210,7 @@
 //       highLightPerTapEnabled: true,
 //       drawBorders: false,
 //       noDataText: 'loading',
-//       marker: MyLineMarker(textColor: Colors.white, backColor: Colors.blueGrey),
+//       marker: MyLineMarker(textColor: AppColors.cyan50, backColor: Colors.blueGrey),
 //       highlightPerDragEnabled: true,
 //     );
 
@@ -247,10 +247,10 @@
 //             });
 //           },
 //           child: Container(
-//             // color: Colors.white,
+//             // color: AppColors.cyan50,
 //             decoration: BoxDecoration(
 //               border: Border(bottom: BorderSide(color: Colors.blueGrey.shade50, width: 1)),
-//               color: Colors.white,
+//               color: AppColors.cyan50,
 //             ),
 //             padding: const EdgeInsets.only(left: 32, top: 16, right: 32, bottom: 16),
 //             child: Row(
@@ -268,7 +268,7 @@
 //                     Text(
 //                       'Speed rates line ',
 //                       style: TextStyle(
-//                         // color: Colors.white,
+//                         // color: AppColors.cyan50,
 //                         fontSize: 14,
 //                         fontWeight: FontWeight.w400,
 //                       ),
@@ -290,11 +290,11 @@
 //         ),
 //         if (_show) ...[
 //           if (widget.statsList.isEmpty)
-//             Container(height: 200, color: Colors.white, child: Center(child: Text('No data')))
+//             Container(height: 200, color: AppColors.cyan50, child: Center(child: Text('No data')))
 //           else
 //             Container(
 //               height: 200,
-//               color: Colors.white,
+//               color: AppColors.cyan50,
 //               padding: const EdgeInsets.all(32),
 //               child: SpeedLine(statsList: widget.statsList, showPeriod: widget.showPeriod),
 //             ),

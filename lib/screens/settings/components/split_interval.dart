@@ -20,7 +20,7 @@ class SplitInterval extends StatelessWidget {
         children: [
           Text(
             'Split snapshots every ${_watchSplitInterval(context).inMinutes} (m)',
-            style: TextStyles.f16w6.blueGrey800,
+            style: TextStyles.f16w6.blueGrey900,
           ),
           SliderTheme(
             data: const SliderThemeData(

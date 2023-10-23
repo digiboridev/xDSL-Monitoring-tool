@@ -193,7 +193,7 @@
 //       highLightPerTapEnabled: true,
 //       drawBorders: false,
 //       noDataText: 'loading',
-//       marker: MyLineMarker(textColor: Colors.white, backColor: Colors.blueGrey),
+//       marker: MyLineMarker(textColor: AppColors.cyan50, backColor: Colors.blueGrey),
 //       highlightPerDragEnabled: true,
 //     );
 //   }
@@ -212,7 +212,7 @@
 
 //     if (!isSpawned) {
 //       return Container(
-//         color: Colors.white,
+//         color: AppColors.cyan50,
 //         height: 200,
 //         child: Center(
 //           child: CircularProgressIndicator(),
@@ -253,10 +253,10 @@
 //             });
 //           },
 //           child: Container(
-//             // color: Colors.white,
+//             // color: AppColors.cyan50,
 //             decoration: BoxDecoration(
 //               border: Border(bottom: BorderSide(color: Colors.blueGrey.shade50, width: 1)),
-//               color: Colors.white,
+//               color: AppColors.cyan50,
 //             ),
 //             padding: const EdgeInsets.only(left: 32, top: 16, right: 32, bottom: 16),
 //             child: Row(
@@ -274,7 +274,7 @@
 //                     Text(
 //                       'External host ping ',
 //                       style: TextStyle(
-//                         // color: Colors.white,
+//                         // color: AppColors.cyan50,
 //                         fontSize: 14,
 //                         fontWeight: FontWeight.w400,
 //                       ),
@@ -304,7 +304,7 @@
 //                   ? ExternalLatency(collection: widget.collection, showPeriod: widget.showPeriod)
 //                   : Container(
 //                       height: 200,
-//                       color: Colors.white,
+//                       color: AppColors.cyan50,
 //                       child: Center(child: Text('No data')),
 //                     ),
 //         ),

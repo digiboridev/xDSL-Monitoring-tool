@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:xdslmt/screens/settings/components/animation_switch.dart';
 import 'package:xdslmt/screens/settings/components/split_interval.dart';
-import 'package:xdslmt/screens/settings/components/ext_host.dart';
 import 'package:xdslmt/screens/settings/components/nu_host.dart';
 import 'package:xdslmt/screens/settings/components/nu_login.dart';
 import 'package:xdslmt/screens/settings/components/nu_type.dart';
@@ -30,7 +29,7 @@ class SettingsScreenView extends StatelessWidget {
             end: Alignment.bottomCenter,
             colors: [
               AppColors.cyan100,
-              Colors.white,
+              AppColors.cyan50,
               AppColors.cyan100,
             ],
           ),
@@ -45,7 +44,6 @@ class SettingsScreenView extends StatelessWidget {
                 const NuHost(),
                 const NuLogin(),
                 const NuPassword(),
-                const ExternalHost(),
                 const SamplingInterval(),
                 const SplitInterval(),
                 const AnimationSwitch(),

@@ -18,7 +18,7 @@ class CurrentScreen extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomCenter,
-            colors: [AppColors.cyan100, Colors.white, AppColors.cyan100],
+            colors: [AppColors.cyan100, AppColors.cyan50, AppColors.cyan100],
           ),
         ),
         child: Column(
@@ -31,7 +31,7 @@ class CurrentScreen extends StatelessWidget {
                   return const LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Colors.white, Colors.transparent, Colors.transparent, Colors.white],
+                    colors: [AppColors.cyan50, Colors.transparent, Colors.transparent, AppColors.cyan50],
                     stops: [0.0, 0.025, 0.950, 1.0],
                   ).createShader(rect);
                 },

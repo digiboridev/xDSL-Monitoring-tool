@@ -17,7 +17,7 @@ class OrientLock extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text('Lock orientation', style: TextStyles.f16w6.blueGrey800),
+          Text('Lock orientation', style: TextStyles.f16w6.blueGrey900),
           const SizedBox(width: 8),
           SizedBox(
             height: 28,

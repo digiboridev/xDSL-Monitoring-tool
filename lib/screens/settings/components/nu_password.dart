@@ -32,14 +32,8 @@ class NuPassword extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(
-                'Network unit password',
-                style: TextStyles.f16w6.blueGrey800,
-              ),
-              Text(
-                _watchPassword(context),
-                style: TextStyles.f12.blueGrey600,
-              ),
+              Text('Network unit password', style: TextStyles.f16w6.blueGrey900),
+              Text(_watchPassword(context), style: TextStyles.f12.blueGrey600),
             ],
           ),
         ),

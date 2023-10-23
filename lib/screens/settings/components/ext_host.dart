@@ -6,6 +6,7 @@ import 'package:xdslmt/utils/formatters.dart';
 import 'package:xdslmt/utils/validators.dart';
 import 'package:xdslmt/widgets/text_styles.dart';
 
+@Deprecated('backup')
 class ExternalHost extends StatelessWidget {
   const ExternalHost({super.key});
 

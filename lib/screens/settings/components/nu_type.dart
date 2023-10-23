@@ -32,7 +32,7 @@ class NuType extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Network unit type', style: TextStyles.f16w6.blueGrey800),
+              Text('Network unit type', style: TextStyles.f16w6.blueGrey900),
               Text(_watchType(context).name, style: TextStyles.f12.blueGrey600),
             ],
           ),

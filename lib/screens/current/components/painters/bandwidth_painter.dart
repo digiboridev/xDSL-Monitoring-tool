@@ -8,11 +8,6 @@ class BandwPainter extends CustomPainter {
   final int max;
   BandwPainter({required this.curr, required this.attainable, required this.max});
 
-  @override
-  bool shouldRepaint(BandwPainter oldDelegate) {
-    return oldDelegate.curr != curr || oldDelegate.attainable != attainable || oldDelegate.max != max;
-  }
-
   static const double _startAngle = 5 * pi / 8;
   static const double _sweepAngle = 14 * pi / 8;
 
@@ -41,5 +36,10 @@ class BandwPainter extends CustomPainter {
     canvas.drawArc(rect, _startAngle, _sweepAngle, false, _bgPaint);
     canvas.drawArc(rect, _startAngle, _aAngle, false, _attPaint);
     canvas.drawArc(rect, _startAngle, _cAngle, false, _currPaint);
+  }
+
+  @override
+  bool shouldRepaint(BandwPainter oldDelegate) {
+    return oldDelegate.curr != curr || oldDelegate.attainable != attainable || oldDelegate.max != max;
   }
 }

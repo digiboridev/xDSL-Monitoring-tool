@@ -96,11 +96,13 @@ class _ScreensWrapperState extends State<ScreensWrapper> {
       child: Container(
         color: AppColors.cyan100,
         child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 100),
+          switchInCurve: Curves.easeIn,
+          switchOutCurve: Curves.easeOut,
           transitionBuilder: (child, animation) => ScaleTransition(
-            scale: Tween(begin: 0.95, end: 1.0).animate(animation),
+            scale: Tween(begin: 0.975, end: 1.0).animate(animation),
             child: FadeTransition(
-              opacity: Tween(begin: 0.0, end: 1.0).animate(animation),
+              opacity: Tween(begin: 0.5, end: 1.0).animate(animation),
               child: child,
             ),
           ),
@@ -147,8 +149,9 @@ class _ScreensWrapperState extends State<ScreensWrapper> {
     return AppBar(
       title: AnimatedSwitcher(
         duration: const Duration(milliseconds: 250),
+        switchInCurve: Curves.easeInCubic,
         transitionBuilder: (child, animation) => ScaleTransition(
-          scale: Tween(begin: 0.7, end: 1.0).animate(animation),
+          scale: Tween(begin: 0.9, end: 1.0).animate(animation),
           child: FadeTransition(
             opacity: Tween(begin: 0.0, end: 1.0).animate(animation),
             child: child,

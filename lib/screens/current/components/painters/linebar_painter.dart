@@ -6,9 +6,6 @@ class LineBarPainter extends CustomPainter {
   LineBarPainter({required this.fill});
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
-
-  @override
   void paint(Canvas canvas, Size size) {
     Paint p = Paint()
       ..color = AppColors.blueGrey100
@@ -31,4 +28,7 @@ class LineBarPainter extends CustomPainter {
     canvas.drawRRect(RRect.fromLTRBR(0, 0, size.width, size.height, const Radius.circular(3)), p);
     canvas.drawRRect(RRect.fromLTRBR(0, size.height - (size.height * fill), size.width, size.height, const Radius.circular(3)), pfill);
   }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }

@@ -3,11 +3,6 @@ import 'package:xdslmt/widgets/app_colors.dart';
 
 abstract class TextStyles {
   // General
-  static const TextStyle body = TextStyle(fontSize: 16);
-  static const TextStyle title = TextStyle(fontSize: 24, fontWeight: FontWeight.bold);
-  static const TextStyle subtitle = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
-
-  // Specific
   static const TextStyle f18 = TextStyle(fontSize: 18);
   static const TextStyle f18w3 = TextStyle(fontSize: 18, fontWeight: FontWeight.w300);
   static const TextStyle f18w6 = TextStyle(fontSize: 18, fontWeight: FontWeight.w600);
@@ -28,7 +23,16 @@ abstract class TextStyles {
   static const TextStyle f8w6 = TextStyle(fontSize: 8, fontWeight: FontWeight.w600);
 
   // Charts
-  static TextStyle f8hc100 = const TextStyle(fontSize: 8, height: 1, color: AppColors.cyan100);
+  static const TextStyle f8hc100 = TextStyle(fontSize: 8, height: 1, color: AppColors.cyan100);
+  static const TextStyle f6meshV = TextStyle(
+    color: AppColors.cyan50,
+    fontSize: 6,
+    height: 1,
+    shadows: [
+      Shadow(blurRadius: 2, color: Colors.black),
+      Shadow(blurRadius: 8, color: AppColors.blueGrey800),
+    ],
+  );
 }
 
 extension CS on TextStyle {

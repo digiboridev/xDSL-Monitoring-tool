@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/path_factory.dart';
 import 'package:xdslmt/widgets/app_colors.dart';
+import 'package:xdslmt/widgets/text_styles.dart';
 
 class LinePathPainter extends CustomPainter {
   final Iterable<({int t, int v})> data;
@@ -18,6 +19,8 @@ class LinePathPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     // Debug
     // final paintStart = DateTime.now();
+
+    canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
 
     // Create data path
     final cp = PathFactory.makeLinePath(data, size, '$key ${size.width}');
@@ -43,17 +46,7 @@ class LinePathPainter extends CustomPainter {
       final double y = meshStep * i;
       final double x = size.width;
       final text = TextPainter(
-        text: TextSpan(
-          text: scaleFormat(vMax / meshSteps * (meshSteps - i)),
-          style: const TextStyle(
-            color: AppColors.cyan50,
-            fontSize: 6,
-            shadows: [
-              Shadow(blurRadius: 2, color: Colors.black),
-              Shadow(blurRadius: 8, color: AppColors.blueGrey800),
-            ],
-          ),
-        ),
+        text: TextSpan(text: scaleFormat(vMax / meshSteps * (meshSteps - i)), style: TextStyles.f6meshV),
         textDirection: TextDirection.ltr,
         textAlign: TextAlign.center,
       );

@@ -3,7 +3,7 @@ import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/path_factory.dart';
 import 'package:xdslmt/widgets/app_colors.dart';
 
-@Deprecated('backup')
+@Deprecated('alternative implementation')
 class StatusPainter extends CustomPainter {
   final Iterable<TimeStatus> data;
   final double scale;

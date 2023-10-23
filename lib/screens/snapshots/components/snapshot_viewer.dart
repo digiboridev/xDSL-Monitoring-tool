@@ -59,6 +59,7 @@ class _SnapshotViewerState extends State<SnapshotViewer> {
       ),
       body: SizedBox.expand(
         child: AnimatedSwitcher(
+          switchInCurve: Curves.easeInCubic,
           duration: const Duration(milliseconds: 300),
           child: body(),
         ),

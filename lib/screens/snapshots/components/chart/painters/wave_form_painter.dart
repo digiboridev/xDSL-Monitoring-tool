@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/path_factory.dart';
 import 'package:xdslmt/widgets/app_colors.dart';
+import 'package:xdslmt/widgets/text_styles.dart';
 
 class WaveFormPainter extends CustomPainter {
   final Iterable<({int t, int v})> data;
@@ -17,6 +18,8 @@ class WaveFormPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     // Debug
     // final paintStart = DateTime.now();
+
+    canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
 
     // Create data path
     final cp = PathFactory.makeWaveFormPath(data, size, '$key ${size.width}');
@@ -47,17 +50,7 @@ class WaveFormPainter extends CustomPainter {
       final double y = meshStep * i;
       final double x = size.width;
       final text = TextPainter(
-        text: TextSpan(
-          text: (vMax / meshSteps * (meshSteps - i)).toStringAsFixed(1),
-          style: const TextStyle(
-            color: AppColors.cyan50,
-            fontSize: 6,
-            shadows: [
-              Shadow(blurRadius: 2, color: Colors.black),
-              Shadow(blurRadius: 8, color: AppColors.blueGrey800),
-            ],
-          ),
-        ),
+        text: TextSpan(text: (vMax / meshSteps * (meshSteps - i)).toStringAsFixed(1), style: TextStyles.f6meshV),
         textDirection: TextDirection.ltr,
         textAlign: TextAlign.center,
       );

@@ -25,6 +25,8 @@ class StatusEventsPainter extends CustomPainter {
     // Debug
     // final paintStart = DateTime.now();
 
+    canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
+
     // Create data path
     final dataPath = PathFactory.makeStatusLinePath(data, size, '$key ${size.width}');
 

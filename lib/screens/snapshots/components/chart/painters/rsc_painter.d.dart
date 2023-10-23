@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/path_factory.dart';
 import 'package:xdslmt/widgets/app_colors.dart';
 
-@Deprecated('backup')
+@Deprecated('alternative implementation')
 class RSCPainter extends CustomPainter {
   final Iterable<TimeValue> data;
   final double scale;

@@ -9,6 +9,7 @@ import 'package:xdslmt/screens/settings/components/nu_type.dart';
 import 'package:xdslmt/screens/settings/components/orient_lock.dart';
 import 'package:xdslmt/screens/settings/components/nu_password.dart';
 import 'package:xdslmt/screens/settings/components/sampling_interval.dart';
+import 'package:xdslmt/widgets/app_colors.dart';
 import 'package:xdslmt/widgets/fillable_scrollable_wrapper.dart';
 import 'package:xdslmt/widgets/min_spacer.dart';
 import 'package:xdslmt/widgets/text_styles.dart';
@@ -23,14 +24,14 @@ class SettingsScreenView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox.expand(
       child: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomCenter,
             colors: [
-              Colors.cyan.shade100,
+              AppColors.cyan100,
               Colors.white,
-              Colors.cyan.shade100,
+              AppColors.cyan100,
             ],
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/path_factory.dart';
+import 'package:xdslmt/widgets/app_colors.dart';
 
 @Deprecated('backup')
 class RSCPainter extends CustomPainter {
@@ -32,7 +33,7 @@ class RSCPainter extends CustomPainter {
     final paintTime = DateTime.now();
 
     final paint = Paint()
-      ..color = Colors.cyan.shade100.withOpacity(0.5)
+      ..color = AppColors.cyan100.withOpacity(0.5)
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
 

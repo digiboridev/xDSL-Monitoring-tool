@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
 import 'package:xdslmt/screens/current/components/painters/timeless_waveform_painter.dart';
+import 'package:xdslmt/widgets/app_colors.dart';
 import 'package:xdslmt/widgets/text_styles.dart';
 
 class RSCBar extends StatelessWidget {
@@ -44,7 +45,7 @@ class RSCBar extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.blueGrey.shade100),
+                    border: Border.all(color: AppColors.blueGrey100),
                     borderRadius: BorderRadius.circular(3),
                   ),
                   child: CustomPaint(painter: WaveFormTimelessPainter(max: 1000, increasedData: dfec)),
@@ -56,7 +57,7 @@ class RSCBar extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.blueGrey.shade100),
+                    border: Border.all(color: AppColors.blueGrey100),
                     borderRadius: BorderRadius.circular(3),
                   ),
                   child: CustomPaint(
@@ -73,7 +74,7 @@ class RSCBar extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.blueGrey.shade100),
+                    border: Border.all(color: AppColors.blueGrey100),
                     borderRadius: BorderRadius.circular(3),
                   ),
                   child: CustomPaint(painter: WaveFormTimelessPainter(max: 1000, increasedData: ufec)),
@@ -85,7 +86,7 @@ class RSCBar extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.blueGrey.shade100),
+                    border: Border.all(color: AppColors.blueGrey100),
                     borderRadius: BorderRadius.circular(3),
                   ),
                   child: CustomPaint(painter: WaveFormTimelessPainter(max: 1000, increasedData: ucrc)),

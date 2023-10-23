@@ -9,6 +9,7 @@ import 'package:xdslmt/screens/settings/binding.dart';
 import 'package:xdslmt/screens/settings/view.dart';
 import 'package:xdslmt/screens/snapshots/binding.dart';
 import 'package:xdslmt/screens/snapshots/view.dart';
+import 'package:xdslmt/widgets/app_colors.dart';
 import 'package:xdslmt/widgets/text_styles.dart';
 
 class ScreensWrapper extends StatefulWidget {
@@ -82,24 +83,24 @@ class _ScreensWrapperState extends State<ScreensWrapper> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(screenName, style: TextStyles.f18w6.cyan100),
+          title: Text(screenName, style: TextStyles.f18w6.cyan400),
           actions: [
             IconButton(
               tooltip: 'Minimize app',
-              icon: Icon(Icons.minimize, color: Colors.cyan.shade100),
+              icon: const Icon(Icons.minimize, color: AppColors.cyan100),
               onPressed: () {
                 const MethodChannel('main').invokeMethod('minimize');
               },
             ),
             IconButton(
               tooltip: 'Close app',
-              icon: Icon(Icons.power_settings_new, color: Colors.cyan.shade100),
+              icon: const Icon(Icons.power_settings_new, color: AppColors.cyan100),
               onPressed: () {
                 exit(0);
               },
             ),
           ],
-          backgroundColor: Colors.blueGrey.shade900,
+          backgroundColor: AppColors.blueGrey900,
         ),
         // body: screens[_screenIndex],
         body: AnimatedSwitcher(duration: const Duration(milliseconds: 200), child: screens[screenIndex]),
@@ -161,7 +162,7 @@ class _FloatButtonState extends State<FloatButton> {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      backgroundColor: busy ? Colors.cyan.shade600 : Colors.blueGrey.shade900.withOpacity(0.75),
+      backgroundColor: busy ? AppColors.cyan600 : AppColors.blueGrey900.withOpacity(0.75),
       onPressed: () => toogleSampling(context),
       hoverColor: Colors.amber[100],
       child: AnimatedSwitcher(

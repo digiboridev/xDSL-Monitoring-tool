@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:xdslmt/utils/formatters.dart';
+import 'package:xdslmt/widgets/app_colors.dart';
 
 class TimelinePainter extends CustomPainter {
   final DateTime start;
@@ -13,7 +14,7 @@ class TimelinePainter extends CustomPainter {
     // final paintTime = DateTime.now();
 
     final paint = Paint()
-      ..color = Colors.cyan.shade100
+      ..color = AppColors.cyan100
       ..style = PaintingStyle.stroke;
     final int tDiff = end.millisecondsSinceEpoch - start.millisecondsSinceEpoch;
     final double scaledOffset = offset * scale;
@@ -58,7 +59,7 @@ class TimelinePainter extends CustomPainter {
       final timePainter = TextPainter(
         text: TextSpan(
           text: '${curTimeDate.numhms}\n${curTimeDate.numymd}',
-          style: TextStyle(color: Colors.cyan.shade100, fontSize: 8),
+          style: const TextStyle(color: AppColors.cyan100, fontSize: 8),
         ),
         textDirection: TextDirection.ltr,
         textAlign: TextAlign.center,

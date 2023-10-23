@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:xdslmt/widgets/app_colors.dart';
 
 class LineBarPainter extends CustomPainter {
   final double fill;
@@ -10,10 +11,9 @@ class LineBarPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint p = Paint()
-      ..color = Colors.blueGrey.shade100
+      ..color = AppColors.blueGrey100
       ..style = PaintingStyle.fill;
     Paint pfill = Paint()
-      // ..color = Colors.blueGrey
       ..style = PaintingStyle.fill
       ..shader = const LinearGradient(
         colors: [Colors.black, Colors.yellow],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/screens/settings/vm.dart';
+import 'package:xdslmt/widgets/app_colors.dart';
 import 'package:xdslmt/widgets/text_styles.dart';
 
 class SplitInterval extends StatelessWidget {
@@ -22,10 +23,10 @@ class SplitInterval extends StatelessWidget {
             style: TextStyles.f16w6.blueGrey800,
           ),
           SliderTheme(
-            data: SliderThemeData(
+            data: const SliderThemeData(
               trackHeight: 2,
-              thumbColor: Colors.blueGrey.shade900,
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8, pressedElevation: 10),
+              thumbColor: AppColors.blueGrey900,
+              thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8, pressedElevation: 10),
             ),
             child: Slider(
               value: _watchSplitInterval(context).inMinutes.toDouble(),

@@ -68,13 +68,13 @@
 //     // Apply setiings
 //     downCRCSet
 //       // ..setLineWidth(1)
-//       ..setColor1(Colors.blueGrey.shade600)
+//       ..setColor1(AppColors.blueGrey600)
 //       ..setMode(Mode.stepped)
 //       ..setDrawValues(false)
 //       ..setDrawFilled(true)
 //       ..setFillAlpha(200)
 //       ..setLineWidth(0)
-//       ..setGradientColor(Colors.blueGrey.shade600, Colors.blueGrey.shade200)
+//       ..setGradientColor(AppColors.blueGrey600, AppColors.blueGrey200)
 //       ..setDrawCircles(false);
 
 //     // Prepare upload CRC set
@@ -201,7 +201,7 @@
 //                   children: [
 //                     Icon(
 //                       Icons.bar_chart,
-//                       color: _show ? Colors.blueGrey.shade900 : Colors.blueGrey.shade800,
+//                       color: _show ? AppColors.blueGrey900 : AppColors.blueGrey800,
 //                     ),
 //                     Container(
 //                       width: 16,
@@ -219,11 +219,11 @@
 //                 _show
 //                     ? Icon(
 //                         Icons.arrow_drop_up,
-//                         color: Colors.blueGrey.shade600,
+//                         color: AppColors.blueGrey600,
 //                       )
 //                     : Icon(
 //                         Icons.arrow_drop_down,
-//                         color: Colors.blueGrey.shade600,
+//                         color: AppColors.blueGrey600,
 //                       ),
 //               ],
 //             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/screens/snapshots/components/snaplist_tile.dart';
 import 'package:xdslmt/screens/snapshots/vm.dart';
+import 'package:xdslmt/widgets/app_colors.dart';
 
 class SnapshotsScreenView extends StatelessWidget {
   const SnapshotsScreenView({super.key});
@@ -10,14 +11,14 @@ class SnapshotsScreenView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox.expand(
       child: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomCenter,
             colors: [
-              Colors.cyan.shade100,
+              AppColors.cyan100,
               Colors.white,
-              Colors.cyan.shade100,
+              AppColors.cyan100,
             ],
           ),
         ),

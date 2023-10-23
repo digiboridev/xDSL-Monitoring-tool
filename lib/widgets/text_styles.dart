@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:xdslmt/widgets/app_colors.dart';
 
 abstract class TextStyles {
   // General
@@ -27,14 +28,15 @@ abstract class TextStyles {
   static const TextStyle f8w6 = TextStyle(fontSize: 8, fontWeight: FontWeight.w600);
 
   // Charts
-  static TextStyle f8hc100 = TextStyle(fontSize: 8, height: 1, color: Colors.cyan.shade100);
+  static TextStyle f8hc100 = const TextStyle(fontSize: 8, height: 1, color: AppColors.cyan100);
 }
 
 extension CS on TextStyle {
-  TextStyle get cyan50 => copyWith(color: Colors.cyan.shade50);
-  TextStyle get cyan100 => copyWith(color: Colors.cyan.shade100);
-  TextStyle get blueGrey900 => copyWith(color: Colors.blueGrey.shade800);
-  TextStyle get blueGrey800 => copyWith(color: Colors.blueGrey.shade800);
-  TextStyle get blueGrey600 => copyWith(color: Colors.blueGrey.shade600);
-  TextStyle get blueGrey400 => copyWith(color: Colors.blueGrey.shade400);
+  TextStyle get cyan50 => copyWith(color: AppColors.cyan50);
+  TextStyle get cyan100 => copyWith(color: AppColors.cyan100);
+  TextStyle get cyan400 => copyWith(color: AppColors.cyan400);
+  TextStyle get blueGrey400 => copyWith(color: AppColors.blueGrey400);
+  TextStyle get blueGrey600 => copyWith(color: AppColors.blueGrey600);
+  TextStyle get blueGrey800 => copyWith(color: AppColors.blueGrey800);
+  TextStyle get blueGrey900 => copyWith(color: AppColors.blueGrey900);
 }

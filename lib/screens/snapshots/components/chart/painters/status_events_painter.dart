@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/path_factory.dart';
+import 'package:xdslmt/widgets/app_colors.dart';
 
 class StatusEventsPainter extends CustomPainter {
   final Iterable<({int t, SampleStatus s})> data;
@@ -10,7 +11,7 @@ class StatusEventsPainter extends CustomPainter {
   StatusEventsPainter({required this.data, required this.scale, required this.offset, required this.key});
 
   static final Paint pu = Paint()
-    ..colorFilter = ColorFilter.mode(Colors.cyan.shade100, BlendMode.srcOver)
+    ..colorFilter = const ColorFilter.mode(AppColors.cyan100, BlendMode.srcOver)
     ..style = PaintingStyle.stroke;
   static final Paint pd = Paint()
     ..colorFilter = const ColorFilter.mode(Colors.black, BlendMode.srcOver)

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:xdslmt/widgets/app_colors.dart';
 
 class TimelessLinePathPainter extends CustomPainter {
   final List<int?> data;
   final bool invert;
   TimelessLinePathPainter(this.data, this.invert);
 
-  Paint get _linePaint => Paint()
-    ..color = Colors.blueGrey.shade800
+  static final _linePaint = Paint()
+    ..color = AppColors.blueGrey800
     ..strokeWidth = 1;
-  Paint get _meshPaint => Paint()
-    ..color = Colors.blueGrey.shade100
+  static final _meshPaint = Paint()
+    ..color = AppColors.blueGrey100
     ..strokeWidth = 0.5;
 
   @override

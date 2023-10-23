@@ -3,6 +3,7 @@ import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/models/snapshot_stats.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/painters/line_path_painter.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/painters/status_events_painter.dart';
+import 'package:xdslmt/widgets/app_colors.dart';
 import 'package:xdslmt/widgets/text_styles.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/painters/wave_form_painter.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/painters/timeline_painter.dart';
@@ -66,7 +67,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
             });
           },
           child: Container(
-            color: Colors.blueGrey.shade900,
+            color: AppColors.blueGrey900,
             child: Column(
               children: [
                 const SizedBox(height: 16),
@@ -219,7 +220,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: Row(
                       children: [
                         Text('Downstream Rate', style: TextStyles.f16w6.cyan100),
-                        Icon(downRate ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
+                        Icon(downRate ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('MIN: ${widget.snapshotStats.downRateMin ?? 0}', style: TextStyles.f8hc100),
                         const SizedBox(width: 4),
@@ -254,7 +255,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: Row(
                       children: [
                         Text('Upstream Rate', style: TextStyles.f16w6.cyan100),
-                        Icon(upRate ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
+                        Icon(upRate ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('MIN: ${widget.snapshotStats.upRateMin ?? 0}', style: TextStyles.f8hc100),
                         const SizedBox(width: 4),
@@ -289,7 +290,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: Row(
                       children: [
                         Text('Downstream Attainable Rate', style: TextStyles.f16w6.cyan100),
-                        Icon(downAttainableRate ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
+                        Icon(downAttainableRate ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('MIN: ${widget.snapshotStats.downAttainableRateMin ?? 0}', style: TextStyles.f8hc100),
                         const SizedBox(width: 4),
@@ -324,7 +325,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: Row(
                       children: [
                         Text('Upstream Attainable Rate', style: TextStyles.f16w6.cyan100),
-                        Icon(upAttainableRate ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
+                        Icon(upAttainableRate ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('MIN: ${widget.snapshotStats.upAttainableRateMin ?? 0}', style: TextStyles.f8hc100),
                         const SizedBox(width: 4),
@@ -359,7 +360,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: Row(
                       children: [
                         Text('Donwstream FEC', style: TextStyles.f16w6.cyan100),
-                        Icon(downFec ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
+                        Icon(downFec ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('TOTAL: ${widget.snapshotStats.downFecTotal}', style: TextStyles.f8hc100),
                       ],
@@ -389,7 +390,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: Row(
                       children: [
                         Text('Upstream FEC', style: TextStyles.f16w6.cyan100),
-                        Icon(upFec ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
+                        Icon(upFec ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('TOTAL: ${widget.snapshotStats.upFecTotal}', style: TextStyles.f8hc100),
                       ],
@@ -419,7 +420,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: Row(
                       children: [
                         Text('Donwstream CRC', style: TextStyles.f16w6.cyan100),
-                        Icon(downCrc ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
+                        Icon(downCrc ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('TOTAL: ${widget.snapshotStats.downCrcTotal}', style: TextStyles.f8hc100),
                       ],
@@ -449,7 +450,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: Row(
                       children: [
                         Text('Upstream CRC', style: TextStyles.f16w6.cyan100),
-                        Icon(upCrc ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
+                        Icon(upCrc ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('TOTAL: ${widget.snapshotStats.upCrcTotal}', style: TextStyles.f8hc100),
                       ],
@@ -479,7 +480,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: Row(
                       children: [
                         Text('Downstream SRNM', style: TextStyles.f16w6.cyan100),
-                        Icon(downMargin ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
+                        Icon(downMargin ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('MIN: ${((widget.snapshotStats.downSNRmMin ?? 0) / 10).toStringAsFixed(1)}', style: TextStyles.f8hc100),
                         const SizedBox(width: 4),
@@ -514,7 +515,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: Row(
                       children: [
                         Text('Upstream SRNM', style: TextStyles.f16w6.cyan100),
-                        Icon(upMargin ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
+                        Icon(upMargin ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('MIN: ${((widget.snapshotStats.upSNRmMin ?? 0) / 10).toStringAsFixed(1)}', style: TextStyles.f8hc100),
                         const SizedBox(width: 4),
@@ -549,7 +550,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: Row(
                       children: [
                         Text('Downstream ATTN', style: TextStyles.f16w6.cyan100),
-                        Icon(downAttn ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
+                        Icon(downAttn ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('MIN: ${((widget.snapshotStats.downAttenuationMin ?? 0) / 10).toStringAsFixed(1)}', style: TextStyles.f8hc100),
                         const SizedBox(width: 4),
@@ -584,7 +585,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: Row(
                       children: [
                         Text('Upstream ATTN', style: TextStyles.f16w6.cyan100),
-                        Icon(upAttn ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.cyan.shade100),
+                        Icon(upAttn ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('MIN: ${((widget.snapshotStats.upAttenuationMin ?? 0) / 10).toStringAsFixed(1)}', style: TextStyles.f8hc100),
                         const SizedBox(width: 4),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:xdslmt/screens/current/components/summary.dart';
+import 'package:xdslmt/widgets/app_colors.dart';
 import 'package:xdslmt/widgets/text_styles.dart';
 import 'components/status_bar.dart';
 import 'components/bandwidth_bar.dart';
@@ -13,11 +14,11 @@ class CurrentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox.expand(
       child: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomCenter,
-            colors: [Colors.cyan.shade100, Colors.white, Colors.cyan.shade100],
+            colors: [AppColors.cyan100, Colors.white, AppColors.cyan100],
           ),
         ),
         child: Column(

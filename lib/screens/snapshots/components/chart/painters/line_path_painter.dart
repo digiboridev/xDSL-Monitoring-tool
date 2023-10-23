@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/path_factory.dart';
+import 'package:xdslmt/widgets/app_colors.dart';
 
 class LinePathPainter extends CustomPainter {
   final Iterable<({int t, int v})> data;
@@ -10,7 +11,7 @@ class LinePathPainter extends CustomPainter {
   LinePathPainter({required this.data, required this.scale, required this.offset, required this.key, required this.scaleFormat});
 
   static final Paint p = Paint()
-    ..colorFilter = ColorFilter.mode(Colors.cyan.shade100, BlendMode.srcOver)
+    ..colorFilter = const ColorFilter.mode(AppColors.cyan100, BlendMode.srcOver)
     ..style = PaintingStyle.stroke;
 
   @override
@@ -44,12 +45,12 @@ class LinePathPainter extends CustomPainter {
       final text = TextPainter(
         text: TextSpan(
           text: scaleFormat(vMax / meshSteps * (meshSteps - i)),
-          style: TextStyle(
-            color: Colors.cyan.shade50,
+          style: const TextStyle(
+            color: AppColors.cyan50,
             fontSize: 6,
             shadows: [
-              const Shadow(blurRadius: 2, color: Colors.black),
-              Shadow(blurRadius: 8, color: Colors.blueGrey.shade800),
+              Shadow(blurRadius: 2, color: Colors.black),
+              Shadow(blurRadius: 8, color: AppColors.blueGrey800),
             ],
           ),
         ),
@@ -61,7 +62,7 @@ class LinePathPainter extends CustomPainter {
       canvas.drawLine(
         Offset(0, y),
         Offset(x - text.width - 4, y),
-        Paint()..color = Colors.cyan.shade200.withOpacity(0.25),
+        Paint()..color = AppColors.cyan200.withOpacity(0.25),
       );
     }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/path_factory.dart';
+import 'package:xdslmt/widgets/app_colors.dart';
 
 class WaveFormPainter extends CustomPainter {
   final Iterable<({int t, int v})> data;
@@ -9,7 +10,7 @@ class WaveFormPainter extends CustomPainter {
   WaveFormPainter({required this.data, required this.scale, required this.offset, required this.key});
 
   static final Paint p = Paint()
-    ..colorFilter = ColorFilter.mode(Colors.cyan.shade100, BlendMode.srcOver)
+    ..colorFilter = const ColorFilter.mode(AppColors.cyan100, BlendMode.srcOver)
     ..style = PaintingStyle.stroke;
 
   @override
@@ -40,7 +41,7 @@ class WaveFormPainter extends CustomPainter {
     canvas.drawLine(
       Offset(0, size.height / 2),
       Offset(size.width, size.height / 2),
-      Paint()..color = Colors.cyan.shade200.withOpacity(0.25),
+      Paint()..color = AppColors.cyan200.withOpacity(0.25),
     );
     for (int i = 0; i < meshSteps; i++) {
       final double y = meshStep * i;
@@ -48,12 +49,12 @@ class WaveFormPainter extends CustomPainter {
       final text = TextPainter(
         text: TextSpan(
           text: (vMax / meshSteps * (meshSteps - i)).toStringAsFixed(1),
-          style: TextStyle(
-            color: Colors.cyan.shade50,
+          style: const TextStyle(
+            color: AppColors.cyan50,
             fontSize: 6,
             shadows: [
-              const Shadow(blurRadius: 2, color: Colors.black),
-              Shadow(blurRadius: 8, color: Colors.blueGrey.shade800),
+              Shadow(blurRadius: 2, color: Colors.black),
+              Shadow(blurRadius: 8, color: AppColors.blueGrey800),
             ],
           ),
         ),
@@ -65,12 +66,12 @@ class WaveFormPainter extends CustomPainter {
       canvas.drawLine(
         Offset(0, y / 2),
         Offset(x - text.width - 4, y / 2),
-        Paint()..color = Colors.cyan.shade200.withOpacity(0.25),
+        Paint()..color = AppColors.cyan200.withOpacity(0.25),
       );
       canvas.drawLine(
         Offset(0, size.height - y / 2),
         Offset(x, size.height - y / 2),
-        Paint()..color = Colors.cyan.shade200.withOpacity(0.25),
+        Paint()..color = AppColors.cyan200.withOpacity(0.25),
       );
     }
 

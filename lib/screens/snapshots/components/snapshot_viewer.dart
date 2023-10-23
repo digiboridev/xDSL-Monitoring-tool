@@ -4,6 +4,7 @@ import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/models/snapshot_stats.dart';
 import 'package:xdslmt/data/repositories/stats_repo.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/interactive_chart.dart';
+import 'package:xdslmt/widgets/app_colors.dart';
 import 'package:xdslmt/widgets/text_styles.dart';
 
 class SnapshotViewer extends StatefulWidget {
@@ -39,7 +40,7 @@ class _SnapshotViewerState extends State<SnapshotViewer> {
           IconButton(
             onPressed: () => Navigator.pop(context),
             icon: const Icon(Icons.close),
-            color: Colors.cyan.shade100,
+            color: AppColors.cyan100,
           ),
         ],
         title: Hero(
@@ -53,7 +54,7 @@ class _SnapshotViewerState extends State<SnapshotViewer> {
             ),
           ),
         ),
-        backgroundColor: Colors.blueGrey.shade900,
+        backgroundColor: AppColors.blueGrey900,
       ),
       body: SizedBox.expand(
         child: body(),
@@ -66,7 +67,7 @@ class _SnapshotViewerState extends State<SnapshotViewer> {
     if (statsList.isEmpty) return const Center(child: CircularProgressIndicator());
 
     return Container(
-      color: Colors.blueGrey.shade900,
+      color: AppColors.blueGrey900,
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),

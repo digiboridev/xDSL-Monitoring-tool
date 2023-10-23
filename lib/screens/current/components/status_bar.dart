@@ -2,6 +2,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
+import 'package:xdslmt/widgets/app_colors.dart';
 
 class StatusBar extends StatelessWidget {
   const StatusBar({super.key});
@@ -18,7 +19,7 @@ class StatusBar extends StatelessWidget {
     return Column(
       children: [
         Container(
-          color: Colors.blueGrey[700],
+          color: AppColors.blueGrey800,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(

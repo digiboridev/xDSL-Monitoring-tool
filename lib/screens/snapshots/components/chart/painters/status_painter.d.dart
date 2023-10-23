@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/path_factory.dart';
+import 'package:xdslmt/widgets/app_colors.dart';
 
 @Deprecated('backup')
 class StatusPainter extends CustomPainter {
@@ -51,7 +52,7 @@ class StatusPainter extends CustomPainter {
       } else if (status == SampleStatus.connectionDown) {
         canvas.drawLine(Offset(x, halfHeight), Offset(x2, halfHeight), paint..color = Colors.black);
       } else {
-        canvas.drawLine(Offset(x, halfHeight), Offset(x2, halfHeight), paint..color = Colors.cyan.shade100);
+        canvas.drawLine(Offset(x, halfHeight), Offset(x2, halfHeight), paint..color = AppColors.cyan100);
       }
     }
 

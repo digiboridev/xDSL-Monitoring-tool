@@ -5,6 +5,7 @@ import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
 import 'package:xdslmt/screens/current/components/painters/timeless_linepath_painter.dart';
 import 'package:xdslmt/screens/current/components/painters/linebar_painter.dart';
+import 'package:xdslmt/widgets/app_colors.dart';
 import 'package:xdslmt/widgets/text_styles.dart';
 
 class SNRBar extends StatelessWidget {
@@ -227,7 +228,7 @@ class LineChart extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.cyan.shade100),
+        border: Border.all(color: AppColors.cyan100),
         borderRadius: const BorderRadius.all(Radius.circular(3)),
       ),
       child: CustomPaint(painter: TimelessLinePathPainter(s, invert)),

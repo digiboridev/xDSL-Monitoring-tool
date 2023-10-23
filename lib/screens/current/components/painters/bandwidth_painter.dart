@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:xdslmt/widgets/app_colors.dart';
 
 class BandwPainter extends CustomPainter {
   final int curr;
@@ -18,7 +19,7 @@ class BandwPainter extends CustomPainter {
   Paint get _bgPaint => Paint()
     ..style = PaintingStyle.stroke
     ..strokeWidth = 12
-    ..color = Colors.blueGrey.shade200;
+    ..color = AppColors.blueGrey200;
   Paint get _attPaint => Paint()
     ..style = PaintingStyle.stroke
     ..strokeWidth = 8
@@ -26,7 +27,7 @@ class BandwPainter extends CustomPainter {
   Paint get _currPaint => Paint()
     ..style = PaintingStyle.stroke
     ..strokeWidth = 8
-    ..color = Colors.blueGrey.shade800;
+    ..color = AppColors.blueGrey800;
 
   double get _pCurr => (curr / max).clamp(0, 1);
   double get _pAtt => (attainable / max).clamp(0, 1);

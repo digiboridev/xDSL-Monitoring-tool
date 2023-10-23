@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:xdslmt/widgets/app_colors.dart';
 
 class WaveFormTimelessPainter extends CustomPainter {
   final List<int> increasedData;
   final int max;
   WaveFormTimelessPainter({required this.increasedData, required this.max});
 
-  Paint get _barPaint => Paint()
-    ..color = Colors.blueGrey.shade900.withOpacity(0.5)
+  static final _barPaint = Paint()
+    ..color = AppColors.blueGrey900.withOpacity(0.5)
     ..strokeWidth = 1;
-  Paint get _meshPaint => Paint()
-    ..color = Colors.blueGrey.shade100
+  static final _meshPaint = Paint()
+    ..color = AppColors.blueGrey100
     ..strokeWidth = 0.5;
-  Paint get _linePaint => Paint()
-    ..color = Colors.blueGrey.shade600
+  static final _linePaint = Paint()
+    ..color = AppColors.blueGrey600
     ..strokeWidth = 1;
 
   @override

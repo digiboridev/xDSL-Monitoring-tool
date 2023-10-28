@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/path_factory.dart';
-import 'package:xdslmt/widgets/app_colors.dart';
+import 'package:xdslmt/core/colors.dart';
 
 @Deprecated('alternative implementation')
 class RSCPainter extends CustomPainter {

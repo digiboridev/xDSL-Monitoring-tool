@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/path_factory.dart';
-import 'package:xdslmt/widgets/app_colors.dart';
-import 'package:xdslmt/widgets/text_styles.dart';
+import 'package:xdslmt/core/colors.dart';
+import 'package:xdslmt/core/text_styles.dart';
 
 class WaveFormPainter extends CustomPainter {
   final Iterable<({int t, int v})> data;

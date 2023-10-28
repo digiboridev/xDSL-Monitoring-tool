@@ -9,6 +9,7 @@ class AppSettings {
   final String pwd;
   final Duration samplingInterval;
   final Duration splitInterval;
+  @Deprecated('Not used anymore')
   final String externalHost;
   final bool animations;
   final bool orientLock;
@@ -32,7 +33,7 @@ class AppSettings {
       login: 'admin',
       pwd: 'admin',
       samplingInterval: const Duration(seconds: 1),
-      splitInterval: const Duration(minutes: 30),
+      splitInterval: const Duration(minutes: 60),
       externalHost: '8.8.8.8',
       animations: true,
       orientLock: true,

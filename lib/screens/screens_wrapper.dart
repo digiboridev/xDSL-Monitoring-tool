@@ -2,15 +2,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:xdslmt/data/repositories/settings_repo.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
-import 'package:xdslmt/screens/current/current_screen.dart';
+import 'package:xdslmt/screens/monitoring/current_screen.dart';
 import 'package:xdslmt/screens/settings/binding.dart';
 import 'package:xdslmt/screens/settings/view.dart';
 import 'package:xdslmt/screens/snapshots/binding.dart';
 import 'package:xdslmt/screens/snapshots/view.dart';
-import 'package:xdslmt/widgets/app_colors.dart';
-import 'package:xdslmt/widgets/text_styles.dart';
+import 'package:xdslmt/core/colors.dart';
+import 'package:xdslmt/core/text_styles.dart';
 
 class ScreensWrapper extends StatefulWidget {
   const ScreensWrapper({super.key});
@@ -20,72 +19,31 @@ class ScreensWrapper extends StatefulWidget {
 }
 
 class _ScreensWrapperState extends State<ScreensWrapper> {
-  late final List screens = [
-    const CurrentScreen(),
-    const SnapshotsScreenBinding(child: SnapshotsScreenView()),
-    const SettingsScreenBinding(child: SettingsScreenView()),
-  ];
+  final Map screens = {
+    'Monitoring': const MonitoringScreen(),
+    'Snapshots': const SnapshotsScreenBinding(child: SnapshotsScreenView()),
+    'Settings': const SettingsScreenBinding(child: SettingsScreenView()),
+  };
+  late String currentScreen = screens.keys.first;
 
-  int screenIndex = 0;
-  selectScreen(int index) => setState(() => screenIndex = index);
-
-  String get screenName {
-    switch (screenIndex) {
-      case 0:
-        return 'Monitoring';
-      case 1:
-        return 'Snapshots';
-      case 2:
-        return 'Settings';
-      default:
-        return 'Unknown';
-    }
-  }
-
-  setupOrient() async {
-    set(bool orientLock) {
-      if (orientLock) {
-        SystemChrome.setPreferredOrientations([
-          DeviceOrientation.portraitUp,
-          DeviceOrientation.portraitDown,
-        ]);
-      } else {
-        SystemChrome.setPreferredOrientations(
-          [
-            DeviceOrientation.portraitUp,
-            DeviceOrientation.portraitDown,
-            DeviceOrientation.landscapeLeft,
-            DeviceOrientation.landscapeRight,
-          ],
-        );
-      }
-    }
-
-    final srepo = context.read<SettingsRepository>();
-    final settings = await srepo.getSettings;
-    set(settings.orientLock);
-    srepo.updatesStream.map((settings) => settings.orientLock).distinct().listen((orientLock) => set(orientLock));
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    setupOrient();
-  }
+  void close() => exit(0);
+  void minimize() => const MethodChannel('main').invokeMethod('minimize');
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
+      /// Prevents back button from closing the app when sampling is active
+      /// and minimizes the app instead
       onWillPop: () async {
         bool sampling = context.read<StatsSamplingService>().samplingActive;
-        if (sampling) const MethodChannel('main').invokeMethod('minimize');
+        if (sampling) minimize();
         return !sampling;
       },
       child: Scaffold(
         backgroundColor: AppColors.blueGrey900,
         appBar: appBar(),
         body: body(),
-        floatingActionButton: screenIndex == 0 ? const FloatButton() : null,
+        floatingActionButton: currentScreen == screens.keys.first ? const FloatButton() : null,
         bottomNavigationBar: bottomBar(),
       ),
     );
@@ -106,7 +64,7 @@ class _ScreensWrapperState extends State<ScreensWrapper> {
               child: child,
             ),
           ),
-          child: screens[screenIndex],
+          child: screens[currentScreen],
         ),
       ),
     );
@@ -120,8 +78,8 @@ class _ScreensWrapperState extends State<ScreensWrapper> {
       selectedFontSize: 14,
       unselectedItemColor: AppColors.blueGrey200,
       selectedItemColor: AppColors.cyan50,
-      currentIndex: screenIndex,
-      onTap: selectScreen,
+      currentIndex: screens.keys.toList().indexOf(currentScreen),
+      onTap: (index) => setState(() => currentScreen = screens.keys.toList()[index]),
       items: const [
         BottomNavigationBarItem(
           label: 'Monitoring',
@@ -148,7 +106,7 @@ class _ScreensWrapperState extends State<ScreensWrapper> {
   AppBar appBar() {
     return AppBar(
       title: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 250),
+        duration: const Duration(milliseconds: 100),
         switchInCurve: Curves.easeInCubic,
         transitionBuilder: (child, animation) => ScaleTransition(
           scale: Tween(begin: 0.9, end: 1.0).animate(animation),
@@ -157,22 +115,18 @@ class _ScreensWrapperState extends State<ScreensWrapper> {
             child: child,
           ),
         ),
-        child: Row(key: Key(screenName), children: [Text(screenName, style: TextStyles.f18w6.cyan50)]),
+        child: Row(key: Key(currentScreen), children: [Text(currentScreen, style: TextStyles.f18w6.cyan50)]),
       ),
       actions: [
         IconButton(
           tooltip: 'Minimize app',
           icon: const Icon(Icons.minimize, color: AppColors.cyan50),
-          onPressed: () {
-            const MethodChannel('main').invokeMethod('minimize');
-          },
+          onPressed: minimize,
         ),
         IconButton(
           tooltip: 'Close app',
           icon: const Icon(Icons.power_settings_new, color: AppColors.cyan50),
-          onPressed: () {
-            exit(0);
-          },
+          onPressed: close,
         ),
       ],
       backgroundColor: AppColors.blueGrey900,

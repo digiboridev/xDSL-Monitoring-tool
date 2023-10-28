@@ -7,8 +7,8 @@ import 'package:xdslmt/data/repositories/stats_repo.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
 import 'package:xdslmt/screens/snapshots/components/snapshot_viewer.dart';
 import 'package:xdslmt/screens/snapshots/vm.dart';
-import 'package:xdslmt/utils/formatters.dart';
-import 'package:xdslmt/widgets/text_styles.dart';
+import 'package:xdslmt/core/formatters.dart';
+import 'package:xdslmt/core/text_styles.dart';
 
 class SnaplistTile extends StatefulWidget {
   const SnaplistTile({super.key, required this.snapshotId});
@@ -19,17 +19,17 @@ class SnaplistTile extends StatefulWidget {
 }
 
 class _SnaplistTileState extends State<SnaplistTile> {
-  late StatsRepository statsRepository = context.read<StatsRepository>();
-  late StreamSubscription updSub;
+  late final StatsRepository statsRepository;
+  late final StreamSubscription updSub;
   SnapshotStats? snapshotStats;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<StatsRepository>().snapshotStatsById(widget.snapshotId).then((value) {
-        if (mounted) setState(() => snapshotStats = value);
-      });
+
+    statsRepository = context.read<StatsRepository>();
+    statsRepository.snapshotStatsById(widget.snapshotId).then((value) {
+      if (mounted) setState(() => snapshotStats = value);
     });
     updSub = statsRepository.snapshotStatsStreamById(widget.snapshotId).listen((event) {
       if (mounted) setState(() => snapshotStats = event);

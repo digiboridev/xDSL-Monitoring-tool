@@ -2,9 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
-import 'package:xdslmt/screens/current/components/painters/timeless_waveform_painter.dart';
-import 'package:xdslmt/widgets/app_colors.dart';
-import 'package:xdslmt/widgets/text_styles.dart';
+import 'package:xdslmt/screens/monitoring/components/painters/timeless_waveform_painter.dart';
+import 'package:xdslmt/core/colors.dart';
+import 'package:xdslmt/core/text_styles.dart';
 
 class RSCBar extends StatelessWidget {
   const RSCBar({super.key});

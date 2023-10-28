@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/path_factory.dart';
-import 'package:xdslmt/widgets/app_colors.dart';
+import 'package:xdslmt/core/colors.dart';
 
 class StatusEventsPainter extends CustomPainter {
   final Iterable<({int t, SampleStatus s})> data;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/screens/snapshots/components/snaplist_tile.dart';
 import 'package:xdslmt/screens/snapshots/vm.dart';
-import 'package:xdslmt/widgets/app_colors.dart';
+import 'package:xdslmt/core/colors.dart';
 
 class SnapshotsScreenView extends StatelessWidget {
   const SnapshotsScreenView({super.key});

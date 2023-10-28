@@ -8,11 +8,11 @@ import 'package:xdslmt/screens/settings/components/nu_type.dart';
 import 'package:xdslmt/screens/settings/components/orient_lock.dart';
 import 'package:xdslmt/screens/settings/components/nu_password.dart';
 import 'package:xdslmt/screens/settings/components/sampling_interval.dart';
-import 'package:xdslmt/widgets/app_colors.dart';
-import 'package:xdslmt/widgets/fillable_scrollable_wrapper.dart';
-import 'package:xdslmt/widgets/min_spacer.dart';
-import 'package:xdslmt/widgets/text_styles.dart';
-import 'package:xdslmt/widgets/version.dart';
+import 'package:xdslmt/core/colors.dart';
+import 'package:xdslmt/utils/fillable_scrollable_wrapper.dart';
+import 'package:xdslmt/utils/min_spacer.dart';
+import 'package:xdslmt/core/text_styles.dart';
+import 'package:xdslmt/utils/version.dart';
 
 class SettingsScreenView extends StatelessWidget {
   const SettingsScreenView({

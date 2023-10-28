@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:xdslmt/widgets/app_colors.dart';
+import 'package:xdslmt/core/colors.dart';
 
 class TimelessLinePathPainter extends CustomPainter {
   final List<int?> data;

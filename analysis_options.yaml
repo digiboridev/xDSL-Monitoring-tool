@@ -9,5 +9,6 @@ linter:
     prefer_single_quotes: true
     require_trailing_commas: true
     package_prefixed_library_names: true
-    # prefer_const_constructors: false // dev
-    # avoid_print: false // dev
+    # dev rules
+    # prefer_const_constructors: false
+    # avoid_print: false 

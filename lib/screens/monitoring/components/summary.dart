@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/data/models/snapshot_stats.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
-import 'package:xdslmt/utils/formatters.dart';
-import 'package:xdslmt/widgets/text_styles.dart';
+import 'package:xdslmt/core/formatters.dart';
+import 'package:xdslmt/core/text_styles.dart';
 
 class Summary extends StatelessWidget {
   const Summary({super.key});

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:xdslmt/screens/current/components/summary.dart';
-import 'package:xdslmt/widgets/app_colors.dart';
-import 'package:xdslmt/widgets/text_styles.dart';
+import 'package:xdslmt/screens/monitoring/components/summary.dart';
+import 'package:xdslmt/core/colors.dart';
+import 'package:xdslmt/core/text_styles.dart';
 import 'components/status_bar.dart';
 import 'components/bandwidth_bar.dart';
 import 'components/snr_bar.dart';
 import 'components/rsc_bar.dart';
 
-class CurrentScreen extends StatelessWidget {
-  const CurrentScreen({super.key});
+class MonitoringScreen extends StatelessWidget {
+  const MonitoringScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

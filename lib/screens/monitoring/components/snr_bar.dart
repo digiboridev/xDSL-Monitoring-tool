@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
-import 'package:xdslmt/screens/current/components/painters/timeless_linepath_painter.dart';
-import 'package:xdslmt/screens/current/components/painters/linebar_painter.dart';
-import 'package:xdslmt/widgets/app_colors.dart';
-import 'package:xdslmt/widgets/text_styles.dart';
+import 'package:xdslmt/screens/monitoring/components/painters/timeless_linepath_painter.dart';
+import 'package:xdslmt/screens/monitoring/components/painters/linebar_painter.dart';
+import 'package:xdslmt/core/colors.dart';
+import 'package:xdslmt/core/text_styles.dart';
 
 class SNRBar extends StatelessWidget {
   const SNRBar({super.key});
@@ -247,11 +247,11 @@ class MinMaxAvgRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('${min?.oneFrStr ?? 'N/A'} MIN', style: TextStyles.f10.blueGrey600),
+        Text('${min?.oneFrStr ?? '-'} MIN', style: TextStyles.f10.blueGrey600),
         const SizedBox(width: 4),
-        Text('${max?.oneFrStr ?? 'N/A'} MAX', style: TextStyles.f10.blueGrey600),
+        Text('${max?.oneFrStr ?? '-'} MAX', style: TextStyles.f10.blueGrey600),
         const SizedBox(width: 4),
-        Text('${avg?.oneFrStr ?? 'N/A'} AVG', style: TextStyles.f10.blueGrey600),
+        Text('${avg?.oneFrStr ?? '-'} AVG', style: TextStyles.f10.blueGrey600),
       ],
     );
   }

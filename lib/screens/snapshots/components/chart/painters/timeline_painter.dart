@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:xdslmt/utils/formatters.dart';
-import 'package:xdslmt/widgets/app_colors.dart';
-import 'package:xdslmt/widgets/text_styles.dart';
+import 'package:xdslmt/core/formatters.dart';
+import 'package:xdslmt/core/colors.dart';
+import 'package:xdslmt/core/text_styles.dart';
 
 class TimelinePainter extends CustomPainter {
   final DateTime start;

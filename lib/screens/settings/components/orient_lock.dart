@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/screens/settings/vm.dart';
-import 'package:xdslmt/widgets/text_styles.dart';
+import 'package:xdslmt/core/text_styles.dart';
 
 class OrientLock extends StatelessWidget {
   const OrientLock({super.key});

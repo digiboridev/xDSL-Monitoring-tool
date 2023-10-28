@@ -3,11 +3,11 @@ import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/models/snapshot_stats.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/painters/line_path_painter.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/painters/status_events_painter.dart';
-import 'package:xdslmt/widgets/app_colors.dart';
-import 'package:xdslmt/widgets/text_styles.dart';
+import 'package:xdslmt/core/colors.dart';
+import 'package:xdslmt/core/text_styles.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/painters/wave_form_painter.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/painters/timeline_painter.dart';
-import 'package:xdslmt/utils/formatters.dart';
+import 'package:xdslmt/core/formatters.dart';
 
 class InteractiveChart extends StatefulWidget {
   final List<LineStats> statsList;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/screens/settings/vm.dart';
-import 'package:xdslmt/widgets/app_colors.dart';
-import 'package:xdslmt/widgets/text_styles.dart';
+import 'package:xdslmt/core/colors.dart';
+import 'package:xdslmt/core/text_styles.dart';
 
 class SplitInterval extends StatelessWidget {
   const SplitInterval({super.key});
@@ -30,8 +30,8 @@ class SplitInterval extends StatelessWidget {
             ),
             child: Slider(
               value: _watchSplitInterval(context).inMinutes.toDouble(),
-              min: 10,
-              max: 60,
+              min: 20,
+              max: 120,
               divisions: 5,
               label: _watchSplitInterval(context).inMinutes.toString(),
               onChanged: (double value) => _getVm(context).setSplitInterval = Duration(minutes: value.toInt()),

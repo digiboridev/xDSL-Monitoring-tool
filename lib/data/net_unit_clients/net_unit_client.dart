@@ -3,7 +3,7 @@ import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/models/network_unit_type.dart';
 import 'package:xdslmt/data/net_unit_clients/simulator_impl.dart';
 
-abstract base class NetUnitClient {
+abstract class NetUnitClient {
   /// IP address of the network unit
   final String ip;
 

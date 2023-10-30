@@ -36,8 +36,8 @@ class LineStats {
   final int? upFECIncr;
   final int? downFECIncr;
 
-  const LineStats._({
-    required this.time,
+  LineStats({
+    DateTime? time,
     required this.snapshotId,
     required this.status,
     required this.statusText,
@@ -58,11 +58,10 @@ class LineStats {
     this.downCRCIncr,
     this.upFECIncr,
     this.downFECIncr,
-  });
+  }) : time = time ?? DateTime.now();
 
   factory LineStats.errored({required String snapshotId, required String statusText}) {
-    return LineStats._(
-      time: DateTime.now(),
+    return LineStats(
       snapshotId: snapshotId,
       status: SampleStatus.samplingError,
       statusText: statusText,
@@ -70,8 +69,7 @@ class LineStats {
   }
 
   factory LineStats.connectionDown({required String snapshotId, required String statusText}) {
-    return LineStats._(
-      time: DateTime.now(),
+    return LineStats(
       snapshotId: snapshotId,
       status: SampleStatus.connectionDown,
       statusText: statusText,
@@ -99,8 +97,7 @@ class LineStats {
     required int upFECIncr,
     required int downFECIncr,
   }) {
-    return LineStats._(
-      time: DateTime.now(),
+    return LineStats(
       snapshotId: snapshotId,
       status: SampleStatus.connectionUp,
       statusText: statusText,
@@ -208,7 +205,7 @@ class LineStats {
   }
 
   factory LineStats.fromMap(Map<String, dynamic> map) {
-    return LineStats._(
+    return LineStats(
       time: DateTime.fromMillisecondsSinceEpoch(map['time'] as int),
       snapshotId: map['snapshotId'] as String,
       status: SampleStatus.values.byName(map['status'] as String),

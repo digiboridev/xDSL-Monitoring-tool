@@ -9,8 +9,6 @@ class AppSettings {
   final String pwd;
   final Duration samplingInterval;
   final Duration splitInterval;
-  @Deprecated('Not used anymore')
-  final String externalHost;
   final bool animations;
   final bool orientLock;
 
@@ -21,7 +19,6 @@ class AppSettings {
     required this.pwd,
     required this.samplingInterval,
     required this.splitInterval,
-    required this.externalHost,
     required this.animations,
     required this.orientLock,
   });
@@ -34,7 +31,6 @@ class AppSettings {
       pwd: 'admin',
       samplingInterval: const Duration(seconds: 1),
       splitInterval: const Duration(minutes: 60),
-      externalHost: '8.8.8.8',
       animations: true,
       orientLock: true,
     );
@@ -47,7 +43,6 @@ class AppSettings {
     String? pwd,
     Duration? samplingInterval,
     Duration? splitInterval,
-    String? externalHost,
     bool? animations,
     bool? orientLock,
   }) {
@@ -58,7 +53,6 @@ class AppSettings {
       pwd: pwd ?? this.pwd,
       samplingInterval: samplingInterval ?? this.samplingInterval,
       splitInterval: splitInterval ?? this.splitInterval,
-      externalHost: externalHost ?? this.externalHost,
       animations: animations ?? this.animations,
       orientLock: orientLock ?? this.orientLock,
     );
@@ -72,7 +66,6 @@ class AppSettings {
       'pwd': pwd,
       'samplingInterval': samplingInterval.inMilliseconds,
       'splitInterval': splitInterval.inMilliseconds,
-      'externalHost': externalHost,
       'animations': animations,
       'orientLock': orientLock,
     };
@@ -86,7 +79,6 @@ class AppSettings {
       pwd: map['pwd'] as String,
       samplingInterval: Duration(milliseconds: (map['samplingInterval'] as num).toInt()),
       splitInterval: Duration(milliseconds: (map['splitInterval'] as num).toInt()),
-      externalHost: map['externalHost'] as String,
       animations: map['animations'] as bool,
       orientLock: map['orientLock'] as bool,
     );
@@ -98,7 +90,7 @@ class AppSettings {
 
   @override
   String toString() {
-    return 'AppSettings(nuType: $nuType, host: $host, login: $login, pwd: $pwd, samplingInterval: $samplingInterval, splitInterval: $splitInterval, externalHost: $externalHost, animations: $animations, orientLock: $orientLock)';
+    return 'AppSettings(nuType: $nuType, host: $host, login: $login, pwd: $pwd, samplingInterval: $samplingInterval, splitInterval: $splitInterval, animations: $animations, orientLock: $orientLock)';
   }
 
   @override
@@ -111,7 +103,6 @@ class AppSettings {
         other.pwd == pwd &&
         other.samplingInterval == samplingInterval &&
         other.splitInterval == splitInterval &&
-        other.externalHost == externalHost &&
         other.animations == animations &&
         other.orientLock == orientLock;
   }
@@ -124,7 +115,6 @@ class AppSettings {
         pwd.hashCode ^
         samplingInterval.hashCode ^
         splitInterval.hashCode ^
-        externalHost.hashCode ^
         animations.hashCode ^
         orientLock.hashCode;
   }

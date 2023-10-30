@@ -3,50 +3,56 @@ import 'dart:async';
 import 'dart:io';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
+import 'package:xdslmt/data/net_unit_clients/stats_parser/raw_line_stats.dart';
+
+/// Alias for function that responds to prompt with command
+/// `prompt` - prompt that appears before command
+/// `command` - command that will be sent after prompt appears
+typedef P2C = ({String prompt, String command});
+typedef Cmd2Stats = ({String command, RawLineStats? Function(String) tryParse});
 
 class CommonTelnetClient implements NetUnitClient {
-  @override
-  final String snapshotId;
-  final String ip;
-  final String login;
-  final String password;
-
   CommonTelnetClient({
-    required this.ip,
-    required this.login,
-    required this.password,
+    required this.unitIp,
     required this.snapshotId,
-    this.loginPrt = 'Login:',
-    this.passwordPrt = 'Password:',
-    this.shPrepPrt = '>',
-    this.shPrepCmd = 'sh',
-    this.shReadyPrt = '#',
-    this.errorPrompts = const ['Bad Password!!!', 'Login incorrect', 'Login failed'],
+    required this.prepPrts,
+    required this.errorPrts,
+    required this.readyPrt,
+    required this.cmd2Stats,
   });
 
-  /// Prompt that appears while unit waiting for login input
-  /// Can be empty if no need to enter login (trendchip usually)
-  String loginPrt;
+  @override
+  final String snapshotId;
+  final String unitIp;
 
-  /// Prompt that appears while unit waiting for password input
-  /// Can be empty if no need to enter password
-  String passwordPrt;
-
-  /// Prompt that appears after auth and uses to prepare shell for full access (if needed)
-  /// Can be empty if no need to prepare shell
-  String shPrepPrt;
-
-  /// Command that uses to prepare shell for full access
-  String shPrepCmd;
-
-  /// Prompt that appears after shell prepared and ready for full access
-  String shReadyPrt;
+  /// Prompts for auth and shell preparation
+  final List<P2C> prepPrts;
 
   /// Prompts for error recognition durning connect
-  List<String> errorPrompts;
+  final List<String> errorPrts;
+
+  /// Prompt that appears after shell prepared and ready for full access
+  final String readyPrt;
+
+  final Cmd2Stats cmd2Stats;
 
   Socket? _socket;
   Stream<String>? _socketStream;
+  bool get _isConnected => _socket != null && _socketStream != null;
+  LineStats? _prevStats;
+
+  @override
+  Future<LineStats> fetchStats() async {
+    try {
+      if (!_isConnected) await _connect();
+      final lineStats = await _getStats();
+      return lineStats;
+    } catch (e) {
+      print('Fetch error: $e');
+      _wipeSocket();
+      return LineStats.errored(snapshotId: snapshotId, statusText: e.toString());
+    }
+  }
 
   void _wipeSocket() {
     _socket?.destroy();
@@ -60,45 +66,46 @@ class CommonTelnetClient implements NetUnitClient {
     _wipeSocket();
     final completer = Completer();
 
-    final socket = await Socket.connect(ip, 23);
+    final socket = await Socket.connect(unitIp, 24); // TODO use 23
     final socketStream = socket.map((event) => String.fromCharCodes(event).trim()).asBroadcastStream();
-    socketStream.forEach((event) => print('Socket event: $event'));
 
-    /// Attaching prompts answerers
-    if (loginPrt.isNotEmpty) {
-      socketStream.firstWhere((event) => event.contains(loginPrt)).then((_) => socket.writeln(login)).ignore();
-    }
-    if (passwordPrt.isNotEmpty) {
-      socketStream.firstWhere((event) => event.contains(passwordPrt)).then((_) => socket.writeln(password)).ignore();
-    }
-    if (shPrepPrt.isNotEmpty) {
-      socketStream.firstWhere((event) => event.contains(shPrepPrt)).then((_) => socket.writeln(shPrepCmd)).ignore();
-    }
+    late StreamSubscription tempSub;
 
-    // Handle successfull connect
-    // Exposes socket and socketStream to class and complete flow
-    socketStream.firstWhere((event) => event.contains(shReadyPrt)).then((_) {
-      if (!completer.isCompleted) {
-        _socket = socket;
-        _socketStream = socketStream;
-        socket.done.then((value) => _wipeSocket());
-        completer.complete();
+    tempSub = socketStream.listen((event) {
+      print('Socket event: $event');
+
+      // Handle preparing prompts
+      for (var p2c in prepPrts) {
+        if (event.contains(p2c.prompt)) socket.writeln(p2c.command);
       }
-    }).ignore();
 
-    // Handle connect errors and complete with error
-    for (var error in errorPrompts) {
-      socketStream.firstWhere((event) => event.contains(error)).then((_) {
+      // Handle success prompt
+      if (event.contains(readyPrt)) {
         if (!completer.isCompleted) {
-          socket.destroy();
-          completer.completeError(error);
+          _socket = socket;
+          _socketStream = socketStream;
+          socket.done.then((value) => _wipeSocket());
+          tempSub.cancel();
+          completer.complete();
         }
-      }).ignore();
-    }
+      }
 
-    // Auto complete by timeout to prevent deadlocks
+      // Handle errors prompt
+      for (var error in errorPrts) {
+        if (event.contains(error)) {
+          if (!completer.isCompleted) {
+            tempSub.cancel();
+            socket.destroy();
+            completer.completeError(error);
+          }
+        }
+      }
+    });
+
+    // Auto complete by timeout if no success prompt received
     Timer(const Duration(seconds: 10), () {
       if (!completer.isCompleted) {
+        tempSub.cancel();
         socket.destroy();
         completer.completeError('Connect timeout');
       }
@@ -108,17 +115,58 @@ class CommonTelnetClient implements NetUnitClient {
   }
 
   Future<LineStats> _getStats() {
-    throw UnimplementedError();
+    final completer = Completer<LineStats>();
+    late StreamSubscription tempSub;
+
+    // Wait and parse stats pessimistically due to possible garbage in stream
+    tempSub = _socketStream!.listen((event) {
+      RawLineStats? maybeStats = cmd2Stats.tryParse(event);
+      if (maybeStats != null && !completer.isCompleted) {
+        final stats = LineStats(
+          snapshotId: snapshotId,
+          status: maybeStats.status,
+          statusText: maybeStats.statusText,
+          connectionType: maybeStats.connectionType,
+          upAttainableRate: maybeStats.upAttainableRate,
+          downAttainableRate: maybeStats.downAttainableRate,
+          upRate: maybeStats.upRate,
+          downRate: maybeStats.downRate,
+          upMargin: maybeStats.upMargin != null ? (maybeStats.upMargin! * 10).truncate() : null,
+          downMargin: maybeStats.downMargin != null ? (maybeStats.downMargin! * 10).truncate() : null,
+          upAttenuation: maybeStats.upAttenuation != null ? (maybeStats.upAttenuation! * 10).truncate() : null,
+          downAttenuation: maybeStats.downAttenuation != null ? (maybeStats.downAttenuation! * 10).truncate() : null,
+          upCRC: maybeStats.upCRC,
+          downCRC: maybeStats.downCRC,
+          upFEC: maybeStats.upFEC,
+          downFEC: maybeStats.downFEC,
+          upCRCIncr: _incrDiff(_prevStats?.upCRC, maybeStats.upCRC),
+          downCRCIncr: _incrDiff(_prevStats?.downCRC, maybeStats.downCRC),
+          upFECIncr: _incrDiff(_prevStats?.upFEC, maybeStats.upFEC),
+          downFECIncr: _incrDiff(_prevStats?.downFEC, maybeStats.downFEC),
+        );
+
+        tempSub.cancel();
+        completer.complete(stats);
+      }
+    });
+
+    // Send command to get stats
+    _socket!.writeln(cmd2Stats.command);
+
+    // Auto complete by timeout if no stats received
+    Timer(const Duration(seconds: 10), () {
+      if (!completer.isCompleted) {
+        tempSub.cancel();
+        completer.completeError('Get stats timeout');
+      }
+    });
+
+    return completer.future;
   }
 
-  @override
-  Future<LineStats> fetchStats() async {
-    try {
-      await _connect();
-    } catch (e) {
-      print('Connect error: $e');
-      return LineStats.errored(snapshotId: snapshotId, statusText: 'Connect error: $e');
-    }
-    throw UnimplementedError();
+  int _incrDiff(int? prev, int? next) {
+    if (prev == null || next == null) return 0;
+    final diff = next - prev;
+    return diff > 0 ? diff : 0;
   }
 }

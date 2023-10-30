@@ -1,121 +1,66 @@
-// import 'package:xdslmt/data/models/line_stats.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:xdslmt/data/models/line_stats.dart';
+import 'package:xdslmt/data/net_unit_clients/stats_parser/raw_line_stats.dart';
 
-// // This parser will receive parts of messages
-// // finds needed data with regex
-// // when all data parts is received it will pass answer throught callback function
+RawLineStats? bcm63xxParser(String msg) {
+  if (msg.contains('Status:')) {
+    final statusText = RegExp(r'(?<=Status: ).+').firstMatch(msg)?.group(0) ?? 'unknown';
+    final status = statusText.toLowerCase().contains('showtime') ? SampleStatus.connectionUp : SampleStatus.connectionDown;
+    var linestats = RawLineStats(status: status, statusText: statusText);
 
-// class BCMTelnetParser {
-//   // Data parts
-//   Map lineData = {
-//     'connectionType': 'null',
-//     'upMaxRate': null,
-//     'downMaxRate': null,
-//     'upRate': null,
-//     'downRate': null,
-//     'upMargin': null,
-//     'downMargin': null,
-//     'upAttenuation': null,
-//     'downAttenuation': null,
-//     'upCRC': null,
-//     'downCRC': null,
-//     'upFEC': null,
-//     'downFEC': null,
-//   };
-//   //callback
-//   var cb;
+    final connectionType = RegExp(r'(?<=Mode:                   ).+').firstMatch(msg)?.group(0);
+    if (connectionType != null) linestats.connectionType = connectionType;
 
-//   // Constructor
-//   BCMTelnetParser(this.cb);
+    final spd = RegExp(r'(?<=Bearer: 0,).+').firstMatch(msg)?.group(0);
+    if (spd != null) {
+      final upRate = RegExp(r'(?<=Upstream rate = )\d+').firstMatch(spd)?.group(0);
+      if (upRate != null) linestats.upRate = int.tryParse(upRate);
+      final downRate = RegExp(r'(?<=Downstream rate = )\d+').firstMatch(spd)?.group(0);
+      if (downRate != null) linestats.downRate = int.tryParse(downRate);
+    }
 
-//   // Receives messages find data parts with regex
-//   void receiver(msg) {
-//     msg = String.fromCharCodes(msg).trim();
+    final maxSpd = RegExp(r'(?<=Max:    ).+').firstMatch(msg)?.group(0);
+    if (maxSpd != null) {
+      final upMaxRate = RegExp(r'(?<=Upstream rate = )\d+').firstMatch(maxSpd)?.group(0);
+      if (upMaxRate != null) linestats.upAttainableRate = int.tryParse(upMaxRate);
+      final downMaxRate = RegExp(r'(?<=Downstream rate = )\d+').firstMatch(maxSpd)?.group(0);
+      if (downMaxRate != null) linestats.downAttainableRate = int.tryParse(downMaxRate);
+    }
 
-//     if ('Status: Showtime'.allMatches(msg).isNotEmpty) {
-//       try {
-//         lineData['connectionType'] = RegExp(r'(?<=Mode:                   ).+').firstMatch(msg).group(0);
-//         var spd = RegExp(r'(?<=Bearer: 0,).+').firstMatch(msg).group(0);
+    final snr = RegExp(r'(?<=SNR \(dB\):).+').firstMatch(msg)?.group(0);
+    final snrArr = snr?.split(RegExp(r'\s+')) ?? [];
 
-//         lineData['upMaxRate'] = RegExp(r'(?<=Upstream rate = )\d+').firstMatch(spd).group(0);
-//         lineData['downMaxRate'] = RegExp(r'(?<=Downstream rate = )\d+').firstMatch(spd).group(0);
+    final upMargin = snrArr.elementAtOrNull(2);
+    if (upMargin != null) linestats.upMargin = double.tryParse(upMargin);
+    final downMargin = snrArr.elementAtOrNull(1);
+    if (downMargin != null) linestats.downMargin = double.tryParse(downMargin);
 
-//         var maxSpd = RegExp(r'(?<=Max:    ).+').firstMatch(msg).group(0);
+    final att = RegExp(r'(?<=Attn\(dB\):).+').firstMatch(msg)?.group(0);
+    final attArr = att?.split(RegExp(r'\s+')) ?? [];
 
-//         lineData['upRate'] = RegExp(r'(?<=Upstream rate = )\d+').firstMatch(maxSpd).group(0);
-//         lineData['downRate'] = RegExp(r'(?<=Downstream rate = )\d+').firstMatch(maxSpd).group(0);
+    final upAttenuation = attArr.elementAtOrNull(2);
+    if (upAttenuation != null) linestats.upAttenuation = double.tryParse(upAttenuation);
+    final downAttenuation = attArr.elementAtOrNull(1);
+    if (downAttenuation != null) linestats.downAttenuation = double.tryParse(downAttenuation);
 
-//         var snr = RegExp(r'(?<=SNR \(dB\):).+').firstMatch(msg)?.group(0);
-//         var snrArr = snr.split(RegExp(r'\s+'));
+    final fex = RegExp(r'(?<=RSCorr:).+').firstMatch(msg)?.group(0);
+    final fecArr = fex?.split(RegExp(r'\s+')) ?? [];
 
-//         lineData['upMargin'] = snrArr[2];
-//         lineData['downMargin'] = snrArr[1];
+    final upFEC = fecArr.elementAtOrNull(2);
+    if (upFEC != null) linestats.upFEC = int.tryParse(upFEC);
+    final downFEC = fecArr.elementAtOrNull(1);
+    if (downFEC != null) linestats.downFEC = int.tryParse(downFEC);
 
-//         var att = RegExp(r'(?<=Attn\(dB\):).+').firstMatch(msg)?.group(0);
-//         var attArr = att.split(RegExp(r'\s+'));
-//         lineData['upAttenuation'] = attArr[2];
-//         lineData['downAttenuation'] = attArr[1];
+    final crc = RegExp(r'(?<=RSUnCorr:).+').firstMatch(msg)?.group(0);
+    final crcArr = crc?.split(RegExp(r'\s+')) ?? [];
 
-//         var fex = RegExp(r'(?<=RSCorr:).+').firstMatch(msg)?.group(0);
-//         var fecArr = fex.split(RegExp(r'\s+'));
-//         lineData['upFEC'] = fecArr[2];
-//         lineData['downFEC'] = fecArr[1];
+    final upCRC = crcArr.elementAtOrNull(2);
+    if (upCRC != null) linestats.upCRC = int.tryParse(upCRC);
+    final downCRC = crcArr.elementAtOrNull(1);
+    if (downCRC != null) linestats.downCRC = int.tryParse(downCRC);
 
-//         var crc = RegExp(r'(?<=RSUnCorr:).+').firstMatch(msg)?.group(0);
-//         var crcArr = crc.split(RegExp(r'\s+'));
-//         lineData['upCRC'] = crcArr[2];
-//         lineData['downCRC'] = crcArr[1];
-//       } catch (e) {
-//         cb(LineStatsCollection(
-//           isErrored: true,
-//           isConnectionUp: false,
-//           status: 'data error',
-//           dateTime: DateTime.now(),
-//         ));
-//       }
+    return linestats;
+  }
 
-//       checkFoAll();
-//       return;
-//     } else if ('Status: '.allMatches(msg).isNotEmpty) {
-//       cb(LineStatsCollection(
-//         isErrored: false,
-//         isConnectionUp: false,
-//         status: RegExp(r'(?<=Status: ).+').firstMatch(msg)?.group(0),
-//         dateTime: DateTime.now(),
-//       ));
-//     }
-//   }
-
-//   // Check for all data parts
-//   // When all parts received pass LineStatsCollection throught callback
-//   void checkFoAll() {
-//     if (!lineData.values.contains(null)) {
-//       cb(
-//         LineStats.connectionUp(
-//           snapshotId: '',
-//           statusText: 'Up',
-//           connectionType: lineData['connectionType'],
-//           upAttainableRate: int.parse(lineData['upMaxRate']),
-//           downAttainableRate: int.parse(lineData['downMaxRate']),
-//           upRate: int.parse(lineData['upRate']),
-//           downRate: int.parse(lineData['downRate']),
-//           upMargin: double.parse(lineData['upMargin']),
-//           downMargin: double.parse(lineData['downMargin']),
-//           upAttenuation: double.parse(lineData['upAttenuation']),
-//           downAttenuation: double.parse(lineData['downAttenuation']),
-//           upCRC: int.parse(lineData['upCRC']),
-//           downCRC: int.parse(lineData['downCRC']),
-//           upFEC: int.parse(lineData['upFEC']),
-//           downFEC: int.parse(lineData['downFEC']),
-//           upCRCIncr: int.parse(lineData['upCRC']),
-//           downCRCIncr: int.parse(lineData['downCRC']),
-//           upFECIncr: int.parse(lineData['upFEC']),
-//           downFECIncr: int.parse(lineData['downFEC']),
-//           // dateTime: DateTime.now(),
-//         ),
-//       );
-//     }
-//   }
-// }
-
-
-// // TODO common BCM63xx and trendchip parser
+  return null;
+}

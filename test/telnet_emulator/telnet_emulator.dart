@@ -8,7 +8,7 @@ Future<void> main(List<String> args) async {
 }
 
 startEmulator() async {
-  final serverSocket = await ServerSocket.bind('0.0.0.0', 23);
+  final serverSocket = await ServerSocket.bind('0.0.0.0', 24); // TODO use 23
   serverSocket.forEach((socket) async {
     print('New connection from ${socket.remoteAddress.address}:${socket.remotePort}');
 

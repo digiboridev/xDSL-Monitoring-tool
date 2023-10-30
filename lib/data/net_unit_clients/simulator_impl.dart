@@ -9,8 +9,11 @@ import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 /// It also has a method to reduce stats to half of the current value, like if the line has impulse drops.
 /// The [fetchStats] method simulates the network stats by introducing chances of fetch failure, connection down, downstream stats drift, and upstream stats drift.
 /// It returns a [LineStats] object with the simulated stats.
-final class ClientSimulator extends NetUnitClient {
-  ClientSimulator({required super.snapshotId}) : super(ip: '_', login: '_', password: '_');
+final class ClientSimulator implements NetUnitClient {
+  @override
+  final String snapshotId;
+  ClientSimulator({required this.snapshotId});
+
   late final Random _rnd = Random();
 
   // Base speed rates

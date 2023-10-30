@@ -8,23 +8,26 @@ import '../../telnet_emulator/telnet_emulator.dart';
 Future<void> main() async {
   await startEmulator();
 
-  test('login error', () async {
+  test('login error', () {
     final NetUnitClient client = CommonTelnetClient(
       ip: '0.0.0.0',
       login: 'wronglogin',
       password: 'wrongpassword',
       snapshotId: 'test',
     );
-    expect(await client.fetchStats(), predicate<LineStats>((p0) => p0.status == SampleStatus.samplingError));
+    final f = client.fetchStats();
+    expect(f, completes);
+    f.then((stats) => expect(stats.status, SampleStatus.samplingError));
   });
 
-  test('login success and unimplemented', () async {
+  test('login success and unimplemented', () {
     final NetUnitClient client = CommonTelnetClient(
       ip: '0.0.0.0',
       login: 'loginau',
       password: 'passwordook',
       snapshotId: 'test',
     );
-    expect(client.fetchStats(), throwsUnimplementedError);
+    final f = client.fetchStats();
+    expect(f, throwsUnimplementedError);
   });
 }

@@ -71,36 +71,42 @@ class CommonTelnetClient implements NetUnitClient {
 
     late StreamSubscription tempSub;
 
-    tempSub = socketStream.listen((event) {
-      print('Socket event: $event');
+    tempSub = socketStream.listen(
+      (event) {
+        print('Socket event: $event');
 
-      // Handle preparing prompts
-      for (var p2c in prepPrts) {
-        if (event.contains(p2c.prompt)) socket.writeln(p2c.command);
-      }
-
-      // Handle success prompt
-      if (event.contains(readyPrt)) {
-        if (!completer.isCompleted) {
-          _socket = socket;
-          _socketStream = socketStream;
-          socket.done.then((value) => _wipeSocket());
-          tempSub.cancel();
-          completer.complete();
+        // Handle preparing prompts
+        for (var p2c in prepPrts) {
+          if (event.contains(p2c.prompt)) socket.writeln(p2c.command);
         }
-      }
 
-      // Handle errors prompt
-      for (var error in errorPrts) {
-        if (event.contains(error)) {
+        // Handle success prompt
+        if (event.contains(readyPrt)) {
           if (!completer.isCompleted) {
+            _socket = socket;
+            _socketStream = socketStream;
+            socket.done.then((value) => _wipeSocket());
             tempSub.cancel();
-            socket.destroy();
-            completer.completeError(error);
+            completer.complete();
           }
         }
-      }
-    });
+
+        // Handle errors prompt
+        for (var error in errorPrts) {
+          if (event.contains(error)) {
+            if (!completer.isCompleted) {
+              tempSub.cancel();
+              socket.destroy();
+              completer.completeError(error);
+            }
+          }
+        }
+      },
+      onError: (e) {
+        if (!completer.isCompleted) completer.completeError('Connect error $e');
+      },
+      cancelOnError: true,
+    );
 
     // Auto complete by timeout if no success prompt received
     Timer(const Duration(seconds: 10), () {
@@ -118,37 +124,43 @@ class CommonTelnetClient implements NetUnitClient {
     final completer = Completer<LineStats>();
     late StreamSubscription tempSub;
 
-    // Wait and parse stats pessimistically due to possible garbage in stream
-    tempSub = _socketStream!.listen((event) {
-      RawLineStats? maybeStats = cmd2Stats.tryParse(event);
-      if (maybeStats != null && !completer.isCompleted) {
-        final stats = LineStats(
-          snapshotId: snapshotId,
-          status: maybeStats.status,
-          statusText: maybeStats.statusText,
-          connectionType: maybeStats.connectionType,
-          upAttainableRate: maybeStats.upAttainableRate,
-          downAttainableRate: maybeStats.downAttainableRate,
-          upRate: maybeStats.upRate,
-          downRate: maybeStats.downRate,
-          upMargin: maybeStats.upMargin != null ? (maybeStats.upMargin! * 10).truncate() : null,
-          downMargin: maybeStats.downMargin != null ? (maybeStats.downMargin! * 10).truncate() : null,
-          upAttenuation: maybeStats.upAttenuation != null ? (maybeStats.upAttenuation! * 10).truncate() : null,
-          downAttenuation: maybeStats.downAttenuation != null ? (maybeStats.downAttenuation! * 10).truncate() : null,
-          upCRC: maybeStats.upCRC,
-          downCRC: maybeStats.downCRC,
-          upFEC: maybeStats.upFEC,
-          downFEC: maybeStats.downFEC,
-          upCRCIncr: _incrDiff(_prevStats?.upCRC, maybeStats.upCRC),
-          downCRCIncr: _incrDiff(_prevStats?.downCRC, maybeStats.downCRC),
-          upFECIncr: _incrDiff(_prevStats?.upFEC, maybeStats.upFEC),
-          downFECIncr: _incrDiff(_prevStats?.downFEC, maybeStats.downFEC),
-        );
+    tempSub = _socketStream!.listen(
+      (event) {
+        // Wait and parse stats pessimistically due to possible garbage in stream
+        RawLineStats? maybeStats = cmd2Stats.tryParse(event);
+        if (maybeStats != null && !completer.isCompleted) {
+          final stats = LineStats(
+            snapshotId: snapshotId,
+            status: maybeStats.status,
+            statusText: maybeStats.statusText,
+            connectionType: maybeStats.connectionType,
+            upAttainableRate: maybeStats.upAttainableRate,
+            downAttainableRate: maybeStats.downAttainableRate,
+            upRate: maybeStats.upRate,
+            downRate: maybeStats.downRate,
+            upMargin: maybeStats.upMargin != null ? (maybeStats.upMargin! * 10).truncate() : null,
+            downMargin: maybeStats.downMargin != null ? (maybeStats.downMargin! * 10).truncate() : null,
+            upAttenuation: maybeStats.upAttenuation != null ? (maybeStats.upAttenuation! * 10).truncate() : null,
+            downAttenuation: maybeStats.downAttenuation != null ? (maybeStats.downAttenuation! * 10).truncate() : null,
+            upCRC: maybeStats.upCRC,
+            downCRC: maybeStats.downCRC,
+            upFEC: maybeStats.upFEC,
+            downFEC: maybeStats.downFEC,
+            upCRCIncr: _incrDiff(_prevStats?.upCRC, maybeStats.upCRC),
+            downCRCIncr: _incrDiff(_prevStats?.downCRC, maybeStats.downCRC),
+            upFECIncr: _incrDiff(_prevStats?.upFEC, maybeStats.upFEC),
+            downFECIncr: _incrDiff(_prevStats?.downFEC, maybeStats.downFEC),
+          );
 
-        tempSub.cancel();
-        completer.complete(stats);
-      }
-    });
+          tempSub.cancel();
+          completer.complete(stats);
+        }
+      },
+      onError: (e) {
+        if (!completer.isCompleted) completer.completeError('Connect error $e');
+      },
+      cancelOnError: true,
+    );
 
     // Send command to get stats
     _socket!.writeln(cmd2Stats.command);

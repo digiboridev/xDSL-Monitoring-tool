@@ -16,6 +16,30 @@ Future<void> main() async {
       snapshotId: 'test',
       prepPrts: [
         (prompt: 'Login:', command: 'wronglogin'),
+        (prompt: 'Password:', command: 'admin'),
+        (prompt: '>', command: 'sh'),
+      ],
+      errorPrts: const [
+        'Bad Password!!!',
+        'Login incorrect',
+        'Login failed',
+      ],
+      readyPrt: '#',
+      cmd2Stats: (command: 'adsl info --show', tryParse: bcm63xxParser),
+    );
+    final f = client.fetchStats();
+    expect(f, completes);
+    f.then((stats) => expect(stats.status, SampleStatus.samplingError));
+    f.then((stats) => expect(stats.statusText, 'Login incorrect'));
+    f.then((value) => print('Status:${value.statusText}'));
+  });
+
+  test('password error', () {
+    final NetUnitClient client = CommonTelnetClient(
+      unitIp: '0.0.0.0',
+      snapshotId: 'test',
+      prepPrts: [
+        (prompt: 'Login:', command: 'admin'),
         (prompt: 'Password:', command: 'wrongpassword'),
         (prompt: '>', command: 'sh'),
       ],
@@ -30,16 +54,17 @@ Future<void> main() async {
     final f = client.fetchStats();
     expect(f, completes);
     f.then((stats) => expect(stats.status, SampleStatus.samplingError));
+    f.then((stats) => expect(stats.statusText, 'Bad Password!!!'));
     f.then((value) => print('Status:${value.statusText}'));
   });
 
-  test('login success and cant parse', () {
+  test('login success and wrong stats prompt', () {
     final NetUnitClient client = CommonTelnetClient(
       unitIp: '0.0.0.0',
       snapshotId: 'test',
       prepPrts: [
-        (prompt: 'Login:', command: 'loginau'),
-        (prompt: 'Password:', command: 'passwordook'),
+        (prompt: 'Login:', command: 'admin'),
+        (prompt: 'Password:', command: 'admin'),
         (prompt: '>', command: 'sh'),
       ],
       errorPrts: const [
@@ -53,6 +78,7 @@ Future<void> main() async {
     final f = client.fetchStats();
     expect(f, completes);
     f.then((stats) => expect(stats.status, SampleStatus.samplingError));
+    f.then((stats) => expect(stats.statusText, 'Get stats timeout'));
     f.then((value) => print('Status:${value.statusText}'));
   });
 
@@ -61,8 +87,8 @@ Future<void> main() async {
       unitIp: '0.0.0.0',
       snapshotId: 'test',
       prepPrts: [
-        (prompt: 'Login:', command: 'loginau'),
-        (prompt: 'Password:', command: 'passwordook'),
+        (prompt: 'Login:', command: 'admin'),
+        (prompt: 'Password:', command: 'admin'),
         (prompt: '>', command: 'sh'),
       ],
       errorPrts: const [

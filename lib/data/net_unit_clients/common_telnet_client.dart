@@ -5,10 +5,14 @@ import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 import 'package:xdslmt/data/net_unit_clients/stats_parser/raw_line_stats.dart';
 
-/// Alias for function that responds to prompt with command
-/// `prompt` - prompt that appears before command
+/// Alias for function that responds to specific prompt with command
+/// `prompt` - prompt that needs to be responded
 /// `command` - command that will be sent after prompt appears
 typedef P2C = ({String prompt, String command});
+
+/// Alias for function that requests stats using specific command and trying parse the response
+/// `command` - command that will be sent to request stats
+/// `tryParse` - function that will try to parse response and return [RawLineStats] or null
 typedef Cmd2Stats = ({String command, RawLineStats? Function(String) tryParse});
 
 class CommonTelnetClient implements NetUnitClient {
@@ -66,7 +70,7 @@ class CommonTelnetClient implements NetUnitClient {
     _wipeSocket();
     final completer = Completer();
 
-    final socket = await Socket.connect(unitIp, 24); // TODO use 23
+    final socket = await Socket.connect(unitIp, 23);
     final socketStream = socket.map((event) => String.fromCharCodes(event).trim()).asBroadcastStream();
 
     late StreamSubscription tempSub;
@@ -132,8 +136,8 @@ class CommonTelnetClient implements NetUnitClient {
           final stats = LineStats(
             snapshotId: snapshotId,
             status: maybeStats.status,
-            statusText: maybeStats.statusText,
-            connectionType: maybeStats.connectionType,
+            statusText: maybeStats.statusText.trim(),
+            connectionType: maybeStats.connectionType?.trim(),
             upAttainableRate: maybeStats.upAttainableRate,
             downAttainableRate: maybeStats.downAttainableRate,
             upRate: maybeStats.upRate,

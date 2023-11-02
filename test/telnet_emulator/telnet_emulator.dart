@@ -7,12 +7,8 @@ Future<void> main(List<String> args) async {
   await startEmulator();
 }
 
-startEmulator({
-  String login = 'admin',
-  String password = 'admin',
-  String prefix = 'emu',
-}) async {
-  final serverSocket = await ServerSocket.bind('0.0.0.0', 24); // TODO use 23
+startEmulator({String login = 'admin', String password = 'admin', String prefix = 'emu'}) async {
+  final serverSocket = await ServerSocket.bind('0.0.0.0', 23);
   serverSocket.forEach((socket) async {
     print('New connection from ${socket.remoteAddress.address}:${socket.remotePort}');
 
@@ -47,9 +43,17 @@ startEmulator({
       // Answer to bcm63xx commands
       stream.where((event) => event == 'sh').forEach((element) => socket.writeln('$prefix#'));
       stream.where((event) => event == 'adsl info --show').forEach((_) async {
-        var filePath = p.join(Directory.current.path, 'test', 'telnet_emulator', 'bcmstats.txt');
+        var filePath = p.join(Directory.current.path, 'test', 'telnet_emulator', 'stats_examples', 'bcmstats.txt');
         File bcmStats = File(filePath);
         String stats = await bcmStats.readAsString();
+        socket.writeln(stats);
+      });
+
+      // Answer to trendchip commands
+      stream.where((event) => event == 'wan adsl diag').forEach((_) async {
+        var filePath = p.join(Directory.current.path, 'test', 'telnet_emulator', 'stats_examples', 'trendchip_diag.txt');
+        File trendchipDiag = File(filePath);
+        String stats = await trendchipDiag.readAsString();
         socket.writeln(stats);
       });
     } catch (e) {

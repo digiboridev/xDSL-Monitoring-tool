@@ -4,6 +4,7 @@ import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 import 'package:xdslmt/data/net_unit_clients/common_telnet_client.dart';
 import 'package:xdslmt/data/net_unit_clients/stats_parser/bcm_stats_parser.dart';
+import 'package:xdslmt/data/net_unit_clients/stats_parser/trendchip_stats_parser.dart';
 
 import '../../telnet_emulator/telnet_emulator.dart';
 
@@ -98,6 +99,29 @@ Future<void> main() async {
       ],
       readyPrt: '#',
       cmd2Stats: (command: 'adsl info --show', tryParse: bcm63xxParser),
+    );
+    final f = client.fetchStats();
+    expect(f, completes);
+    f.then((stats) => expect(stats.status, SampleStatus.connectionUp));
+    f.then((value) => print('Status:${value.statusText}'));
+  });
+
+  test('login success and parsed for trendchip', () {
+    final NetUnitClient client = CommonTelnetClient(
+      unitIp: '0.0.0.0',
+      snapshotId: 'test',
+      prepPrts: [
+        (prompt: 'Login:', command: 'admin'),
+        (prompt: 'Password:', command: 'admin'),
+        (prompt: '>', command: 'sh'),
+      ],
+      errorPrts: const [
+        'Bad Password!!!',
+        'Login incorrect',
+        'Login failed',
+      ],
+      readyPrt: '#',
+      cmd2Stats: (command: 'wan adsl diag', tryParse: trendchipParser),
     );
     final f = client.fetchStats();
     expect(f, completes);

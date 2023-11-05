@@ -63,6 +63,7 @@ class App extends StatelessWidget {
 // TODO wakelock and fore switch
 // TODO nu clients restore
 // TODO sign
-// TODO license
+// TODO about
+// TODO analytics
 // TODO release
 // D4:6E:0E:3E:17:35

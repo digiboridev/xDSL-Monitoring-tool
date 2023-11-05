@@ -62,6 +62,7 @@ class App extends StatelessWidget {
 
 // TODO wakelock and fore switch
 // TODO nu clients restore
+// vDSL rates extend
 // TODO sign
 // TODO about
 // TODO analytics

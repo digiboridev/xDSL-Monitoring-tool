@@ -8,6 +8,7 @@ import 'package:xdslmt/core/text_styles.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/painters/wave_form_painter.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/painters/timeline_painter.dart';
 import 'package:xdslmt/core/formatters.dart';
+import 'package:xdslmt/utils/to_csv.dart';
 
 class InteractiveChart extends StatefulWidget {
   final List<LineStats> statsList;
@@ -612,12 +613,83 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                       ),
                     ),
                   ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: CSVExportButton(id: widget.snapshotStats.snapshotId, statsList: widget.statsList),
+                ),
                 const SizedBox(height: 32),
               ],
             ),
           ),
         );
       },
+    );
+  }
+}
+
+class CSVExportButton extends StatelessWidget {
+  final List<LineStats> statsList;
+  final String id;
+
+  const CSVExportButton({super.key, required this.id, required this.statsList});
+
+  void export(BuildContext context) {
+    List<String> header = [
+      'Time',
+      'Status',
+      'Downstream Rate',
+      'Upstream Rate',
+      'Downstream Attainable Rate',
+      'Upstream Attainable Rate',
+      'Downstream FEC',
+      'Upstream FEC',
+      'Downstream CRC',
+      'Upstream CRC',
+      'Downstream SNRm',
+      'Upstream SNRm',
+      'Downstream Attenuation',
+      'Upstream Attenuation',
+    ];
+    List<List<String>> listOfLists = [];
+    for (var stat in statsList) {
+      listOfLists.add([
+        stat.time.ymdhms,
+        stat.status.toString(),
+        stat.downRate.toString(),
+        stat.upRate.toString(),
+        stat.downAttainableRate.toString(),
+        stat.upAttainableRate.toString(),
+        stat.downFECIncr.toString(),
+        stat.upFECIncr.toString(),
+        stat.downCRCIncr.toString(),
+        stat.upCRCIncr.toString(),
+        stat.downMargin.toString(),
+        stat.upMargin.toString(),
+        stat.downAttenuation.toString(),
+        stat.upAttenuation.toString(),
+      ]);
+    }
+
+    try {
+      toCSV(id, header, listOfLists);
+    } catch (e) {
+      debugPrint(e.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e'), backgroundColor: AppColors.blueGrey800));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton.icon(
+      label: const Text('Export to CSV'),
+      onPressed: () => export(context),
+      icon: const Icon(Icons.file_download),
+      style: TextButton.styleFrom(
+        foregroundColor: AppColors.cyan100,
+        backgroundColor: AppColors.blueGrey800,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
     );
   }
 }

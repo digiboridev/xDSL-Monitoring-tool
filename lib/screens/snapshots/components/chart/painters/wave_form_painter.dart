@@ -19,14 +19,13 @@ class WaveFormPainter extends CustomPainter {
     // Debug
     // final paintStart = DateTime.now();
 
-    canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
-
     // Create data path
     final cp = PathFactory.makeWaveFormPath(data, size, '$key ${size.width}');
     final Path dataPath = cp.path;
     final PathMetadata metadata = cp.metadata;
 
     canvas.save(); // save canvas state before data clipping
+    canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height)); // clip data to canvas
 
     // Draw data
     final Matrix4 displayMatrix = Matrix4.identity();

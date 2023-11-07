@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xdslmt/core/colors.dart';
 import 'package:xdslmt/screens/settings/vm.dart';
 import 'package:xdslmt/core/text_styles.dart';
 
@@ -27,6 +28,15 @@ class AnimationSwitch extends StatelessWidget {
                 onChanged: (v) => _getVm(context).setAnimations = v,
               ),
             ),
+          ),
+          const Spacer(),
+          const Tooltip(
+            triggerMode: TooltipTriggerMode.tap,
+            decoration: BoxDecoration(color: AppColors.blueGrey800, borderRadius: BorderRadius.all(Radius.circular(4))),
+            padding: EdgeInsets.all(8),
+            showDuration: Duration(seconds: 6),
+            message: 'Enables animations. Disable it if you have performance issues.',
+            child: Icon(Icons.info_outline_rounded),
           ),
         ],
       ),

@@ -72,4 +72,3 @@ class App extends StatelessWidget {
 // TODO about
 // TODO analytics
 // TODO release
-// D4:6E:0E:3E:17:35

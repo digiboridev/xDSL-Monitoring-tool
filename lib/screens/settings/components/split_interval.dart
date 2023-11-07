@@ -18,9 +18,22 @@ class SplitInterval extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Split snapshots every ${_watchSplitInterval(context).inMinutes} (m)',
-            style: TextStyles.f16w6.blueGrey900,
+          Row(
+            children: [
+              Text(
+                'Split snapshots every ${_watchSplitInterval(context).inMinutes} (m)',
+                style: TextStyles.f16w6.blueGrey900,
+              ),
+              const Spacer(),
+              const Tooltip(
+                triggerMode: TooltipTriggerMode.tap,
+                decoration: BoxDecoration(color: AppColors.blueGrey800, borderRadius: BorderRadius.all(Radius.circular(4))),
+                padding: EdgeInsets.all(8),
+                showDuration: Duration(seconds: 6),
+                message: 'Split snapshots to smaller chunks after specified time. It make large dataset more readable.',
+                child: Icon(Icons.info_outline_rounded),
+              ),
+            ],
           ),
           SliderTheme(
             data: const SliderThemeData(

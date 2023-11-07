@@ -37,6 +37,8 @@ class SettingsScreenViewModel extends ValueNotifier<SettingsScreenState> with St
   Duration get splitInterval => _expSettings.splitInterval;
   bool get animations => _expSettings.animations;
   bool get orientLock => _expSettings.orientLock;
+  bool get wakeLock => _expSettings.wakeLock;
+  bool get foregroundService => _expSettings.foregroundService;
 
   set setNuType(NetworkUnitType v) => _setSettings(_expSettings.copyWith(nuType: v));
   set setHost(String v) => _setSettings(_expSettings.copyWith(host: v));
@@ -46,6 +48,8 @@ class SettingsScreenViewModel extends ValueNotifier<SettingsScreenState> with St
   set setSplitInterval(Duration v) => _setSettings(_expSettings.copyWith(splitInterval: v));
   set setAnimations(bool v) => _setSettings(_expSettings.copyWith(animations: v));
   set setOrientLock(bool v) => _setSettings(_expSettings.copyWith(orientLock: v));
+  set setWakelock(bool v) => _setSettings(_expSettings.copyWith(wakeLock: v));
+  set setForegroundService(bool v) => _setSettings(_expSettings.copyWith(foregroundService: v));
 
   @override
   void dispose() {

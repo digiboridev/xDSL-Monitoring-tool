@@ -1,3 +1,5 @@
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +9,8 @@ import 'package:xdslmt/data/repositories/settings_repo.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
 import 'package:xdslmt/screens/screens_wrapper.dart';
 
-void main() => runApp(const App());
+// void main() => runApp(const App());
+void main() => runApp(DevicePreview(enabled: !kReleaseMode, builder: (context) => const App()));
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -16,10 +19,12 @@ class App extends StatelessWidget {
   void bindOrientLock(SettingsRepository settingsRepo) async {
     void set(bool orientLock) {
       if (orientLock) {
-        SystemChrome.setPreferredOrientations([
-          DeviceOrientation.portraitUp,
-          DeviceOrientation.portraitDown,
-        ]);
+        SystemChrome.setPreferredOrientations(
+          [
+            DeviceOrientation.portraitUp,
+            DeviceOrientation.portraitDown,
+          ],
+        );
       } else {
         SystemChrome.setPreferredOrientations(
           [
@@ -42,7 +47,7 @@ class App extends StatelessWidget {
       providers: [
         Provider<SettingsRepository>(create: (_) => SL.settingsRepository),
         Provider<StatsRepository>(create: (_) => SL.statsRepository),
-        ChangeNotifierProvider<StatsSamplingService>(create: (_) => SL.statsSamplingService),
+        ChangeNotifierProvider<StatsSamplingService>.value(value: SL.statsSamplingService),
       ],
       builder: (context, child) {
         bindOrientLock(context.read<SettingsRepository>());
@@ -50,17 +55,17 @@ class App extends StatelessWidget {
       },
       child: MaterialApp(
         title: 'xDSL Monitoring Tool',
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
-        ),
+        theme: ThemeData(useMaterial3: true, colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan)),
         home: const ScreensWrapper(),
+        locale: DevicePreview.locale(context),
+        builder: DevicePreview.appBuilder,
       ),
     );
   }
 }
 
-// TODO wakelock and fore switch
+
+// TODO wakelock kt if started
 // TODO nu clients restore
 // TODO vDSL rates extend, dynamic range by protocol
 // TODO sign

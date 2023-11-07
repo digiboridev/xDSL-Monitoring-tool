@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:xdslmt/screens/settings/vm.dart';
 import 'package:xdslmt/core/text_styles.dart';
 
-class OrientLock extends StatelessWidget {
-  const OrientLock({super.key});
+class OrientLockSwitch extends StatelessWidget {
+  const OrientLockSwitch({super.key});
 
   SettingsScreenViewModel _getVm(BuildContext context) => context.read<SettingsScreenViewModel>();
   bool watchOrientLock(BuildContext context) => context.select<SettingsScreenViewModel, bool>((v) => v.orientLock);

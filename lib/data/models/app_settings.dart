@@ -11,6 +11,8 @@ class AppSettings {
   final Duration splitInterval;
   final bool animations;
   final bool orientLock;
+  final bool wakeLock;
+  final bool foregroundService;
 
   AppSettings._({
     required this.nuType,
@@ -21,6 +23,8 @@ class AppSettings {
     required this.splitInterval,
     required this.animations,
     required this.orientLock,
+    required this.wakeLock,
+    required this.foregroundService,
   });
 
   factory AppSettings.base() {
@@ -33,6 +37,8 @@ class AppSettings {
       splitInterval: const Duration(minutes: 60),
       animations: true,
       orientLock: true,
+      wakeLock: true,
+      foregroundService: true,
     );
   }
 
@@ -45,6 +51,8 @@ class AppSettings {
     Duration? splitInterval,
     bool? animations,
     bool? orientLock,
+    bool? wakeLock,
+    bool? foregroundService,
   }) {
     return AppSettings._(
       nuType: nuType ?? this.nuType,
@@ -55,6 +63,8 @@ class AppSettings {
       splitInterval: splitInterval ?? this.splitInterval,
       animations: animations ?? this.animations,
       orientLock: orientLock ?? this.orientLock,
+      wakeLock: wakeLock ?? this.wakeLock,
+      foregroundService: foregroundService ?? this.foregroundService,
     );
   }
 
@@ -68,6 +78,8 @@ class AppSettings {
       'splitInterval': splitInterval.inMilliseconds,
       'animations': animations,
       'orientLock': orientLock,
+      'wakeLock': wakeLock,
+      'foregroundService': foregroundService,
     };
   }
 
@@ -81,6 +93,8 @@ class AppSettings {
       splitInterval: Duration(milliseconds: (map['splitInterval'] as num).toInt()),
       animations: map['animations'] as bool,
       orientLock: map['orientLock'] as bool,
+      wakeLock: map['wakeLock'] as bool,
+      foregroundService: map['foregroundService'] as bool,
     );
   }
 
@@ -90,7 +104,7 @@ class AppSettings {
 
   @override
   String toString() {
-    return 'AppSettings(nuType: $nuType, host: $host, login: $login, pwd: $pwd, samplingInterval: $samplingInterval, splitInterval: $splitInterval, animations: $animations, orientLock: $orientLock)';
+    return 'AppSettings(nuType: $nuType, host: $host, login: $login, pwd: $pwd, samplingInterval: $samplingInterval, splitInterval: $splitInterval, animations: $animations, orientLock: $orientLock), wakeLock: $wakeLock, foregroundService: $foregroundService';
   }
 
   @override
@@ -104,7 +118,9 @@ class AppSettings {
         other.samplingInterval == samplingInterval &&
         other.splitInterval == splitInterval &&
         other.animations == animations &&
-        other.orientLock == orientLock;
+        other.orientLock == orientLock &&
+        other.wakeLock == wakeLock &&
+        other.foregroundService == foregroundService;
   }
 
   @override
@@ -116,6 +132,8 @@ class AppSettings {
         samplingInterval.hashCode ^
         splitInterval.hashCode ^
         animations.hashCode ^
-        orientLock.hashCode;
+        orientLock.hashCode ^
+        wakeLock.hashCode ^
+        foregroundService.hashCode;
   }
 }

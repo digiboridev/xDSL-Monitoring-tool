@@ -14,9 +14,8 @@ toCSV(String name, List<String> headerRow, List<List<String>> listOfListOfString
     headerAndDataList.add(dataRow);
   }
 
-  String csvData = const ListToCsvConverter().convert(headerAndDataList);
-
-  final bytes = utf8.encode(csvData);
+  final csv = const ListToCsvConverter().convert(headerAndDataList);
+  final bytes = utf8.encode(csv);
 
   final p = await Permission.storage.request();
   if (p.isGranted) {

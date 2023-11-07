@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:xdslmt/data/repositories/settings_repo.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
 import 'package:xdslmt/screens/monitoring/current_screen.dart';
 import 'package:xdslmt/screens/settings/binding.dart';
@@ -148,6 +149,8 @@ class _FloatButtonState extends State<FloatButton> {
     if (busy) return;
 
     final samplingService = context.read<StatsSamplingService>();
+    final settingsRepo = context.read<SettingsRepository>();
+    final settings = await settingsRepo.getSettings;
 
     if (samplingService.samplingActive) {
       samplingService.stopSampling();
@@ -155,8 +158,8 @@ class _FloatButtonState extends State<FloatButton> {
       const MethodChannel('main').invokeMethod('stopWakeLock');
     } else {
       samplingService.runSampling();
-      const MethodChannel('main').invokeMethod('startForegroundService');
-      const MethodChannel('main').invokeMethod('startWakeLock');
+      if (settings.wakeLock) const MethodChannel('main').invokeMethod('startWakeLock');
+      if (settings.foregroundService) const MethodChannel('main').invokeMethod('startForegroundService');
     }
 
     setState(() => busy = true);

@@ -290,7 +290,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     onTap: () => setState(() => downAttainableRate = !downAttainableRate),
                     child: Row(
                       children: [
-                        Text('Downstream Attainable Rate', style: TextStyles.f16w6.cyan100),
+                        Text('Down Attainable Rate', style: TextStyles.f16w6.cyan100),
                         Icon(downAttainableRate ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('MIN: ${widget.snapshotStats.downAttainableRateMin ?? 0}', style: TextStyles.f8hc100),
@@ -325,7 +325,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     onTap: () => setState(() => upAttainableRate = !upAttainableRate),
                     child: Row(
                       children: [
-                        Text('Upstream Attainable Rate', style: TextStyles.f16w6.cyan100),
+                        Text('Up Attainable Rate', style: TextStyles.f16w6.cyan100),
                         Icon(upAttainableRate ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('MIN: ${widget.snapshotStats.upAttainableRateMin ?? 0}', style: TextStyles.f8hc100),

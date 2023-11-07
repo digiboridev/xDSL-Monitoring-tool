@@ -65,7 +65,7 @@ class App extends StatelessWidget {
 }
 
 
-// TODO wakelock kt if started
+
 // TODO nu clients restore
 // TODO vDSL rates extend, dynamic range by protocol
 // TODO sign

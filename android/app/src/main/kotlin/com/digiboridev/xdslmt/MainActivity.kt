@@ -39,7 +39,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
             result.success("started")
         }
         if (method == "stopWakeLock") {
-            _wl.release()
+            if (_wl.isHeld) _wl.release()
             result.success("stopped")
         }
         if (method == "startForegroundService") {

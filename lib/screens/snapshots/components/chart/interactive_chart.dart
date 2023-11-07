@@ -39,6 +39,49 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
   bool upAttainableRate = false;
   bool downAttainableRate = false;
 
+  void zoomIn(double width) {
+    setState(() {
+      scale = scale * 1.5;
+      offset = offset - (width / scale / 4);
+      debugPrint(scale.toString());
+      debugPrint(offset.toString());
+    });
+  }
+
+  void zoomOut(double width) {
+    setState(() {
+      offset = offset + (width / scale / 4);
+      scale = scale / 1.5;
+
+      // Prevent scrolling out of bounds
+      if (offset > width / scale - width / scale) offset = width / scale - width / scale;
+      if (offset < 0 - (width - (width / scale))) offset = 0 - (width - (width / scale));
+
+      // Prevent scaling out of bounds
+      if (scale < 1.0) scale = 1;
+      if (scale == 1.0 && offset != 1) offset = 1;
+    });
+  }
+
+  void forward(double width) {
+    setState(() {
+      offset = offset - 10 / scale;
+      // Prevent scrolling out of bounds
+      if (offset > width / scale - width / scale) offset = width / scale - width / scale;
+      if (offset < 0 - (width - (width / scale))) offset = 0 - (width - (width / scale));
+    });
+  }
+
+  void backward(double width) {
+    setState(() {
+      offset = offset + 10 / scale;
+
+      // Prevent scrolling out of bounds
+      if (offset > width / scale - width / scale) offset = width / scale - width / scale;
+      if (offset < 0 - (width - (width / scale))) offset = 0 - (width - (width / scale));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -140,6 +183,20 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                           Text(widget.snapshotStats.startTime.ymdhms, style: TextStyles.f14.cyan100),
                         ],
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Total duration', style: TextStyles.f14.cyan100),
+                          Text(widget.snapshotStats.samplingDuration.hms, style: TextStyles.f14.cyan100),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Uplink duration', style: TextStyles.f14.cyan100),
+                          Text(widget.snapshotStats.uplinkDuration.hms, style: TextStyles.f14.cyan100),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -159,9 +216,26 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     children: [
                       Text('Timeline', style: TextStyles.f16w6.cyan100),
                       const Spacer(),
-                      Text('TOTAL: ${widget.snapshotStats.samplingDuration.hms}', style: TextStyles.f8hc100),
-                      const SizedBox(width: 4),
-                      Text('UP: ${widget.snapshotStats.uplinkDuration.hms}', style: TextStyles.f8hc100),
+                      IconButton(
+                        onPressed: () => backward(width),
+                        icon: const Icon(Icons.fast_rewind),
+                        color: AppColors.cyan100,
+                      ),
+                      IconButton(
+                        onPressed: () => forward(width),
+                        icon: const Icon(Icons.fast_forward),
+                        color: AppColors.cyan100,
+                      ),
+                      IconButton(
+                        onPressed: () => zoomIn(width),
+                        icon: const Icon(Icons.zoom_in),
+                        color: AppColors.cyan100,
+                      ),
+                      IconButton(
+                        onPressed: () => zoomOut(width),
+                        icon: const Icon(Icons.zoom_out),
+                        color: AppColors.cyan100,
+                      ),
                     ],
                   ),
                 ),

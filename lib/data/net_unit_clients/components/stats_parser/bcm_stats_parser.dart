@@ -8,10 +8,11 @@ RawLineStats? bcm63xxParser(String msg) {
     final status = statusText.toLowerCase().contains('showtime') ? SampleStatus.connectionUp : SampleStatus.connectionDown;
     var linestats = RawLineStats(status: status, statusText: statusText);
 
-    final connectionType = RegExp(r'(?<=Mode:                   ).+').firstMatch(msg)?.group(0);
+    final connectionType = RegExp(r'(?<=Mode:\s*)\S.+').stringMatch(msg);
     if (connectionType != null) linestats.connectionType = connectionType;
 
-    final spd = RegExp(r'(?<=Bearer: 0,).+').firstMatch(msg)?.group(0);
+    var spd = RegExp(r'(?<=Bearer:).+').firstMatch(msg)?.group(0);
+    spd ??= RegExp(r'(?<=Path:).+').firstMatch(msg)?.group(0);
     if (spd != null) {
       final upRate = RegExp(r'(?<=Upstream rate = )\d+').firstMatch(spd)?.group(0);
       if (upRate != null) linestats.upRate = int.tryParse(upRate);
@@ -19,7 +20,7 @@ RawLineStats? bcm63xxParser(String msg) {
       if (downRate != null) linestats.downRate = int.tryParse(downRate);
     }
 
-    final maxSpd = RegExp(r'(?<=Max:    ).+').firstMatch(msg)?.group(0);
+    final maxSpd = RegExp(r'(?<=Max:).+').firstMatch(msg)?.group(0);
     if (maxSpd != null) {
       final upMaxRate = RegExp(r'(?<=Upstream rate = )\d+').firstMatch(maxSpd)?.group(0);
       if (upMaxRate != null) linestats.upAttainableRate = int.tryParse(upMaxRate);

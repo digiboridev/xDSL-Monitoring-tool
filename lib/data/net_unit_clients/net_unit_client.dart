@@ -3,6 +3,7 @@
 import 'package:xdslmt/data/models/app_settings.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/bcm63xx_impl.dart';
+import 'package:xdslmt/data/net_unit_clients/bcm63xx_xdslcmd_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/simulator_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/tcp31xx_impl.dart';
 
@@ -12,6 +13,10 @@ enum NetworkUnitType {
 
   // Generic Broadcom BCM63xx based via telnet
   broadcom_63xx_telnet,
+
+  // Generic Broadcom BCM63xx (VDSL+) based via telnet
+  // usually usses xdslcmd instead of adsl
+  broadcom_63xx_xdslcmd_telnet,
 
   // Generic Trendchip(Ralink, MTK) based via telnet
   trendchip_31xx_telnet,
@@ -45,6 +50,8 @@ abstract class NetUnitClient {
         return ClientSimulator(snapshotId: snapshotId);
       case NetworkUnitType.broadcom_63xx_telnet:
         return BCM63xxClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+      case NetworkUnitType.broadcom_63xx_xdslcmd_telnet:
+        return BCM63xdslcmdClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
       case NetworkUnitType.trendchip_31xx_telnet:
         return TCP31xxClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
       default:

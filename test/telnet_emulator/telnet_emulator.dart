@@ -9,7 +9,7 @@ Future<void> main(List<String> args) async {
     command2Stats: (
       cmd: 'adsl info --show',
       file: File(
-        p.join(Directory.current.path, 'test', 'telnet_emulator', 'stats_examples', 'bcmstats.txt'),
+        p.join(Directory.current.path, 'test', 'telnet_emulator', 'stats_examples', 'bcmstats_adsl.txt'),
       ),
     ),
   );

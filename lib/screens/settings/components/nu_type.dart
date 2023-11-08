@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/core/colors.dart';
-import 'package:xdslmt/data/models/network_unit_type.dart';
+import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 import 'package:xdslmt/screens/settings/vm.dart';
 import 'package:xdslmt/core/text_styles.dart';
 

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
-import 'package:xdslmt/data/net_unit_clients/stats_parser/raw_line_stats.dart';
+import 'package:xdslmt/data/net_unit_clients/components/stats_parser/raw_line_stats.dart';
 
 /// Alias for function that responds to specific prompt with command
 /// `prompt` - prompt that needs to be responded

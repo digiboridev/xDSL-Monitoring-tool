@@ -31,7 +31,7 @@ Grant persmission for working in background (According to your os shell).
 
 # Supported network units
   - Generic Broadcom BCM63xx based via telnet
-  - Generic Trendchip(Ralink, MTK) based via telnet
+  - Generic Trendchip TC31xx (Ralink, MTK) based via telnet
   - Huawei hg532e via web
   - TP-Link w8901n via telnet
   - ZTE H108n v1 via telnet

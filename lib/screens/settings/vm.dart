@@ -2,7 +2,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:xdslmt/data/models/app_settings.dart';
-import 'package:xdslmt/data/models/network_unit_type.dart';
+import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 import 'package:xdslmt/data/repositories/settings_repo.dart';
 import 'package:xdslmt/screens/settings/state.dart';
 import 'package:xdslmt/utils/streambang.dart';

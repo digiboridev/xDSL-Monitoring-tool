@@ -1,7 +1,36 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:xdslmt/data/models/app_settings.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
-import 'package:xdslmt/data/models/network_unit_type.dart';
+import 'package:xdslmt/data/net_unit_clients/bcm63xx_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/simulator_impl.dart';
+import 'package:xdslmt/data/net_unit_clients/tcp31xx_impl.dart';
+
+enum NetworkUnitType {
+  /// Mock
+  simulator,
+
+  // Generic Broadcom BCM63xx based via telnet
+  broadcom_63xx_telnet,
+
+  // Generic Trendchip(Ralink, MTK) based via telnet
+  trendchip_31xx_telnet,
+
+  /// ZTE H108n v1 via telnet
+  h108nv1_telnet,
+
+  /// TP-Link w8901 via telnet
+  w8901_telnet,
+
+  /// D-Link 2640u via telnet
+  d2640u_telnet,
+
+  /// Tenda d301 via telnet
+  d301_telnet,
+
+  /// Huawei HG532e via http
+  hg532e_http,
+}
 
 abstract class NetUnitClient {
   /// Unique snapshot ID
@@ -14,6 +43,10 @@ abstract class NetUnitClient {
     switch (type) {
       case NetworkUnitType.simulator:
         return ClientSimulator(snapshotId: snapshotId);
+      case NetworkUnitType.broadcom_63xx_telnet:
+        return BCM63xxClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+      case NetworkUnitType.trendchip_31xx_telnet:
+        return TCP31xxClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
       default:
         throw Exception('Unknown NetUnitClient type: $type');
     }

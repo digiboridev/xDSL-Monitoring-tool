@@ -6,7 +6,7 @@ Max:    Upstream rate = 2123 Kbps, Downstream rate = 18123 Kbps
 Bearer: 0, Upstream rate = 1123 Kbps, Downstream rate = 15123 Kbps
 Bearer: 1, Upstream rate = 0 Kbps, Downstream rate = 0 Kbps
 Link Power State:       L0
-Mode:                   VDSL2 Annex B
+Mode:                   ADSL2+ Annex A
 VDSL2 Profile:          Profile 17a
 TPS-TC:                 PTM Mode(0x0)
 Trellis:                U:ON /D:ON

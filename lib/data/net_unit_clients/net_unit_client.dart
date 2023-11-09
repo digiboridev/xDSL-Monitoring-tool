@@ -13,14 +13,17 @@ enum NetworkUnitType {
   simulator,
 
   /// Generic Broadcom BCM63xx based via telnet
+  @Deprecated('new classigication')
   broadcom_63xx_telnet,
 
   /// Generic Broadcom BCM63xx (VDSL+) based via telnet
   /// usually usses xdslcmd instead of adsl
+  @Deprecated('new classigication')
   broadcom_63xx_xdslcmd_telnet,
 
   /// Generic Broadcom BCM63xx (VDSL+) based via telnet
   /// usually usses xdslctl instead of adsl
+  @Deprecated('new classigication')
   broadcom_63xx_xdslctl_telnet,
 
   // Generic Trendchip(Ralink, MTK) based via telnet

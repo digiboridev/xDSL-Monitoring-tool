@@ -1,6 +1,7 @@
 import 'package:xdslmt/data/net_unit_clients/components/common_telnet_client.dart';
 import 'package:xdslmt/data/net_unit_clients/components/stats_parser/bcm_stats_parser.dart';
 
+@Deprecated('new classigication')
 class BCM63xdslctlClientImpl extends CommonTelnetClient {
   BCM63xdslctlClientImpl({
     required super.unitIp,

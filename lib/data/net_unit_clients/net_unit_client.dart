@@ -1,47 +1,32 @@
 // ignore_for_file: constant_identifier_names
-
 import 'package:xdslmt/data/models/app_settings.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
-import 'package:xdslmt/data/net_unit_clients/bcm63xx_impl.dart';
-import 'package:xdslmt/data/net_unit_clients/bcm63xx_xdslcmd_impl.dart';
-import 'package:xdslmt/data/net_unit_clients/bcm63xx_xdslctl_impl.dart';
+import 'package:xdslmt/data/net_unit_clients/broadcom_adsl_impl.dart';
+import 'package:xdslmt/data/net_unit_clients/broadcom_adsl_sh_impl.dart';
+import 'package:xdslmt/data/net_unit_clients/broadcom_adslcmd_impl.dart';
+import 'package:xdslmt/data/net_unit_clients/broadcom_adslcmd_sh_impl.dart';
+import 'package:xdslmt/data/net_unit_clients/broadcom_adslctl_impl.dart';
+import 'package:xdslmt/data/net_unit_clients/broadcom_adslctl_sh_impl.dart';
+import 'package:xdslmt/data/net_unit_clients/broadcom_xdslcmd_impl.dart';
+import 'package:xdslmt/data/net_unit_clients/broadcom_xdslcmd_sh_impl.dart';
+import 'package:xdslmt/data/net_unit_clients/broadcom_xdslctl_impl.dart';
+import 'package:xdslmt/data/net_unit_clients/broadcom_xdslctl_sh_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/simulator_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/tcp31xx_impl.dart';
 
 enum NetworkUnitType {
-  /// Mock
   simulator,
-
-  /// Generic Broadcom BCM63xx based via telnet
-  @Deprecated('new classigication')
-  broadcom_63xx_telnet,
-
-  /// Generic Broadcom BCM63xx (VDSL+) based via telnet
-  /// usually usses xdslcmd instead of adsl
-  @Deprecated('new classigication')
-  broadcom_63xx_xdslcmd_telnet,
-
-  /// Generic Broadcom BCM63xx (VDSL+) based via telnet
-  /// usually usses xdslctl instead of adsl
-  @Deprecated('new classigication')
-  broadcom_63xx_xdslctl_telnet,
-
-  // Generic Trendchip(Ralink, MTK) based via telnet
+  broadcom_telnet_adsl,
+  broadcom_telnet_adslcmd,
+  broadcom_telnet_adslctl,
+  broadcom_telnet_xdslcmd,
+  broadcom_telnet_xdslctl,
+  broadcom_telnet_adsl_sh,
+  broadcom_telnet_adslcmd_sh,
+  broadcom_telnet_adslctl_sh,
+  broadcom_telnet_xdslcmd_sh,
+  broadcom_telnet_xdslctl_sh,
   trendchip_31xx_telnet,
-
-  /// ZTE H108n v1 via telnet
-  h108nv1_telnet,
-
-  /// TP-Link w8901 via telnet
-  w8901_telnet,
-
-  /// D-Link 2640u via telnet
-  d2640u_telnet,
-
-  /// Tenda d301 via telnet
-  d301_telnet,
-
-  /// Huawei HG532e via http
   hg532e_http,
 }
 
@@ -57,12 +42,26 @@ abstract class NetUnitClient {
     switch (type) {
       case NetworkUnitType.simulator:
         return ClientSimulator(snapshotId: snapshotId);
-      case NetworkUnitType.broadcom_63xx_telnet:
-        return BCM63xxClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
-      case NetworkUnitType.broadcom_63xx_xdslcmd_telnet:
-        return BCM63xdslcmdClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
-      case NetworkUnitType.broadcom_63xx_xdslctl_telnet:
-        return BCM63xdslctlClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+      case NetworkUnitType.broadcom_telnet_adsl:
+        return BroadcomAdslClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+      case NetworkUnitType.broadcom_telnet_adslcmd:
+        return BroadcomAdslcmdClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+      case NetworkUnitType.broadcom_telnet_adslctl:
+        return BroadcomAdslctlClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+      case NetworkUnitType.broadcom_telnet_xdslcmd:
+        return BroadcomXdslcmdClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+      case NetworkUnitType.broadcom_telnet_xdslctl:
+        return BroadcomXdslctlClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+      case NetworkUnitType.broadcom_telnet_adsl_sh:
+        return BroadcomAdslShClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+      case NetworkUnitType.broadcom_telnet_adslcmd_sh:
+        return BroadcomAdslcmdShClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+      case NetworkUnitType.broadcom_telnet_adslctl_sh:
+        return BroadcomAdslctlShClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+      case NetworkUnitType.broadcom_telnet_xdslcmd_sh:
+        return BroadcomXdslcmdShClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+      case NetworkUnitType.broadcom_telnet_xdslctl_sh:
+        return BroadcomXdslctlShClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
       case NetworkUnitType.trendchip_31xx_telnet:
         return TCP31xxClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
       default:

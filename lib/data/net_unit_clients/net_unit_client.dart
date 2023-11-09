@@ -4,6 +4,7 @@ import 'package:xdslmt/data/models/app_settings.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/bcm63xx_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/bcm63xx_xdslcmd_impl.dart';
+import 'package:xdslmt/data/net_unit_clients/bcm63xx_xdslctl_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/simulator_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/tcp31xx_impl.dart';
 
@@ -11,12 +12,16 @@ enum NetworkUnitType {
   /// Mock
   simulator,
 
-  // Generic Broadcom BCM63xx based via telnet
+  /// Generic Broadcom BCM63xx based via telnet
   broadcom_63xx_telnet,
 
-  // Generic Broadcom BCM63xx (VDSL+) based via telnet
-  // usually usses xdslcmd instead of adsl
+  /// Generic Broadcom BCM63xx (VDSL+) based via telnet
+  /// usually usses xdslcmd instead of adsl
   broadcom_63xx_xdslcmd_telnet,
+
+  /// Generic Broadcom BCM63xx (VDSL+) based via telnet
+  /// usually usses xdslctl instead of adsl
+  broadcom_63xx_xdslctl_telnet,
 
   // Generic Trendchip(Ralink, MTK) based via telnet
   trendchip_31xx_telnet,
@@ -44,6 +49,7 @@ abstract class NetUnitClient {
   /// Fetches line stats from the network unit
   Future<LineStats> fetchStats();
 
+  /// Factory method for creating specific NetUnitClient implementation based on type
   factory NetUnitClient.fromType(NetworkUnitType type, String snapshotId, String ip, String login, String password) {
     switch (type) {
       case NetworkUnitType.simulator:
@@ -52,6 +58,8 @@ abstract class NetUnitClient {
         return BCM63xxClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
       case NetworkUnitType.broadcom_63xx_xdslcmd_telnet:
         return BCM63xdslcmdClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+      case NetworkUnitType.broadcom_63xx_xdslctl_telnet:
+        return BCM63xdslctlClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
       case NetworkUnitType.trendchip_31xx_telnet:
         return TCP31xxClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
       default:
@@ -59,6 +67,7 @@ abstract class NetUnitClient {
     }
   }
 
+  /// Factory method for creating specific NetUnitClient implementation based on app settings
   factory NetUnitClient.fromSettings(AppSettings settings, String snapshotId) {
     return NetUnitClient.fromType(settings.nuType, snapshotId, settings.host, settings.login, settings.pwd);
   }

@@ -2,25 +2,25 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
-import 'package:xdslmt/data/net_unit_clients/bcm63xx_xdslcmd_impl.dart';
+import 'package:xdslmt/data/net_unit_clients/bcm63xx_xdslctl_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 import 'package:path/path.dart' as p;
 import '../../telnet_emulator/telnet_emulator.dart';
 
 void main() {
-  test('bcm63xx xdslcmd impl parsing', () async {
+  test('bcm63xx xdslctl impl parsing', () async {
     final closeEmu = await startEmulator(
       login: 'qwe',
       password: 'asd',
       command2Stats: (
-        cmd: 'xdslcmd info --show',
+        cmd: 'xdslctl info --show',
         file: File(
           p.join(Directory.current.path, 'test', 'telnet_emulator', 'stats_examples', 'bcmstats_vdsl.txt'),
         ),
       ),
     );
 
-    final NetUnitClient client = BCM63xdslcmdClientImpl(
+    final NetUnitClient client = BCM63xdslctlClientImpl(
       unitIp: '0.0.0.0',
       snapshotId: 'test',
       login: 'qwe',
@@ -51,19 +51,19 @@ void main() {
     await closeEmu();
   });
 
-  test('bcm63xx xdslcmd impl parsing 2', () async {
+  test('bcm63xx xdslctl impl parsing 2', () async {
     final closeEmu = await startEmulator(
       login: 'qwe',
       password: 'asd',
       command2Stats: (
-        cmd: 'xdslcmd info --show',
+        cmd: 'xdslctl info --show',
         file: File(
           p.join(Directory.current.path, 'test', 'telnet_emulator', 'stats_examples', 'bcmstats_vdsl2.txt'),
         ),
       ),
     );
 
-    final NetUnitClient client = BCM63xdslcmdClientImpl(
+    final NetUnitClient client = BCM63xdslctlClientImpl(
       unitIp: '0.0.0.0',
       snapshotId: 'test',
       login: 'qwe',
@@ -94,19 +94,19 @@ void main() {
     await closeEmu();
   });
 
-  test('bcm63xx xdslcmd impl parsing 3', () async {
+  test('bcm63xx xdslctl impl parsing 3', () async {
     final closeEmu = await startEmulator(
       login: 'qwe',
       password: 'asd',
       command2Stats: (
-        cmd: 'xdslcmd info --show',
+        cmd: 'xdslctl info --show',
         file: File(
           p.join(Directory.current.path, 'test', 'telnet_emulator', 'stats_examples', 'bcmstats_vdsl3.txt'),
         ),
       ),
     );
 
-    final NetUnitClient client = BCM63xdslcmdClientImpl(
+    final NetUnitClient client = BCM63xdslctlClientImpl(
       unitIp: '0.0.0.0',
       snapshotId: 'test',
       login: 'qwe',

@@ -1,0 +1,174 @@
+ADSL driver and PHY status
+Status: Showtime
+Retrain Reason:   0
+Last initialization procedure status:   0
+Max:   Upstream rate = 21366 Kbps, Downstream rate = 54572 Kbps
+Bearer:   0, Upstream rate = 20000 Kbps, Downstream rate = 58121 Kbps
+Bearer:   1, Upstream rate = 0 Kbps, Downstream rate = 0 Kbps
+Link Power State:   L0
+Mode:         VDSL2 Annex B
+VDSL2 Profile:      Profile 17a
+TPS-TC:         PTM Mode(0x0)
+Trellis:      U:ON /D:ON
+Line Status:      No Defect
+Training Status:   Showtime
+      Down      Up
+SNR (dB):    5.5       6.5
+Attn(dB):    18.2       0.0
+Pwr(dBm):    13.4       7.5
+         VDSL2 framing
+         Bearer 0
+MSGc:      -6      20
+B:      235      239
+M:      1      1
+T:      0      64
+R:      12      0
+S:      0.1292      0.3819
+L:      15353      5028
+D:      8      1
+I:      248      120
+N:      248      240
+Q:      8      0
+V:      1      0
+RxQueue:      48      0
+TxQueue:      12      0
+G.INP Framing:      18      0
+G.INP lookback:      12      0
+RRC bits:      0      24
+         Bearer 1
+MSGc:      122      -6
+B:      0      0
+M:      2      0
+T:      2      0
+R:      16      0
+S:      8.0000      0.0000
+L:      32      0
+D:      1      0
+I:      32      0
+N:      32      0
+Q:      0      0
+V:      0      0
+RxQueue:      0      0
+TxQueue:      0      0
+G.INP Framing:      0      0
+G.INP lookback:      0      0
+RRC bits:      0      0
+         Counters
+         Bearer 0
+OHF:      0      117045
+OHFErr:      0      2
+RS:      22014896      3195443
+RSCorr:      50716      0
+RSUnCorr:   0      0
+         Bearer 1
+OHF:      44513      0
+OHFErr:      0      0
+RS:      355610      0
+RSCorr:      2      0
+RSUnCorr:   0      0
+
+         Retransmit Counters
+rtx_tx:      393821      0
+rtx_c:      154      0
+rtx_uc:      0      0
+
+         G.INP Counters
+LEFTRS:      2      0
+minEFTR:   58114      0
+errFreeBits:   633668      0
+
+         Bearer 0
+HEC:      0      0
+OCD:      0      0
+LCD:      0      0
+Total Cells:   79880787      0
+Data Cells:   660759      0
+Drop Cells:   0
+Bit Errors:   0      0
+
+         Bearer 1
+HEC:      0      0
+OCD:      0      0
+LCD:      0      0
+Total Cells:   0      0
+Data Cells:   0      0
+Drop Cells:   0
+Bit Errors:   0      0
+
+ES:      0      2
+SES:      0      0
+UAS:      89      89
+AS:      716
+
+         Bearer 0
+INP:      48.00      0.00
+INPRein:   0.00      0.00
+delay:      0      0
+PER:      0.00      6.13
+OR:      0.01      33.91
+AgR:      58213.05   20033.74
+
+         Bearer 1
+INP:      2.00      0.00
+INPRein:   2.00      0.00
+delay:      0      0
+PER:      16.06      0.01
+OR:      63.75      0.01
+AgR:      63.75   0.01
+
+Bitswap:   491/491      5/5
+
+Total time = 13 min 25 sec
+FEC:      50716      0
+CRC:      0      2
+ES:      0      2
+SES:      0      0
+UAS:      89      89
+LOS:      0      0
+LOF:      0      0
+LOM:      0      0
+Latest 15 minutes time = 13 min 25 sec
+FEC:      50716      0
+CRC:      0      2
+ES:      0      2
+SES:      0      0
+UAS:      89      89
+LOS:      0      0
+LOF:      0      0
+LOM:      0      0
+Previous 15 minutes time = 0 sec
+FEC:      0      0
+CRC:      0      0
+ES:      0      0
+SES:      0      0
+UAS:      0      0
+LOS:      0      0
+LOF:      0      0
+LOM:      0      0
+Latest 1 day time = 13 min 25 sec
+FEC:      50716      0
+CRC:      0      2
+ES:      0      2
+SES:      0      0
+UAS:      89      89
+LOS:      0      0
+LOF:      0      0
+LOM:      0      0
+Previous 1 day time = 0 sec
+FEC:      0      0
+CRC:      0      0
+ES:      0      0
+SES:      0      0
+UAS:      0      0
+LOS:      0      0
+LOF:      0      0
+LOM:      0      0
+Since Link time = 11 min 55 sec
+FEC:      50716      0
+CRC:      0      2
+ES:      0      2
+SES:      0      0
+UAS:      0      0
+LOS:      0      0
+LOF:      0      0
+LOM:      0      0

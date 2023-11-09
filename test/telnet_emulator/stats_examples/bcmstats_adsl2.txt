@@ -1,0 +1,120 @@
+ADSL driver and PHY status
+Status: Showtime
+Last Retrain Reason:	8000
+Last initialization procedure status:	0
+Max:	Upstream rate = 570 Kbps, Downstream rate = 3056 Kbps
+Bearer:	0, Upstream rate = 646 Kbps, Downstream rate = 2755 Kbps
+
+Link Power State:	L0
+Mode:			ADSL2 Annex A
+TPS-TC:			ATM Mode(0x0)
+Trellis:		U:ON /D:ON
+Line Status:		No Defect
+Training Status:	Showtime
+		Down		Up
+SNR (dB):	 2.9		 5.8
+Attn(dB):	 65.0		 41.0
+Pwr(dBm):	 18.2		 12.4
+
+			ADSL2 framing
+			Bearer 0
+MSGc:		53		11
+B:		18		78
+M:		8		1
+T:		5		1
+R:		16		16
+S:		1.7364		3.8579
+L:		774		197
+D:		1		8
+
+			Counters
+			Bearer 0
+SF:		1245508		200199
+SFErr:		3		20
+RS:		45928127		3601664
+RSCorr:		7242		10092
+RSUnCorr:	3		22
+
+ReXmt:		1193		0
+ReXmtCorr:	1193		0
+ReXmtUnCorr:	3		0
+
+			Bearer 0
+HEC:		2		24
+OCD:		0		0
+LCD:		0		0
+Total Cells:	130331790		30600462
+Data Cells:	5077585		1722635
+Drop Cells:	0
+Bit Errors:	180		2776
+
+ES:		1403		3039
+SES:		162		6
+UAS:		1502		1364
+AS:		20061
+
+			Bearer 0
+INP:		29.00		2.50
+INPRein:	0.00		0.00
+delay:		8		8
+PER:		16.00		16.39
+OR:		29.48		8.29
+AgR:		2771.88	652.73
+
+Bitswap:	3333/3333		15/15
+
+Total time = 52 days 12 hours 5 min 58 sec
+FEC:		4159597		3118687
+CRC:		9669		4479
+ES:		1403		3039
+SES:		162		6
+UAS:		1502		1364
+LOS:		8		0
+LOF:		62		0
+LOM:		0		0
+Latest 15 minutes time = 5 min 58 sec
+FEC:		78		283
+CRC:		0		0
+ES:		0		0
+SES:		0		0
+UAS:		0		0
+LOS:		0		0
+LOF:		0		0
+LOM:		0		0
+Previous 15 minutes time = 15 min 0 sec
+FEC:		173		765
+CRC:		0		4
+ES:		0		3
+SES:		0		0
+UAS:		0		0
+LOS:		0		0
+LOF:		0		0
+LOM:		0		0
+Latest 1 day time = 12 hours 5 min 58 sec
+FEC:		23611		20193
+CRC:		1196		43
+ES:		75		28
+SES:		23		0
+UAS:		125		104
+LOS:		1		0
+LOF:		9		0
+LOM:		0		0
+Previous 1 day time = 24 hours 0 sec
+FEC:		29570		26828
+CRC:		283		171
+ES:		117		123
+SES:		0		0
+UAS:		0		0
+LOS:		0		0
+LOF:		0		0
+LOM:		0		0
+Since Link time = 5 hours 34 min 19 sec
+FEC:		7242		10092
+CRC:		3		20
+ES:		3		15
+SES:		0		0
+UAS:		0		0
+LOS:		0		0
+LOF:		0		0
+LOM:		0		0
+NTR: mipsCntAtNtr=0 ncoCntAtNtr=0

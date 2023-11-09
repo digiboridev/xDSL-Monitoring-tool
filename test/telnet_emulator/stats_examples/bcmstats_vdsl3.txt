@@ -1,0 +1,116 @@
+ADSL driver and PHY status
+Status: Showtime
+Retrain Reason:	1
+Last initialization procedure status:	0
+Max:	Upstream rate = 30956 Kbps, Downstream rate = 95624 Kbps
+Bearer:	0, Upstream rate = 20000 Kbps, Downstream rate = 63404 Kbps
+
+Link Power State:	L0
+Mode:			VDSL2 Annex B
+VDSL2 Profile:		Profile 17a
+TPS-TC:			PTM Mode(0x0)
+Trellis:		U:ON /D:ON
+Line Status:		No Defect
+Training Status:	Showtime
+		Down		Up
+SNR (dB):	 10.6		 12.9
+Attn(dB):	 12.8		 0.0
+Pwr(dBm):	 0.3		 0.3
+			VDSL2 framing
+			Bearer 0
+MSGc:		14		150
+B:		41		236
+M:		1		1
+T:		64		5
+R:		16		16
+S:		0.0211		0.3771
+L:		22016		5410
+D:		1721		1
+I:		58		255
+N:		58		255
+			Counters
+			Bearer 0
+OHF:		30852080		1342788
+OHFErr:		3235		0
+RS:		3602978050		768327
+RSCorr:		316177384		1
+RSUnCorr:	4096		0
+
+			Bearer 0
+HEC:		995		0
+OCD:		28		0
+LCD:		28		0
+Total Cells:	798631207		0
+Data Cells:	157811109		0
+Drop Cells:	0
+Bit Errors:	0		0
+
+ES:		76096		2
+SES:		284		0
+UAS:		240		176
+AS:		41780
+
+			Bearer 0
+INP:		5.00		0.00
+INPRein:	0.00		0.00
+delay:		9		0
+PER:		1.35		6.15
+OR:		118.15		202.87
+AgR:		63522.34	20203.27
+
+Bitswap:	6409/6409		0/0
+
+Total time = 1 days 15 hours 30 min 8 sec
+FEC:		3470557127		22
+CRC:		572948		2
+ES:		76096		2
+SES:		284		0
+UAS:		240		176
+LOS:		6		0
+LOF:		51		0
+LOM:		0		0
+Latest 15 minutes time = 8 sec
+FEC:		52622		0
+CRC:		0		0
+ES:		0		0
+SES:		0		0
+UAS:		0		0
+LOS:		0		0
+LOF:		0		0
+LOM:		0		0
+Previous 15 minutes time = 15 min 0 sec
+FEC:		6439887		0
+CRC:		25		0
+ES:		12		0
+SES:		0		0
+UAS:		0		0
+LOS:		0		0
+LOF:		0		0
+LOM:		0		0
+Latest 1 day time = 15 hours 30 min 8 sec
+FEC:		552683451		1
+CRC:		31193		0
+ES:		4055		0
+SES:		11		0
+UAS:		36		25
+LOS:		1		0
+LOF:		9		0
+LOM:		0		0
+Previous 1 day time = 24 hours 0 sec
+FEC:		1590863975		4
+CRC:		285533		0
+ES:		22274		0
+SES:		108		0
+UAS:		36		25
+LOS:		1		0
+LOF:		8		0
+LOM:		0		0
+Since Link time = 11 hours 36 min 19 sec
+FEC:		316177384		1
+CRC:		3235		0
+ES:		960		0
+SES:		0		0
+UAS:		0		0
+LOS:		0		0
+LOF:		0		0
+LOM:		0		0

@@ -113,7 +113,7 @@ class CommonTelnetClient implements NetUnitClient {
     );
 
     // Auto complete by timeout if no success prompt received
-    Timer(const Duration(seconds: 10), () {
+    Timer(const Duration(seconds: 5), () {
       if (!completer.isCompleted) {
         tempSub.cancel();
         socket.destroy();
@@ -170,7 +170,7 @@ class CommonTelnetClient implements NetUnitClient {
     _socket!.writeln(cmd2Stats.command);
 
     // Auto complete by timeout if no stats received
-    Timer(const Duration(seconds: 10), () {
+    Timer(const Duration(seconds: 5), () {
       if (!completer.isCompleted) {
         tempSub.cancel();
         completer.completeError('Get stats timeout');

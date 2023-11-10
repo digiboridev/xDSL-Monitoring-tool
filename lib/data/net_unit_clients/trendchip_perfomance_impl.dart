@@ -1,9 +1,8 @@
 import 'package:xdslmt/data/net_unit_clients/components/common_telnet_client.dart';
 import 'package:xdslmt/data/net_unit_clients/components/stats_parser/trendchip_stats_parser.dart';
 
-@Deprecated('Use new version instead')
-class TCP31xxClientImpl extends CommonTelnetClient {
-  TCP31xxClientImpl({
+class TrendchipPerfomanceClientImpl extends CommonTelnetClient {
+  TrendchipPerfomanceClientImpl({
     required super.unitIp,
     required super.snapshotId,
     required String login,
@@ -13,12 +12,8 @@ class TCP31xxClientImpl extends CommonTelnetClient {
             (prompt: 'Login:', command: login),
             (prompt: 'Password:', command: password),
           ],
-          errorPrts: const [
-            'Bad Password!!!',
-            'Login incorrect',
-            'Login failed',
-          ],
+          errorPrts: const ['Bad Password!!!', 'Login incorrect', 'Login failed'],
           readyPrt: '>',
-          cmd2Stats: (command: 'wan adsl diag\nwan adsl status\n', tryParse: trendchipParser),
+          cmd2Stats: (command: 'wa ad status\nwa ad diag\n', tryParse: trendchipParser), // TODO: commands
         );
 }

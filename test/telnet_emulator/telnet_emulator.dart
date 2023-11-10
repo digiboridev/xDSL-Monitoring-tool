@@ -21,7 +21,7 @@ Future<Future Function()> startEmulator({
   bool passwordSkip = false,
   bool shellSkip = false,
   int chunkSize = 20,
-  required ({String cmd, File file}) command2Stats,
+  required ({String cmd, File file}) command2Stats, // TODO: add support for multiple commands
 }) async {
   final serverSocket = await ServerSocket.bind('0.0.0.0', 23, shared: true);
 
@@ -73,7 +73,7 @@ Future<Future Function()> startEmulator({
       }
 
       // Answer to stats fetch command
-      stream.where((event) => event == command2Stats.cmd).forEach((_) async {
+      stream.where((event) => event.contains(command2Stats.cmd)).forEach((_) async {
         String stats = await command2Stats.file.readAsString();
 
         /// Split stats into chunks and send them with delay

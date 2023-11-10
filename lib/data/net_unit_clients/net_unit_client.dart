@@ -13,6 +13,8 @@ import 'package:xdslmt/data/net_unit_clients/broadcom_xdslctl_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/broadcom_xdslctl_sh_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/simulator_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/tcp31xx_impl.dart';
+import 'package:xdslmt/data/net_unit_clients/trendchip_perfomance_impl.dart';
+import 'package:xdslmt/data/net_unit_clients/trendchip_status_diag_impl.dart';
 
 enum NetworkUnitType {
   simulator,
@@ -26,7 +28,10 @@ enum NetworkUnitType {
   broadcom_telnet_adslctl_sh,
   broadcom_telnet_xdslcmd_sh,
   broadcom_telnet_xdslctl_sh,
+  @Deprecated('Use new version instead')
   trendchip_31xx_telnet,
+  trendchip_telnet_status_diag,
+  trendchip_telnet_perfomance,
   hg532e_http,
 }
 
@@ -64,6 +69,10 @@ abstract class NetUnitClient {
         return BroadcomXdslctlShClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
       case NetworkUnitType.trendchip_31xx_telnet:
         return TCP31xxClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+      case NetworkUnitType.trendchip_telnet_status_diag:
+        return TrendchipStatusDiagClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+      case NetworkUnitType.trendchip_telnet_perfomance:
+        return TrendchipPerfomanceClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
       default:
         throw Exception('Unknown NetUnitClient type: $type');
     }

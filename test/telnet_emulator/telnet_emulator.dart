@@ -20,6 +20,7 @@ Future<Future Function()> startEmulator({
   bool loginSkip = false,
   bool passwordSkip = false,
   bool shellSkip = false,
+  int chunkSize = 20,
   required ({String cmd, File file}) command2Stats,
 }) async {
   final serverSocket = await ServerSocket.bind('0.0.0.0', 23, shared: true);
@@ -74,7 +75,18 @@ Future<Future Function()> startEmulator({
       // Answer to stats fetch command
       stream.where((event) => event == command2Stats.cmd).forEach((_) async {
         String stats = await command2Stats.file.readAsString();
-        socket.writeln(stats);
+
+        /// Split stats into chunks and send them with delay
+        /// to simulate real terminal behavior
+        final lines = stats.split('\n');
+        for (var i = 0; i < lines.length; i += chunkSize) {
+          if (i + chunkSize > lines.length) {
+            socket.writeln(lines.sublist(i).join('\n'));
+          } else {
+            socket.writeln(lines.sublist(i, i + chunkSize).join('\n'));
+          }
+          await Future.delayed(const Duration(milliseconds: 10));
+        }
       });
     } catch (e) {
       print('Error: $e');

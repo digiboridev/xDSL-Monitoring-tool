@@ -389,6 +389,7 @@ Future<void> main() async {
 
   test('trendchip parser > connectionUp', () async {
     final closeEmu = await startEmulator(
+      shellSkip: true,
       command2Stats: (
         cmd: 'wan adsl diag',
         file: File('test/telnet_emulator/stats_examples/trendchip_diag.txt'),

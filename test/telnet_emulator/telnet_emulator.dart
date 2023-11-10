@@ -1,27 +1,16 @@
 // ignore_for_file: avoid_print
 import 'dart:io';
-import 'package:path/path.dart' as p;
 
 Future<void> main(List<String> args) async {
   print('Emulator started in standalone mode');
 
-  await startEmulator(
-    command2Stats: (
-      cmd: 'adsl info --show',
-      file: File(
-        p.join(Directory.current.path, 'test', 'telnet_emulator', 'stats_examples', 'bcmstats_adsl.txt'),
-      ),
-    ),
-  );
+  final file = File('test/telnet_emulator/stats_examples/bcmstats_adsl.txt');
+  const cmd = 'adsl info --show';
 
-  // await startEmulator(
-  //   command2Stats: (
-  //     cmd: 'wan adsl diag',
-  //     file: File(
-  //       p.join(Directory.current.path, 'test', 'telnet_emulator', 'stats_examples', 'trendchip_diag.txt'),
-  //     ),
-  //   ),
-  // );
+  // final file = File('test/telnet_emulator/stats_examples/trendchip_diag.txt');
+  // final cmd = 'wan adsl diag';
+
+  await startEmulator(command2Stats: (cmd: cmd, file: file));
 }
 
 Future<Future Function()> startEmulator({
@@ -36,20 +25,22 @@ Future<Future Function()> startEmulator({
   final serverSocket = await ServerSocket.bind('0.0.0.0', 23, shared: true);
 
   serverSocket.forEach((socket) async {
-    print('New connection from ${socket.remoteAddress.address}:${socket.remotePort}');
+    print('EMU New connection from ${socket.remoteAddress.address}:${socket.remotePort}');
 
     try {
       final stream = socket.map((event) => String.fromCharCodes(event).trim()).asBroadcastStream();
-      stream.forEach((event) => print('Incoming: $event'));
+      stream.forEach((event) => print('EMU Incoming: $event'));
 
       // Send greeting message
       socket.writeln('Copyright (c) 1994 - 1337 Digibori Communications Corp.');
 
       // Login ask procedure
       if (loginSkip == false) {
+        print('login ask');
         socket.writeln('Login:');
-        String unitLogin = await stream.first;
-        if (unitLogin != login) {
+        String data = await stream.first;
+        if (data != login) {
+          print('login incorrect, got:$data expect: $login');
           socket.writeln('Login incorrect');
           socket.destroy();
           return;
@@ -58,9 +49,11 @@ Future<Future Function()> startEmulator({
 
       // Password ask procedure
       if (passwordSkip == false) {
+        print('password ask');
         socket.writeln('Password:');
-        String unitPassword = await stream.first;
-        if (unitPassword != password) {
+        String data = await stream.first;
+        if (data != password) {
+          print('password incorrect, got:$data expect: $password');
           socket.writeln('Bad Password!!!');
           socket.destroy();
           return;
@@ -68,11 +61,14 @@ Future<Future Function()> startEmulator({
       }
 
       // Login successful - ready to receive commands
+      print('auth successful');
       socket.writeln('$prefix>');
 
       // Answer to bcm63xx shell command
       if (shellSkip == false) {
-        stream.where((event) => event == 'sh').forEach((element) => socket.writeln('$prefix#'));
+        print('shell cmd wait');
+        String data = await stream.first;
+        if (data == 'sh') socket.writeln('$prefix#');
       }
 
       // Answer to stats fetch command

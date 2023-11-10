@@ -45,7 +45,7 @@ digiborimusik@gmail.com
 Alternatively, you can simply send me a dump of your device's terminal session. It is important to have example commands and responses for successful and unsuccessful attempts to log in, request data, and respond to data in several different states such as idle, connected, initializing, etc.
 
 # Planned features
-  - SNR per tone, Bitloading, Bitswap support
+  - SNR per tone, Bit table support
   - HLog, QLN support
   - Cloud sync for remote data sharing
   - Desktop version

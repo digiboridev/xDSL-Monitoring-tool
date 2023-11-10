@@ -81,12 +81,18 @@ class CommonTelnetClient implements NetUnitClient {
 
         // Handle preparing prompts
         for (var p2c in prepPrts) {
-          if (event.contains(p2c.prompt)) socket.writeln(p2c.command);
+          if (event.contains(p2c.prompt)) {
+            print('Matched preparing prompt: ${p2c.prompt}');
+            print('Sending command: ${p2c.command}');
+            socket.write('${p2c.command}\n');
+          }
         }
 
         // Handle success prompt
         if (event.contains(readyPrt)) {
+          print('Matched ready prompt: $readyPrt');
           if (!completer.isCompleted) {
+            print('Completing connection flow');
             _socket = socket;
             _socketStream = socketStream;
             socket.done.then((value) => _wipeSocket());
@@ -98,7 +104,9 @@ class CommonTelnetClient implements NetUnitClient {
         // Handle errors prompt
         for (var error in errorPrts) {
           if (event.contains(error)) {
+            print('Matched error prompt: $error');
             if (!completer.isCompleted) {
+              print('Completing connection flow with error');
               tempSub.cancel();
               socket.destroy();
               completer.completeError(error);
@@ -107,7 +115,11 @@ class CommonTelnetClient implements NetUnitClient {
         }
       },
       onError: (e) {
-        if (!completer.isCompleted) completer.completeError('Connect error $e');
+        print('Socket error: $e');
+        if (!completer.isCompleted) {
+          print('Completing connection flow with error');
+          completer.completeError('Connect error $e');
+        }
       },
       cancelOnError: true,
     );
@@ -167,7 +179,7 @@ class CommonTelnetClient implements NetUnitClient {
     );
 
     // Send command to get stats
-    _socket!.writeln(cmd2Stats.command);
+    _socket!.write('${cmd2Stats.command}\n');
 
     // Auto complete by timeout if no stats received
     Timer(const Duration(seconds: 5), () {

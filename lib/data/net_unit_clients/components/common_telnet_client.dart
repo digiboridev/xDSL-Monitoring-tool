@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 import 'package:xdslmt/data/net_unit_clients/components/stats_parser/raw_line_stats.dart';
+import 'package:xdslmt/utils/debouncebuffer.dart';
 
 /// Alias for function that responds to specific prompt with command
 /// `prompt` - prompt that needs to be responded
@@ -140,9 +141,10 @@ class CommonTelnetClient implements NetUnitClient {
     final completer = Completer<LineStats>();
     late StreamSubscription tempSub;
 
-    tempSub = _socketStream!.listen(
+    tempSub = _socketStream!.transform(DebounceBuffer(const Duration(milliseconds: 300))).listen(
       (event) {
-        // Wait and parse stats pessimistically due to possible garbage in stream
+        // Wait and parse stats pessimisticaSlly due to possible garbage in stream
+        print('Get stats event: $event');
         RawLineStats? maybeStats = cmd2Stats.tryParse(event);
         if (maybeStats != null && !completer.isCompleted) {
           final stats = LineStats(
@@ -167,13 +169,19 @@ class CommonTelnetClient implements NetUnitClient {
             upFECIncr: _incrDiff(_prevStats?.upFEC, maybeStats.upFEC),
             downFECIncr: _incrDiff(_prevStats?.downFEC, maybeStats.downFEC),
           );
+          print('Completing with stats: $stats');
 
+          _prevStats = stats;
           tempSub.cancel();
           completer.complete(stats);
         }
       },
       onError: (e) {
-        if (!completer.isCompleted) completer.completeError('Connect error $e');
+        print('Get stats error: $e');
+        if (!completer.isCompleted) {
+          print('Completing get stats flow with error');
+          completer.completeError('Connect error $e');
+        }
       },
       cancelOnError: true,
     );
@@ -182,8 +190,10 @@ class CommonTelnetClient implements NetUnitClient {
     _socket!.write('${cmd2Stats.command}\n');
 
     // Auto complete by timeout if no stats received
-    Timer(const Duration(seconds: 5), () {
+    Timer(const Duration(seconds: 10), () {
+      print('Get stats timeout');
       if (!completer.isCompleted) {
+        print('Completing get stats flow with error');
         tempSub.cancel();
         completer.completeError('Get stats timeout');
       }

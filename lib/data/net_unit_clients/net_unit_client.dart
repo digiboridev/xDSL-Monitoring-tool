@@ -12,7 +12,6 @@ import 'package:xdslmt/data/net_unit_clients/broadcom_xdslcmd_sh_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/broadcom_xdslctl_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/broadcom_xdslctl_sh_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/simulator_impl.dart';
-import 'package:xdslmt/data/net_unit_clients/tcp31xx_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/trendchip_perfomance_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/trendchip_status_diag_impl.dart';
 
@@ -67,8 +66,6 @@ abstract class NetUnitClient {
         return BroadcomXdslcmdShClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
       case NetworkUnitType.broadcom_telnet_xdslctl_sh:
         return BroadcomXdslctlShClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
-      case NetworkUnitType.trendchip_31xx_telnet:
-        return TCP31xxClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
       case NetworkUnitType.trendchip_telnet_status_diag:
         return TrendchipStatusDiagClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
       case NetworkUnitType.trendchip_telnet_perfomance:

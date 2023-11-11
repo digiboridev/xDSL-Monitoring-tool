@@ -12,10 +12,16 @@ void main() {
       login: 'qwe',
       password: 'asd',
       shellSkip: true,
-      command2Stats: (
-        cmd: 'wan adsl diag\nwan adsl status',
-        file: File('test/telnet_emulator/stats_examples/trendchip_diag.txt'),
-      ),
+      cmdResponses: [
+        (
+          cmd: 'wan adsl diag',
+          response: File('test/telnet_emulator/stats_examples/trendchip_diag.txt').readAsStringSync(),
+        ),
+        (
+          cmd: 'wan adsl status',
+          response: File('test/telnet_emulator/stats_examples/trendchip_status_up.txt').readAsStringSync(),
+        ),
+      ],
     );
 
     final NetUnitClient client = TCP31xxClientImpl(

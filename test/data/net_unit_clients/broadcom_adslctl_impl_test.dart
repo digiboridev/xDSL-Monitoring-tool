@@ -10,10 +10,12 @@ void main() {
   test('broadcom adslctl impl  > success flow', () async {
     final closeEmu = await startEmulator(
       shellSkip: true,
-      command2Stats: (
-        cmd: 'adslctl info --show',
-        file: File('test/telnet_emulator/stats_examples/bcmstats_adsl.txt'),
-      ),
+      cmdResponses: [
+        (
+          cmd: 'adslctl info --show',
+          response: File('test/telnet_emulator/stats_examples/bcmstats_adsl.txt').readAsStringSync(),
+        ),
+      ],
     );
 
     final NetUnitClient client = BroadcomAdslctlClientImpl(

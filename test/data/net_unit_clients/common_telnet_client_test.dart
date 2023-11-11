@@ -11,10 +11,12 @@ import '../../telnet_emulator/telnet_emulator.dart';
 Future<void> main() async {
   test('wrong login > login error', () async {
     final closeEmu = await startEmulator(
-      command2Stats: (
-        cmd: 'adsl info --show',
-        file: File('test/telnet_emulator/stats_examples/bcmstats_adsl.txt'),
-      ),
+      cmdResponses: [
+        (
+          cmd: 'adsl info --show',
+          response: File('test/telnet_emulator/stats_examples/bcmstats_adsl.txt').readAsStringSync(),
+        ),
+      ],
     );
 
     final NetUnitClient client = CommonTelnetClient(
@@ -40,10 +42,12 @@ Future<void> main() async {
 
   test('wrong password > password error', () async {
     final closeEmu = await startEmulator(
-      command2Stats: (
-        cmd: 'adsl info --show',
-        file: File('test/telnet_emulator/stats_examples/bcmstats_adsl.txt'),
-      ),
+      cmdResponses: [
+        (
+          cmd: 'adsl info --show',
+          response: File('test/telnet_emulator/stats_examples/bcmstats_adsl.txt').readAsStringSync(),
+        ),
+      ],
     );
 
     final NetUnitClient client = CommonTelnetClient(
@@ -67,10 +71,12 @@ Future<void> main() async {
 
   test('incorrect shell command > timeout', () async {
     final closeEmu = await startEmulator(
-      command2Stats: (
-        cmd: 'adsl info --show',
-        file: File('test/telnet_emulator/stats_examples/bcmstats_adsl.txt'),
-      ),
+      cmdResponses: [
+        (
+          cmd: 'adsl info --show',
+          response: File('test/telnet_emulator/stats_examples/bcmstats_adsl.txt').readAsStringSync(),
+        ),
+      ],
     );
 
     final NetUnitClient client = CommonTelnetClient(
@@ -94,10 +100,12 @@ Future<void> main() async {
 
   test('incorrect ready prompt > timeout', () async {
     final closeEmu = await startEmulator(
-      command2Stats: (
-        cmd: 'adsl info --show',
-        file: File('test/telnet_emulator/stats_examples/bcmstats_adsl.txt'),
-      ),
+      cmdResponses: [
+        (
+          cmd: 'adsl info --show',
+          response: File('test/telnet_emulator/stats_examples/bcmstats_adsl.txt').readAsStringSync(),
+        ),
+      ],
     );
 
     final NetUnitClient client = CommonTelnetClient(
@@ -121,10 +129,12 @@ Future<void> main() async {
 
   test('incorrect stats command > timeout', () async {
     final closeEmu = await startEmulator(
-      command2Stats: (
-        cmd: 'adsl info --show',
-        file: File('test/telnet_emulator/stats_examples/bcmstats_adsl.txt'),
-      ),
+      cmdResponses: [
+        (
+          cmd: 'adsl info --show',
+          response: File('test/telnet_emulator/stats_examples/bcmstats_adsl.txt').readAsStringSync(),
+        ),
+      ],
     );
 
     final NetUnitClient client = CommonTelnetClient(
@@ -148,10 +158,12 @@ Future<void> main() async {
 
   test('broadcom parser > connectionUp', () async {
     final closeEmu = await startEmulator(
-      command2Stats: (
-        cmd: 'adsl info --show',
-        file: File('test/telnet_emulator/stats_examples/bcmstats_adsl.txt'),
-      ),
+      cmdResponses: [
+        (
+          cmd: 'adsl info --show',
+          response: File('test/telnet_emulator/stats_examples/bcmstats_adsl.txt').readAsStringSync(),
+        ),
+      ],
     );
 
     final NetUnitClient client = CommonTelnetClient(
@@ -174,10 +186,12 @@ Future<void> main() async {
 
   test('broadcom parser > correctness adsl', () async {
     final closeEmu = await startEmulator(
-      command2Stats: (
-        cmd: 'adsl info --show',
-        file: File('test/telnet_emulator/stats_examples/bcmstats_adsl.txt'),
-      ),
+      cmdResponses: [
+        (
+          cmd: 'adsl info --show',
+          response: File('test/telnet_emulator/stats_examples/bcmstats_adsl.txt').readAsStringSync(),
+        ),
+      ],
     );
 
     final NetUnitClient client = CommonTelnetClient(
@@ -217,10 +231,12 @@ Future<void> main() async {
 
   test('broadcom parser > correctness adsl2', () async {
     final closeEmu = await startEmulator(
-      command2Stats: (
-        cmd: 'adsl info --show',
-        file: File('test/telnet_emulator/stats_examples/bcmstats_adsl2.txt'),
-      ),
+      cmdResponses: [
+        (
+          cmd: 'adsl info --show',
+          response: File('test/telnet_emulator/stats_examples/bcmstats_adsl2.txt').readAsStringSync(),
+        ),
+      ],
     );
 
     final NetUnitClient client = CommonTelnetClient(
@@ -260,10 +276,12 @@ Future<void> main() async {
 
   test('broadcom parser > correctness vdsl', () async {
     final closeEmu = await startEmulator(
-      command2Stats: (
-        cmd: 'adsl info --show',
-        file: File('test/telnet_emulator/stats_examples/bcmstats_vdsl.txt'),
-      ),
+      cmdResponses: [
+        (
+          cmd: 'adsl info --show',
+          response: File('test/telnet_emulator/stats_examples/bcmstats_vdsl.txt').readAsStringSync(),
+        ),
+      ],
     );
 
     final NetUnitClient client = CommonTelnetClient(
@@ -303,10 +321,12 @@ Future<void> main() async {
 
   test('broadcom parser > correctness vdsl2', () async {
     final closeEmu = await startEmulator(
-      command2Stats: (
-        cmd: 'adsl info --show',
-        file: File('test/telnet_emulator/stats_examples/bcmstats_vdsl2.txt'),
-      ),
+      cmdResponses: [
+        (
+          cmd: 'adsl info --show',
+          response: File('test/telnet_emulator/stats_examples/bcmstats_vdsl2.txt').readAsStringSync(),
+        ),
+      ],
     );
 
     final NetUnitClient client = CommonTelnetClient(
@@ -346,10 +366,12 @@ Future<void> main() async {
 
   test('broadcom parser > correctness vdsl3', () async {
     final closeEmu = await startEmulator(
-      command2Stats: (
-        cmd: 'adsl info --show',
-        file: File('test/telnet_emulator/stats_examples/bcmstats_vdsl3.txt'),
-      ),
+      cmdResponses: [
+        (
+          cmd: 'adsl info --show',
+          response: File('test/telnet_emulator/stats_examples/bcmstats_vdsl3.txt').readAsStringSync(),
+        ),
+      ],
     );
 
     final NetUnitClient client = CommonTelnetClient(
@@ -390,10 +412,12 @@ Future<void> main() async {
   test('trendchip parser > connectionUp', () async {
     final closeEmu = await startEmulator(
       shellSkip: true,
-      command2Stats: (
-        cmd: 'wan adsl diag',
-        file: File('test/telnet_emulator/stats_examples/trendchip_diag.txt'),
-      ),
+      cmdResponses: [
+        (
+          cmd: 'wan adsl diag',
+          response: File('test/telnet_emulator/stats_examples/trendchip_diag.txt').readAsStringSync(),
+        ),
+      ],
     );
 
     final NetUnitClient client = CommonTelnetClient(
@@ -419,10 +443,12 @@ Future<void> main() async {
       login: 'admin',
       password: 'admin',
       shellSkip: true,
-      command2Stats: (
-        cmd: 'wan adsl diag',
-        file: File('test/telnet_emulator/stats_examples/trendchip_diag.txt'),
-      ),
+      cmdResponses: [
+        (
+          cmd: 'wan adsl diag',
+          response: File('test/telnet_emulator/stats_examples/trendchip_diag.txt').readAsStringSync(),
+        ),
+      ],
     );
 
     final NetUnitClient client = CommonTelnetClient(
@@ -465,10 +491,12 @@ Future<void> main() async {
       login: 'admin',
       password: 'admin',
       shellSkip: true,
-      command2Stats: (
-        cmd: 'wan adsl diag',
-        file: File('test/telnet_emulator/stats_examples/trendchip_diag_alt.txt'),
-      ),
+      cmdResponses: [
+        (
+          cmd: 'wan adsl diag',
+          response: File('test/telnet_emulator/stats_examples/trendchip_diag_alt.txt').readAsStringSync(),
+        ),
+      ],
     );
 
     final NetUnitClient client = CommonTelnetClient(

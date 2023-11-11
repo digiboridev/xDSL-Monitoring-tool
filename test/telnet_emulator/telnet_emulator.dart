@@ -10,8 +10,10 @@ Future<void> main(List<String> args) async {
   // final file = File('test/telnet_emulator/stats_examples/trendchip_diag.txt');
   // final cmd = 'wan adsl diag';
 
-  await startEmulator(command2Stats: (cmd: cmd, file: file));
+  await startEmulator(cmdResponses: [(cmd: cmd, response: file.readAsStringSync())]);
 }
+
+typedef C2R = ({String cmd, String response});
 
 Future<Future Function()> startEmulator({
   String login = 'admin',
@@ -20,8 +22,8 @@ Future<Future Function()> startEmulator({
   bool loginSkip = false,
   bool passwordSkip = false,
   bool shellSkip = false,
+  List<C2R> cmdResponses = const [],
   int chunkSize = 20,
-  required ({String cmd, File file}) command2Stats, // TODO: add support for multiple commands
 }) async {
   final serverSocket = await ServerSocket.bind('0.0.0.0', 23, shared: true);
 
@@ -37,11 +39,12 @@ Future<Future Function()> startEmulator({
 
       // Login ask procedure
       if (loginSkip == false) {
-        print('login ask');
         socket.writeln('Login:');
+        print('EMU login wait');
         String data = await stream.first;
+        print('EMU login received');
         if (data != login) {
-          print('login incorrect, got:$data expect: $login');
+          print('EMU login incorrect, got:$data expect: $login');
           socket.writeln('Login incorrect');
           socket.destroy();
           return;
@@ -50,11 +53,12 @@ Future<Future Function()> startEmulator({
 
       // Password ask procedure
       if (passwordSkip == false) {
-        print('password ask');
         socket.writeln('Password:');
+        print('EMU password wait');
         String data = await stream.first;
+        print('EMU password received');
         if (data != password) {
-          print('password incorrect, got:$data expect: $password');
+          print('EMU password incorrect, got:$data expect: $password');
           socket.writeln('Bad Password!!!');
           socket.destroy();
           return;
@@ -62,34 +66,40 @@ Future<Future Function()> startEmulator({
       }
 
       // Login successful - ready to receive commands
-      print('auth successful');
+      print('EMU auth successful');
       socket.writeln('$prefix>');
 
-      // Answer to bcm63xx shell command
+      // Wait for shell permission command
+      // (also known as "second stage login")
       if (shellSkip == false) {
-        print('shell cmd wait');
-        String data = await stream.first;
-        if (data == 'sh') socket.writeln('$prefix#');
+        print('EMU shell cmd wait');
+        await stream.firstWhere((data) => data == 'sh');
+        print('EMU shell cmd received');
+        socket.writeln('$prefix#');
       }
 
-      // Answer to stats fetch command
-      stream.where((event) => event.contains(command2Stats.cmd)).forEach((_) async {
-        String stats = await command2Stats.file.readAsString();
-
-        /// Split stats into chunks and send them with delay
-        /// to simulate real terminal behavior
-        final lines = stats.split('\n');
-        for (var i = 0; i < lines.length; i += chunkSize) {
-          if (i + chunkSize > lines.length) {
-            socket.writeln(lines.sublist(i).join('\n'));
-          } else {
-            socket.writeln(lines.sublist(i, i + chunkSize).join('\n'));
+      // Bind command responses
+      stream.forEach((event) async {
+        for (final cmdResponse in cmdResponses) {
+          print('EMU catched cmd: ${cmdResponse.cmd}');
+          if (event.contains(cmdResponse.cmd)) {
+            /// Split stats into chunks (aka packet size) and send them with delay
+            /// to simulate real terminal network behavior
+            final lines = cmdResponse.response.split('\n');
+            for (var i = 0; i < lines.length; i += chunkSize) {
+              print('EMU send chunk ${i + chunkSize}');
+              if (i + chunkSize > lines.length) {
+                socket.writeln(lines.sublist(i).join('\n'));
+              } else {
+                socket.writeln(lines.sublist(i, i + chunkSize).join('\n'));
+              }
+              await Future.delayed(const Duration(milliseconds: 10));
+            }
           }
-          await Future.delayed(const Duration(milliseconds: 10));
         }
       });
     } catch (e) {
-      print('Error: $e');
+      print('EMU Error: $e');
       socket.destroy();
     }
   });

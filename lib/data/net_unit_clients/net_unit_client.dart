@@ -17,7 +17,7 @@ import 'package:xdslmt/data/net_unit_clients/trendchip_perfomance_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/trendchip_status_diag_impl.dart';
 
 enum NetworkUnitType {
-  simulator,
+  simulator, // TODO: vdsl simulator, adsl2+ simulator, gdmt simulator
   broadcom_telnet_adsl,
   broadcom_telnet_adslcmd,
   broadcom_telnet_adslctl,

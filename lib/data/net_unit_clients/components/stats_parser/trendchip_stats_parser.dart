@@ -19,15 +19,19 @@ RawLineStats? trendchipParser(String msg) {
       final upMaxRate = RegExp(r'(?<=ATTNDRus\s*=\s*)\d+').stringMatch(msg);
       if (upMaxRate != null) linestats.upAttainableRate = int.tryParse(upMaxRate);
 
-      var downRate = RegExp(r'(?<=near-end bit rate:\s*)\d+').stringMatch(msg);
-      downRate ??= RegExp(r'(?<=near-end interleaved channel bit rate:\s*)\d+').stringMatch(msg);
-      downRate ??= RegExp(r'(?<=near-end fast channel bit rate:\s*)\d+').stringMatch(msg);
-      if (downRate != null) linestats.downRate = int.tryParse(downRate);
+      final nbr = int.tryParse(RegExp(r'(?<=near-end bit rate:\s*)\d+').stringMatch(msg) ?? '');
+      if (nbr != null && nbr > 0) linestats.downRate = nbr;
+      final nibr = int.tryParse(RegExp(r'(?<=near-end interleaved channel bit rate:\s*)\d+').stringMatch(msg) ?? '');
+      if (nibr != null && nibr > 0) linestats.downRate = nibr;
+      final nfbr = int.tryParse(RegExp(r'(?<=near-end fast channel bit rate:\s*)\d+').stringMatch(msg) ?? '');
+      if (nfbr != null && nfbr > 0) linestats.downRate = nfbr;
 
-      var upRate = RegExp(r'(?<=far-end bit rate:\s*)\d+').stringMatch(msg);
-      upRate ??= RegExp(r'(?<=far-end interleaved channel bit rate:\s*)\d+').stringMatch(msg);
-      upRate ??= RegExp(r'(?<=far-end fast channel bit rate:\s*)\d+').stringMatch(msg);
-      if (upRate != null) linestats.upRate = int.tryParse(upRate);
+      final fbr = int.tryParse(RegExp(r'(?<=far-end bit rate:\s*)\d+').stringMatch(msg) ?? '');
+      if (fbr != null && fbr > 0) linestats.upRate = fbr;
+      final fibr = int.tryParse(RegExp(r'(?<=far-end interleaved channel bit rate:\s*)\d+').stringMatch(msg) ?? '');
+      if (fibr != null && fibr > 0) linestats.upRate = fibr;
+      final ffbr = int.tryParse(RegExp(r'(?<=far-end fast channel bit rate:\s*)\d+').stringMatch(msg) ?? '');
+      if (ffbr != null && ffbr > 0) linestats.upRate = ffbr;
 
       final downMargin = RegExp(r'(?<=noise margin downstream:\s*)\d+').stringMatch(msg);
       if (downMargin != null) linestats.downMargin = double.tryParse(downMargin);
@@ -41,21 +45,33 @@ RawLineStats? trendchipParser(String msg) {
       final upAttenuation = RegExp(r'(?<=attenuation upstream:\s*)\d+').stringMatch(msg);
       if (upAttenuation != null) linestats.upAttenuation = double.tryParse(upAttenuation);
 
-      var downCRC = RegExp(r'(?<=near-end CRC error interleaved:\s*)\d+').stringMatch(msg);
-      downCRC ??= RegExp(r'(?<=near-end CRC error fast:\s*)\d+').stringMatch(msg);
-      if (downCRC != null) linestats.downCRC = int.tryParse(downCRC);
+      int downCRC = 0;
+      final downCRCIr = int.tryParse(RegExp(r'(?<=near-end CRC error interleaved:\s*)\d+').stringMatch(msg) ?? '');
+      if (downCRCIr != null) downCRC += downCRCIr;
+      final downCRCF = int.tryParse(RegExp(r'(?<=near-end CRC error fast:\s*)\d+').stringMatch(msg) ?? '');
+      if (downCRCF != null) downCRC += downCRCF;
+      linestats.downCRC = downCRC;
 
-      var upCRC = RegExp(r'(?<=far-end CRC error interleaved:\s*)\d+').stringMatch(msg);
-      upCRC ??= RegExp(r'(?<=far-end CRC error fast:\s*)\d+').stringMatch(msg);
-      if (upCRC != null) linestats.upCRC = int.tryParse(upCRC);
+      int upCRC = 0;
+      final upCRCIr = int.tryParse(RegExp(r'(?<=far-end CRC error interleaved:\s*)\d+').stringMatch(msg) ?? '');
+      if (upCRCIr != null) upCRC += upCRCIr;
+      final upCRCF = int.tryParse(RegExp(r'(?<=far-end CRC error fast:\s*)\d+').stringMatch(msg) ?? '');
+      if (upCRCF != null) upCRC += upCRCF;
+      linestats.upCRC = upCRC;
 
-      var downFEC = RegExp(r'(?<=near-end FEC error interleaved:\s*)\d+').stringMatch(msg);
-      downFEC ??= RegExp(r'(?<=near-end FEC error fast:\s*)\d+').stringMatch(msg);
-      if (downFEC != null) linestats.downFEC = int.tryParse(downFEC);
+      int downFEC = 0;
+      final downFECIr = int.tryParse(RegExp(r'(?<=near-end FEC error interleaved:\s*)\d+').stringMatch(msg) ?? '');
+      if (downFECIr != null) downFEC += downFECIr;
+      final downFECF = int.tryParse(RegExp(r'(?<=near-end FEC error fast:\s*)\d+').stringMatch(msg) ?? '');
+      if (downFECF != null) downFEC += downFECF;
+      linestats.downFEC = downFEC;
 
-      var upFEC = RegExp(r'(?<=far-end FEC error interleaved:\s*)\d+').stringMatch(msg);
-      upFEC ??= RegExp(r'(?<=far-end FEC error fast:\s*)\d+').stringMatch(msg);
-      if (upFEC != null) linestats.upFEC = int.tryParse(upFEC);
+      int upFEC = 0;
+      final upFECIr = int.tryParse(RegExp(r'(?<=far-end FEC error interleaved:\s*)\d+').stringMatch(msg) ?? '');
+      if (upFECIr != null) upFEC += upFECIr;
+      final upFECF = int.tryParse(RegExp(r'(?<=far-end FEC error fast:\s*)\d+').stringMatch(msg) ?? '');
+      if (upFECF != null) upFEC += upFECF;
+      linestats.upFEC = upFEC;
 
       return linestats;
     }

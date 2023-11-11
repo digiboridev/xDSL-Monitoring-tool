@@ -1,0 +1,13 @@
+near-end FEC error fast: 0
+near-end FEC error interleaved: 8119
+near-end CRC error fast: 0
+near-end CRC error interleaved: 120
+near-end HEC error fast: 0
+near-end HEC error interleaved: 1403
+far-end FEC error fast: 0
+far-end FEC error interleaved: 12
+far-end CRC error fast: 0
+far-end CRC error interleaved: 23
+far-end HEC error fast: 0
+far-end HEC error interleaved: 34
+ADSL uptime 0:04:55

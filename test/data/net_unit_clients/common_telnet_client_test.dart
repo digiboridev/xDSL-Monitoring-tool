@@ -156,12 +156,12 @@ Future<void> main() async {
     await closeEmu();
   });
 
-  test('broadcom parser > connectionUp', () async {
+  test('broadcom parser > connection training', () async {
     final closeEmu = await startEmulator(
       cmdResponses: [
         (
           cmd: 'adsl info --show',
-          response: File('test/telnet_emulator/stats_examples/bcmstats_adsl.txt').readAsStringSync(),
+          response: File('test/telnet_emulator/stats_examples/bcmstats_training.txt').readAsStringSync(),
         ),
       ],
     );
@@ -179,7 +179,37 @@ Future<void> main() async {
       cmd2Stats: (command: 'adsl info --show', tryParse: bcm63xxParser),
     );
     final stats = await client.fetchStats();
-    expect(stats.status, SampleStatus.connectionUp);
+    expect(stats.status, SampleStatus.connectionDown);
+    expect(stats.statusText, 'G.994 Training');
+    print(stats);
+    await closeEmu();
+  });
+
+  test('broadcom parser > connection training', () async {
+    final closeEmu = await startEmulator(
+      cmdResponses: [
+        (
+          cmd: 'adsl info --show',
+          response: File('test/telnet_emulator/stats_examples/bcmstats_started.txt').readAsStringSync(),
+        ),
+      ],
+    );
+
+    final NetUnitClient client = CommonTelnetClient(
+      unitIp: '0.0.0.0',
+      snapshotId: 'test',
+      prepPrts: [
+        (prompt: 'Login:', command: 'admin'),
+        (prompt: 'Password:', command: 'admin'),
+        (prompt: '>', command: 'sh'),
+      ],
+      errorPrts: const ['Bad Password!!!', 'Login incorrect', 'Login failed'],
+      readyPrt: '#',
+      cmd2Stats: (command: 'adsl info --show', tryParse: bcm63xxParser),
+    );
+    final stats = await client.fetchStats();
+    expect(stats.status, SampleStatus.connectionDown);
+    expect(stats.statusText, 'G.993 Started');
     print(stats);
     await closeEmu();
   });
@@ -409,13 +439,13 @@ Future<void> main() async {
     await closeEmu();
   });
 
-  test('trendchip parser > connectionUp', () async {
+  test('trendchip parser > connection down', () async {
     final closeEmu = await startEmulator(
       shellSkip: true,
       cmdResponses: [
         (
-          cmd: 'wan adsl diag',
-          response: File('test/telnet_emulator/stats_examples/trendchip_diag.txt').readAsStringSync(),
+          cmd: 'wan adsl status',
+          response: File('test/telnet_emulator/stats_examples/trendchip_status_down.txt').readAsStringSync(),
         ),
       ],
     );
@@ -429,11 +459,43 @@ Future<void> main() async {
       ],
       errorPrts: const ['Bad Password!!!', 'Login incorrect', 'Login failed'],
       readyPrt: '>',
-      cmd2Stats: (command: 'wan adsl diag', tryParse: trendchipParser),
+      cmd2Stats: (command: 'wan adsl status\nwan adsl diag', tryParse: trendchipParser),
     );
 
     final stats = await client.fetchStats();
-    expect(stats.status, SampleStatus.connectionUp);
+    expect(stats.status, SampleStatus.connectionDown);
+    expect(stats.statusText, 'down');
+
+    print(stats);
+    await closeEmu();
+  });
+
+  test('trendchip parser > connection initializing', () async {
+    final closeEmu = await startEmulator(
+      shellSkip: true,
+      cmdResponses: [
+        (
+          cmd: 'wan adsl status',
+          response: File('test/telnet_emulator/stats_examples/trendchip_status_initializing.txt').readAsStringSync(),
+        ),
+      ],
+    );
+
+    final NetUnitClient client = CommonTelnetClient(
+      unitIp: '0.0.0.0',
+      snapshotId: 'test',
+      prepPrts: [
+        (prompt: 'Login:', command: 'admin'),
+        (prompt: 'Password:', command: 'admin'),
+      ],
+      errorPrts: const ['Bad Password!!!', 'Login incorrect', 'Login failed'],
+      readyPrt: '>',
+      cmd2Stats: (command: 'wan adsl status\nwan adsl diag', tryParse: trendchipParser),
+    );
+
+    final stats = await client.fetchStats();
+    expect(stats.status, SampleStatus.connectionDown);
+    expect(stats.statusText, 'initializing');
     print(stats);
     await closeEmu();
   });
@@ -486,6 +548,54 @@ Future<void> main() async {
     await closeEmu();
   });
 
+  test('trendchip parser > correctness diag2', () async {
+    final closeEmu = await startEmulator(
+      login: 'admin',
+      password: 'admin',
+      shellSkip: true,
+      cmdResponses: [
+        (
+          cmd: 'wan adsl diag',
+          response: File('test/telnet_emulator/stats_examples/trendchip_diag2.txt').readAsStringSync(),
+        ),
+      ],
+    );
+
+    final NetUnitClient client = CommonTelnetClient(
+      unitIp: '0.0.0.0',
+      snapshotId: 'test',
+      prepPrts: [
+        (prompt: 'Login:', command: 'admin'),
+        (prompt: 'Password:', command: 'admin'),
+      ],
+      errorPrts: const ['Bad Password!!!', 'Login incorrect', 'Login failed'],
+      readyPrt: '>',
+      cmd2Stats: (command: 'wan adsl diag', tryParse: trendchipParser),
+    );
+
+    final stats = await client.fetchStats();
+    expect(stats.status, SampleStatus.connectionUp);
+    expect(stats.connectionType, 'ADSL2+ Mode');
+    expect(stats.upAttainableRate, 2437);
+    expect(stats.downAttainableRate, 16513);
+    expect(stats.upRate, 700);
+    expect(stats.downRate, 8192);
+    expect(stats.upMargin, 310);
+    expect(stats.downMargin, 210);
+    expect(stats.upAttenuation, 120);
+    expect(stats.downAttenuation, 240);
+    expect(stats.upCRC, 0);
+    expect(stats.downCRC, 0);
+    expect(stats.upFEC, 0);
+    expect(stats.downFEC, 87);
+    expect(stats.upCRCIncr, 0);
+    expect(stats.downCRCIncr, 0);
+    expect(stats.upFECIncr, 0);
+    expect(stats.downFECIncr, 0);
+    print(stats);
+    await closeEmu();
+  });
+
   test('trendchip parser > correctness diag alt', () async {
     final closeEmu = await startEmulator(
       login: 'admin',
@@ -526,6 +636,246 @@ Future<void> main() async {
     expect(stats.downCRC, 10);
     expect(stats.upFEC, 0);
     expect(stats.downFEC, 819);
+    expect(stats.upCRCIncr, 0);
+    expect(stats.downCRCIncr, 0);
+    expect(stats.upFECIncr, 0);
+    expect(stats.downFECIncr, 0);
+    print(stats);
+    await closeEmu();
+  });
+
+  test('trendchip parser > correctness multi-command', () async {
+    final closeEmu = await startEmulator(
+      login: 'admin',
+      password: 'admin',
+      shellSkip: true,
+      cmdResponses: [
+        (
+          cmd: 'wan adsl status',
+          response: File('test/telnet_emulator/stats_examples/trendchip_status_up.txt').readAsStringSync(),
+        ),
+        (
+          cmd: 'wan adsl opmode',
+          response: File('test/telnet_emulator/stats_examples/trendchip_opmode.txt').readAsStringSync(),
+        ),
+        (
+          cmd: 'wan adsl chandata',
+          response: File('test/telnet_emulator/stats_examples/trendchip_chandata.txt').readAsStringSync(),
+        ),
+        (
+          cmd: 'wan adsl perfdata',
+          response: File('test/telnet_emulator/stats_examples/trendchip_perfdata.txt').readAsStringSync(),
+        ),
+        (
+          cmd: 'wan adsl linedata near',
+          response: File('test/telnet_emulator/stats_examples/trendchip_linedata_near.txt').readAsStringSync(),
+        ),
+        (
+          cmd: 'wan adsl linedata far',
+          response: File('test/telnet_emulator/stats_examples/trendchip_linedata_far.txt').readAsStringSync(),
+        ),
+        (
+          cmd: 'wan dmt2 show cparams',
+          response: File('test/telnet_emulator/stats_examples/trendchip_cparams.txt').readAsStringSync(),
+        ),
+        (
+          cmd: 'wan dmt2 show rparams',
+          response: File('test/telnet_emulator/stats_examples/trendchip_rparams.txt').readAsStringSync(),
+        ),
+      ],
+    );
+
+    final NetUnitClient client = CommonTelnetClient(
+      unitIp: '0.0.0.0',
+      snapshotId: 'test',
+      prepPrts: [
+        (prompt: 'Login:', command: 'admin'),
+        (prompt: 'Password:', command: 'admin'),
+      ],
+      errorPrts: const ['Bad Password!!!', 'Login incorrect', 'Login failed'],
+      readyPrt: '>',
+      cmd2Stats: (
+        command:
+            'wan adsl status\nwan adsl opmode\nwan adsl chandata\nwan adsl perfdata\nwan adsl linedata near\nwan adsl linedata far\nwan dmt2 show cparams\nwan dmt2 show rparams\n',
+        tryParse: trendchipParser
+      ),
+    );
+
+    final stats = await client.fetchStats();
+    expect(stats.status, SampleStatus.connectionUp);
+    expect(stats.connectionType, 'ADSL2+ Mode');
+    expect(stats.upAttainableRate, 831);
+    expect(stats.downAttainableRate, 13764);
+    expect(stats.upRate, 448);
+    expect(stats.downRate, 4032);
+    expect(stats.upMargin, 80);
+    expect(stats.downMargin, 120);
+    expect(stats.upAttenuation, 240);
+    expect(stats.downAttenuation, 390);
+    expect(stats.upCRC, 23);
+    expect(stats.downCRC, 120);
+    expect(stats.upFEC, 12);
+    expect(stats.downFEC, 8119);
+    expect(stats.upCRCIncr, 0);
+    expect(stats.downCRCIncr, 0);
+    expect(stats.upFECIncr, 0);
+    expect(stats.downFECIncr, 0);
+    print(stats);
+    await closeEmu();
+  });
+
+  test('trendchip parser > correctness multi-command 2', () async {
+    final closeEmu = await startEmulator(
+      login: 'admin',
+      password: 'admin',
+      shellSkip: true,
+      cmdResponses: [
+        (
+          cmd: 'wan adsl status',
+          response: File('test/telnet_emulator/stats_examples/trendchip_status_up.txt').readAsStringSync(),
+        ),
+        (
+          cmd: 'wan adsl opmode',
+          response: File('test/telnet_emulator/stats_examples/trendchip_opmode2.txt').readAsStringSync(),
+        ),
+        (
+          cmd: 'wan adsl chandata',
+          response: File('test/telnet_emulator/stats_examples/trendchip_chandata2.txt').readAsStringSync(),
+        ),
+        (
+          cmd: 'wan adsl perfdata',
+          response: File('test/telnet_emulator/stats_examples/trendchip_perfdata2.txt').readAsStringSync(),
+        ),
+        (
+          cmd: 'wan adsl linedata near',
+          response: File('test/telnet_emulator/stats_examples/trendchip_linedata_near2.txt').readAsStringSync(),
+        ),
+        (
+          cmd: 'wan adsl linedata far',
+          response: File('test/telnet_emulator/stats_examples/trendchip_linedata_far2.txt').readAsStringSync(),
+        ),
+        (
+          cmd: 'wan dmt2 show cparams',
+          response: File('test/telnet_emulator/stats_examples/trendchip_cparams2.txt').readAsStringSync(),
+        ),
+        (
+          cmd: 'wan dmt2 show rparams',
+          response: File('test/telnet_emulator/stats_examples/trendchip_rparams2.txt').readAsStringSync(),
+        ),
+      ],
+    );
+
+    final NetUnitClient client = CommonTelnetClient(
+      unitIp: '0.0.0.0',
+      snapshotId: 'test',
+      prepPrts: [
+        (prompt: 'Login:', command: 'admin'),
+        (prompt: 'Password:', command: 'admin'),
+      ],
+      errorPrts: const ['Bad Password!!!', 'Login incorrect', 'Login failed'],
+      readyPrt: '>',
+      cmd2Stats: (
+        command:
+            'wan adsl status\nwan adsl opmode\nwan adsl chandata\nwan adsl perfdata\nwan adsl linedata near\nwan adsl linedata far\nwan dmt2 show cparams\nwan dmt2 show rparams\n',
+        tryParse: trendchipParser
+      ),
+    );
+
+    final stats = await client.fetchStats();
+    expect(stats.status, SampleStatus.connectionUp);
+    expect(stats.connectionType, 'ADSL2PLUS');
+    expect(stats.upAttainableRate, 1107);
+    expect(stats.downAttainableRate, 18488);
+    expect(stats.upRate, 2323);
+    expect(stats.downRate, 18123);
+    expect(stats.upMargin, 310);
+    expect(stats.downMargin, 210);
+    expect(stats.upAttenuation, 120);
+    expect(stats.downAttenuation, 240);
+    expect(stats.upCRC, 4);
+    expect(stats.downCRC, 94);
+    expect(stats.upFEC, 5);
+    expect(stats.downFEC, 52019);
+    expect(stats.upCRCIncr, 0);
+    expect(stats.downCRCIncr, 0);
+    expect(stats.upFECIncr, 0);
+    expect(stats.downFECIncr, 0);
+    print(stats);
+    await closeEmu();
+  });
+
+  test('trendchip parser > correctness multi-command alt', () async {
+    final closeEmu = await startEmulator(
+      login: 'admin',
+      password: 'admin',
+      shellSkip: true,
+      cmdResponses: [
+        (
+          cmd: 'wan adsl status',
+          response: File('test/telnet_emulator/stats_examples/trendchip_status_up.txt').readAsStringSync(),
+        ),
+        (
+          cmd: 'wan adsl opmode',
+          response: File('test/telnet_emulator/stats_examples/trendchip_opmode_alt.txt').readAsStringSync(),
+        ),
+        (
+          cmd: 'wan adsl chandata',
+          response: File('test/telnet_emulator/stats_examples/trendchip_chandata_alt.txt').readAsStringSync(),
+        ),
+        (
+          cmd: 'wan adsl perfdata',
+          response: File('test/telnet_emulator/stats_examples/trendchip_perfdata_alt.txt').readAsStringSync(),
+        ),
+        (
+          cmd: 'wan adsl linedata near',
+          response: File('test/telnet_emulator/stats_examples/trendchip_linedata_near2.txt').readAsStringSync(),
+        ),
+        (
+          cmd: 'wan adsl linedata far',
+          response: File('test/telnet_emulator/stats_examples/trendchip_linedata_far2.txt').readAsStringSync(),
+        ),
+        (
+          cmd: 'wan dmt2 show cparams',
+          response: File('test/telnet_emulator/stats_examples/trendchip_cparams2.txt').readAsStringSync(),
+        ),
+        (
+          cmd: 'wan dmt2 show rparams',
+          response: File('test/telnet_emulator/stats_examples/trendchip_rparams2.txt').readAsStringSync(),
+        ),
+      ],
+    );
+
+    final NetUnitClient client = CommonTelnetClient(
+      unitIp: '0.0.0.0',
+      snapshotId: 'test',
+      prepPrts: [
+        (prompt: 'Login:', command: 'admin'),
+        (prompt: 'Password:', command: 'admin'),
+      ],
+      errorPrts: const ['Bad Password!!!', 'Login incorrect', 'Login failed'],
+      readyPrt: '>',
+      cmd2Stats: (
+        command:
+            'wan adsl status\nwan adsl opmode\nwan adsl chandata\nwan adsl perfdata\nwan adsl linedata near\nwan adsl linedata far\nwan dmt2 show cparams\nwan dmt2 show rparams\n',
+        tryParse: trendchipParser
+      ),
+    );
+
+    final stats = await client.fetchStats();
+    expect(stats.status, SampleStatus.connectionUp);
+    expect(stats.connectionType, 'ITU G.992.1(G.DMT)');
+    expect(stats.upAttainableRate, 1107);
+    expect(stats.downAttainableRate, 18488);
+    expect(stats.upRate, 831);
+    expect(stats.downRate, 11000);
+    expect(stats.upMargin, 310);
+    expect(stats.downMargin, 210);
+    expect(stats.upAttenuation, 120);
+    expect(stats.downAttenuation, 240);
+    expect(stats.upCRC, 4);
+    expect(stats.downCRC, 94);
+    expect(stats.upFEC, 5);
+    expect(stats.downFEC, 52019);
     expect(stats.upCRCIncr, 0);
     expect(stats.downCRCIncr, 0);
     expect(stats.upFECIncr, 0);

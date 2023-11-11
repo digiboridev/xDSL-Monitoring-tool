@@ -1,0 +1,4 @@
+ADSL driver and PHY status
+Status: G.993 Started
+Last Retrain Reason: 8000
+Last initialization procedure status: 3

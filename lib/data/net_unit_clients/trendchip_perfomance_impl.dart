@@ -14,6 +14,10 @@ class TrendchipPerfomanceClientImpl extends CommonTelnetClient {
           ],
           errorPrts: const ['Bad Password!!!', 'Login incorrect', 'Login failed'],
           readyPrt: '>',
-          cmd2Stats: (command: 'wa ad status\nwa ad diag\n', tryParse: trendchipParser), // TODO: commands
+          cmd2Stats: (
+            command:
+                'wan adsl status\nwan adsl opmode\nwan adsl chandata\nwan adsl perfdata\nwan adsl linedata near\nwan adsl linedata far\nwan dmt2 show cparams\nwan dmt2 show rparams\n',
+            tryParse: trendchipParser
+          ),
         );
 }

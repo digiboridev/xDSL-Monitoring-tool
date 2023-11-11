@@ -1,0 +1,4 @@
+ADSL driver and PHY status
+Status: G.994 Training
+Last Retrain Reason: 8000
+Last initialization procedure status: 3

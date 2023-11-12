@@ -18,6 +18,8 @@ class _BandwidthBarState extends State<BandwidthBar> with TickerProviderStateMix
   int currUp = 0;
   int attainableDown = 0;
   int attainableUp = 0;
+  int maxDown = 1;
+  int maxUp = 1;
 
   //Animation vars
   late final AnimationController controller = AnimationController(vsync: this, duration: const Duration(seconds: 1));
@@ -53,10 +55,31 @@ class _BandwidthBarState extends State<BandwidthBar> with TickerProviderStateMix
 
     // Get new values
     SnapshotStats? stats = context.read<StatsSamplingService>().snapshotStats;
+    final type = stats?.lastConnectionType;
+
+    bool isVDSL2 = type?.toLowerCase().contains('vdsl2') ?? type?.toLowerCase().contains('993.2') ?? type?.toLowerCase().contains('993.5') ?? false;
+    bool isVDSL = type?.toLowerCase().contains('vdsl') ?? type?.toLowerCase().contains('993.1') ?? false;
+    bool isAdsl = type?.toLowerCase().contains('adsl') ?? type?.toLowerCase().contains('992') ?? false;
+
+    if (isVDSL2) {
+      maxDown = 200000;
+      maxUp = 100000;
+    } else if (isVDSL) {
+      maxDown = 60000;
+      maxUp = 5000;
+    } else if (isAdsl) {
+      maxDown = 24000;
+      maxUp = 3500;
+    } else {
+      maxDown = 300000;
+      maxUp = 100000;
+    }
+
     currDown = stats?.downRateLast ?? 0;
     currUp = stats?.upRateLast ?? 0;
     attainableDown = stats?.downAttainableRateLast ?? 0;
     attainableUp = stats?.upAttainableRateLast ?? 0;
+    setState(() {});
 
     // Start animation from old to new values if changed
     if (currDown != currDownold || currUp != currUpold || attainableDown != attainableDownold || attainableUp != attainableUpold) {
@@ -88,14 +111,15 @@ class _BandwidthBarState extends State<BandwidthBar> with TickerProviderStateMix
           height: 150,
           width: 150,
           child: CustomPaint(
-            painter: BandwPainter(curr: currDownAnimation.value, attainable: attainableDownAnimation.value, max: 24000),
+            painter: BandwPainter(curr: currDownAnimation.value, attainable: attainableDownAnimation.value, max: maxDown),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text('Down', style: TextStyles.f12.blueGrey600),
-                Text('${currDownAnimation.value}/${attainableDownAnimation.value}', style: TextStyles.f14w3.blueGrey900),
-                Text('Kbps', style: TextStyles.f12.blueGrey600),
+                Text('DOWNSTREAM', style: TextStyles.f10w6.blueGrey600),
+                Text('CUR/ATT', style: TextStyles.f10.blueGrey600),
+                Text('${currDownAnimation.value}/${attainableDownAnimation.value}', style: TextStyles.f14w3.blueGrey800),
+                Text('Kbps', style: TextStyles.f10.blueGrey600),
               ],
             ),
           ),
@@ -104,14 +128,15 @@ class _BandwidthBarState extends State<BandwidthBar> with TickerProviderStateMix
           height: 150,
           width: 150,
           child: CustomPaint(
-            painter: BandwPainter(curr: currUpAnimation.value, attainable: attainableUpAnimation.value, max: 3000),
+            painter: BandwPainter(curr: currUpAnimation.value, attainable: attainableUpAnimation.value, max: maxUp),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text('Up', style: TextStyles.f12.blueGrey600),
-                Text('${currUpAnimation.value}/${attainableUpAnimation.value}', style: TextStyles.f14w3.blueGrey900),
-                Text('Kbps', style: TextStyles.f12.blueGrey600),
+                Text('UPSTEAM', style: TextStyles.f10w6.blueGrey600),
+                Text('CUR/ATT', style: TextStyles.f10.blueGrey600),
+                Text('${currUpAnimation.value}/${attainableUpAnimation.value}', style: TextStyles.f14w3.blueGrey800),
+                Text('Kbps', style: TextStyles.f10.blueGrey600),
               ],
             ),
           ),

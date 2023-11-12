@@ -19,6 +19,7 @@ class Summary extends StatelessWidget {
           const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text('Protocol:', style: TextStyles.f14w3, overflow: TextOverflow.ellipsis),
               Text('Start time:', style: TextStyles.f14w3, overflow: TextOverflow.ellipsis),
               Text('Last sample time:', style: TextStyles.f14w3, overflow: TextOverflow.ellipsis),
               Text('Sampling duration:', style: TextStyles.f14w3, overflow: TextOverflow.ellipsis),
@@ -33,6 +34,7 @@ class Summary extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
+                Text(stats?.lastConnectionType ?? 'N/A', style: TextStyles.f14, overflow: TextOverflow.ellipsis),
                 Text(stats?.startTime.ymdhms ?? 'N/A', style: TextStyles.f14, overflow: TextOverflow.ellipsis),
                 Text(stats?.lastSampleTime?.ymdhms ?? 'N/A', style: TextStyles.f14, overflow: TextOverflow.ellipsis),
                 Text(stats?.samplingDuration.hms ?? 'N/A', style: TextStyles.f14, overflow: TextOverflow.ellipsis),

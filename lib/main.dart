@@ -1,5 +1,4 @@
-import 'package:device_preview/device_preview.dart';
-import 'package:flutter/foundation.dart';
+// import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -9,8 +8,8 @@ import 'package:xdslmt/data/repositories/settings_repo.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
 import 'package:xdslmt/screens/screens_wrapper.dart';
 
-// void main() => runApp(const App());
-void main() => runApp(DevicePreview(enabled: !kReleaseMode, builder: (context) => const App()));
+void main() => runApp(const App());
+// void main() => runApp(DevicePreview(enabled: !kReleaseMode, builder: (context) => const App()));
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -57,8 +56,8 @@ class App extends StatelessWidget {
         title: 'xDSL Monitoring Tool',
         theme: ThemeData(useMaterial3: true, colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan)),
         home: const ScreensWrapper(),
-        locale: DevicePreview.locale(context),
-        builder: DevicePreview.appBuilder,
+        // locale: DevicePreview.locale(context),
+        // builder: DevicePreview.appBuilder,
       ),
     );
   }

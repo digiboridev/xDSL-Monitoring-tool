@@ -29,7 +29,7 @@ class AppSettings {
 
   factory AppSettings.base() {
     return AppSettings._(
-      nuType: NetworkUnitType.simulator,
+      nuType: NetworkUnitType.simulator_adsl,
       host: '192.168.1.1',
       login: 'admin',
       pwd: 'admin',

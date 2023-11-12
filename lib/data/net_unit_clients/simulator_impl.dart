@@ -9,18 +9,27 @@ import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 /// It also has a method to reduce stats to half of the current value, like if the line has impulse drops.
 /// The [fetchStats] method simulates the network stats by introducing chances of fetch failure, connection down, downstream stats drift, and upstream stats drift.
 /// It returns a [LineStats] object with the simulated stats.
-final class ClientSimulator implements NetUnitClient {
+final class SimulatorClientImpl implements NetUnitClient {
   @override
   final String snapshotId;
-  ClientSimulator({required this.snapshotId});
+  final String protocol;
+  SimulatorClientImpl({
+    required this.snapshotId,
+    this.protocol = 'ADSL2+',
+    int baseDownRate = 16000,
+    int baseUpRate = 1500,
+  })  : _bdownRate = baseDownRate,
+        _bupRate = baseUpRate,
+        _bdownAttainableRate = (baseDownRate * 1.2).toInt(),
+        _bupAttainableRate = (baseUpRate * 1.2).toInt();
 
   late final Random _rnd = Random();
 
   // Base speed rates
-  final int _bupRate = 1500;
-  final int _bdownRate = 16000;
-  final int _bupAttainableRate = 2000;
-  final int _bdownAttainableRate = 18000;
+  final int _bupRate;
+  final int _bdownRate;
+  final int _bupAttainableRate;
+  final int _bdownAttainableRate;
 
   // Base line values
   final double _bmrU = 10;
@@ -78,12 +87,10 @@ final class ClientSimulator implements NetUnitClient {
     await Future.delayed(Duration(milliseconds: _rnd.nextInt(1000)));
 
     // chance of connection recovery
-    if (_prevStats?.status == SampleStatus.connectionDown) {
-      if (_rndChance <= 90) {
-        final newStats = LineStats.connectionDown(snapshotId: snapshotId, statusText: 'Down');
-        _prevStats = newStats;
-        return newStats;
-      }
+    if (_prevStats?.status == SampleStatus.connectionDown && _rndChance <= 90) {
+      final newStats = LineStats.connectionDown(snapshotId: snapshotId, statusText: 'Initializing');
+      _prevStats = newStats;
+      return newStats;
     }
 
     // chance of fetch failure
@@ -108,8 +115,8 @@ final class ClientSimulator implements NetUnitClient {
 
     // chance of donwstream stats drift
     if (_rndChance <= 10) {
-      _downRate = (_downRate + ((sigDrift + _rnd.nextInt(25)) * 4)).clamp(2000, 23000);
-      _downAttainableRate = (_downAttainableRate + ((sigDrift + _rnd.nextInt(25)) * 4)).clamp(3000, 24000);
+      _downRate = (_downRate + ((sigDrift + _rnd.nextInt(25)) * 4)).clamp(2000, _bdownRate + 4000);
+      _downAttainableRate = (_downAttainableRate + ((sigDrift + _rnd.nextInt(25)) * 4)).clamp(3000, _bdownAttainableRate + 4000);
 
       _mrD = (_mrD + ((sigDrift + _rnd.nextInt(100)) / 100)).clamp(0, 30);
       _attD = (_attD + ((sigDrift + _rnd.nextInt(100)) / 100)).clamp(0, 100);
@@ -119,8 +126,8 @@ final class ClientSimulator implements NetUnitClient {
 
     // chance of upstream stats drift
     if (_rndChance <= 10) {
-      _upRate = (_upRate + ((sigDrift + _rnd.nextInt(5)) * 4)).clamp(250, 2000);
-      _upAttainableRate = (_upAttainableRate + ((sigDrift + _rnd.nextInt(5)) * 4)).clamp(500, 3000);
+      _upRate = (_upRate + ((sigDrift + _rnd.nextInt(5)) * 4)).clamp(250, _bupRate + 4000);
+      _upAttainableRate = (_upAttainableRate + ((sigDrift + _rnd.nextInt(5)) * 4)).clamp(500, _bupAttainableRate + 4000);
 
       _mrU = (_mrU + ((sigDrift + _rnd.nextInt(100)) / 100)).clamp(0, 30);
       _attU = (_attU + ((sigDrift + _rnd.nextInt(100)) / 100)).clamp(0, 100);
@@ -131,7 +138,7 @@ final class ClientSimulator implements NetUnitClient {
     final nextStats = LineStats.connectionUp(
       snapshotId: snapshotId,
       statusText: 'Up',
-      connectionType: 'ADSL2+',
+      connectionType: protocol,
       upAttainableRate: _upAttainableRate,
       downAttainableRate: _downAttainableRate,
       upRate: _upRate,

@@ -16,7 +16,8 @@ import 'package:xdslmt/data/net_unit_clients/trendchip_perfomance_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/trendchip_status_diag_impl.dart';
 
 enum NetworkUnitType {
-  simulator, // TODO: vdsl simulator, adsl2+ simulator, gdmt simulator
+  simulator_adsl, // TODO: vdsl simulator, adsl2+ simulator, gdmt simulator
+  simulator_vdsl,
   broadcom_telnet_adsl,
   broadcom_telnet_adslcmd,
   broadcom_telnet_adslctl,
@@ -44,8 +45,10 @@ abstract class NetUnitClient {
   /// Factory method for creating specific NetUnitClient implementation based on type
   factory NetUnitClient.fromType(NetworkUnitType type, String snapshotId, String ip, String login, String password) {
     switch (type) {
-      case NetworkUnitType.simulator:
-        return ClientSimulator(snapshotId: snapshotId);
+      case NetworkUnitType.simulator_adsl:
+        return SimulatorClientImpl(snapshotId: snapshotId, baseDownRate: 16000, baseUpRate: 1500, protocol: 'ADSL2+');
+      case NetworkUnitType.simulator_vdsl:
+        return SimulatorClientImpl(snapshotId: snapshotId, baseDownRate: 75000, baseUpRate: 15000, protocol: 'VDSL2');
       case NetworkUnitType.broadcom_telnet_adsl:
         return BroadcomAdslClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
       case NetworkUnitType.broadcom_telnet_adslcmd:

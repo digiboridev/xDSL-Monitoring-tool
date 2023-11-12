@@ -31,23 +31,28 @@ class StatsSamplingService extends ChangeNotifier {
     Duration splitInterval = settings.splitInterval;
     String snapshotId = DateTime.now().millisecondsSinceEpoch.toString();
 
-    final client = NetUnitClient.fromSettings(settings, snapshotId);
-    final snapshotStats = SnapshotStats.create(snapshotId, settings.host, settings.login, settings.pwd);
+    var client = NetUnitClient.fromSettings(settings, snapshotId);
+    var snapshotStats = SnapshotStats.create(snapshotId, settings.host, settings.login, settings.pwd);
     _client = client;
     _snapshotStats = snapshotStats;
     notifyListeners();
 
     tick(String session) async {
-      // If sampling was stopped or restarted during the timer delay
+      // If sampling was stopped or restarted during the previous tick
       if (_snapshotStats?.snapshotId != session) return;
 
       LineStats lineStats = await client.fetchStats();
+      snapshotStats = snapshotStats.copyWithLineStats(lineStats);
+      _statsRepository.insertLineStats(lineStats);
+      _statsRepository.upsertSnapshotStats(snapshotStats);
 
       // If sampling was stopped or restarted while new stats were being fetched
       if (_snapshotStats?.snapshotId != session) return;
 
-      // Handle new line stats
-      _handleLineStats(lineStats);
+      // Handle new values
+      _snapshotStats = snapshotStats;
+      _addLineStatsToQueue(lineStats);
+      notifyListeners();
 
       // Restart sampling if the split interval has been reached
       if (_snapshotStats!.samplingDuration > splitInterval) {
@@ -73,20 +78,8 @@ class StatsSamplingService extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Handle a new line stats sample
-  _handleLineStats(LineStats lineStats) {
-    _snapshotStats = _snapshotStats?.copyWithLineStats(lineStats);
-    _addToQueue(lineStats);
-    notifyListeners();
-
-    _statsRepository.insertLineStats(lineStats);
-    _statsRepository.upsertSnapshotStats(_snapshotStats!);
-
-    debugPrint('Handled stats at: ${DateTime.now()}, count: ${_snapshotStats?.samples ?? 0}');
-  }
-
-  _addToQueue(LineStats value) {
-    _samplesQueue.addLast(value);
+  _addLineStatsToQueue(LineStats lineStats) {
+    _samplesQueue.addLast(lineStats);
     if (_samplesQueue.length > 500) _samplesQueue.removeFirst();
   }
 

@@ -44,6 +44,7 @@ class CommonTelnetClient implements NetUnitClient {
   Socket? _socket;
   Stream<String>? _socketStream;
   bool get _isConnected => _socket != null && _socketStream != null;
+  bool _disposed = false;
   LineStats? _prevStats;
 
   @override
@@ -63,6 +64,7 @@ class CommonTelnetClient implements NetUnitClient {
   dispose() {
     print('CommonTelnetClient dispose');
     _wipeSocket();
+    _disposed = true;
   }
 
   void _wipeSocket() {
@@ -85,6 +87,9 @@ class CommonTelnetClient implements NetUnitClient {
     tempSub = socketStream.listen(
       (event) {
         print('Socket event: $event');
+
+        // If client disposed during connection flow
+        if (_disposed) socket.destroy();
 
         // Handle preparing prompts
         for (var p2c in prepPrts) {

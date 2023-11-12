@@ -22,6 +22,7 @@ class DebounceBuffer extends StreamTransformerBase<String, String> {
         timer?.cancel();
         buffer.add(event);
         timer = Timer(duration, () {
+          if (controller.isClosed) return;
           controller.add(buffer.join(separator));
           buffer.clear();
         });

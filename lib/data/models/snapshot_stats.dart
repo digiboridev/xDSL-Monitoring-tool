@@ -14,6 +14,7 @@ class SnapshotStats {
   final Duration samplingDuration;
   final Duration uplinkDuration;
   final SampleStatus? lastSampleStatus;
+  final String? lastConnectionType;
   final DateTime? lastSampleTime;
   final int? downRateLast;
   final int? downRateMin;
@@ -68,6 +69,7 @@ class SnapshotStats {
     required this.samplingDuration,
     required this.uplinkDuration,
     this.lastSampleStatus,
+    this.lastConnectionType,
     this.lastSampleTime,
     this.downRateLast,
     this.downRateMin,
@@ -174,7 +176,7 @@ class SnapshotStats {
     return newTime.difference(lastSampleTime!);
   }
 
-  SnapshotStats copyWithLineStats(LineStats stats) {
+  SnapshotStats copyWithLineStats(LineStats lineStats) {
     return SnapshotStats._(
       snapshotId: snapshotId,
       host: host,
@@ -182,52 +184,53 @@ class SnapshotStats {
       password: password,
       startTime: startTime,
       samples: samples + 1,
-      disconnects: _isDisconnect(stats.status) ? disconnects + 1 : disconnects,
-      samplingErrors: _isSamplingError(stats.status) ? samplingErrors + 1 : samplingErrors,
+      disconnects: _isDisconnect(lineStats.status) ? disconnects + 1 : disconnects,
+      samplingErrors: _isSamplingError(lineStats.status) ? samplingErrors + 1 : samplingErrors,
       samplingDuration: DateTime.now().difference(startTime),
-      uplinkDuration: uplinkDuration + uplinkDurationIncrement(stats.status, stats.time),
-      lastSampleStatus: stats.status,
-      lastSampleTime: stats.time,
-      downRateLast: stats.downRate,
-      downRateMin: _minVal(downRateMin, stats.downRate),
-      downRateMax: _maxVal(downRateMax, stats.downRate),
-      downRateAvg: _avgVal(downRateAvg, stats.downRate),
-      downAttainableRateLast: stats.downAttainableRate,
-      downAttainableRateMin: _minVal(downAttainableRateMin, stats.downAttainableRate),
-      downAttainableRateMax: _maxVal(downAttainableRateMax, stats.downAttainableRate),
-      downAttainableRateAvg: _avgVal(downAttainableRateAvg, stats.downAttainableRate),
-      upRateLast: stats.upRate,
-      upRateMin: _minVal(upRateMin, stats.upRate),
-      upRateMax: _maxVal(upRateMax, stats.upRate),
-      upRateAvg: _avgVal(upRateAvg, stats.upRate),
-      upAttainableRateLast: stats.upAttainableRate,
-      upAttainableRateMin: _minVal(upAttainableRateMin, stats.upAttainableRate),
-      upAttainableRateMax: _maxVal(upAttainableRateMax, stats.upAttainableRate),
-      upAttainableRateAvg: _avgVal(upAttainableRateAvg, stats.upAttainableRate),
-      downSNRmLast: stats.downMargin,
-      downSNRmMin: _minVal(downSNRmMin, stats.downMargin),
-      downSNRmMax: _maxVal(downSNRmMax, stats.downMargin),
-      downSNRmAvg: _avgVal(downSNRmAvg, stats.downMargin),
-      upSNRmLast: stats.upMargin,
-      upSNRmMin: _minVal(upSNRmMin, stats.upMargin),
-      upSNRmMax: _maxVal(upSNRmMax, stats.upMargin),
-      upSNRmAvg: _avgVal(upSNRmAvg, stats.upMargin),
-      downAttenuationLast: stats.downAttenuation,
-      downAttenuationMin: _minVal(downAttenuationMin, stats.downAttenuation),
-      downAttenuationMax: _maxVal(downAttenuationMax, stats.downAttenuation),
-      downAttenuationAvg: _avgVal(downAttenuationAvg, stats.downAttenuation),
-      upAttenuationLast: stats.upAttenuation,
-      upAttenuationMin: _minVal(upAttenuationMin, stats.upAttenuation),
-      upAttenuationMax: _maxVal(upAttenuationMax, stats.upAttenuation),
-      upAttenuationAvg: _avgVal(upAttenuationAvg, stats.upAttenuation),
-      downFecTotal: (downFecTotal ?? 0) + (stats.downFECIncr ?? 0),
-      downFecLast: stats.downFECIncr,
-      upFecTotal: (upFecTotal ?? 0) + (stats.upFECIncr ?? 0),
-      upFecLast: stats.upFECIncr,
-      downCrcTotal: (downCrcTotal ?? 0) + (stats.downCRCIncr ?? 0),
-      downCrcLast: stats.downCRCIncr,
-      upCrcTotal: (upCrcTotal ?? 0) + (stats.upCRCIncr ?? 0),
-      upCrcLast: stats.upCRCIncr,
+      uplinkDuration: uplinkDuration + uplinkDurationIncrement(lineStats.status, lineStats.time),
+      lastSampleStatus: lineStats.status,
+      lastConnectionType: lineStats.connectionType,
+      lastSampleTime: lineStats.time,
+      downRateLast: lineStats.downRate,
+      downRateMin: _minVal(downRateMin, lineStats.downRate),
+      downRateMax: _maxVal(downRateMax, lineStats.downRate),
+      downRateAvg: _avgVal(downRateAvg, lineStats.downRate),
+      downAttainableRateLast: lineStats.downAttainableRate,
+      downAttainableRateMin: _minVal(downAttainableRateMin, lineStats.downAttainableRate),
+      downAttainableRateMax: _maxVal(downAttainableRateMax, lineStats.downAttainableRate),
+      downAttainableRateAvg: _avgVal(downAttainableRateAvg, lineStats.downAttainableRate),
+      upRateLast: lineStats.upRate,
+      upRateMin: _minVal(upRateMin, lineStats.upRate),
+      upRateMax: _maxVal(upRateMax, lineStats.upRate),
+      upRateAvg: _avgVal(upRateAvg, lineStats.upRate),
+      upAttainableRateLast: lineStats.upAttainableRate,
+      upAttainableRateMin: _minVal(upAttainableRateMin, lineStats.upAttainableRate),
+      upAttainableRateMax: _maxVal(upAttainableRateMax, lineStats.upAttainableRate),
+      upAttainableRateAvg: _avgVal(upAttainableRateAvg, lineStats.upAttainableRate),
+      downSNRmLast: lineStats.downMargin,
+      downSNRmMin: _minVal(downSNRmMin, lineStats.downMargin),
+      downSNRmMax: _maxVal(downSNRmMax, lineStats.downMargin),
+      downSNRmAvg: _avgVal(downSNRmAvg, lineStats.downMargin),
+      upSNRmLast: lineStats.upMargin,
+      upSNRmMin: _minVal(upSNRmMin, lineStats.upMargin),
+      upSNRmMax: _maxVal(upSNRmMax, lineStats.upMargin),
+      upSNRmAvg: _avgVal(upSNRmAvg, lineStats.upMargin),
+      downAttenuationLast: lineStats.downAttenuation,
+      downAttenuationMin: _minVal(downAttenuationMin, lineStats.downAttenuation),
+      downAttenuationMax: _maxVal(downAttenuationMax, lineStats.downAttenuation),
+      downAttenuationAvg: _avgVal(downAttenuationAvg, lineStats.downAttenuation),
+      upAttenuationLast: lineStats.upAttenuation,
+      upAttenuationMin: _minVal(upAttenuationMin, lineStats.upAttenuation),
+      upAttenuationMax: _maxVal(upAttenuationMax, lineStats.upAttenuation),
+      upAttenuationAvg: _avgVal(upAttenuationAvg, lineStats.upAttenuation),
+      downFecTotal: (downFecTotal ?? 0) + (lineStats.downFECIncr ?? 0),
+      downFecLast: lineStats.downFECIncr,
+      upFecTotal: (upFecTotal ?? 0) + (lineStats.upFECIncr ?? 0),
+      upFecLast: lineStats.upFECIncr,
+      downCrcTotal: (downCrcTotal ?? 0) + (lineStats.downCRCIncr ?? 0),
+      downCrcLast: lineStats.downCRCIncr,
+      upCrcTotal: (upCrcTotal ?? 0) + (lineStats.upCRCIncr ?? 0),
+      upCrcLast: lineStats.upCRCIncr,
     );
   }
 
@@ -246,6 +249,7 @@ class SnapshotStats {
         other.samplingDuration == samplingDuration &&
         other.uplinkDuration == uplinkDuration &&
         other.lastSampleStatus == lastSampleStatus &&
+        other.lastConnectionType == lastConnectionType &&
         other.lastSampleTime == lastSampleTime &&
         other.downRateLast == downRateLast &&
         other.downRateMin == downRateMin &&
@@ -302,6 +306,7 @@ class SnapshotStats {
         samplingDuration.hashCode ^
         uplinkDuration.hashCode ^
         lastSampleStatus.hashCode ^
+        lastConnectionType.hashCode ^
         lastSampleTime.hashCode ^
         downRateLast.hashCode ^
         downRateMin.hashCode ^
@@ -347,7 +352,7 @@ class SnapshotStats {
 
   @override
   String toString() {
-    return 'SnapshotStats(snapshotId: $snapshotId, host: $host, login: $login, password: $password, startTime: $startTime, samples: $samples, disconnects: $disconnects, samplingErrors: $samplingErrors, samplingDuration: $samplingDuration, uplinkDuration: $uplinkDuration, lastSampleStatus: $lastSampleStatus, lastSampleTime: $lastSampleTime, downRateLast: $downRateLast, downRateMin: $downRateMin, downRateMax: $downRateMax, downRateAvg: $downRateAvg, downAttainableRateLast: $downAttainableRateLast, downAttainableRateMin: $downAttainableRateMin, downAttainableRateMax: $downAttainableRateMax, downAttainableRateAvg: $downAttainableRateAvg, upRateLast: $upRateLast, upRateMin: $upRateMin, upRateMax: $upRateMax, upRateAvg: $upRateAvg, upAttainableRateLast: $upAttainableRateLast, upAttainableRateMin: $upAttainableRateMin, upAttainableRateMax: $upAttainableRateMax, upAttainableRateAvg: $upAttainableRateAvg, downSNRmLast: $downSNRmLast, downSNRmMin: $downSNRmMin, downSNRmMax: $downSNRmMax, downSNRmAvg: $downSNRmAvg, upSNRmLast: $upSNRmLast, upSNRmMin: $upSNRmMin, upSNRmMax: $upSNRmMax, upSNRmAvg: $upSNRmAvg, downAttenuationLast: $downAttenuationLast, downAttenuationMin: $downAttenuationMin, downAttenuationMax: $downAttenuationMax, downAttenuationAvg: $downAttenuationAvg, upAttenuationLast: $upAttenuationLast, upAttenuationMin: $upAttenuationMin, upAttenuationMax: $upAttenuationMax, upAttenuationAvg: $upAttenuationAvg, downFecLast: $downFecLast, downFecTotal: $downFecTotal, upFecLast: $upFecLast, upFecTotal: $upFecTotal, downCrcLast: $downCrcLast, downCrcTotal: $downCrcTotal, upCrcLast: $upCrcLast, upCrcTotal: $upCrcTotal)';
+    return 'SnapshotStats(snapshotId: $snapshotId, host: $host, login: $login, password: $password, startTime: $startTime, samples: $samples, disconnects: $disconnects, samplingErrors: $samplingErrors, samplingDuration: $samplingDuration, uplinkDuration: $uplinkDuration, lastSampleStatus: $lastSampleStatus, lastConnectionType: $lastConnectionType, lastSampleTime: $lastSampleTime, downRateLast: $downRateLast, downRateMin: $downRateMin, downRateMax: $downRateMax, downRateAvg: $downRateAvg, downAttainableRateLast: $downAttainableRateLast, downAttainableRateMin: $downAttainableRateMin, downAttainableRateMax: $downAttainableRateMax, downAttainableRateAvg: $downAttainableRateAvg, upRateLast: $upRateLast, upRateMin: $upRateMin, upRateMax: $upRateMax, upRateAvg: $upRateAvg, upAttainableRateLast: $upAttainableRateLast, upAttainableRateMin: $upAttainableRateMin, upAttainableRateMax: $upAttainableRateMax, upAttainableRateAvg: $upAttainableRateAvg, downSNRmLast: $downSNRmLast, downSNRmMin: $downSNRmMin, downSNRmMax: $downSNRmMax, downSNRmAvg: $downSNRmAvg, upSNRmLast: $upSNRmLast, upSNRmMin: $upSNRmMin, upSNRmMax: $upSNRmMax, upSNRmAvg: $upSNRmAvg, downAttenuationLast: $downAttenuationLast, downAttenuationMin: $downAttenuationMin, downAttenuationMax: $downAttenuationMax, downAttenuationAvg: $downAttenuationAvg, upAttenuationLast: $upAttenuationLast, upAttenuationMin: $upAttenuationMin, upAttenuationMax: $upAttenuationMax, upAttenuationAvg: $upAttenuationAvg, downFecLast: $downFecLast, downFecTotal: $downFecTotal, upFecLast: $upFecLast, upFecTotal: $upFecTotal, downCrcLast: $downCrcLast, downCrcTotal: $downCrcTotal, upCrcLast: $upCrcLast, upCrcTotal: $upCrcTotal)';
   }
 
   Map<String, dynamic> toMap() {
@@ -363,6 +368,7 @@ class SnapshotStats {
       'samplingDuration': samplingDuration.inMilliseconds,
       'uplinkDuration': uplinkDuration.inMilliseconds,
       'lastSampleStatus': lastSampleStatus?.name,
+      'lastConnectionType': lastConnectionType,
       'lastSampleTime': lastSampleTime?.millisecondsSinceEpoch,
       'downRateLast': downRateLast,
       'downRateMin': downRateMin,
@@ -420,6 +426,7 @@ class SnapshotStats {
       samplingDuration: Duration(milliseconds: map['samplingDuration'] as int),
       uplinkDuration: Duration(milliseconds: map['uplinkDuration'] as int),
       lastSampleStatus: map['lastSampleStatus'] != null ? SampleStatus.values.byName(map['lastSampleStatus'] as String) : null,
+      lastConnectionType: map['lastConnectionType'] != null ? map['lastConnectionType'] as String : null,
       lastSampleTime: map['lastSampleTime'] != null ? DateTime.fromMillisecondsSinceEpoch(map['lastSampleTime'] as int) : null,
       downRateLast: map['downRateLast'] != null ? map['downRateLast'] as int : null,
       downRateMin: map['downRateMin'] != null ? map['downRateMin'] as int : null,

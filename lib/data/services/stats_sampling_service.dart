@@ -30,7 +30,7 @@ class StatsSamplingService extends ChangeNotifier {
     Duration splitInterval = settings.splitInterval;
     String snapshotId = DateTime.now().millisecondsSinceEpoch.toString();
 
-    final client = NetUnitClient.fromSettings(settings, snapshotId);
+    final client = NetUnitClient.fromSettings(settings, snapshotId); // TODO dispose client
     final statsBlank = SnapshotStats.create(snapshotId, settings.host, settings.login, settings.pwd);
     _snapshotStats = statsBlank;
     notifyListeners();

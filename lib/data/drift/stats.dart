@@ -63,7 +63,6 @@ class LineStatsTable extends Table {
 class SnapshotStatsTable extends Table {
   @override
   Set<Column> get primaryKey => {snapshotId};
-
   TextColumn get snapshotId => text().unique().withLength(min: 1)();
   TextColumn get host => text()();
   TextColumn get login => text()();
@@ -75,6 +74,7 @@ class SnapshotStatsTable extends Table {
   IntColumn get samplingDuration => integer()();
   IntColumn get uplinkDuration => integer()();
   TextColumn get lastSampleStatus => textEnum<SampleStatus>().nullable()();
+  TextColumn get lastConnectionType => text().nullable()();
   DateTimeColumn get lastSampleTime => dateTime().nullable()();
   IntColumn get downRateLast => integer().nullable()();
   IntColumn get downRateMin => integer().nullable()();

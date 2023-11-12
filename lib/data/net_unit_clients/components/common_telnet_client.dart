@@ -59,7 +59,14 @@ class CommonTelnetClient implements NetUnitClient {
     }
   }
 
+  @override
+  dispose() {
+    print('CommonTelnetClient dispose');
+    _wipeSocket();
+  }
+
   void _wipeSocket() {
+    print('Wiping socket');
     _socket?.destroy();
     _socket = null;
     _socketStream = null;
@@ -68,10 +75,9 @@ class CommonTelnetClient implements NetUnitClient {
   /// Start connect flow and return future that completes on success or throws error
   /// After successfull negotiation socket and socketStream will be available in [_socket] and [_socketStream]
   Future _connect() async {
-    _wipeSocket();
     final completer = Completer();
 
-    final socket = await Socket.connect(unitIp, 23);
+    final socket = await Socket.connect(unitIp, 23, timeout: const Duration(seconds: 5));
     final socketStream = socket.map((event) => String.fromCharCodes(event).trim()).asBroadcastStream();
 
     late StreamSubscription tempSub;
@@ -128,6 +134,7 @@ class CommonTelnetClient implements NetUnitClient {
     // Auto complete by timeout if no success prompt received
     Timer(const Duration(seconds: 5), () {
       if (!completer.isCompleted) {
+        print('Completing connection flow timeout error');
         tempSub.cancel();
         socket.destroy();
         completer.completeError('Connect timeout');
@@ -187,13 +194,13 @@ class CommonTelnetClient implements NetUnitClient {
     );
 
     // Send command to get stats
+    print('Sending command: ${cmd2Stats.command}');
     _socket!.write('${cmd2Stats.command}\n');
 
     // Auto complete by timeout if no stats received
     Timer(const Duration(seconds: 10), () {
-      print('Get stats timeout');
       if (!completer.isCompleted) {
-        print('Completing get stats flow with error');
+        print('Completing get stats flow with timeout error');
         tempSub.cancel();
         completer.completeError('Get stats timeout');
       }

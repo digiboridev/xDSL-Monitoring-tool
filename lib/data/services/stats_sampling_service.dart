@@ -14,9 +14,10 @@ class StatsSamplingService extends ChangeNotifier {
   final StatsRepository _statsRepository;
   StatsSamplingService(this._statsRepository, this._settingsRepository);
 
+  NetUnitClient? _client;
   SnapshotStats? _snapshotStats;
   SnapshotStats? get snapshotStats => _snapshotStats;
-  bool get samplingActive => _snapshotStats != null;
+  bool get samplingActive => _client != null && _snapshotStats != null;
 
   final _samplesQueue = Queue<LineStats>();
   List<LineStats> get lastSamples => List.unmodifiable(_samplesQueue);
@@ -30,38 +31,45 @@ class StatsSamplingService extends ChangeNotifier {
     Duration splitInterval = settings.splitInterval;
     String snapshotId = DateTime.now().millisecondsSinceEpoch.toString();
 
-    final client = NetUnitClient.fromSettings(settings, snapshotId); // TODO dispose client
-    final statsBlank = SnapshotStats.create(snapshotId, settings.host, settings.login, settings.pwd);
-    _snapshotStats = statsBlank;
+    final client = NetUnitClient.fromSettings(settings, snapshotId);
+    final snapshotStats = SnapshotStats.create(snapshotId, settings.host, settings.login, settings.pwd);
+    _client = client;
+    _snapshotStats = snapshotStats;
     notifyListeners();
 
-    // Enqueue the sampling
-    tick() async {
+    tick(String session) async {
+      // If sampling was stopped or restarted during the timer delay
+      if (_snapshotStats?.snapshotId != session) return;
+
       LineStats lineStats = await client.fetchStats();
 
-      // If sampling was stopped or changed while waiting for the response
-      // drop responce and break the loop
-      if (lineStats.snapshotId != _snapshotStats?.snapshotId) return;
+      // If sampling was stopped or restarted while new stats were being fetched
+      if (_snapshotStats?.snapshotId != session) return;
 
+      // Handle new line stats
       _handleLineStats(lineStats);
 
-      // Restart sampling if the split interval has passed, without wiping the queue
+      // Restart sampling if the split interval has been reached
       if (_snapshotStats!.samplingDuration > splitInterval) {
-        _snapshotStats = null;
+        stopSampling(wipeQueue: false);
         runSampling();
         return;
       }
 
-      Timer(samplingInterval, () => tick());
+      // Schedule next iteration
+      Timer(samplingInterval, () => tick(session));
     }
 
-    tick();
+    // Enqueue the sampling
+    tick(snapshotId);
   }
 
   /// Stop Network Unit stats sampling
-  stopSampling() {
-    _samplesQueue.clear();
+  stopSampling({bool wipeQueue = true}) {
+    if (wipeQueue) _samplesQueue.clear();
     _snapshotStats = null;
+    _client?.dispose();
+    _client = null;
     notifyListeners();
   }
 

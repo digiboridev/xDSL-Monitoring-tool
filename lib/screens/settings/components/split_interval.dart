@@ -21,7 +21,7 @@ class SplitInterval extends StatelessWidget {
           Row(
             children: [
               Text(
-                'Split snapshots every ${_watchSplitInterval(context).inMinutes} (m)',
+                'Split snapshots every ${_watchSplitInterval(context).inHours} (h)',
                 style: TextStyles.f16w6.blueGrey900,
               ),
               const Spacer(),
@@ -30,7 +30,7 @@ class SplitInterval extends StatelessWidget {
                 decoration: BoxDecoration(color: AppColors.blueGrey800, borderRadius: BorderRadius.all(Radius.circular(4))),
                 padding: EdgeInsets.all(8),
                 showDuration: Duration(seconds: 6),
-                message: 'Split snapshots to smaller chunks after specified time. It make large dataset more readable.',
+                message: 'Split snapshots to smaller chunks after specified time. It make large dataset more readable on long time periods',
                 child: Icon(Icons.info_outline_rounded),
               ),
             ],
@@ -42,12 +42,12 @@ class SplitInterval extends StatelessWidget {
               thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8, pressedElevation: 10),
             ),
             child: Slider(
-              value: _watchSplitInterval(context).inMinutes.toDouble(),
-              min: 20,
-              max: 120,
-              divisions: 5,
-              label: _watchSplitInterval(context).inMinutes.toString(),
-              onChanged: (double value) => _getVm(context).setSplitInterval = Duration(minutes: value.toInt()),
+              value: _watchSplitInterval(context).inHours.toDouble(),
+              min: 1,
+              max: 12,
+              divisions: 11,
+              label: _watchSplitInterval(context).inHours.toString(),
+              onChanged: (double value) => _getVm(context).setSplitInterval = Duration(hours: value.toInt()),
             ),
           ),
         ],

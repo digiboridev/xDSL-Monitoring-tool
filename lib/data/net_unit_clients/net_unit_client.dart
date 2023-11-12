@@ -80,4 +80,6 @@ abstract class NetUnitClient {
   factory NetUnitClient.fromSettings(AppSettings settings, String snapshotId) {
     return NetUnitClient.fromType(settings.nuType, snapshotId, settings.host, settings.login, settings.pwd);
   }
+
+  dispose();
 }

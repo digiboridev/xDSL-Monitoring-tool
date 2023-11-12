@@ -8,7 +8,7 @@ Future<void> main(List<String> args) async {
   const cmd = 'adsl info --show';
 
   // final file = File('test/telnet_emulator/stats_examples/trendchip_diag.txt');
-  // final cmd = 'wan adsl diag';
+  // const cmd = 'wan adsl diag';
 
   await startEmulator(cmdResponses: [(cmd: cmd, response: file.readAsStringSync())]);
 }

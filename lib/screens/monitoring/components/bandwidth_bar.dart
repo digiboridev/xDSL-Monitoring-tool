@@ -18,8 +18,8 @@ class _BandwidthBarState extends State<BandwidthBar> with TickerProviderStateMix
   int currUp = 0;
   int attainableDown = 0;
   int attainableUp = 0;
-  int maxDown = 1;
-  int maxUp = 1;
+  int maxDown = 300000;
+  int maxUp = 100000;
 
   //Animation vars
   late final AnimationController controller = AnimationController(vsync: this, duration: const Duration(seconds: 1));
@@ -56,23 +56,24 @@ class _BandwidthBarState extends State<BandwidthBar> with TickerProviderStateMix
     // Get new values
     SnapshotStats? stats = context.read<StatsSamplingService>().snapshotStats;
     final type = stats?.lastConnectionType;
+    if (type != null) {
+      bool isVDSL2 = type.toLowerCase().contains('vdsl2') || type.toLowerCase().contains('993.2') || type.toLowerCase().contains('993.5');
+      bool isVDSL = type.toLowerCase().contains('vdsl') || type.toLowerCase().contains('993.1');
+      bool isAdsl = type.toLowerCase().contains('adsl') || type.toLowerCase().contains('992');
 
-    bool isVDSL2 = type?.toLowerCase().contains('vdsl2') ?? type?.toLowerCase().contains('993.2') ?? type?.toLowerCase().contains('993.5') ?? false;
-    bool isVDSL = type?.toLowerCase().contains('vdsl') ?? type?.toLowerCase().contains('993.1') ?? false;
-    bool isAdsl = type?.toLowerCase().contains('adsl') ?? type?.toLowerCase().contains('992') ?? false;
-
-    if (isVDSL2) {
-      maxDown = 200000;
-      maxUp = 100000;
-    } else if (isVDSL) {
-      maxDown = 60000;
-      maxUp = 5000;
-    } else if (isAdsl) {
-      maxDown = 24000;
-      maxUp = 3500;
-    } else {
-      maxDown = 300000;
-      maxUp = 100000;
+      if (isVDSL2) {
+        maxDown = 200000;
+        maxUp = 100000;
+      } else if (isVDSL) {
+        maxDown = 60000;
+        maxUp = 5000;
+      } else if (isAdsl) {
+        maxDown = 24000;
+        maxUp = 3500;
+      } else {
+        maxDown = 300000;
+        maxUp = 100000;
+      }
     }
 
     currDown = stats?.downRateLast ?? 0;

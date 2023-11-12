@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 
@@ -160,4 +161,7 @@ final class SimulatorClientImpl implements NetUnitClient {
     _prevStats = nextStats;
     return nextStats;
   }
+
+  @override
+  dispose() => debugPrint('SimulatorClientImpl disposed');
 }

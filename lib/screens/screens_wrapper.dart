@@ -164,7 +164,7 @@ class _FloatButtonState extends State<FloatButton> {
 
     setState(() => busy = true);
     await Future.delayed(const Duration(milliseconds: 1000));
-    setState(() => busy = false);
+    if (mounted) setState(() => busy = false);
   }
 
   Icon get getIcon {

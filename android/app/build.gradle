@@ -42,7 +42,8 @@ android {
 
     defaultConfig {
         applicationId "com.digiboridev.xdslmt"
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 26
+        // minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

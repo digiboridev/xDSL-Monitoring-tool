@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:xdslmt/data/models/app_settings.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 import 'package:xdslmt/data/repositories/settings_repo.dart';
@@ -16,12 +17,17 @@ class SettingsScreenViewModel extends ValueNotifier<SettingsScreenState> with St
 
   _init() async {
     value = SettingsScreenState.loaded(await settingsRepository.getSettings);
+    Logger.root.info('SettingsScreenViewModel: init complete');
+
     var sub = settingsRepository.updatesStream.listen((update) => value = SettingsScreenState.loaded(update));
     insert(sub);
-    debugPrint('SettingsScreenViewModel: _init()');
   }
 
-  Future<void> _setSettings(AppSettings settings) => settingsRepository.setSettings(settings);
+  Future<void> _setSettings(AppSettings settings) {
+    Logger.root.info('SettingsScreenViewModel: setSettings: $settings');
+
+    return settingsRepository.setSettings(settings);
+  }
 
   /// Explicit state getter, to avoid repetitive cast under the main state guard
   /// Be careful and use it only deeper than state guard, otherwise it will throw

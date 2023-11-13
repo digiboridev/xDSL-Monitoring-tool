@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
+import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart' as path;
@@ -26,22 +27,28 @@ class DB extends _$DB {
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
-      onCreate: (migrator) => migrator.createAll(),
+      onCreate: (migrator) async {
+        Logger.root.info('drift onCreate');
+
+        await migrator.createAll();
+      },
+      onUpgrade: (migrator, from, to) async {
+        Logger.root.info('drift onUpgrade: $from -> $to');
+
+        // if (from < 2) {
+        // blabla
+        // }
+      },
       beforeOpen: (openingDetails) async {
+        Logger.root.info('drift beforeOpen ${openingDetails.versionNow}');
+
         if (kDebugMode && openingDetails.hadUpgrade) {
-          debugPrint('drift beforeOpen');
           final m = createMigrator();
           for (final table in allTables) {
             await m.deleteTable(table.actualTableName);
             await m.createTable(table);
           }
         }
-      },
-      onUpgrade: (migrator, from, to) async {
-        debugPrint('onUpgrade: $from -> $to');
-        // if (from < 2) {
-        // blabla
-        // }
       },
     );
   }

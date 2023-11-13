@@ -3,8 +3,11 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
+import 'package:logging/logging.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
+
+final log = Logger('HG532eClientImpl');
 
 String ultraEncoder(text) {
   var ultraHash = base64.encode(utf8.encode((sha256.convert(utf8.encode(text))).toString()));
@@ -23,6 +26,8 @@ class HG532eClientImpl implements NetUnitClient {
   LineStats? _prevStats;
 
   Future<bool> get _loginRequest async {
+    log.info('login request');
+
     final url = Uri.parse('http://$ip/index/login.cgi');
 
     final response = await http.post(
@@ -30,6 +35,8 @@ class HG532eClientImpl implements NetUnitClient {
       body: 'Username=$login&Password=${ultraEncoder(password)}',
       headers: {'Cookie': 'Language=ru; FirstMenu=Admin_0; SecondMenu=Admin_0_0; ThirdMenu=Admin_0_0_0; '},
     );
+
+    log.fine('response headers: ${response.headers}');
 
     if (response.headers['content-length'] == '707') {
       _cookie = response.headers['set-cookie'];
@@ -49,6 +56,8 @@ class HG532eClientImpl implements NetUnitClient {
     final substr = res.substring(res.indexOf('"InternetGatewayDevice.WANDevice.1.WANDSLInterfaceConfig"'), res.indexOf('),null'));
 
     final List<dynamic> decodedString = jsonDecode('[' + substr + ']');
+
+    log.finest('decodedString: $decodedString');
 
     final stats = LineStats(
       snapshotId: snapshotId,
@@ -72,6 +81,7 @@ class HG532eClientImpl implements NetUnitClient {
       upFECIncr: _incrDiff(_prevStats?.upFEC, int.tryParse(decodedString[20])),
       downFECIncr: _incrDiff(_prevStats?.downFEC, int.tryParse(decodedString[19])),
     );
+
     _prevStats = stats;
     return stats;
   }
@@ -91,7 +101,8 @@ class HG532eClientImpl implements NetUnitClient {
         }
       }
       return _parser(response.body);
-    } catch (e) {
+    } catch (e, s) {
+      log.warning('fetchStats error', e, s);
       return LineStats.errored(snapshotId: snapshotId, statusText: 'Connection failed');
     }
   }

@@ -1,5 +1,5 @@
 name: xdslmt
-description: xDSL Monitoring tool is an android app for collect line stats of ADSL modem in realtime and background.
+description: xDSL Monitoring tool is an android app for collect and analyze DSL line stats in realtime and background.
 publish_to: 'none'
 version: 2.0.2
 
@@ -22,8 +22,9 @@ dependencies:
   csv: ^5.1.1
   permission_handler: ^11.0.1
   url_launcher: ^6.2.1
-  device_preview: ^1.1.0
   crypto: ^3.0.3
+  logging: ^1.2.0
+  # device_preview: ^1.1.0
 
 dev_dependencies:
   flutter_test:

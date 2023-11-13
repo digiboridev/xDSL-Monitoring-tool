@@ -1,10 +1,12 @@
-// ignore_for_file: unused_element, unused_field, avoid_print
 import 'dart:async';
 import 'dart:io';
+import 'package:logging/logging.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 import 'package:xdslmt/data/net_unit_clients/components/stats_parser/raw_line_stats.dart';
 import 'package:xdslmt/utils/debouncebuffer.dart';
+
+final log = Logger('CommonTelnetClient');
 
 /// Alias for function that responds to specific prompt with command
 /// `prompt` - prompt that needs to be responded
@@ -53,8 +55,8 @@ class CommonTelnetClient implements NetUnitClient {
       if (!_isConnected) await _connect();
       final lineStats = await _getStats();
       return lineStats;
-    } catch (e) {
-      print('Fetch error: $e');
+    } catch (e, s) {
+      log.warning('Fetch error', e, s);
       _wipeSocket();
       return LineStats.errored(snapshotId: snapshotId, statusText: e.toString());
     }
@@ -62,13 +64,13 @@ class CommonTelnetClient implements NetUnitClient {
 
   @override
   dispose() {
-    print('CommonTelnetClient dispose');
+    log.info('dispose called');
     _wipeSocket();
     _disposed = true;
   }
 
   void _wipeSocket() {
-    print('Wiping socket');
+    log.info('wiping socket');
     _socket?.destroy();
     _socket = null;
     _socketStream = null;
@@ -82,11 +84,12 @@ class CommonTelnetClient implements NetUnitClient {
     final socket = await Socket.connect(unitIp, 23, timeout: const Duration(seconds: 5));
     final socketStream = socket.map((event) => String.fromCharCodes(event).trim()).asBroadcastStream();
 
-    late StreamSubscription tempSub;
+    log.info('Socket connected');
 
+    late StreamSubscription tempSub;
     tempSub = socketStream.listen(
       (event) {
-        print('Socket event: $event');
+        log.finest('Connect event: $event');
 
         // If client disposed during connection flow
         if (_disposed) socket.destroy();
@@ -94,17 +97,16 @@ class CommonTelnetClient implements NetUnitClient {
         // Handle preparing prompts
         for (var p2c in prepPrts) {
           if (event.contains(p2c.prompt)) {
-            print('Matched preparing prompt: ${p2c.prompt}');
-            print('Sending command: ${p2c.command}');
+            log.finest('Matched preparing prompt: $p2c');
             socket.write('${p2c.command}\n');
           }
         }
 
         // Handle success prompt
         if (event.contains(readyPrt)) {
-          print('Matched ready prompt: $readyPrt');
+          log.finest('Matched ready prompt: $readyPrt');
           if (!completer.isCompleted) {
-            print('Completing connection flow');
+            log.finest('Completing connection flow');
             _socket = socket;
             _socketStream = socketStream;
             socket.done.then((value) => _wipeSocket());
@@ -116,9 +118,9 @@ class CommonTelnetClient implements NetUnitClient {
         // Handle errors prompt
         for (var error in errorPrts) {
           if (event.contains(error)) {
-            print('Matched error prompt: $error');
+            log.finest('Matched error prompt: $error');
             if (!completer.isCompleted) {
-              print('Completing connection flow with error');
+              log.finest('Completing connection flow with error');
               tempSub.cancel();
               socket.destroy();
               completer.completeError(error);
@@ -126,10 +128,10 @@ class CommonTelnetClient implements NetUnitClient {
           }
         }
       },
-      onError: (e) {
-        print('Socket error: $e');
+      onError: (e, s) {
+        log.warning('Connect socket error', e, s);
         if (!completer.isCompleted) {
-          print('Completing connection flow with error');
+          log.info('Completing connection flow with error');
           completer.completeError('Connect error $e');
         }
       },
@@ -139,7 +141,7 @@ class CommonTelnetClient implements NetUnitClient {
     // Auto complete by timeout if no success prompt received
     Timer(const Duration(seconds: 5), () {
       if (!completer.isCompleted) {
-        print('Completing connection flow timeout error');
+        log.warning('Connect timeout');
         tempSub.cancel();
         socket.destroy();
         completer.completeError('Connect timeout');
@@ -151,12 +153,13 @@ class CommonTelnetClient implements NetUnitClient {
 
   Future<LineStats> _getStats() {
     final completer = Completer<LineStats>();
-    late StreamSubscription tempSub;
+    log.finest('Get stats call');
 
+    late StreamSubscription tempSub;
     tempSub = _socketStream!.transform(DebounceBuffer(const Duration(milliseconds: 300))).listen(
       (event) {
-        // Wait and parse stats pessimisticaSlly due to possible garbage in stream
-        print('Get stats event: $event');
+        // Wait and parse stats pessimistically due to possible garbage in stream
+        log.finest('Get stats event: $event');
         RawLineStats? maybeStats = cmd2Stats.tryParse(event);
         if (maybeStats != null && !completer.isCompleted) {
           final stats = LineStats(
@@ -181,17 +184,18 @@ class CommonTelnetClient implements NetUnitClient {
             upFECIncr: _incrDiff(_prevStats?.upFEC, maybeStats.upFEC),
             downFECIncr: _incrDiff(_prevStats?.downFEC, maybeStats.downFEC),
           );
-          print('Completing with stats: $stats');
+
+          log.finest('Parsed stats: $stats');
 
           _prevStats = stats;
           tempSub.cancel();
           completer.complete(stats);
         }
       },
-      onError: (e) {
-        print('Get stats error: $e');
+      onError: (e, s) {
+        log.warning('Get stats socket error', e, s);
         if (!completer.isCompleted) {
-          print('Completing get stats flow with error');
+          log.info('Completing get stats flow with error');
           completer.completeError('Connect error $e');
         }
       },
@@ -199,13 +203,13 @@ class CommonTelnetClient implements NetUnitClient {
     );
 
     // Send command to get stats
-    print('Sending command: ${cmd2Stats.command}');
+    log.finest('Sending command: ${cmd2Stats.command}');
     _socket!.write('${cmd2Stats.command}\n');
 
     // Auto complete by timeout if no stats received
     Timer(const Duration(seconds: 10), () {
       if (!completer.isCompleted) {
-        print('Completing get stats flow with timeout error');
+        log.warning('Get stats timeout');
         tempSub.cancel();
         completer.completeError('Get stats timeout');
       }

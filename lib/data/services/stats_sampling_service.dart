@@ -2,12 +2,15 @@
 import 'dart:async';
 import 'dart:collection';
 import 'package:flutter/foundation.dart';
+import 'package:logging/logging.dart';
 import 'package:xdslmt/data/models/app_settings.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/models/snapshot_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 import 'package:xdslmt/data/repositories/stats_repo.dart';
 import 'package:xdslmt/data/repositories/settings_repo.dart';
+
+final log = Logger('StatsSamplingService');
 
 class StatsSamplingService extends ChangeNotifier {
   final SettingsRepository _settingsRepository;
@@ -37,6 +40,10 @@ class StatsSamplingService extends ChangeNotifier {
     _snapshotStats = snapshotStats;
     notifyListeners();
 
+    log.info('run sampling: $snapshotId');
+    log.fine('settings: $settings');
+    log.fine('snapshotStats: $snapshotStats');
+
     tick() async {
       // If sampling was stopped or restarted during the previous tick
       if (_snapshotStats?.snapshotId != snapshotId) return;
@@ -63,6 +70,9 @@ class StatsSamplingService extends ChangeNotifier {
 
       // Schedule next iteration
       Timer(samplingInterval, () => tick());
+
+      if (snapshotStats.samples < 10) log.fine('first ticks: $snapshotStats $lineStats');
+      if (snapshotStats.samples % 120 == 0) log.fine('rare tick: $snapshotStats, $lineStats');
     }
 
     // Enqueue the sampling
@@ -71,6 +81,7 @@ class StatsSamplingService extends ChangeNotifier {
 
   /// Stop Network Unit stats sampling
   stopSampling({bool wipeQueue = true}) {
+    log.info('stop sampling $_snapshotStats');
     if (wipeQueue) _samplesQueue.clear();
     _snapshotStats = null;
     _client?.dispose();

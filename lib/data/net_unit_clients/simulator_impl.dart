@@ -1,8 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:math';
-import 'package:flutter/foundation.dart';
+import 'package:logging/logging.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
+
+final log = Logger('SimulatorClientImpl');
 
 /// This class represents a client simulator for a network unit.
 /// It extends the [NetUnitClient] class and overrides the [fetchStats] method to simulate network stats.
@@ -163,5 +165,7 @@ final class SimulatorClientImpl implements NetUnitClient {
   }
 
   @override
-  dispose() => debugPrint('SimulatorClientImpl disposed');
+  dispose() {
+    log.info('disposed');
+  }
 }

@@ -43,8 +43,6 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
     setState(() {
       scale = scale * 1.5;
       offset = offset - (width / scale / 4);
-      debugPrint(scale.toString());
-      debugPrint(offset.toString());
     });
   }
 
@@ -105,9 +103,6 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
               // Prevent scaling out of bounds
               if (scale < 1.0) scale = 1;
               if (scale == 1.0 && offset != 1) offset = 1;
-
-              // debugPrint(scale.toString());
-              // debugPrint(offset.toString());
             });
           },
           child: Container(

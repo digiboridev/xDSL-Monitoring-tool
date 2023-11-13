@@ -37,9 +37,9 @@ class StatsSamplingService extends ChangeNotifier {
     _snapshotStats = snapshotStats;
     notifyListeners();
 
-    tick(String session) async {
+    tick() async {
       // If sampling was stopped or restarted during the previous tick
-      if (_snapshotStats?.snapshotId != session) return;
+      if (_snapshotStats?.snapshotId != snapshotId) return;
 
       LineStats lineStats = await client.fetchStats();
       snapshotStats = snapshotStats.copyWithLineStats(lineStats);
@@ -47,7 +47,7 @@ class StatsSamplingService extends ChangeNotifier {
       _statsRepository.upsertSnapshotStats(snapshotStats);
 
       // If sampling was stopped or restarted while new stats were being fetched
-      if (_snapshotStats?.snapshotId != session) return;
+      if (_snapshotStats?.snapshotId != snapshotId) return;
 
       // Handle new values
       _snapshotStats = snapshotStats;
@@ -62,11 +62,11 @@ class StatsSamplingService extends ChangeNotifier {
       }
 
       // Schedule next iteration
-      Timer(samplingInterval, () => tick(session));
+      Timer(samplingInterval, () => tick());
     }
 
     // Enqueue the sampling
-    tick(snapshotId);
+    tick();
   }
 
   /// Stop Network Unit stats sampling

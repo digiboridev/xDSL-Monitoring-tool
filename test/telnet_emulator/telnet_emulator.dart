@@ -4,13 +4,14 @@ import 'dart:io';
 Future<void> main(List<String> args) async {
   print('Emulator started in standalone mode');
 
-  final file = File('test/telnet_emulator/stats_examples/bcmstats_adsl.txt');
-  const cmd = 'adsl info --show';
+  // final file = File('test/telnet_emulator/stats_examples/bcmstats_adsl.txt');
+  // final file = File('test/telnet_emulator/stats_examples/bcmstats_adsl2.txt');
+  // const cmd = 'adsl info --show';
 
-  // final file = File('test/telnet_emulator/stats_examples/trendchip_diag.txt');
-  // const cmd = 'wan adsl diag';
+  final file = File('test/telnet_emulator/stats_examples/trendchip_diag_alt.txt');
+  const cmd = 'wan adsl diag';
 
-  await startEmulator(cmdResponses: [(cmd: cmd, response: file.readAsStringSync())]);
+  await startEmulator(shellSkip: true, cmdResponses: [(cmd: cmd, response: file.readAsStringSync())]);
 }
 
 typedef C2R = ({String cmd, String response});
@@ -93,7 +94,7 @@ Future<Future Function()> startEmulator({
               } else {
                 socket.writeln(lines.sublist(i, i + chunkSize).join('\n'));
               }
-              await Future.delayed(const Duration(milliseconds: 10));
+              await Future.delayed(const Duration(milliseconds: 20));
             }
           }
         }

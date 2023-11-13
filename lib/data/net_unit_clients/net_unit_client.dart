@@ -11,6 +11,7 @@ import 'package:xdslmt/data/net_unit_clients/broadcom_xdslcmd_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/broadcom_xdslcmd_sh_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/broadcom_xdslctl_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/broadcom_xdslctl_sh_impl.dart';
+import 'package:xdslmt/data/net_unit_clients/huawei_hg532e_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/simulator_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/trendchip_perfomance_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/trendchip_status_diag_impl.dart';
@@ -71,6 +72,8 @@ abstract class NetUnitClient {
         return TrendchipStatusDiagClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
       case NetworkUnitType.trendchip_telnet_perfomance:
         return TrendchipPerfomanceClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+      case NetworkUnitType.hg532e_http:
+        return HG532eClientImpl(snapshotId: snapshotId, ip: ip, login: login, password: password);
       default:
         throw Exception('Unknown NetUnitClient type: $type');
     }

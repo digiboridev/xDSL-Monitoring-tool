@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/models/snapshot_stats.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/painters/line_path_painter.dart';
@@ -742,8 +743,9 @@ class CSVExportButton extends StatelessWidget {
 
     try {
       toCSV(id, header, listOfLists);
-    } catch (e) {
+    } catch (e, s) {
       debugPrint(e.toString());
+      Logger.root.severe('Error: $e', e, s);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e'), backgroundColor: AppColors.blueGrey800));
     }
   }

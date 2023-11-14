@@ -36,7 +36,9 @@ class HG532eClientImpl implements NetUnitClient {
       headers: {'Cookie': 'Language=ru; FirstMenu=Admin_0; SecondMenu=Admin_0_0; ThirdMenu=Admin_0_0_0; '},
     );
 
-    log.fine('response headers: ${response.headers}');
+    log.fine('login response statusCode: ${response.statusCode}');
+    log.fine('login response headers: ${response.headers}');
+    log.fine('login response body: ${response.body}');
 
     if (response.headers['content-length'] == '707') {
       _cookie = response.headers['set-cookie'];
@@ -53,33 +55,35 @@ class HG532eClientImpl implements NetUnitClient {
   }
 
   LineStats _parser(String res) {
+    log.fine('parser res: $res');
+
     final substr = res.substring(res.indexOf('"InternetGatewayDevice.WANDevice.1.WANDSLInterfaceConfig"'), res.indexOf('),null'));
+    log.fine('parser substr: $substr');
 
-    final List<dynamic> decodedString = jsonDecode('[' + substr + ']');
-
-    log.finest('decodedString: $decodedString');
+    final List<dynamic> decoded = jsonDecode('[' + substr + ']');
+    log.fine('parser decoded: $decoded');
 
     final stats = LineStats(
       snapshotId: snapshotId,
-      status: decodedString[2] == 'Up' ? SampleStatus.connectionUp : SampleStatus.connectionDown,
-      statusText: decodedString[2],
-      connectionType: decodedString[1],
-      upAttainableRate: int.tryParse(decodedString[3]),
-      downAttainableRate: int.tryParse(decodedString[4]),
-      upRate: int.tryParse(decodedString[5]),
-      downRate: int.tryParse(decodedString[6]),
-      upMargin: double.tryParse(decodedString[7])?.toInt(),
-      downMargin: double.tryParse(decodedString[8])?.toInt(),
-      upAttenuation: double.tryParse(decodedString[12])?.toInt(),
-      downAttenuation: double.tryParse(decodedString[13])?.toInt(),
-      upCRC: int.tryParse(decodedString[18]),
-      downCRC: int.tryParse(decodedString[17]),
-      upFEC: int.tryParse(decodedString[20]),
-      downFEC: int.tryParse(decodedString[19]),
-      upCRCIncr: _incrDiff(_prevStats?.upCRC, int.tryParse(decodedString[18])),
-      downCRCIncr: _incrDiff(_prevStats?.downCRC, int.tryParse(decodedString[17])),
-      upFECIncr: _incrDiff(_prevStats?.upFEC, int.tryParse(decodedString[20])),
-      downFECIncr: _incrDiff(_prevStats?.downFEC, int.tryParse(decodedString[19])),
+      status: decoded[2] == 'Up' ? SampleStatus.connectionUp : SampleStatus.connectionDown,
+      statusText: decoded[2],
+      connectionType: decoded[1],
+      upAttainableRate: int.tryParse(decoded[3]),
+      downAttainableRate: int.tryParse(decoded[4]),
+      upRate: int.tryParse(decoded[5]),
+      downRate: int.tryParse(decoded[6]),
+      upMargin: double.tryParse(decoded[7])?.toInt(),
+      downMargin: double.tryParse(decoded[8])?.toInt(),
+      upAttenuation: double.tryParse(decoded[12])?.toInt(),
+      downAttenuation: double.tryParse(decoded[13])?.toInt(),
+      upCRC: int.tryParse(decoded[18]),
+      downCRC: int.tryParse(decoded[17]),
+      upFEC: int.tryParse(decoded[20]),
+      downFEC: int.tryParse(decoded[19]),
+      upCRCIncr: _incrDiff(_prevStats?.upCRC, int.tryParse(decoded[18])),
+      downCRCIncr: _incrDiff(_prevStats?.downCRC, int.tryParse(decoded[17])),
+      upFECIncr: _incrDiff(_prevStats?.upFEC, int.tryParse(decoded[20])),
+      downFECIncr: _incrDiff(_prevStats?.downFEC, int.tryParse(decoded[19])),
     );
 
     _prevStats = stats;
@@ -92,6 +96,7 @@ class HG532eClientImpl implements NetUnitClient {
   @override
   Future<LineStats> fetchStats() async {
     try {
+      // TODO: refactor dat shit
       http.Response response = await _dataRequest;
       if (response.headers['content-length'] == '691') {
         if (await _loginRequest) {
@@ -102,11 +107,12 @@ class HG532eClientImpl implements NetUnitClient {
       }
       return _parser(response.body);
     } catch (e, s) {
-      log.warning('fetchStats error', e, s);
+      log.warning('Fetch error: $e', e, s);
       return LineStats.errored(snapshotId: snapshotId, statusText: 'Connection failed');
     }
   }
 
+  // TODO extract
   int _incrDiff(int? prev, int? next) {
     if (prev == null || next == null) return 0;
     final diff = next - prev;

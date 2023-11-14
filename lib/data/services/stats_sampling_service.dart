@@ -42,7 +42,6 @@ class StatsSamplingService extends ChangeNotifier {
 
     log.info('run sampling: $snapshotId');
     log.fine('settings: $settings');
-    log.fine('snapshotStats: $snapshotStats');
 
     tick() async {
       // If sampling was stopped or restarted during the previous tick
@@ -71,8 +70,8 @@ class StatsSamplingService extends ChangeNotifier {
       // Schedule next iteration
       Timer(samplingInterval, () => tick());
 
-      if (snapshotStats.samples < 10) log.fine('first ticks: $snapshotStats $lineStats');
-      if (snapshotStats.samples % 120 == 0) log.fine('rare tick: $snapshotStats, $lineStats');
+      log.fine('tick linestats: $lineStats');
+      log.fine('tick snapshotstats: $snapshotStats');
     }
 
     // Enqueue the sampling
@@ -81,7 +80,7 @@ class StatsSamplingService extends ChangeNotifier {
 
   /// Stop Network Unit stats sampling
   stopSampling({bool wipeQueue = true}) {
-    log.info('stop sampling $_snapshotStats');
+    log.info('stop sampling');
     if (wipeQueue) _samplesQueue.clear();
     _snapshotStats = null;
     _client?.dispose();

@@ -48,7 +48,13 @@ class _SnaplistTileState extends State<SnaplistTile> {
   }
 
   onTap() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => SnapshotViewer(widget.snapshotId)));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SnapshotViewer(widget.snapshotId),
+        settings: const RouteSettings(name: 'SnapshotViewer'),
+      ),
+    );
   }
 
   onDelete() async {

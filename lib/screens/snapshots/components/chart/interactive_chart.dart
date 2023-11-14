@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/models/snapshot_stats.dart';
 import 'package:xdslmt/screens/snapshots/components/chart/painters/line_path_painter.dart';
@@ -41,6 +42,8 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
   bool downAttainableRate = false;
 
   void zoomIn(double width) {
+    final s = Sentry.startTransaction('InteractiveChart', 'zoomIn', description: 'samples: ${widget.statsList.length}');
+    WidgetsBinding.instance.addPostFrameCallback((_) => s.finish());
     setState(() {
       scale = scale * 1.5;
       offset = offset - (width / scale / 4);
@@ -48,6 +51,8 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
   }
 
   void zoomOut(double width) {
+    final s = Sentry.startTransaction('InteractiveChart', 'zoomOut', description: 'samples: ${widget.statsList.length}');
+    WidgetsBinding.instance.addPostFrameCallback((_) => s.finish());
     setState(() {
       offset = offset + (width / scale / 4);
       scale = scale / 1.5;
@@ -63,6 +68,8 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
   }
 
   void forward(double width) {
+    final s = Sentry.startTransaction('InteractiveChart', 'forward', description: 'samples: ${widget.statsList.length}');
+    WidgetsBinding.instance.addPostFrameCallback((_) => s.finish());
     setState(() {
       offset = offset - 10 / scale;
       // Prevent scrolling out of bounds
@@ -72,6 +79,9 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
   }
 
   void backward(double width) {
+    final s = Sentry.startTransaction('InteractiveChart', 'backward', description: 'samples: ${widget.statsList.length}');
+    WidgetsBinding.instance.addPostFrameCallback((_) => s.finish());
+
     setState(() {
       offset = offset + 10 / scale;
 
@@ -79,6 +89,17 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
       if (offset > width / scale - width / scale) offset = width / scale - width / scale;
       if (offset < 0 - (width - (width / scale))) offset = 0 - (width - (width / scale));
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Sentry.startTransaction(
+      'InteractiveChart',
+      'init',
+      description: 'samples: ${widget.statsList.length}',
+      autoFinishAfter: const Duration(seconds: 30),
+    );
   }
 
   @override

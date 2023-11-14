@@ -26,6 +26,7 @@ Future<void> main() async {
 
     // Setup remote log
     if (record.error != null) Sentry.captureException(record.error, stackTrace: record.stackTrace);
+    if (record.level == Level.INFO) Sentry.captureMessage(message, template: logerName);
     Sentry.addBreadcrumb(Breadcrumb(message: message, level: dartLevel2Sentry(level), timestamp: time, category: logerName));
   });
 

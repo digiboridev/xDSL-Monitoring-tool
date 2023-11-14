@@ -28,19 +28,19 @@ class DB extends _$DB {
   MigrationStrategy get migration {
     return MigrationStrategy(
       onCreate: (migrator) async {
-        Logger.root.info('drift onCreate');
+        Logger.root.fine('drift onCreate');
 
         await migrator.createAll();
       },
       onUpgrade: (migrator, from, to) async {
-        Logger.root.info('drift onUpgrade: $from -> $to');
+        Logger.root.fine('drift onUpgrade: $from -> $to');
 
         // if (from < 2) {
         // blabla
         // }
       },
       beforeOpen: (openingDetails) async {
-        Logger.root.info('drift beforeOpen ${openingDetails.versionNow}');
+        Logger.root.fine('drift beforeOpen ${openingDetails.versionNow}');
 
         if (kDebugMode && openingDetails.hadUpgrade) {
           final m = createMigrator();

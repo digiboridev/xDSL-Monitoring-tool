@@ -7,24 +7,28 @@ import 'package:xdslmt/data/models/app_settings.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/models/snapshot_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
+import 'package:xdslmt/data/repositories/current_sampling_repo.dart';
 import 'package:xdslmt/data/repositories/stats_repo.dart';
 import 'package:xdslmt/data/repositories/settings_repo.dart';
 
 class StatsSamplingService extends ChangeNotifier {
   final SettingsRepository _settingsRepository;
   final StatsRepository _statsRepository;
-  StatsSamplingService(this._statsRepository, this._settingsRepository);
+  final CurrentSamplingRepository _currentSamplingRepository;
+  StatsSamplingService(this._statsRepository, this._settingsRepository, this._currentSamplingRepository);
 
-  // NetUnitClient? _client;
+  @Deprecated('move to shared repo')
   SnapshotStats? _snapshotStats;
+  @Deprecated('move to shared repo')
   SnapshotStats? get snapshotStats => _snapshotStats;
-  // bool get samplingActive => _client != null && _snapshotStats != null;
 
+  @Deprecated('move to shared repo')
   final _samplesQueue = Queue<LineStats>();
-
+  @Deprecated('move to shared repo')
   Iterable<LineStats> get lastSamples => _samplesQueue;
 
   StreamSubscription? samplingSub;
+  @Deprecated('move to shared repo')
   bool get samplingActive => samplingSub != null;
 
   Stream<(LineStats lineStats, SnapshotStats snapshotStats)> createLineStatsStream() async* {
@@ -80,9 +84,11 @@ class StatsSamplingService extends ChangeNotifier {
       _addLineStatsToQueue(lineStats);
       _snapshotStats = snapshotStats;
       notifyListeners();
+      _currentSamplingRepository.updateStats(lineStats, snapshotStats);
     });
 
     notifyListeners();
+    _currentSamplingRepository.updateStatus(true);
   }
 
   stopSampling({bool wipeQueue = true}) {
@@ -92,6 +98,7 @@ class StatsSamplingService extends ChangeNotifier {
     samplingSub = null;
 
     notifyListeners();
+    _currentSamplingRepository.updateStatus(false);
   }
 
   _addLineStatsToQueue(LineStats lineStats) {

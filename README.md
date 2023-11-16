@@ -59,4 +59,5 @@ If you want to add new device support you can simply send me a dump of your devi
   - SNR per tone, Bit table support
   - HLog, QLN support
   - Cloud sync for remote data sharing
+  - Multi-device monitoring
   - Desktop version

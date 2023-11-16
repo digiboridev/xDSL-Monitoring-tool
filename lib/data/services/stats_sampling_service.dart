@@ -2,15 +2,13 @@
 import 'dart:async';
 import 'dart:collection';
 import 'package:flutter/foundation.dart';
-import 'package:logging/logging.dart';
+import 'package:xdslmt/core/app_logger.dart';
 import 'package:xdslmt/data/models/app_settings.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/models/snapshot_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 import 'package:xdslmt/data/repositories/stats_repo.dart';
 import 'package:xdslmt/data/repositories/settings_repo.dart';
-
-final log = Logger('StatsSamplingService');
 
 class StatsSamplingService extends ChangeNotifier {
   final SettingsRepository _settingsRepository;
@@ -40,8 +38,8 @@ class StatsSamplingService extends ChangeNotifier {
     _snapshotStats = snapshotStats;
     notifyListeners();
 
-    log.info('run sampling: $snapshotId');
-    log.fine('settings: $settings');
+    AppLogger.info(name: 'StatsSamplingService', 'Run sampling: $snapshotId');
+    AppLogger.debug(name: 'StatsSamplingService', '$settings');
 
     tick() async {
       // If sampling was stopped or restarted during the previous tick
@@ -70,8 +68,8 @@ class StatsSamplingService extends ChangeNotifier {
       // Schedule next iteration
       Timer(samplingInterval, () => tick());
 
-      log.fine('tick linestats: $lineStats');
-      log.fine('tick snapshotstats: $snapshotStats');
+      AppLogger.debug(name: 'StatsSamplingService', 'tick linestats: \n$lineStats');
+      AppLogger.debug(name: 'StatsSamplingService', 'tick snapshotstats: \n$snapshotStats');
     }
 
     // Enqueue the sampling
@@ -80,7 +78,7 @@ class StatsSamplingService extends ChangeNotifier {
 
   /// Stop Network Unit stats sampling
   stopSampling({bool wipeQueue = true}) {
-    log.info('stop sampling');
+    AppLogger.info(name: 'StatsSamplingService', 'Stop sampling');
     if (wipeQueue) _samplesQueue.clear();
     _snapshotStats = null;
     _client?.dispose();

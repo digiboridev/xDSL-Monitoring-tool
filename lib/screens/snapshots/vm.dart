@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:logging/logging.dart';
+import 'package:xdslmt/core/app_logger.dart';
 import 'package:xdslmt/data/repositories/stats_repo.dart';
 import 'package:xdslmt/screens/snapshots/state.dart';
 
@@ -11,12 +11,12 @@ class SnapshotsScreenViewModel extends ValueNotifier<SnapshotsScreenState> {
 
   _init() async {
     value = SnapshotsScreenState.loaded(await statsRepository.snapshotIds());
-    Logger.root.fine('SnapshotsScreenViewModel: init complete');
+    AppLogger.debug(name: 'SnapshotsScreenViewModel', 'init complete');
   }
 
   refresh() async {
     value = SnapshotsScreenState.loaded(await statsRepository.snapshotIds());
-    Logger.root.fine('SnapshotsScreenViewModel: refresh complete');
+    AppLogger.debug(name: 'SnapshotsScreenViewModel', 'refresh complete');
   }
 
   bool get vmReady => value is SnapshotsScreenLoaded;

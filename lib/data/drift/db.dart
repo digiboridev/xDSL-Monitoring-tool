@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
-import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart' as path;
+import 'package:xdslmt/core/app_logger.dart';
 import 'package:xdslmt/data/drift/stats.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 
@@ -28,19 +28,19 @@ class DB extends _$DB {
   MigrationStrategy get migration {
     return MigrationStrategy(
       onCreate: (migrator) async {
-        Logger.root.fine('drift onCreate');
+        AppLogger.debug('drift onCreate');
 
         await migrator.createAll();
       },
       onUpgrade: (migrator, from, to) async {
-        Logger.root.fine('drift onUpgrade: $from -> $to');
+        AppLogger.debug('drift onUpgrade: $from -> $to');
 
         // if (from < 2) {
         // blabla
         // }
       },
       beforeOpen: (openingDetails) async {
-        Logger.root.fine('drift beforeOpen ${openingDetails.versionNow}');
+        AppLogger.debug('drift beforeOpen ${openingDetails.versionNow}');
 
         if (kDebugMode && openingDetails.hadUpgrade) {
           final m = createMigrator();

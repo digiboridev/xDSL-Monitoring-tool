@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:logging/logging.dart';
+import 'package:xdslmt/core/app_logger.dart';
 import 'package:xdslmt/data/models/app_settings.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 import 'package:xdslmt/data/repositories/settings_repo.dart';
@@ -17,14 +17,14 @@ class SettingsScreenViewModel extends ValueNotifier<SettingsScreenState> with St
 
   _init() async {
     value = SettingsScreenState.loaded(await settingsRepository.getSettings);
-    Logger.root.fine('SettingsScreenViewModel: init complete');
+    AppLogger.debug(name: 'SettingsScreenViewModel', 'init complete');
 
     var sub = settingsRepository.updatesStream.listen((update) => value = SettingsScreenState.loaded(update));
     insert(sub);
   }
 
   Future<void> _setSettings(AppSettings settings) {
-    Logger.root.fine('SettingsScreenViewModel: setSettings: $settings');
+    AppLogger.debug(name: 'SettingsScreenViewModel', 'setSettings: $settings');
 
     return settingsRepository.setSettings(settings);
   }

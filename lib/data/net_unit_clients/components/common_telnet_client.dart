@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:logging/logging.dart';
+import 'package:xdslmt/core/app_logger.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 import 'package:xdslmt/data/net_unit_clients/components/stats_parser/raw_line_stats.dart';
 import 'package:xdslmt/utils/debouncebuffer.dart';
-
-final log = Logger('CommonTelnetClient');
 
 /// Alias for function that responds to specific prompt with command
 /// `prompt` - prompt that needs to be responded
@@ -56,7 +54,7 @@ class CommonTelnetClient implements NetUnitClient {
       final lineStats = await _getStats();
       return lineStats;
     } catch (e, s) {
-      log.warning('Fetch error: $e', e, s);
+      AppLogger.warning(name: 'CommonTelnetClient', 'Fetch error: $e', error: e, stack: s);
       _wipeSocket();
       return LineStats.errored(snapshotId: snapshotId, statusText: e.toString());
     }
@@ -79,20 +77,19 @@ class CommonTelnetClient implements NetUnitClient {
   Future _connect() async {
     final completer = Completer();
 
-    log.fine('Connect start');
+    AppLogger.debug(name: 'CommonTelnetClient', 'Connect start');
 
     final socket = await Socket.connect(unitIp, 23, timeout: const Duration(seconds: 5));
     final socketStream = socket.map((event) => String.fromCharCodes(event).trim()).asBroadcastStream();
 
-    log.fine('Socket established');
-    log.fine('Socket local address: ${socket.address}:${socket.port}');
-    log.fine('Socket remote address: ${socket.remoteAddress.address}:${socket.remotePort}');
+    AppLogger.debug(name: 'CommonTelnetClient', 'Connect established');
+    AppLogger.debug(name: 'CommonTelnetClient', 'Socket local address: ${socket.address}:${socket.port}');
+    AppLogger.debug(name: 'CommonTelnetClient', 'Socket remote address: ${socket.remoteAddress.address}:${socket.remotePort}');
 
     late StreamSubscription tempSub;
     tempSub = socketStream.listen(
       (event) {
-        log.fine('Connect stream event >');
-        log.fine(event);
+        AppLogger.debug(name: 'CommonTelnetClient', 'Connect stream event > \n$event');
 
         // If client disposed during connection flow
         if (_disposed) socket.destroy();
@@ -100,15 +97,15 @@ class CommonTelnetClient implements NetUnitClient {
         // Handle preparing prompts
         for (var p2c in prepPrts) {
           if (event.contains(p2c.prompt)) {
-            log.fine('Connect matched preparing prompt: $p2c');
+            AppLogger.debug(name: 'CommonTelnetClient', 'Connect matched preparing prompt: $p2c');
             socket.write('${p2c.command}\n');
           }
         }
 
         // Handle success prompt
         if (event.contains(readyPrt)) {
-          log.fine('Connect matched ready prompt: $readyPrt');
-          log.fine('Completed: ${completer.isCompleted}');
+          AppLogger.debug(name: 'CommonTelnetClient', 'Connect matched ready prompt: $readyPrt');
+          AppLogger.debug(name: 'CommonTelnetClient', 'Completed: ${completer.isCompleted}');
           if (!completer.isCompleted) {
             _socket = socket;
             _socketStream = socketStream;
@@ -121,8 +118,8 @@ class CommonTelnetClient implements NetUnitClient {
         // Handle errors prompt
         for (var error in errorPrts) {
           if (event.contains(error)) {
-            log.fine('Connect matched error prompt: $error');
-            log.fine('Completed: ${completer.isCompleted}');
+            AppLogger.debug(name: 'CommonTelnetClient', 'Connect matched error prompt: $error');
+            AppLogger.debug(name: 'CommonTelnetClient', 'Completed: ${completer.isCompleted}');
             if (!completer.isCompleted) {
               tempSub.cancel();
               socket.destroy();
@@ -132,8 +129,8 @@ class CommonTelnetClient implements NetUnitClient {
         }
       },
       onError: (e, s) {
-        log.fine('Connect stream error: $e');
-        log.fine('Completed: ${completer.isCompleted}');
+        AppLogger.debug(name: 'CommonTelnetClient', 'Connect stream error: $e');
+        AppLogger.debug(name: 'CommonTelnetClient', 'Completed: ${completer.isCompleted}');
         if (!completer.isCompleted) completer.completeError(e, s);
       },
       cancelOnError: true,
@@ -141,8 +138,8 @@ class CommonTelnetClient implements NetUnitClient {
 
     // Auto complete by timeout if no success prompt received
     Timer(const Duration(seconds: 5), () {
-      log.fine('Connect timeout');
-      log.fine('Completed: ${completer.isCompleted}');
+      AppLogger.debug(name: 'CommonTelnetClient', 'Connect timeout');
+      AppLogger.debug(name: 'CommonTelnetClient', 'Completed: ${completer.isCompleted}');
       if (!completer.isCompleted) {
         tempSub.cancel();
         socket.destroy();
@@ -156,17 +153,18 @@ class CommonTelnetClient implements NetUnitClient {
   Future<LineStats> _getStats() {
     final completer = Completer<LineStats>();
 
-    log.fine('Get stats start');
+    AppLogger.debug(name: 'CommonTelnetClient', 'Get stats start');
 
     late StreamSubscription tempSub;
     tempSub = _socketStream!.transform(DebounceBuffer(const Duration(milliseconds: 300))).listen(
       (event) {
-        log.fine('Get stats stream event >');
-        log.fine(event);
+        AppLogger.debug(name: 'CommonTelnetClient', 'Get stats stream event > \n$event');
 
         // Wait and parse stats pessimistically due to possible garbage in stream
         RawLineStats? maybeStats = cmd2Stats.tryParse(event);
         if (maybeStats != null && !completer.isCompleted) {
+          AppLogger.debug(name: 'CommonTelnetClient', 'Get stats parsed');
+
           final stats = LineStats(
             snapshotId: snapshotId,
             status: maybeStats.status,
@@ -190,29 +188,27 @@ class CommonTelnetClient implements NetUnitClient {
             downFECIncr: _incrDiff(_prevStats?.downFEC, maybeStats.downFEC),
           );
 
-          log.fine('Get stats parsed');
-
           _prevStats = stats;
           tempSub.cancel();
           completer.complete(stats);
         }
       },
       onError: (e, s) {
-        log.fine('Get stats stream error: $e');
-        log.fine('Completed: ${completer.isCompleted}');
+        AppLogger.debug(name: 'CommonTelnetClient', 'Get stats stream error: $e');
+        AppLogger.debug(name: 'CommonTelnetClient', 'Completed: ${completer.isCompleted}');
         if (!completer.isCompleted) completer.completeError(e, s);
       },
       cancelOnError: true,
     );
 
     // Send command to get stats
-    log.fine('Get stats send: ${cmd2Stats.command}');
+    AppLogger.debug(name: 'CommonTelnetClient', 'Get stats send: ${cmd2Stats.command}');
     _socket!.write('${cmd2Stats.command}\n');
 
     // Auto complete by timeout if no stats received
     Timer(const Duration(seconds: 10), () {
-      log.fine('Get stats timeout');
-      log.fine('Completed: ${completer.isCompleted}');
+      AppLogger.debug(name: 'CommonTelnetClient', 'Get stats timeout');
+      AppLogger.debug(name: 'CommonTelnetClient', 'Completed: ${completer.isCompleted}');
       if (!completer.isCompleted) {
         tempSub.cancel();
         completer.completeError(TimeoutException('Connect timeout'));

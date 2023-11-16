@@ -3,11 +3,9 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
-import 'package:logging/logging.dart';
+import 'package:xdslmt/core/app_logger.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
-
-final log = Logger('HG532eClientImpl');
 
 String ultraEncoder(text) {
   var ultraHash = base64.encode(utf8.encode((sha256.convert(utf8.encode(text))).toString()));
@@ -26,7 +24,7 @@ class HG532eClientImpl implements NetUnitClient {
   LineStats? _prevStats;
 
   Future<bool> get _loginRequest async {
-    log.info('login request');
+    AppLogger.debug(name: 'HG532eClientImpl', 'login request');
 
     final url = Uri.parse('http://$ip/index/login.cgi');
 
@@ -36,9 +34,9 @@ class HG532eClientImpl implements NetUnitClient {
       headers: {'Cookie': 'Language=ru; FirstMenu=Admin_0; SecondMenu=Admin_0_0; ThirdMenu=Admin_0_0_0; '},
     );
 
-    log.fine('login response statusCode: ${response.statusCode}');
-    log.fine('login response headers: ${response.headers}');
-    log.fine('login response body: ${response.body}');
+    AppLogger.debug(name: 'HG532eClientImpl', 'statusCode: ${response.statusCode}');
+    AppLogger.debug(name: 'HG532eClientImpl', 'headers: ${response.headers}');
+    AppLogger.debug(name: 'HG532eClientImpl', 'body: ${response.body}');
 
     if (response.headers['content-length'] == '707') {
       _cookie = response.headers['set-cookie'];
@@ -55,13 +53,13 @@ class HG532eClientImpl implements NetUnitClient {
   }
 
   LineStats _parser(String res) {
-    log.fine('parser res: $res');
+    AppLogger.debug(name: 'HG532eClientImpl', 'parser res: $res');
 
     final substr = res.substring(res.indexOf('"InternetGatewayDevice.WANDevice.1.WANDSLInterfaceConfig"'), res.indexOf('),null'));
-    log.fine('parser substr: $substr');
+    AppLogger.debug(name: 'HG532eClientImpl', 'parser substr: $substr');
 
     final List<dynamic> decoded = jsonDecode('[' + substr + ']');
-    log.fine('parser decoded: $decoded');
+    AppLogger.debug(name: 'HG532eClientImpl', 'parser decoded: $decoded');
 
     final stats = LineStats(
       snapshotId: snapshotId,
@@ -107,7 +105,7 @@ class HG532eClientImpl implements NetUnitClient {
       }
       return _parser(response.body);
     } catch (e, s) {
-      log.warning('Fetch error: $e', e, s);
+      AppLogger.warning(name: 'HG532eClientImpl', 'Fetch error: $e', error: e, stack: s);
       return LineStats.errored(snapshotId: snapshotId, statusText: 'Connection failed');
     }
   }

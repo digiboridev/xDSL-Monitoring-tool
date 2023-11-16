@@ -1,36 +1,30 @@
-// import 'package:device_preview/device_preview.dart';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:xdslmt/core/app_logger.dart';
 import 'package:xdslmt/core/sl.dart';
 import 'package:xdslmt/data/repositories/stats_repo.dart';
 import 'package:xdslmt/data/repositories/settings_repo.dart';
-import 'package:xdslmt/data/services/stats_sampling_service.dart' hide log;
+import 'package:xdslmt/data/services/stats_sampling_service.dart';
 import 'package:xdslmt/screens/screens_wrapper.dart';
-import 'package:xdslmt/utils/dart_level_to_sentry.dart';
 
 Future<void> main() async {
   // Logger configuration
-  Logger.root.level = Level.ALL;
-  Logger.root.onRecord.listen((record) {
-    final logerName = record.loggerName.isEmpty ? 'ROOT' : record.loggerName;
-    final message = record.message;
-    final time = record.time;
-    final level = record.level;
-
+  AppLogger.stream.listen((LogEntity l) {
     // Setup local log
-    log(message, time: time, error: record.error, stackTrace: record.stackTrace, name: logerName, level: level.value);
+    log(l.msg, time: l.time, error: l.error, stackTrace: l.stack, name: l.name, level: l.level.index);
 
     // Setup remote log
-    if (record.error != null) Sentry.captureException(record.error, stackTrace: record.stackTrace);
-    if (record.level == Level.INFO) Sentry.captureMessage(message, template: logerName);
-    Sentry.addBreadcrumb(Breadcrumb(message: message, level: dartLevel2Sentry(level), timestamp: time, category: logerName));
+    if (l.error != null) Sentry.captureException(l.error, stackTrace: l.stack);
+    if (l.level == Level.info) Sentry.captureMessage(l.msg, template: l.name);
+    final b = Breadcrumb(message: l.msg, level: SentryLevel.fromName(l.level.name), timestamp: l.time, category: l.name);
+    Sentry.addBreadcrumb(b);
   });
 
-  // Entry point
+  // runApp(const App());
+  // runApp(DevicePreview(enabled: !kReleaseMode, builder: (context) => const App()));
   await SentryFlutter.init(
     (options) {
       options.dsn = const String.fromEnvironment('sentryKey');
@@ -38,17 +32,12 @@ Future<void> main() async {
       options.enablePrintBreadcrumbs = false;
       options.enableAutoPerformanceTracing = true;
       options.beforeSendTransaction = (transaction) async {
-        print(DateTime.now().toString());
-        print('tr: ' + transaction.eventId.toString());
+        debugPrint('tr send: ${transaction.eventId} ${DateTime.now()}');
         return transaction;
       };
     },
     appRunner: () => runApp(const App()),
   );
-
-  // runApp(DevicePreview(enabled: !kReleaseMode, builder: (context) => const App()));
-
-  // runApp(const App());
 }
 
 class App extends StatelessWidget {
@@ -57,7 +46,7 @@ class App extends StatelessWidget {
   /// Sets up orientation settings and listens to updates
   void bindOrientLock(SettingsRepository settingsRepo) async {
     void set(bool orientLock) {
-      Logger.root.info('orientLock set: $orientLock');
+      AppLogger.debug('OrientLock set: $orientLock');
       if (orientLock) {
         SystemChrome.setPreferredOrientations(
           [

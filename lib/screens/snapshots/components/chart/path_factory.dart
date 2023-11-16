@@ -35,16 +35,36 @@ abstract class PathFactory {
 
     // Layout data as it is on the timeline (x: time, y: value)
     int vMax = 1; // save max value for normalize y
-    for (int i = 0; i < data.length; i++) {
-      final e = data.elementAt(i);
-      final x = e.t - tStart;
-      final y = e.v;
 
-      path.lineTo(x.toDouble(), 0 - y.toDouble());
+    // for (int i = 0; i < data.length; i++) {
+    //   final e = data.elementAt(i);
+    //   final x = e.t - tStart;
+    //   final y = e.v;
 
-      if (y > vMax) vMax = y;
+    //   path.lineTo(x.toDouble(), 0 - y.toDouble());
+
+    //   if (y > vMax) vMax = y;
+    // }
+    // path.lineTo(tDiff.toDouble(), 0);
+
+    if (data.length > 2) {
+      for (int i = 0; i < data.length - 1; i++) {
+        final e = data.elementAt(i);
+        final x = e.t - tStart;
+        final y = e.v;
+
+        final eNext = data.elementAt(i + 1);
+        final xNext = eNext.t - tStart;
+        final yNext = eNext.v;
+
+        if (y == 0 || yNext == 0) continue;
+
+        path.moveTo(x.toDouble(), 0 - y.toDouble());
+        path.lineTo(xNext.toDouble(), 0 - yNext.toDouble());
+
+        if (y > vMax) vMax = y;
+      }
     }
-    path.lineTo(tDiff.toDouble(), 0);
 
     // Clamp path to desired dimensions from `size`
     // Makes it more universal to draw and independent of the view

@@ -189,7 +189,7 @@ class SnapshotStats {
       samplingDuration: DateTime.now().difference(startTime),
       uplinkDuration: uplinkDuration + uplinkDurationIncrement(lineStats.status, lineStats.time),
       lastSampleStatus: lineStats.status,
-      lastConnectionType: lineStats.connectionType,
+      lastConnectionType: lineStats.connectionType ?? lastConnectionType,
       lastSampleTime: lineStats.time,
       downRateLast: lineStats.downRate,
       downRateMin: _minVal(downRateMin, lineStats.downRate),

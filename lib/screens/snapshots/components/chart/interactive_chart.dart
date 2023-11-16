@@ -201,6 +201,13 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          Text('Mode', style: TextStyles.f14.cyan100),
+                          Text(widget.snapshotStats.lastConnectionType ?? 'N/A', style: TextStyles.f14.cyan100),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
                           Text('Total samples', style: TextStyles.f14.cyan100),
                           Text(widget.snapshotStats.samples.toString(), style: TextStyles.f14.cyan100),
                         ],

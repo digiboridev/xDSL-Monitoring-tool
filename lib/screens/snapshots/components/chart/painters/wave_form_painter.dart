@@ -36,6 +36,13 @@ class WaveFormPainter extends CustomPainter {
 
     canvas.restore(); // restore canvas state after clipping (so it doesn't affect other painters)
 
+    // Draw center line
+    canvas.drawLine(
+      Offset(0, size.height / 2),
+      Offset(size.width, size.height / 2),
+      p,
+    );
+
     // Draw vMax vertical mesh
     final int vMax = metadata.vMax;
     const int meshSteps = 3;

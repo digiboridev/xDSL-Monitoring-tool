@@ -37,6 +37,11 @@ Future<void> main() async {
       options.tracesSampleRate = 1.0;
       options.enablePrintBreadcrumbs = false;
       options.enableAutoPerformanceTracing = true;
+      options.beforeSendTransaction = (transaction) async {
+        print(DateTime.now().toString());
+        print('tr: ' + transaction.eventId.toString());
+        return transaction;
+      };
     },
     appRunner: () => runApp(const App()),
   );
@@ -92,7 +97,7 @@ class App extends StatelessWidget {
         title: 'xDSL Monitoring Tool',
         theme: ThemeData(useMaterial3: true, colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan)),
         home: const ScreensWrapper(),
-        navigatorObservers: [SentryNavigatorObserver()],
+        navigatorObservers: [SentryNavigatorObserver(setRouteNameAsTransaction: true)],
         // locale: DevicePreview.locale(context),
         // builder: DevicePreview.appBuilder,
       ),
@@ -102,4 +107,5 @@ class App extends StatelessWidget {
 
 // TODO sign
 // TODO about
+// TODO pp link
 // TODO release

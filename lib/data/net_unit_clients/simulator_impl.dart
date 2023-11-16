@@ -24,7 +24,9 @@ final class SimulatorClientImpl implements NetUnitClient {
   })  : _bdownRate = baseDownRate,
         _bupRate = baseUpRate,
         _bdownAttainableRate = (baseDownRate * 1.2).toInt(),
-        _bupAttainableRate = (baseUpRate * 1.2).toInt();
+        _bupAttainableRate = (baseUpRate * 1.2).toInt(),
+        _bdownRateLimit = (baseDownRate * 1.5).toInt(),
+        _bupRateLimit = (baseUpRate * 1.5).toInt();
 
   late final Random _rnd = Random();
 
@@ -33,6 +35,8 @@ final class SimulatorClientImpl implements NetUnitClient {
   final int _bdownRate;
   final int _bupAttainableRate;
   final int _bdownAttainableRate;
+  final int _bupRateLimit;
+  final int _bdownRateLimit;
 
   // Base line values
   final double _bmrU = 10;
@@ -118,8 +122,8 @@ final class SimulatorClientImpl implements NetUnitClient {
 
     // chance of donwstream stats drift
     if (_rndChance <= 10) {
-      _downRate = (_downRate + ((sigDrift + _rnd.nextInt(25)) * 4)).clamp(2000, _bdownRate + 4000);
-      _downAttainableRate = (_downAttainableRate + ((sigDrift + _rnd.nextInt(25)) * 4)).clamp(3000, _bdownAttainableRate + 4000);
+      _downRate = (_downRate + ((sigDrift + _rnd.nextInt(50)) * 10)).clamp(2000, _bdownRateLimit);
+      _downAttainableRate = (_downAttainableRate + ((sigDrift + _rnd.nextInt(50)) * 10)).clamp(3000, _bdownRateLimit);
 
       _mrD = (_mrD + ((sigDrift + _rnd.nextInt(100)) / 100)).clamp(0, 30);
       _attD = (_attD + ((sigDrift + _rnd.nextInt(100)) / 100)).clamp(0, 100);
@@ -129,8 +133,8 @@ final class SimulatorClientImpl implements NetUnitClient {
 
     // chance of upstream stats drift
     if (_rndChance <= 10) {
-      _upRate = (_upRate + ((sigDrift + _rnd.nextInt(5)) * 4)).clamp(250, _bupRate + 4000);
-      _upAttainableRate = (_upAttainableRate + ((sigDrift + _rnd.nextInt(5)) * 4)).clamp(500, _bupAttainableRate + 4000);
+      _upRate = (_upRate + ((sigDrift + _rnd.nextInt(50)) * 5)).clamp(250, _bupRateLimit);
+      _upAttainableRate = (_upAttainableRate + ((sigDrift + _rnd.nextInt(50)) * 5)).clamp(500, _bupRateLimit);
 
       _mrU = (_mrU + ((sigDrift + _rnd.nextInt(100)) / 100)).clamp(0, 30);
       _attU = (_attU + ((sigDrift + _rnd.nextInt(100)) / 100)).clamp(0, 100);
@@ -165,7 +169,5 @@ final class SimulatorClientImpl implements NetUnitClient {
   }
 
   @override
-  dispose() {
-    log.info('disposed');
-  }
+  dispose() {}
 }

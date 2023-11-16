@@ -17,14 +17,14 @@ class SettingsScreenViewModel extends ValueNotifier<SettingsScreenState> with St
 
   _init() async {
     value = SettingsScreenState.loaded(await settingsRepository.getSettings);
-    Logger.root.info('SettingsScreenViewModel: init complete');
+    Logger.root.fine('SettingsScreenViewModel: init complete');
 
     var sub = settingsRepository.updatesStream.listen((update) => value = SettingsScreenState.loaded(update));
     insert(sub);
   }
 
   Future<void> _setSettings(AppSettings settings) {
-    Logger.root.info('SettingsScreenViewModel: setSettings: $settings');
+    Logger.root.fine('SettingsScreenViewModel: setSettings: $settings');
 
     return settingsRepository.setSettings(settings);
   }

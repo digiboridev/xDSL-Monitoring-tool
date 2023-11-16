@@ -69,7 +69,8 @@ class WaveFormPainter extends CustomPainter {
 
     // Debug
     // final paintEnd = DateTime.now();
-    // debugPrint('WaveFormPainter: ${paintEnd.difference(paintStart).inMicroseconds}us');
+    // final Duration paintDuration = paintEnd.difference(paintStart);
+    // debugPrint('WaveFormPainter: ${paintDuration.inMicroseconds}us');
   }
 
   @override

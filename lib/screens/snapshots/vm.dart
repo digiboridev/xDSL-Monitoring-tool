@@ -11,12 +11,12 @@ class SnapshotsScreenViewModel extends ValueNotifier<SnapshotsScreenState> {
 
   _init() async {
     value = SnapshotsScreenState.loaded(await statsRepository.snapshotIds());
-    Logger.root.info('SnapshotsScreenViewModel: init complete');
+    Logger.root.fine('SnapshotsScreenViewModel: init complete');
   }
 
   refresh() async {
     value = SnapshotsScreenState.loaded(await statsRepository.snapshotIds());
-    Logger.root.info('SnapshotsScreenViewModel: refresh complete');
+    Logger.root.fine('SnapshotsScreenViewModel: refresh complete');
   }
 
   bool get vmReady => value is SnapshotsScreenLoaded;

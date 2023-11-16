@@ -60,7 +60,8 @@ class LinePathPainter extends CustomPainter {
 
     // Debug
     // final paintEnd = DateTime.now();
-    // debugPrint('WaveFormPainter: ${paintEnd.difference(paintStart).inMicroseconds}us');
+    // final Duration paintDuration = paintEnd.difference(paintStart);
+    // debugPrint('LinePathPainter: ${paintDuration.inMicroseconds}us');
   }
 
   @override

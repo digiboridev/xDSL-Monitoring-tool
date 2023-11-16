@@ -41,7 +41,8 @@ class StatusEventsPainter extends CustomPainter {
 
     // Debug
     // final paintEnd = DateTime.now();
-    // debugPrint('StatusEventsPainter: ${paintEnd.difference(paintStart).inMicroseconds}us');
+    // final Duration paintDuration = paintEnd.difference(paintStart);
+    // debugPrint('StatusEventsPainter: ${paintDuration.inMicroseconds}us');
   }
 
   @override

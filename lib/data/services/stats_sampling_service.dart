@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, unused_field
+// ignore_for_file: public_member_api_docs, sort_constructors_first, unused_field, avoid_print
 import 'dart:async';
 import 'dart:collection';
 import 'package:flutter/foundation.dart';
@@ -15,74 +15,82 @@ class StatsSamplingService extends ChangeNotifier {
   final StatsRepository _statsRepository;
   StatsSamplingService(this._statsRepository, this._settingsRepository);
 
-  NetUnitClient? _client;
+  // NetUnitClient? _client;
   SnapshotStats? _snapshotStats;
   SnapshotStats? get snapshotStats => _snapshotStats;
-  bool get samplingActive => _client != null && _snapshotStats != null;
+  // bool get samplingActive => _client != null && _snapshotStats != null;
 
   final _samplesQueue = Queue<LineStats>();
-  List<LineStats> get lastSamples => List.unmodifiable(_samplesQueue);
 
-  /// Start Network Unit stats sampling using the current settings
-  runSampling() async {
-    if (samplingActive) return;
+  Iterable<LineStats> get lastSamples => _samplesQueue;
 
+  StreamSubscription? samplingSub;
+  bool get samplingActive => samplingSub != null;
+
+  Stream<(LineStats lineStats, SnapshotStats snapshotStats)> createLineStatsStream() async* {
     AppSettings settings = await _settingsRepository.getSettings;
     Duration samplingInterval = settings.samplingInterval;
-    Duration splitInterval = settings.splitInterval;
     String snapshotId = DateTime.now().millisecondsSinceEpoch.toString();
 
     var client = NetUnitClient.fromSettings(settings, snapshotId);
     var snapshotStats = SnapshotStats.create(snapshotId, settings.host, settings.login, settings.pwd);
-    _client = client;
-    _snapshotStats = snapshotStats;
-    notifyListeners();
 
     AppLogger.info(name: 'StatsSamplingService', 'Run sampling: $snapshotId');
     AppLogger.debug(name: 'StatsSamplingService', '$settings');
 
-    tick() async {
-      // If sampling was stopped or restarted during the previous tick
-      if (_snapshotStats?.snapshotId != snapshotId) return;
+    try {
+      while (true) {
+        AppLogger.debug(name: 'StatsSamplingService', 'stream tick before');
 
-      LineStats lineStats = await client.fetchStats();
-      snapshotStats = snapshotStats.copyWithLineStats(lineStats);
-      _statsRepository.insertLineStats(lineStats);
-      _statsRepository.upsertSnapshotStats(snapshotStats);
+        LineStats lineStats = await client.fetchStats();
+        snapshotStats = snapshotStats.copyWithLineStats(lineStats);
 
-      // If sampling was stopped or restarted while new stats were being fetched
-      if (_snapshotStats?.snapshotId != snapshotId) return;
+        yield (lineStats, snapshotStats);
 
-      // Handle new values
-      _snapshotStats = snapshotStats;
-      _addLineStatsToQueue(lineStats);
-      notifyListeners();
+        AppLogger.debug(name: 'StatsSamplingService', 'stream tick after');
+        AppLogger.debug(name: 'StatsSamplingService', '$lineStats');
+        AppLogger.debug(name: 'StatsSamplingService', '$snapshotStats');
 
-      // Restart sampling if the split interval has been reached
-      if (_snapshotStats!.samplingDuration > splitInterval) {
-        stopSampling(wipeQueue: false);
-        runSampling();
-        return;
+        _statsRepository.insertLineStats(lineStats);
+        _statsRepository.upsertSnapshotStats(snapshotStats);
+
+        // TODO split
+
+        await Future.delayed(samplingInterval);
       }
-
-      // Schedule next iteration
-      Timer(samplingInterval, () => tick());
-
-      AppLogger.debug(name: 'StatsSamplingService', 'tick linestats: \n$lineStats');
-      AppLogger.debug(name: 'StatsSamplingService', 'tick snapshotstats: \n$snapshotStats');
+    } catch (e, s) {
+      AppLogger.error(name: 'StatsSamplingService', 'stream catch', error: e, stack: s);
+    } finally {
+      AppLogger.debug(name: 'StatsSamplingService', 'stream finally');
+      client.dispose();
     }
-
-    // Enqueue the sampling
-    tick();
   }
 
-  /// Stop Network Unit stats sampling
+  // Start Network Unit stats sampling using the current settings
+  runSampling() async {
+    if (samplingSub != null) return;
+
+    AppLogger.debug(name: 'StatsSamplingService', 'Run sampling');
+
+    _snapshotStats = null;
+    _samplesQueue.clear();
+
+    samplingSub = createLineStatsStream().listen((event) {
+      final (lineStats, snapshotStats) = event;
+      _addLineStatsToQueue(lineStats);
+      _snapshotStats = snapshotStats;
+      notifyListeners();
+    });
+
+    notifyListeners();
+  }
+
   stopSampling({bool wipeQueue = true}) {
     AppLogger.info(name: 'StatsSamplingService', 'Stop sampling');
-    if (wipeQueue) _samplesQueue.clear();
-    _snapshotStats = null;
-    _client?.dispose();
-    _client = null;
+
+    samplingSub?.cancel();
+    samplingSub = null;
+
     notifyListeners();
   }
 

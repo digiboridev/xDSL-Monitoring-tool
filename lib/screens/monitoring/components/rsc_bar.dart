@@ -20,80 +20,90 @@ class RSCBar extends StatelessWidget {
   }
 
   Widget bars() {
-    return RepaintBoundary(
-      child: Builder(
-        builder: (context) {
-          // TODO separate lists in vm with iterative update
-          final v = context.watch<MonitoringScreenViewModel>().lastLineStats;
-          List<int> dfec = [];
-          List<int> ufec = [];
-          List<int> dcrc = [];
-          List<int> ucrc = [];
-
-          for (final s in v) {
-            dfec.add(s.downFECIncr ?? 0);
-            ufec.add(s.upFECIncr ?? 0);
-            dcrc.add(s.downCRCIncr ?? 0);
-            ucrc.add(s.upCRCIncr ?? 0);
-          }
-
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Container(
-                width: 75,
-                height: 50,
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.blueGrey100),
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                  child: CustomPaint(painter: WaveFormTimelessPainter(max: 1000, increasedData: dfec)),
-                ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Container(
+          width: 75,
+          height: 50,
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.blueGrey100),
+              borderRadius: BorderRadius.circular(3),
+            ),
+            child: RepaintBoundary(
+              child: Builder(
+                builder: (context) {
+                  final vs = context.select<MonitoringScreenViewModel, Iterable<int>>((s) => s.rsDownFec);
+                  final max = context.select<MonitoringScreenViewModel, int>((s) => s.rsMax);
+                  return CustomPaint(painter: WaveFormTimelessPainter(max: max, increasedData: vs));
+                },
               ),
-              Container(
-                width: 75,
-                height: 50,
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.blueGrey100),
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                  child: CustomPaint(
-                    painter: WaveFormTimelessPainter(max: 1000, increasedData: dcrc),
-                  ),
-                ),
+            ),
+          ),
+        ),
+        Container(
+          width: 75,
+          height: 50,
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.blueGrey100),
+              borderRadius: BorderRadius.circular(3),
+            ),
+            child: RepaintBoundary(
+              child: Builder(
+                builder: (context) {
+                  final vs = context.select<MonitoringScreenViewModel, Iterable<int>>((s) => s.rsDownCrc);
+                  final max = context.select<MonitoringScreenViewModel, int>((s) => s.rsMax);
+                  return CustomPaint(painter: WaveFormTimelessPainter(max: max, increasedData: vs));
+                },
               ),
-              Container(
-                width: 75,
-                height: 50,
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.blueGrey100),
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                  child: CustomPaint(painter: WaveFormTimelessPainter(max: 1000, increasedData: ufec)),
-                ),
+            ),
+          ),
+        ),
+        Container(
+          width: 75,
+          height: 50,
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.blueGrey100),
+              borderRadius: BorderRadius.circular(3),
+            ),
+            child: RepaintBoundary(
+              child: Builder(
+                builder: (context) {
+                  final vs = context.select<MonitoringScreenViewModel, Iterable<int>>((s) => s.rsUpFec);
+                  final max = context.select<MonitoringScreenViewModel, int>((s) => s.rsMax);
+                  return CustomPaint(painter: WaveFormTimelessPainter(max: max, increasedData: vs));
+                },
               ),
-              Container(
-                width: 75,
-                height: 50,
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.blueGrey100),
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                  child: CustomPaint(painter: WaveFormTimelessPainter(max: 1000, increasedData: ucrc)),
-                ),
+            ),
+          ),
+        ),
+        Container(
+          width: 75,
+          height: 50,
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.blueGrey100),
+              borderRadius: BorderRadius.circular(3),
+            ),
+            child: RepaintBoundary(
+              child: Builder(
+                builder: (context) {
+                  final vs = context.select<MonitoringScreenViewModel, Iterable<int>>((s) => s.rsUpCrc);
+                  final max = context.select<MonitoringScreenViewModel, int>((s) => s.rsMax);
+                  return CustomPaint(painter: WaveFormTimelessPainter(max: max, increasedData: vs));
+                },
               ),
-            ],
-          );
-        },
-      ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

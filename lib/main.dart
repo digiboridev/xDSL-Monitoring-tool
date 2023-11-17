@@ -78,7 +78,7 @@ class App extends StatelessWidget {
         Provider<CurrentSamplingRepository>(create: (_) => SL.currentSamplingRepository),
         Provider<SettingsRepository>(create: (_) => SL.settingsRepository),
         Provider<StatsRepository>(create: (_) => SL.statsRepository),
-        ChangeNotifierProvider<StatsSamplingService>.value(value: SL.statsSamplingService),
+        Provider<StatsSamplingService>.value(value: SL.statsSamplingService),
       ],
       builder: (context, child) {
         bindOrientLock(context.read<SettingsRepository>());

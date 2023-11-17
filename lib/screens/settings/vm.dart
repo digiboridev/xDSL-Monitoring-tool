@@ -9,24 +9,24 @@ import 'package:xdslmt/screens/settings/state.dart';
 import 'package:xdslmt/utils/streambang.dart';
 
 class SettingsScreenViewModel extends ValueNotifier<SettingsScreenState> with StreamBang {
-  final SettingsRepository settingsRepository;
+  final SettingsRepository _settingsRepository;
 
-  SettingsScreenViewModel(this.settingsRepository) : super(SettingsScreenState.loading()) {
+  SettingsScreenViewModel(this._settingsRepository) : super(SettingsScreenState.loading()) {
     _init();
   }
 
   _init() async {
-    value = SettingsScreenState.loaded(await settingsRepository.getSettings);
+    value = SettingsScreenState.loaded(await _settingsRepository.getSettings);
     AppLogger.debug(name: 'SettingsScreenViewModel', 'init complete');
 
-    var sub = settingsRepository.updatesStream.listen((update) => value = SettingsScreenState.loaded(update));
+    var sub = _settingsRepository.updatesStream.listen((update) => value = SettingsScreenState.loaded(update));
     insert(sub);
   }
 
   Future<void> _setSettings(AppSettings settings) {
     AppLogger.debug(name: 'SettingsScreenViewModel', 'setSettings: $settings');
 
-    return settingsRepository.setSettings(settings);
+    return _settingsRepository.setSettings(settings);
   }
 
   /// Explicit state getter, to avoid repetitive cast under the main state guard

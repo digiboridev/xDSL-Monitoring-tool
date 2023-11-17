@@ -1,9 +1,9 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:xdslmt/data/models/snapshot_stats.dart';
-import 'package:xdslmt/data/services/stats_sampling_service.dart';
 import 'package:xdslmt/screens/monitoring/components/painters/bandwidth_painter.dart';
 import 'package:xdslmt/core/text_styles.dart';
+import 'package:xdslmt/screens/monitoring/vm.dart';
 
 class BandwidthBar extends StatefulWidget {
   const BandwidthBar({super.key});
@@ -41,7 +41,7 @@ class _BandwidthBarState extends State<BandwidthBar> with TickerProviderStateMix
     super.initState();
     controller.addListener(() => setState(() {}));
     updateData();
-    context.read<StatsSamplingService>().addListener(() {
+    context.read<MonitoringScreenViewModel>().addListener(() {
       if (mounted) updateData();
     });
   }
@@ -54,8 +54,11 @@ class _BandwidthBarState extends State<BandwidthBar> with TickerProviderStateMix
     int attainableUpold = attainableUp;
 
     // Get new values
-    SnapshotStats? stats = context.read<StatsSamplingService>().snapshotStats;
+    SnapshotStats? stats = context.read<MonitoringScreenViewModel>().snapshotStats;
+
     final type = stats?.lastConnectionType;
+
+    // TODO extract util
     if (type != null) {
       bool isVDSL2 = type.toLowerCase().contains('vdsl2') || type.toLowerCase().contains('993.2') || type.toLowerCase().contains('993.5');
       bool isVDSL = type.toLowerCase().contains('vdsl') || type.toLowerCase().contains('993.1');

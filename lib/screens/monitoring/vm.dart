@@ -6,15 +6,15 @@ import 'package:xdslmt/data/models/snapshot_stats.dart';
 import 'package:xdslmt/data/repositories/current_sampling_repo.dart';
 
 class MonitoringScreenViewModel extends ChangeNotifier {
-  final CurrentSamplingRepository currentSamplingRepository;
-  MonitoringScreenViewModel(this.currentSamplingRepository) {
+  final CurrentSamplingRepository _currentSamplingRepository;
+  MonitoringScreenViewModel(this._currentSamplingRepository) {
     _init();
   }
 
   late StreamSubscription _updatesSub;
 
   _init() {
-    _updatesSub = currentSamplingRepository.updatesStream.listen((_) => notifyListeners());
+    _updatesSub = _currentSamplingRepository.updatesStream.listen((_) => notifyListeners());
     AppLogger.debug(name: 'MonitoringScreenViewModel', 'init complete');
   }
 
@@ -24,7 +24,7 @@ class MonitoringScreenViewModel extends ChangeNotifier {
     super.dispose();
   }
 
-  SnapshotStats? get snapshotStats => currentSamplingRepository.lastSnapshotStats;
-  Iterable<LineStats> get lastSamples => currentSamplingRepository.lastLineStats;
-  bool get samplingActive => currentSamplingRepository.samplingActive;
+  SnapshotStats? get snapshotStats => _currentSamplingRepository.lastSnapshotStats;
+  Iterable<LineStats> get lastSamples => _currentSamplingRepository.lastLineStats;
+  bool get samplingActive => _currentSamplingRepository.samplingActive;
 }

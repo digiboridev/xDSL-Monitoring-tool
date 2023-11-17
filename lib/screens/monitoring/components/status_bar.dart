@@ -1,15 +1,16 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
-import 'package:xdslmt/data/services/stats_sampling_service.dart';
 import 'package:xdslmt/core/colors.dart';
+import 'package:xdslmt/screens/monitoring/vm.dart';
 
 class StatusBar extends StatelessWidget {
   const StatusBar({super.key});
 
   @override
   Widget build(BuildContext context) {
-    StatsSamplingService samplingService = context.watch<StatsSamplingService>();
+    // TODO fix on unactive sampling
+    final samplingService = context.watch<MonitoringScreenViewModel>();
     LineStats? lastSample = samplingService.lastSamples.lastOrNull;
 
     bool sampling = samplingService.samplingActive;
@@ -158,7 +159,7 @@ class _ProgressLineState extends State<ProgressLine> with TickerProviderStateMix
       if (status == AnimationStatus.dismissed) controller.reset();
     });
 
-    StatsSamplingService samplingService = context.read<StatsSamplingService>();
+    final samplingService = context.read<MonitoringScreenViewModel>();
 
     samplingService.addListener(() {
       {

@@ -1,10 +1,9 @@
-import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/data/models/snapshot_stats.dart';
+import 'package:xdslmt/data/repositories/current_sampling_repo.dart';
 import 'package:xdslmt/data/repositories/stats_repo.dart';
-import 'package:xdslmt/data/services/stats_sampling_service.dart';
 import 'package:xdslmt/screens/snapshots/components/snapshot_viewer.dart';
 import 'package:xdslmt/screens/snapshots/vm.dart';
 import 'package:xdslmt/core/formatters.dart';
@@ -19,32 +18,47 @@ class SnaplistTile extends StatefulWidget {
 }
 
 class _SnaplistTileState extends State<SnaplistTile> {
-  late final StatsRepository statsRepository;
-  late final StreamSubscription updSub;
   SnapshotStats? snapshotStats;
+  bool isActiveSnapshot = false;
 
   @override
   void initState() {
     super.initState();
 
-    statsRepository = context.read<StatsRepository>();
-    statsRepository.snapshotStatsById(widget.snapshotId).then((value) {
-      if (mounted) setState(() => snapshotStats = value);
-    });
-    updSub = statsRepository.snapshotStatsStreamById(widget.snapshotId).listen((event) {
-      if (mounted) setState(() => snapshotStats = event);
-    });
-  }
+    final currentSamplingRepository = context.read<CurrentSamplingRepository>();
+    bool hasLastSnapshot = currentSamplingRepository.lastSnapshotStats?.snapshotId == widget.snapshotId;
+    bool isSamplingActive = currentSamplingRepository.samplingActive;
 
-  @override
-  void dispose() {
-    super.dispose();
-    updSub.cancel();
-  }
+    // If the last sampling snapshot is the one we are displaying, we can use it directly
+    // Otherwise (else) we need to fetch the snapshot from the database
+    if (hasLastSnapshot) {
+      // Assign local data
+      snapshotStats = currentSamplingRepository.lastSnapshotStats;
+      isActiveSnapshot = hasLastSnapshot && isSamplingActive;
 
-  bool get isActiveSnapshot {
-    final samplingService = context.read<StatsSamplingService>();
-    return samplingService.snapshotStats?.snapshotId == widget.snapshotId;
+      // Listen for updates while snapshot is processing
+      if (isActiveSnapshot) {
+        Future.doWhile(() async {
+          // Wait for update
+          await currentSamplingRepository.updatesStream.first;
+          hasLastSnapshot = currentSamplingRepository.lastSnapshotStats?.snapshotId == widget.snapshotId;
+          isSamplingActive = currentSamplingRepository.samplingActive;
+
+          // Update local data
+          if (hasLastSnapshot) snapshotStats = snapshotStats = currentSamplingRepository.lastSnapshotStats;
+          isActiveSnapshot = hasLastSnapshot && isSamplingActive;
+          if (mounted) setState(() {});
+
+          // Continue listening if snapshot still displayed and processing
+          return isActiveSnapshot && mounted;
+        });
+      }
+    } else {
+      final statsRepository = context.read<StatsRepository>();
+      statsRepository.snapshotStatsById(widget.snapshotId).then((value) {
+        if (mounted) setState(() => snapshotStats = value);
+      });
+    }
   }
 
   onTap() {
@@ -58,6 +72,9 @@ class _SnaplistTileState extends State<SnaplistTile> {
   }
 
   onDelete() async {
+    final statsRepository = context.read<StatsRepository>();
+    final snapshotsScreenViewModel = context.read<SnapshotsScreenViewModel>();
+
     final bool? result = await showDialog(
       context: context,
       builder: (context) => BackdropFilter(
@@ -83,8 +100,7 @@ class _SnaplistTileState extends State<SnaplistTile> {
 
     if (result == true) {
       await statsRepository.deleteStats(widget.snapshotId);
-      if (!mounted) return;
-      context.read<SnapshotsScreenViewModel>().refresh();
+      snapshotsScreenViewModel.refresh();
     }
   }
 

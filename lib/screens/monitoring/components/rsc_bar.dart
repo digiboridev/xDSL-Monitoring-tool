@@ -1,10 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:xdslmt/data/services/stats_sampling_service.dart';
 import 'package:xdslmt/screens/monitoring/components/painters/timeless_waveform_painter.dart';
 import 'package:xdslmt/core/colors.dart';
 import 'package:xdslmt/core/text_styles.dart';
+import 'package:xdslmt/screens/monitoring/vm.dart';
 
 class RSCBar extends StatelessWidget {
   const RSCBar({super.key});
@@ -23,7 +23,8 @@ class RSCBar extends StatelessWidget {
     return RepaintBoundary(
       child: Builder(
         builder: (context) {
-          final v = context.watch<StatsSamplingService>().lastSamples;
+          // TODO separate lists in vm with iterative update
+          final v = context.watch<MonitoringScreenViewModel>().lastSamples;
           List<int> dfec = [];
           List<int> ufec = [];
           List<int> dcrc = [];
@@ -61,10 +62,7 @@ class RSCBar extends StatelessWidget {
                     borderRadius: BorderRadius.circular(3),
                   ),
                   child: CustomPaint(
-                    painter: WaveFormTimelessPainter(
-                      max: 1000,
-                      increasedData: dcrc,
-                    ),
+                    painter: WaveFormTimelessPainter(max: 1000, increasedData: dcrc),
                   ),
                 ),
               ),
@@ -108,8 +106,8 @@ class RSCBar extends StatelessWidget {
           child: RepaintBoundary(
             child: Builder(
               builder: (context) {
-                final downFecLast = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downFecLast);
-                final downFecTotal = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downFecTotal);
+                final downFecLast = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.downFecLast);
+                final downFecTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.downFecTotal);
                 final downFecTotalExp = downFecTotal?.toStringAsPrecision(3);
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -130,8 +128,8 @@ class RSCBar extends StatelessWidget {
           child: RepaintBoundary(
             child: Builder(
               builder: (context) {
-                final downCrcLast = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downCrcLast);
-                final downCrcTotal = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downCrcTotal);
+                final downCrcLast = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.downCrcLast);
+                final downCrcTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.downCrcTotal);
                 final downCrcTotalExp = downCrcTotal?.toStringAsPrecision(3);
 
                 return Column(
@@ -153,8 +151,8 @@ class RSCBar extends StatelessWidget {
           child: RepaintBoundary(
             child: Builder(
               builder: (context) {
-                final upFecLast = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upFecLast);
-                final upFecTotal = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upFecTotal);
+                final upFecLast = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.upFecLast);
+                final upFecTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.upFecTotal);
                 final upFecTotalExp = upFecTotal?.toStringAsPrecision(3);
 
                 return Column(
@@ -176,8 +174,8 @@ class RSCBar extends StatelessWidget {
           child: RepaintBoundary(
             child: Builder(
               builder: (context) {
-                final upCrcLast = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upCrcLast);
-                final upCrcTotal = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upCrcTotal);
+                final upCrcLast = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.upCrcLast);
+                final upCrcTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.upCrcTotal);
                 final upCrcTotalExp = upCrcTotal?.toStringAsPrecision(3);
 
                 return Column(

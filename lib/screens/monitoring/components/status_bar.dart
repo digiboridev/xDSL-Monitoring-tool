@@ -2,6 +2,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/core/colors.dart';
+import 'package:xdslmt/data/repositories/current_sampling_repo.dart';
 import 'package:xdslmt/screens/monitoring/vm.dart';
 
 class StatusBar extends StatelessWidget {
@@ -34,7 +35,9 @@ class StatusBar extends StatelessWidget {
             ),
           ),
         ),
-        const ProgressLine(),
+        const ProgressLine(
+          key: Key('ProgressLine'),
+        ),
       ],
     );
   }
@@ -144,31 +147,34 @@ class ProgressLine extends StatefulWidget {
 }
 
 class _ProgressLineState extends State<ProgressLine> with TickerProviderStateMixin {
-  late final AnimationController controller = AnimationController(vsync: this, duration: const Duration(seconds: 1));
-  late final curvedAnimation = CurvedAnimation(parent: controller, curve: Curves.ease, reverseCurve: Curves.ease);
-  late final Tween<double> animTween = Tween(begin: 0, end: 0);
-  late final Animation<double> animation = animTween.animate(curvedAnimation);
+  late final controller = AnimationController(vsync: this, duration: const Duration(seconds: 1));
 
   @override
   void initState() {
     super.initState();
 
     controller.addListener(() => setState(() {}));
-    controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed) controller.reset();
-      if (status == AnimationStatus.dismissed) controller.reset();
-    });
 
-    final samplingService = context.read<MonitoringScreenViewModel>();
+    final currentSamplingRepository = context.read<CurrentSamplingRepository>();
+    Future.doWhile(() async {
+      final event = await currentSamplingRepository.updatesStream.first;
+      if (!mounted) return false;
 
-    samplingService.addListener(() {
-      {
-        if (!mounted) return;
-        animTween.begin = 0;
-        animTween.end = 1;
-        controller.reset();
-        controller.forward();
+      Duration lastDuration = currentSamplingRepository.lastSamplingDuration;
+      if (lastDuration == Duration.zero) lastDuration = const Duration(milliseconds: 300);
+
+      if (event == UpdateType.fetchAttempt) {
+        controller.animateTo(0, duration: Duration.zero);
+        controller.animateTo(0.5, duration: Duration(milliseconds: lastDuration.inMilliseconds ~/ 2), curve: Curves.ease);
       }
+
+      if (event == UpdateType.statsUpdated) {
+        controller
+            .animateTo(1, duration: Duration(milliseconds: lastDuration.inMilliseconds ~/ 2), curve: Curves.ease)
+            .whenComplete(() => controller.animateTo(0, duration: Duration.zero));
+      }
+
+      return true;
     });
   }
 
@@ -182,13 +188,15 @@ class _ProgressLineState extends State<ProgressLine> with TickerProviderStateMix
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 1,
+      height: 2,
       child: Row(
         children: [
-          Container(
-            color: Colors.yellow[700],
-            height: 2,
-            width: MediaQuery.of(context).size.width * animation.value,
-          ),
+          if (context.select<MonitoringScreenViewModel, bool>((vm) => vm.samplingActive))
+            Container(
+              color: Colors.yellow[700],
+              height: 2,
+              width: MediaQuery.of(context).size.width * controller.value,
+            ),
         ],
       ),
     );

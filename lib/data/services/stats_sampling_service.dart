@@ -20,7 +20,7 @@ class StatsSamplingService {
   StreamSubscription? _samplingSub;
   bool get samplingActive => _samplingSub != null;
 
-  Stream<(LineStats lineStats, SnapshotStats snapshotStats)> createLineStatsStream() async* {
+  Stream<(LineStats lineStats, SnapshotStats snapshotStats, Duration fetchDuration)> createLineStatsStream() async* {
     AppSettings settings = await _settingsRepository.getSettings;
     Duration samplingInterval = settings.samplingInterval;
     String snapshotId = DateTime.now().millisecondsSinceEpoch.toString();
@@ -38,10 +38,16 @@ class StatsSamplingService {
       while (true) {
         AppLogger.debug(name: 'StatsSamplingService', 'stream tick before');
 
+        final fetchStart = DateTime.now();
+        _currentSamplingRepository.signalFetchAttempt();
+
         LineStats lineStats = await client.fetchStats().catchError((_) => LineStats.errored(snapshotId: snapshotId, statusText: 'Sampling error'));
         snapshotStats = snapshotStats.copyWithLineStats(lineStats);
 
-        yield (lineStats, snapshotStats);
+        final fetchEnd = DateTime.now();
+        final fetchDuration = fetchEnd.difference(fetchStart);
+
+        yield (lineStats, snapshotStats, fetchDuration);
 
         AppLogger.debug(name: 'StatsSamplingService', 'stream tick after');
         AppLogger.debug(name: 'StatsSamplingService', '$lineStats');
@@ -67,11 +73,11 @@ class StatsSamplingService {
 
     AppLogger.debug(name: 'StatsSamplingService', 'Run sampling');
 
+    _currentSamplingRepository.wipeStats();
     _samplingSub = createLineStatsStream().listen(
-      (event) => _currentSamplingRepository.updateStats(event.$1, event.$2),
+      (event) => _currentSamplingRepository.updateStats(event.$1, event.$2, event.$3),
       onDone: () => stopSampling(), // Actually, this should never happen
     );
-    _currentSamplingRepository.wipeStats();
     _currentSamplingRepository.updateStatus(true);
   }
 

@@ -43,11 +43,12 @@ class SNRBar extends StatelessWidget {
                   RepaintBoundary(
                     child: Builder(
                       builder: (context) {
-                        final v = context.watch<MonitoringScreenViewModel>().lastLineStats;
-                        // TODO separate lists in vm with iterative update
-                        final s = v.map((e) => e.downMargin).toList();
-                        if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
-                        return LineChart(s: s, invert: false);
+                        final monitoringScreenViewModel = context.watch<MonitoringScreenViewModel>();
+
+                        final s = monitoringScreenViewModel.downMargins;
+                        final min = monitoringScreenViewModel.marginMin;
+                        final max = monitoringScreenViewModel.marginMax;
+                        return LineChart(s: s, min: min, max: max, invert: false);
                       },
                     ),
                   ),
@@ -90,10 +91,12 @@ class SNRBar extends StatelessWidget {
                   RepaintBoundary(
                     child: Builder(
                       builder: (context) {
-                        final v = context.watch<MonitoringScreenViewModel>().lastLineStats;
-                        final s = v.map((e) => e.upMargin).toList();
-                        if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
-                        return LineChart(s: s, invert: false);
+                        final monitoringScreenViewModel = context.watch<MonitoringScreenViewModel>();
+
+                        final s = monitoringScreenViewModel.upMargins;
+                        final min = monitoringScreenViewModel.marginMin;
+                        final max = monitoringScreenViewModel.marginMax;
+                        return LineChart(s: s, min: min, max: max, invert: false);
                       },
                     ),
                   ),
@@ -142,10 +145,12 @@ class SNRBar extends StatelessWidget {
                   RepaintBoundary(
                     child: Builder(
                       builder: (context) {
-                        final v = context.watch<MonitoringScreenViewModel>().lastLineStats;
-                        final s = v.map((e) => e.downAttenuation).toList();
-                        if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
-                        return LineChart(s: s, invert: true);
+                        final monitoringScreenViewModel = context.watch<MonitoringScreenViewModel>();
+
+                        final s = monitoringScreenViewModel.downAttenuations;
+                        final min = monitoringScreenViewModel.attenuationMin;
+                        final max = monitoringScreenViewModel.attenuationMax;
+                        return LineChart(s: s, min: min, max: max, invert: true);
                       },
                     ),
                   ),
@@ -188,10 +193,12 @@ class SNRBar extends StatelessWidget {
                   RepaintBoundary(
                     child: Builder(
                       builder: (context) {
-                        final v = context.watch<MonitoringScreenViewModel>().lastLineStats;
-                        final s = v.map((e) => e.upAttenuation).toList();
-                        if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
-                        return LineChart(s: s, invert: true);
+                        final monitoringScreenViewModel = context.watch<MonitoringScreenViewModel>();
+
+                        final s = monitoringScreenViewModel.upAttenuations;
+                        final min = monitoringScreenViewModel.attenuationMin;
+                        final max = monitoringScreenViewModel.attenuationMax;
+                        return LineChart(s: s, min: min, max: max, invert: true);
                       },
                     ),
                   ),
@@ -217,9 +224,11 @@ class SNRBar extends StatelessWidget {
 }
 
 class LineChart extends StatelessWidget {
-  const LineChart({super.key, required this.s, required this.invert});
+  const LineChart({super.key, required this.s, required this.min, required this.max, required this.invert});
 
-  final List<int?> s;
+  final Iterable<int?> s;
+  final int min;
+  final int max;
   final bool invert;
 
   @override
@@ -232,7 +241,7 @@ class LineChart extends StatelessWidget {
         border: Border.all(color: AppColors.cyan100),
         borderRadius: const BorderRadius.all(Radius.circular(3)),
       ),
-      child: CustomPaint(painter: TimelessLinePathPainter(s, invert)),
+      child: CustomPaint(painter: TimelessLinePathPainter(s, min, max, invert)),
     );
   }
 }

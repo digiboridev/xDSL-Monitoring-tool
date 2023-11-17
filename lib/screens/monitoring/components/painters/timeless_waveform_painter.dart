@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:xdslmt/core/colors.dart';
 
 class WaveFormTimelessPainter extends CustomPainter {
-  final Iterable<int> increasedData;
+  final Iterable<int?> increasedData;
   final int max;
   WaveFormTimelessPainter({required this.increasedData, required this.max});
 
@@ -37,7 +37,7 @@ class WaveFormTimelessPainter extends CustomPainter {
     // Draw bars
     for (int i = 0; i < increasedData.length; i++) {
       final val = increasedData.elementAt(i);
-      if (val == 0) continue;
+      if (val == null || val == 0) continue;
       final double scale = (val / max).clamp(0, 1);
       final double x = i * step;
       final double y = scale * size.height;

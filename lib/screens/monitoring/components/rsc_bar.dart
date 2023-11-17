@@ -35,8 +35,9 @@ class RSCBar extends StatelessWidget {
             child: RepaintBoundary(
               child: Builder(
                 builder: (context) {
-                  final vs = context.select<MonitoringScreenViewModel, Iterable<int>>((s) => s.rsDownFec);
-                  final max = context.select<MonitoringScreenViewModel, int>((s) => s.rsMax);
+                  final monitoringScreenViewModel = context.watch<MonitoringScreenViewModel>();
+                  final vs = monitoringScreenViewModel.rsDownFec;
+                  final max = monitoringScreenViewModel.rsMax;
                   return CustomPaint(painter: WaveFormTimelessPainter(max: max, increasedData: vs));
                 },
               ),
@@ -55,8 +56,9 @@ class RSCBar extends StatelessWidget {
             child: RepaintBoundary(
               child: Builder(
                 builder: (context) {
-                  final vs = context.select<MonitoringScreenViewModel, Iterable<int>>((s) => s.rsDownCrc);
-                  final max = context.select<MonitoringScreenViewModel, int>((s) => s.rsMax);
+                  final monitoringScreenViewModel = context.watch<MonitoringScreenViewModel>();
+                  final vs = monitoringScreenViewModel.rsDownCrc;
+                  final max = monitoringScreenViewModel.rsMax;
                   return CustomPaint(painter: WaveFormTimelessPainter(max: max, increasedData: vs));
                 },
               ),
@@ -75,8 +77,9 @@ class RSCBar extends StatelessWidget {
             child: RepaintBoundary(
               child: Builder(
                 builder: (context) {
-                  final vs = context.select<MonitoringScreenViewModel, Iterable<int>>((s) => s.rsUpFec);
-                  final max = context.select<MonitoringScreenViewModel, int>((s) => s.rsMax);
+                  final monitoringScreenViewModel = context.watch<MonitoringScreenViewModel>();
+                  final vs = monitoringScreenViewModel.rsUpFec;
+                  final max = monitoringScreenViewModel.rsMax;
                   return CustomPaint(painter: WaveFormTimelessPainter(max: max, increasedData: vs));
                 },
               ),
@@ -95,8 +98,9 @@ class RSCBar extends StatelessWidget {
             child: RepaintBoundary(
               child: Builder(
                 builder: (context) {
-                  final vs = context.select<MonitoringScreenViewModel, Iterable<int>>((s) => s.rsUpCrc);
-                  final max = context.select<MonitoringScreenViewModel, int>((s) => s.rsMax);
+                  final monitoringScreenViewModel = context.watch<MonitoringScreenViewModel>();
+                  final vs = monitoringScreenViewModel.rsUpCrc;
+                  final max = monitoringScreenViewModel.rsMax;
                   return CustomPaint(painter: WaveFormTimelessPainter(max: max, increasedData: vs));
                 },
               ),

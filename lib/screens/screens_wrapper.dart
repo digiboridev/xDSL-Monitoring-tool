@@ -4,7 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/data/repositories/settings_repo.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
-import 'package:xdslmt/screens/monitoring/current_screen.dart';
+import 'package:xdslmt/screens/monitoring/binding.dart';
+import 'package:xdslmt/screens/monitoring/screen.dart';
 import 'package:xdslmt/screens/settings/binding.dart';
 import 'package:xdslmt/screens/settings/view.dart';
 import 'package:xdslmt/screens/snapshots/binding.dart';
@@ -21,7 +22,7 @@ class ScreensWrapper extends StatefulWidget {
 
 class _ScreensWrapperState extends State<ScreensWrapper> {
   final Map screens = {
-    'Monitoring': const MonitoringScreen(),
+    'Monitoring': const MonitoringScreenBinding(child: MonitoringScreen()),
     'Snapshots': const SnapshotsScreenBinding(child: SnapshotsScreenView()),
     'Settings': const SettingsScreenBinding(child: SettingsScreenView()),
   };

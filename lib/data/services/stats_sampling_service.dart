@@ -36,8 +36,8 @@ class StatsSamplingService extends ChangeNotifier {
     Duration samplingInterval = settings.samplingInterval;
     String snapshotId = DateTime.now().millisecondsSinceEpoch.toString();
 
-    var client = NetUnitClient.fromSettings(settings, snapshotId);
-    var snapshotStats = SnapshotStats.create(snapshotId, settings.host, settings.login, settings.pwd);
+    NetUnitClient client = NetUnitClient.fromSettings(settings, snapshotId);
+    SnapshotStats snapshotStats = SnapshotStats.create(snapshotId, settings.host, settings.login, settings.pwd);
 
     AppLogger.info(name: 'StatsSamplingService', 'Run sampling: $snapshotId');
     AppLogger.debug(name: 'StatsSamplingService', '$settings');
@@ -46,7 +46,7 @@ class StatsSamplingService extends ChangeNotifier {
       while (true) {
         AppLogger.debug(name: 'StatsSamplingService', 'stream tick before');
 
-        LineStats lineStats = await client.fetchStats();
+        LineStats lineStats = await client.fetchStats().catchError((_) => LineStats.errored(snapshotId: snapshotId, statusText: 'Sampling error'));
         snapshotStats = snapshotStats.copyWithLineStats(lineStats);
 
         yield (lineStats, snapshotStats);
@@ -55,8 +55,8 @@ class StatsSamplingService extends ChangeNotifier {
         AppLogger.debug(name: 'StatsSamplingService', '$lineStats');
         AppLogger.debug(name: 'StatsSamplingService', '$snapshotStats');
 
-        _statsRepository.insertLineStats(lineStats);
-        _statsRepository.upsertSnapshotStats(snapshotStats);
+        _statsRepository.insertLineStats(lineStats).ignore();
+        _statsRepository.upsertSnapshotStats(snapshotStats).ignore();
 
         // TODO split
 
@@ -79,13 +79,16 @@ class StatsSamplingService extends ChangeNotifier {
     _snapshotStats = null;
     _samplesQueue.clear();
 
-    samplingSub = createLineStatsStream().listen((event) {
-      final (lineStats, snapshotStats) = event;
-      _addLineStatsToQueue(lineStats);
-      _snapshotStats = snapshotStats;
-      notifyListeners();
-      _currentSamplingRepository.updateStats(lineStats, snapshotStats);
-    });
+    samplingSub = createLineStatsStream().listen(
+      (event) {
+        final (lineStats, snapshotStats) = event;
+        _addLineStatsToQueue(lineStats);
+        _snapshotStats = snapshotStats;
+        notifyListeners();
+        _currentSamplingRepository.updateStats(lineStats, snapshotStats);
+      },
+      onDone: () => stopSampling(), // Actually, this should never happen
+    );
 
     notifyListeners();
     _currentSamplingRepository.updateStatus(true);
@@ -112,9 +115,3 @@ class StatsSamplingService extends ChangeNotifier {
     super.dispose();
   }
 }
-
-//asd
-
-// test
-
-// test

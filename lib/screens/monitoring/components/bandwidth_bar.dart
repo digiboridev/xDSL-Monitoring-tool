@@ -54,7 +54,7 @@ class _BandwidthBarState extends State<BandwidthBar> with TickerProviderStateMix
     int attainableUpold = attainableUp;
 
     // Get new values
-    SnapshotStats? stats = context.read<MonitoringScreenViewModel>().snapshotStats;
+    SnapshotStats? stats = context.read<MonitoringScreenViewModel>().lastSnapshotStats;
 
     final type = stats?.lastConnectionType;
 

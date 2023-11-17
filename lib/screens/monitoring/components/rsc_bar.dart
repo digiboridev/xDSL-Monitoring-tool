@@ -24,7 +24,7 @@ class RSCBar extends StatelessWidget {
       child: Builder(
         builder: (context) {
           // TODO separate lists in vm with iterative update
-          final v = context.watch<MonitoringScreenViewModel>().lastSamples;
+          final v = context.watch<MonitoringScreenViewModel>().lastLineStats;
           List<int> dfec = [];
           List<int> ufec = [];
           List<int> dcrc = [];
@@ -106,8 +106,8 @@ class RSCBar extends StatelessWidget {
           child: RepaintBoundary(
             child: Builder(
               builder: (context) {
-                final downFecLast = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.downFecLast);
-                final downFecTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.downFecTotal);
+                final downFecLast = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.downFecLast);
+                final downFecTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.downFecTotal);
                 final downFecTotalExp = downFecTotal?.toStringAsPrecision(3);
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -128,8 +128,8 @@ class RSCBar extends StatelessWidget {
           child: RepaintBoundary(
             child: Builder(
               builder: (context) {
-                final downCrcLast = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.downCrcLast);
-                final downCrcTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.downCrcTotal);
+                final downCrcLast = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.downCrcLast);
+                final downCrcTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.downCrcTotal);
                 final downCrcTotalExp = downCrcTotal?.toStringAsPrecision(3);
 
                 return Column(
@@ -151,8 +151,8 @@ class RSCBar extends StatelessWidget {
           child: RepaintBoundary(
             child: Builder(
               builder: (context) {
-                final upFecLast = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.upFecLast);
-                final upFecTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.upFecTotal);
+                final upFecLast = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.upFecLast);
+                final upFecTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.upFecTotal);
                 final upFecTotalExp = upFecTotal?.toStringAsPrecision(3);
 
                 return Column(
@@ -174,8 +174,8 @@ class RSCBar extends StatelessWidget {
           child: RepaintBoundary(
             child: Builder(
               builder: (context) {
-                final upCrcLast = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.upCrcLast);
-                final upCrcTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.upCrcTotal);
+                final upCrcLast = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.upCrcLast);
+                final upCrcTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.upCrcTotal);
                 final upCrcTotalExp = upCrcTotal?.toStringAsPrecision(3);
 
                 return Column(

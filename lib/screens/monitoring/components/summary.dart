@@ -10,7 +10,7 @@ class Summary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SnapshotStats? stats = context.watch<MonitoringScreenViewModel>().snapshotStats;
+    SnapshotStats? stats = context.watch<MonitoringScreenViewModel>().lastSnapshotStats;
     return SizedBox(
       width: double.infinity,
       child: Row(

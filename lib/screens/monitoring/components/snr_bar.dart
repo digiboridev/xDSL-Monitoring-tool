@@ -25,7 +25,7 @@ class SNRBar extends StatelessWidget {
                   RepaintBoundary(
                     child: Builder(
                       builder: (context) {
-                        final v = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.downSNRmLast);
+                        final v = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.downSNRmLast);
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,7 +43,7 @@ class SNRBar extends StatelessWidget {
                   RepaintBoundary(
                     child: Builder(
                       builder: (context) {
-                        final v = context.watch<MonitoringScreenViewModel>().lastSamples;
+                        final v = context.watch<MonitoringScreenViewModel>().lastLineStats;
                         // TODO separate lists in vm with iterative update
                         final s = v.map((e) => e.downMargin).toList();
                         if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
@@ -55,9 +55,9 @@ class SNRBar extends StatelessWidget {
                   RepaintBoundary(
                     child: Builder(
                       builder: (context) {
-                        final min = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.downSNRmMin);
-                        final max = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.downSNRmMax);
-                        final avg = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.downSNRmAvg);
+                        final min = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.downSNRmMin);
+                        final max = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.downSNRmMax);
+                        final avg = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.downSNRmAvg);
                         return MinMaxAvgRow(min: min, max: max, avg: avg);
                       },
                     ),
@@ -72,7 +72,7 @@ class SNRBar extends StatelessWidget {
                   RepaintBoundary(
                     child: Builder(
                       builder: (context) {
-                        final v = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.upSNRmLast);
+                        final v = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.upSNRmLast);
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,7 +90,7 @@ class SNRBar extends StatelessWidget {
                   RepaintBoundary(
                     child: Builder(
                       builder: (context) {
-                        final v = context.watch<MonitoringScreenViewModel>().lastSamples;
+                        final v = context.watch<MonitoringScreenViewModel>().lastLineStats;
                         final s = v.map((e) => e.upMargin).toList();
                         if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
                         return LineChart(s: s, invert: false);
@@ -101,9 +101,9 @@ class SNRBar extends StatelessWidget {
                   RepaintBoundary(
                     child: Builder(
                       builder: (context) {
-                        final min = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.upSNRmMin);
-                        final max = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.upSNRmMax);
-                        final avg = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.upSNRmAvg);
+                        final min = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.upSNRmMin);
+                        final max = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.upSNRmMax);
+                        final avg = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.upSNRmAvg);
                         return MinMaxAvgRow(min: min, max: max, avg: avg);
                       },
                     ),
@@ -124,7 +124,7 @@ class SNRBar extends StatelessWidget {
                   RepaintBoundary(
                     child: Builder(
                       builder: (context) {
-                        final v = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.downAttenuationLast);
+                        final v = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.downAttenuationLast);
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,7 +142,7 @@ class SNRBar extends StatelessWidget {
                   RepaintBoundary(
                     child: Builder(
                       builder: (context) {
-                        final v = context.watch<MonitoringScreenViewModel>().lastSamples;
+                        final v = context.watch<MonitoringScreenViewModel>().lastLineStats;
                         final s = v.map((e) => e.downAttenuation).toList();
                         if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
                         return LineChart(s: s, invert: true);
@@ -153,9 +153,9 @@ class SNRBar extends StatelessWidget {
                   RepaintBoundary(
                     child: Builder(
                       builder: (context) {
-                        final min = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.downAttenuationMin);
-                        final max = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.downAttenuationMax);
-                        final avg = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.downAttenuationAvg);
+                        final min = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.downAttenuationMin);
+                        final max = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.downAttenuationMax);
+                        final avg = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.downAttenuationAvg);
                         return MinMaxAvgRow(min: min, max: max, avg: avg);
                       },
                     ),
@@ -170,7 +170,7 @@ class SNRBar extends StatelessWidget {
                   RepaintBoundary(
                     child: Builder(
                       builder: (context) {
-                        final v = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.upAttenuationLast);
+                        final v = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.upAttenuationLast);
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,7 +188,7 @@ class SNRBar extends StatelessWidget {
                   RepaintBoundary(
                     child: Builder(
                       builder: (context) {
-                        final v = context.watch<MonitoringScreenViewModel>().lastSamples;
+                        final v = context.watch<MonitoringScreenViewModel>().lastLineStats;
                         final s = v.map((e) => e.upAttenuation).toList();
                         if (s.length < 100) s.insertAll(0, List.filled(100 - s.length, null));
                         return LineChart(s: s, invert: true);
@@ -199,9 +199,9 @@ class SNRBar extends StatelessWidget {
                   RepaintBoundary(
                     child: Builder(
                       builder: (context) {
-                        final min = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.upAttenuationMin);
-                        final max = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.upAttenuationMax);
-                        final avg = context.select<MonitoringScreenViewModel, int?>((s) => s.snapshotStats?.upAttenuationAvg);
+                        final min = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.upAttenuationMin);
+                        final max = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.upAttenuationMax);
+                        final avg = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.upAttenuationAvg);
                         return MinMaxAvgRow(min: min, max: max, avg: avg);
                       },
                     ),

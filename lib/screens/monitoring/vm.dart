@@ -24,7 +24,7 @@ class MonitoringScreenViewModel extends ChangeNotifier {
     super.dispose();
   }
 
-  SnapshotStats? get snapshotStats => _currentSamplingRepository.lastSnapshotStats;
-  Iterable<LineStats> get lastSamples => _currentSamplingRepository.lastLineStats;
+  SnapshotStats? get lastSnapshotStats => _currentSamplingRepository.lastSnapshotStats;
+  Iterable<LineStats> get lastLineStats => _currentSamplingRepository.lastLineStats;
   bool get samplingActive => _currentSamplingRepository.samplingActive;
 }

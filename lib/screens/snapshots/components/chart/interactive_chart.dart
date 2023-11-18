@@ -468,7 +468,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: RepaintBoundary(
                       child: CustomPaint(
                         painter: LinePathPainter(
-                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upAttainableRate ?? 0)),
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upAttainableRate ?? 0)), // TODO remove 0
                           scale: scale,
                           offset: offset,
                           key: 'upAttainableRate${widget.statsList.last.time.millisecondsSinceEpoch}',
@@ -499,7 +499,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: RepaintBoundary(
                       child: CustomPaint(
                         painter: WaveFormPainter(
-                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downFECIncr ?? 0)),
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downFECIncr ?? 0)), // TODO remove 0
                           scale: scale,
                           offset: offset,
                           key: 'downFECIncr${widget.statsList.last.time.millisecondsSinceEpoch}',

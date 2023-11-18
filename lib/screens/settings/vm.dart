@@ -23,6 +23,13 @@ class SettingsScreenViewModel extends ValueNotifier<SettingsScreenState> with St
     insert(sub);
   }
 
+  @override
+  void dispose() {
+    AppLogger.debug(name: 'SettingsScreenViewModel', 'dispose');
+    canshot();
+    super.dispose();
+  }
+
   Future<void> _setSettings(AppSettings settings) {
     AppLogger.debug(name: 'SettingsScreenViewModel', 'setSettings: $settings');
 
@@ -56,10 +63,4 @@ class SettingsScreenViewModel extends ValueNotifier<SettingsScreenState> with St
   set setOrientLock(bool v) => _setSettings(_expSettings.copyWith(orientLock: v));
   set setWakelock(bool v) => _setSettings(_expSettings.copyWith(wakeLock: v));
   set setForegroundService(bool v) => _setSettings(_expSettings.copyWith(foregroundService: v));
-
-  @override
-  void dispose() {
-    super.dispose();
-    canshot();
-  }
 }

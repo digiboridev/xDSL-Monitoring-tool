@@ -9,7 +9,7 @@ class MonitoringScreenBinding extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListenableProvider<MonitoringScreenViewModel>(
+    return ChangeNotifierProvider<MonitoringScreenViewModel>(
       create: (_) => MonitoringScreenViewModel(context.read<CurrentSamplingRepository>()),
       child: child,
     );

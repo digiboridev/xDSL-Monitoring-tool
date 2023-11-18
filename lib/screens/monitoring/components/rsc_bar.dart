@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xdslmt/data/models/recent_counters.dart';
 import 'package:xdslmt/screens/monitoring/components/painters/timeless_waveform_painter.dart';
 import 'package:xdslmt/core/colors.dart';
 import 'package:xdslmt/core/text_styles.dart';
@@ -35,9 +36,9 @@ class RSCBar extends StatelessWidget {
             child: RepaintBoundary(
               child: Builder(
                 builder: (context) {
-                  final monitoringScreenViewModel = context.watch<MonitoringScreenViewModel>();
-                  final vs = monitoringScreenViewModel.rsDownFec;
-                  final max = monitoringScreenViewModel.rsMax;
+                  final recentCounters = context.select<MonitoringScreenViewModel, RecentCounters?>((s) => s.recentCounters);
+                  final vs = recentCounters?.downFECRecent ?? [];
+                  final max = recentCounters?.rsMax ?? 0;
                   return CustomPaint(painter: WaveFormTimelessPainter(max: max, increasedData: vs));
                 },
               ),
@@ -56,9 +57,9 @@ class RSCBar extends StatelessWidget {
             child: RepaintBoundary(
               child: Builder(
                 builder: (context) {
-                  final monitoringScreenViewModel = context.watch<MonitoringScreenViewModel>();
-                  final vs = monitoringScreenViewModel.rsDownCrc;
-                  final max = monitoringScreenViewModel.rsMax;
+                  final recentCounters = context.select<MonitoringScreenViewModel, RecentCounters?>((s) => s.recentCounters);
+                  final vs = recentCounters?.downCRCRecent ?? [];
+                  final max = recentCounters?.rsMax ?? 0;
                   return CustomPaint(painter: WaveFormTimelessPainter(max: max, increasedData: vs));
                 },
               ),
@@ -77,9 +78,9 @@ class RSCBar extends StatelessWidget {
             child: RepaintBoundary(
               child: Builder(
                 builder: (context) {
-                  final monitoringScreenViewModel = context.watch<MonitoringScreenViewModel>();
-                  final vs = monitoringScreenViewModel.rsUpFec;
-                  final max = monitoringScreenViewModel.rsMax;
+                  final recentCounters = context.select<MonitoringScreenViewModel, RecentCounters?>((s) => s.recentCounters);
+                  final vs = recentCounters?.upFECRecent ?? [];
+                  final max = recentCounters?.rsMax ?? 0;
                   return CustomPaint(painter: WaveFormTimelessPainter(max: max, increasedData: vs));
                 },
               ),
@@ -98,9 +99,9 @@ class RSCBar extends StatelessWidget {
             child: RepaintBoundary(
               child: Builder(
                 builder: (context) {
-                  final monitoringScreenViewModel = context.watch<MonitoringScreenViewModel>();
-                  final vs = monitoringScreenViewModel.rsUpCrc;
-                  final max = monitoringScreenViewModel.rsMax;
+                  final recentCounters = context.select<MonitoringScreenViewModel, RecentCounters?>((s) => s.recentCounters);
+                  final vs = recentCounters?.upCRCRecent ?? [];
+                  final max = recentCounters?.rsMax ?? 0;
                   return CustomPaint(painter: WaveFormTimelessPainter(max: max, increasedData: vs));
                 },
               ),
@@ -120,8 +121,8 @@ class RSCBar extends StatelessWidget {
           child: RepaintBoundary(
             child: Builder(
               builder: (context) {
-                final downFecLast = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.downFecLast);
-                final downFecTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.downFecTotal);
+                final downFecLast = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.downFECLast);
+                final downFecTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.downFECTotal);
                 final downFecTotalExp = downFecTotal?.toStringAsPrecision(3);
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -142,8 +143,8 @@ class RSCBar extends StatelessWidget {
           child: RepaintBoundary(
             child: Builder(
               builder: (context) {
-                final downCrcLast = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.downCrcLast);
-                final downCrcTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.downCrcTotal);
+                final downCrcLast = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.downCRCLast);
+                final downCrcTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.downCRCTotal);
                 final downCrcTotalExp = downCrcTotal?.toStringAsPrecision(3);
 
                 return Column(
@@ -165,8 +166,8 @@ class RSCBar extends StatelessWidget {
           child: RepaintBoundary(
             child: Builder(
               builder: (context) {
-                final upFecLast = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.upFecLast);
-                final upFecTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.upFecTotal);
+                final upFecLast = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.upFECLast);
+                final upFecTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.upFECTotal);
                 final upFecTotalExp = upFecTotal?.toStringAsPrecision(3);
 
                 return Column(
@@ -188,8 +189,8 @@ class RSCBar extends StatelessWidget {
           child: RepaintBoundary(
             child: Builder(
               builder: (context) {
-                final upCrcLast = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.upCrcLast);
-                final upCrcTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.upCrcTotal);
+                final upCrcLast = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.upCRCLast);
+                final upCrcTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.upCRCTotal);
                 final upCrcTotalExp = upCrcTotal?.toStringAsPrecision(3);
 
                 return Column(

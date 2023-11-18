@@ -14,6 +14,12 @@ class SnapshotsScreenViewModel extends ValueNotifier<SnapshotsScreenState> {
     AppLogger.debug(name: 'SnapshotsScreenViewModel', 'init complete');
   }
 
+  @override
+  void dispose() {
+    AppLogger.debug(name: 'SnapshotsScreenViewModel', 'dispose');
+    super.dispose();
+  }
+
   refresh() async {
     value = SnapshotsScreenState.loaded(await _statsRepository.snapshotIds());
     AppLogger.debug(name: 'SnapshotsScreenViewModel', 'refresh complete');

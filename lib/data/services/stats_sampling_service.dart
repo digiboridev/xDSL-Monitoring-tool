@@ -1,9 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, unused_field, avoid_print
 import 'dart:async';
+import 'dart:collection';
+import 'dart:isolate';
 import 'package:flutter/services.dart';
 import 'package:xdslmt/core/app_logger.dart';
 import 'package:xdslmt/data/models/app_settings.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
+import 'package:xdslmt/data/models/recent_counters.dart';
 import 'package:xdslmt/data/models/snapshot_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 import 'package:xdslmt/data/repositories/current_sampling_repo.dart';
@@ -17,66 +20,106 @@ class StatsSamplingService {
   StatsSamplingService(this._statsRepository, this._settingsRepository, this._currentSamplingRepository);
 
   final _mc = const MethodChannel('main');
-  StreamSubscription? _samplingSub;
-  bool get samplingActive => _samplingSub != null;
+  Isolate? _isolate;
+  bool get samplingActive => _isolate != null;
 
-  Stream<(LineStats lineStats, SnapshotStats snapshotStats, Duration fetchDuration)> createLineStatsStream() async* {
-    AppSettings settings = await _settingsRepository.getSettings;
-    Duration samplingInterval = settings.samplingInterval;
+  static Stream<CurrentSamplingEvent> _createLineStatsStream(AppSettings settings) async* {
     String snapshotId = DateTime.now().millisecondsSinceEpoch.toString();
 
+    Duration samplingInterval = settings.samplingInterval;
     NetUnitClient client = NetUnitClient.fromSettings(settings, snapshotId);
     SnapshotStats snapshotStats = SnapshotStats.create(snapshotId, settings.host, settings.login, settings.pwd);
 
-    if (settings.wakeLock) _mc.invokeMethod('startWakeLock').ignore();
-    if (settings.foregroundService) _mc.invokeMethod('startForegroundService').ignore();
-
-    AppLogger.info(name: 'StatsSamplingService', 'Run sampling: $snapshotId');
-    AppLogger.debug(name: 'StatsSamplingService', '$settings');
+    Queue<LineStats> lineStatsQueue = Queue();
+    Duration lastFetchDuration = const Duration(seconds: 5);
 
     try {
       while (true) {
-        AppLogger.debug(name: 'StatsSamplingService', 'stream tick before');
-
         final fetchStart = DateTime.now();
-        _currentSamplingRepository.signalFetchAttempt();
-
+        yield CurrentSamplingEvent.fetchPending(fetchStart, lastFetchDuration);
         LineStats lineStats = await client.fetchStats().catchError((_) => LineStats.errored(snapshotId: snapshotId, statusText: 'Sampling error'));
-        snapshotStats = snapshotStats.copyWithLineStats(lineStats);
-
         final fetchEnd = DateTime.now();
-        final fetchDuration = fetchEnd.difference(fetchStart);
+        lastFetchDuration = fetchEnd.difference(fetchStart);
+        yield CurrentSamplingEvent.lineStatsArived(lineStats);
 
-        yield (lineStats, snapshotStats, fetchDuration);
+        lineStatsQueue.addFirst(lineStats);
+        if (lineStatsQueue.length > 500) lineStatsQueue.removeLast();
 
-        AppLogger.debug(name: 'StatsSamplingService', 'stream tick after');
-        AppLogger.debug(name: 'StatsSamplingService', '$lineStats');
-        AppLogger.debug(name: 'StatsSamplingService', '$snapshotStats');
+        snapshotStats = snapshotStats.copyWithLineStats(lineStats);
+        yield CurrentSamplingEvent.snapshotStatsArived(snapshotStats);
 
-        _statsRepository.insertLineStats(lineStats).ignore();
-        _statsRepository.upsertSnapshotStats(snapshotStats).ignore();
+        final recentCounters = RecentCounters.fromLineStats(lineStatsQueue);
+        yield CurrentSamplingEvent.recentCountersArived(recentCounters);
 
         // TODO split
 
+        yield CurrentSamplingEvent.temporizing(DateTime.now(), samplingInterval);
         await Future.delayed(samplingInterval);
       }
-    } catch (e, s) {
-      AppLogger.error(name: 'StatsSamplingService', 'stream catch', error: e, stack: s);
     } finally {
-      AppLogger.debug(name: 'StatsSamplingService', 'stream finally');
       client.dispose();
     }
   }
 
   runSampling() async {
     if (samplingActive) return;
-
     AppLogger.debug(name: 'StatsSamplingService', 'Run sampling');
 
+    AppSettings settings = await _settingsRepository.getSettings;
+    if (settings.wakeLock) _mc.invokeMethod('startWakeLock').ignore();
+    if (settings.foregroundService) _mc.invokeMethod('startForegroundService').ignore();
+    AppLogger.debug(name: 'StatsSamplingService', '$settings');
+
     _currentSamplingRepository.wipeStats();
-    _samplingSub = createLineStatsStream().listen(
-      (event) => _currentSamplingRepository.updateStats(event.$1, event.$2, event.$3),
-      onDone: () => stopSampling(), // Actually, this should never happen
+
+    final receivePort = ReceivePort();
+    _isolate = await Isolate.spawn(
+      (data) async {
+        final (sendPort, token, settings) = data;
+        BackgroundIsolateBinaryMessenger.ensureInitialized(token);
+        AppLogger.stream.listen((event) => sendPort.send(event));
+
+        final stream = _createLineStatsStream(settings);
+        await for (var event in stream) {
+          sendPort.send(event);
+        }
+      },
+      (receivePort.sendPort, RootIsolateToken.instance!, settings),
+      onExit: receivePort.sendPort,
+      onError: receivePort.sendPort,
+    );
+
+    receivePort.listen(
+      (message) {
+        if (message is LogEntity) {
+          AppLogger.forward(message);
+          return;
+        }
+
+        if (message is CurrentSamplingEvent) {
+          _currentSamplingRepository.submitEvent(message);
+          if (message is LineStatsArived) _statsRepository.insertLineStats(message.lineStats).ignore();
+          if (message is SnapshotStatsArived) _statsRepository.upsertSnapshotStats(message.snapshotStats).ignore();
+          return;
+        }
+
+        if (message is List<dynamic>) {
+          final e = Exception(message[0]);
+          final s = StackTrace.fromString(message[1]);
+          AppLogger.error(name: 'Sampling isolate', message[0], error: e, stack: s);
+          receivePort.close();
+          return;
+        }
+
+        if (message == null) {
+          receivePort.close();
+          return;
+        }
+
+        AppLogger.debug(name: 'Sampling isolate', 'Unknown message: $message');
+        AppLogger.debug(name: 'Sampling isolate', message.runtimeType.toString());
+      },
+      onDone: () => AppLogger.debug(name: 'Sampling isolate', 'done'),
     );
     _currentSamplingRepository.updateStatus(true);
   }
@@ -89,8 +132,8 @@ class StatsSamplingService {
     _mc.invokeMethod('stopForegroundService');
     _mc.invokeMethod('stopWakeLock');
 
-    _samplingSub?.cancel();
-    _samplingSub = null;
+    _isolate?.kill();
+    _isolate = null;
 
     _currentSamplingRepository.updateStatus(false);
   }

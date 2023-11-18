@@ -117,7 +117,7 @@ class StatusText extends StatelessWidget {
       child: Builder(
         builder: (context) {
           final sampling = context.select<MonitoringScreenViewModel, bool>((vm) => vm.samplingActive);
-          final lastSample = context.select<MonitoringScreenViewModel, LineStats?>((vm) => vm.lastLineStats.lastOrNull);
+          final lastSample = context.select<MonitoringScreenViewModel, LineStats?>((vm) => vm.lastLineStats);
 
           String statusText = '';
           if (sampling) {

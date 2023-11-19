@@ -170,32 +170,37 @@ class ProgressLine extends StatefulWidget {
 }
 
 class _ProgressLineState extends State<ProgressLine> with TickerProviderStateMixin {
-  late final controller = AnimationController(vsync: this, duration: const Duration(seconds: 1));
+  late final controller = AnimationController(vsync: this);
+  // late final tcontroller = AnimationController(vsync: this);
 
   @override
   void initState() {
     super.initState();
 
     controller.addListener(() => setState(() {}));
+    // tcontroller.addListener(() => setState(() {}));
 
     final currentSamplingRepository = context.read<CurrentSamplingRepository>();
     Future.doWhile(() async {
-      final event = await currentSamplingRepository.updatesStream.first;
+      final event = await currentSamplingRepository.eventBus.first;
       if (!mounted) return false;
 
-      Duration lastDuration = currentSamplingRepository.lastSamplingDuration;
-      if (lastDuration == Duration.zero) lastDuration = const Duration(milliseconds: 300);
-
-      if (event == UpdateType.fetchAttempt) {
+      if (event is FetchPending) {
         controller.animateTo(0, duration: Duration.zero);
-        controller.animateTo(0.5, duration: Duration(milliseconds: lastDuration.inMilliseconds ~/ 2), curve: Curves.ease);
+        controller.animateTo(0.7, duration: event.desiredDuration, curve: Curves.easeOutExpo);
       }
 
-      if (event == UpdateType.statsUpdated) {
+      if (event is LineStatsArived) {
         controller
-            .animateTo(1, duration: Duration(milliseconds: lastDuration.inMilliseconds ~/ 2), curve: Curves.ease)
+            .animateTo(1, duration: const Duration(milliseconds: 100), curve: Curves.easeInExpo)
             .whenComplete(() => controller.animateTo(0, duration: Duration.zero));
       }
+
+      // if (event is Temporizing) {
+      //   tcontroller
+      //       .animateTo(1, duration: event.desiredDuration - const Duration(milliseconds: 300), curve: Curves.linear)
+      //       .whenComplete(() => tcontroller.animateTo(0, duration: Duration.zero));
+      // }
 
       return true;
     });
@@ -204,21 +209,26 @@ class _ProgressLineState extends State<ProgressLine> with TickerProviderStateMix
   @override
   void dispose() {
     controller.dispose();
+    // tcontroller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 1,
       height: 2,
-      child: Row(
+      child: Column(
         children: [
-          if (context.select<MonitoringScreenViewModel, bool>((vm) => vm.samplingActive))
+          if (controller.value != 0)
             Container(
-              color: Colors.yellow[700],
+              width: double.infinity,
               height: 2,
-              width: MediaQuery.of(context).size.width * controller.value,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: const [Colors.yellow, Colors.transparent, Colors.transparent],
+                  stops: [controller.value, controller.value, 1],
+                ),
+              ),
             ),
         ],
       ),

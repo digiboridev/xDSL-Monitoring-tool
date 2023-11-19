@@ -40,7 +40,7 @@ class _SnaplistTileState extends State<SnaplistTile> {
       if (isActiveSnapshot) {
         Future.doWhile(() async {
           // Wait for update
-          await currentSamplingRepository.updatesStream.first;
+          await currentSamplingRepository.eventBus.first;
           hasLastSnapshot = currentSamplingRepository.lastSnapshotStats?.snapshotId == widget.snapshotId;
           isSamplingActive = currentSamplingRepository.samplingActive;
 

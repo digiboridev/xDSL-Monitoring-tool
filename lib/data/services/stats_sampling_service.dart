@@ -121,7 +121,7 @@ class StatsSamplingService {
       },
       onDone: () => AppLogger.debug(name: 'Sampling isolate', 'done'),
     );
-    _currentSamplingRepository.updateStatus(true);
+    _currentSamplingRepository.setStatus(true);
   }
 
   stopSampling({bool wipeQueue = true}) {
@@ -135,6 +135,6 @@ class StatsSamplingService {
     _isolate?.kill();
     _isolate = null;
 
-    _currentSamplingRepository.updateStatus(false);
+    _currentSamplingRepository.setStatus(false);
   }
 }

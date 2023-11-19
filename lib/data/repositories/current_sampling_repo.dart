@@ -1,11 +1,7 @@
 import 'dart:async';
-// import 'dart:collection';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/models/recent_counters.dart';
 import 'package:xdslmt/data/models/snapshot_stats.dart';
-
-@Deprecated('new stream is used instead')
-enum UpdateType { statusChanged, statsUpdated, statsWiped, fetchAttempt }
 
 sealed class CurrentSamplingEvent {
   CurrentSamplingEvent();
@@ -55,20 +51,9 @@ abstract class CurrentSamplingRepository {
   SnapshotStats? get lastSnapshotStats;
   LineStats? get lastLineStats;
   RecentCounters? get recentCounters;
-  Duration get lastSamplingDuration;
-
-  @Deprecated('new stream is used instead')
-  Stream<UpdateType> get updatesStream;
-
   Stream<CurrentSamplingEvent> get eventBus;
 
-  @Deprecated('new stream is used instead')
-  void updateStats(LineStats lineStats, SnapshotStats snapshotStats, RecentCounters recentCounters, Duration samplingDuration);
-  void updateStatus(bool samplingActive);
-  @Deprecated('new stream is used instead')
-  void signalFetchAttempt();
-  void signalFetchPending(DateTime timestamp, Duration desiredDuration);
-  void signalTemporizing(DateTime timestamp, Duration desiredDuration);
+  void setStatus(bool samplingActive);
   void setLineStats(LineStats lineStats);
   void setSnapshotStats(SnapshotStats snapshotStats);
   void setRecentCounters(RecentCounters recentCounters);
@@ -78,13 +63,11 @@ abstract class CurrentSamplingRepository {
 
 /// In-memory implementation of [CurrentSamplingRepository]
 class CurrentSamplingRepositoryImpl implements CurrentSamplingRepository {
-  final _controller = StreamController<UpdateType>.broadcast();
   final _eventBus = StreamController<CurrentSamplingEvent>.broadcast();
   bool _samplingActive = false;
   LineStats? _lastLineStats;
   SnapshotStats? _lastSnapshotStats;
   RecentCounters? _recentCounters;
-  Duration _lastSamplingDuration = Duration.zero;
 
   @override
   bool get samplingActive => _samplingActive;
@@ -95,42 +78,12 @@ class CurrentSamplingRepositoryImpl implements CurrentSamplingRepository {
   @override
   RecentCounters? get recentCounters => _recentCounters;
   @override
-  Duration get lastSamplingDuration => _lastSamplingDuration;
-  @override
-  Stream<UpdateType> get updatesStream => _controller.stream;
-  @override
   Stream<CurrentSamplingEvent> get eventBus => _eventBus.stream;
 
   @override
-  updateStats(LineStats lineStats, SnapshotStats snapshotStats, RecentCounters recentCounters, Duration samplingDuration) {
-    _lastLineStats = lineStats;
-    _lastSnapshotStats = snapshotStats;
-    _recentCounters = recentCounters;
-    _lastSamplingDuration = samplingDuration;
-
-    _controller.add(UpdateType.statsUpdated);
-  }
-
-  @override
-  updateStatus(bool samplingActive) {
+  setStatus(bool samplingActive) {
     _samplingActive = samplingActive;
-    _controller.add(UpdateType.statusChanged);
     _eventBus.add(StatusChanged(samplingActive));
-  }
-
-  @override
-  signalFetchAttempt() {
-    _controller.add(UpdateType.fetchAttempt);
-  }
-
-  @override
-  signalFetchPending(DateTime timestamp, Duration desiredDuration) {
-    _eventBus.add(FetchPending(timestamp, desiredDuration));
-  }
-
-  @override
-  signalTemporizing(DateTime timestamp, Duration desiredDuration) {
-    _eventBus.add(Temporizing(timestamp, desiredDuration));
   }
 
   @override
@@ -156,30 +109,27 @@ class CurrentSamplingRepositoryImpl implements CurrentSamplingRepository {
     _lastSnapshotStats = null;
     _lastLineStats = null;
     _recentCounters = null;
-    _lastSamplingDuration = Duration.zero;
-    _controller.add(UpdateType.statsWiped);
   }
 
   @override
   void submitEvent(CurrentSamplingEvent event) {
-    _eventBus.add(event);
     switch (event) {
       case StatusChanged():
         _samplingActive = event.samplingActive;
-        _controller.add(UpdateType.statusChanged);
+        _eventBus.add(event);
       case FetchPending():
-        _controller.add(UpdateType.fetchAttempt);
+        _eventBus.add(event);
       case Temporizing():
-        ;
+        _eventBus.add(event);
       case LineStatsArived():
         _lastLineStats = event.lineStats;
-        _controller.add(UpdateType.statsUpdated);
+        _eventBus.add(event);
       case SnapshotStatsArived():
         _lastSnapshotStats = event.snapshotStats;
-        _controller.add(UpdateType.statsUpdated);
+        _eventBus.add(event);
       case RecentCountersArived():
         _recentCounters = event.recentCounters;
-        _controller.add(UpdateType.statsUpdated);
+        _eventBus.add(event);
     }
   }
 }

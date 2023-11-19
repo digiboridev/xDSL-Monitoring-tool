@@ -15,7 +15,7 @@ class MonitoringScreenViewModel extends ChangeNotifier {
   late StreamSubscription _updatesSub;
 
   _init() {
-    _updatesSub = _currentSamplingRepository.updatesStream.listen((_) => notifyListeners());
+    _updatesSub = _currentSamplingRepository.eventBus.listen((_) => notifyListeners());
     AppLogger.debug(name: 'MonitoringScreenViewModel', 'init complete');
   }
 

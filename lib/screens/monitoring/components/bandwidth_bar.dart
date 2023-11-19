@@ -56,33 +56,26 @@ class _BandwidthBarState extends State<BandwidthBar> with TickerProviderStateMix
     // Get new values
     SnapshotStats? stats = context.read<MonitoringScreenViewModel>().lastSnapshotStats;
 
-    final type = stats?.lastConnectionType;
-
-    // TODO extract util
-    if (type != null) {
-      bool isVDSL2 = type.toLowerCase().contains('vdsl2') || type.toLowerCase().contains('993.2') || type.toLowerCase().contains('993.5');
-      bool isVDSL = type.toLowerCase().contains('vdsl') || type.toLowerCase().contains('993.1');
-      bool isAdsl = type.toLowerCase().contains('adsl') || type.toLowerCase().contains('992');
-
-      if (isVDSL2) {
-        maxDown = 200000;
-        maxUp = 100000;
-      } else if (isVDSL) {
-        maxDown = 60000;
-        maxUp = 5000;
-      } else if (isAdsl) {
-        maxDown = 24000;
-        maxUp = 3500;
-      } else {
-        maxDown = 300000;
-        maxUp = 100000;
-      }
-    }
-
     currDown = stats?.downRateLast ?? 0;
     currUp = stats?.upRateLast ?? 0;
     attainableDown = stats?.downAttainableRateLast ?? 0;
     attainableUp = stats?.upAttainableRateLast ?? 0;
+
+    // Adjust max values based on current values
+    if (currDown > 0) {
+      maxDown = 24000; // adsl
+      if (currDown > 24000) maxDown = 68000; // vdsl 8/12mhz
+      if (currDown > 68000) maxDown = 150000; // vdsl 17mhz
+      if (currDown > 150000) maxDown = 230000; // vdsl 30mhz
+      if (currDown > 230000) maxDown = 300000; // vdsl 35mhz
+    }
+    if (currUp > 0) {
+      maxUp = 3000; // adsl
+      if (currUp > 3000) maxUp = 20000; // vdsl 8/12mhz
+      if (currUp > 20000) maxUp = 50000; // vdsl 17mhz
+      if (currUp > 50000) maxUp = 100000; // vdsl 30/35mhz
+    }
+
     setState(() {});
 
     // Start animation from old to new values if changed

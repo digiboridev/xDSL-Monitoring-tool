@@ -44,7 +44,7 @@ abstract class NetUnitClient {
       case NetworkUnitType.simulator_adsl:
         return SimulatorClientImpl(baseDownRate: 16000, baseUpRate: 1500, protocol: 'ADSL2+');
       case NetworkUnitType.simulator_vdsl:
-        return SimulatorClientImpl(baseDownRate: 150000, baseUpRate: 55000, protocol: 'VDSL2');
+        return SimulatorClientImpl(baseDownRate: 50000, baseUpRate: 10000, protocol: 'VDSL2');
       case NetworkUnitType.broadcom_telnet_adsl:
         return BroadcomAdslClientImpl(unitIp: ip, login: login, password: password);
       case NetworkUnitType.broadcom_telnet_adslcmd:

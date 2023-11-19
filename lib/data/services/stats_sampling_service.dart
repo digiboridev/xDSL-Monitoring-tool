@@ -37,6 +37,7 @@ class StatsSamplingService {
     String snapshotId = DateTime.now().millisecondsSinceEpoch.toString();
 
     Duration samplingInterval = settings.samplingInterval;
+    Duration splitInterval = settings.splitInterval;
     NetUnitClient client = NetUnitClient.fromSettings(settings);
     SnapshotStats snapshotStats = SnapshotStats.create(snapshotId, settings.host, settings.login, settings.pwd);
 
@@ -70,7 +71,12 @@ class StatsSamplingService {
         AppLogger.debug(name: 'Sampling stream', 'Recent counters arived');
         AppLogger.debug(name: 'Sampling stream', recentCounters.toStringMin());
 
-        // TODO split
+        // Renew snapshot if split interval is reached
+        if (snapshotStats.samplingDuration > splitInterval) {
+          snapshotId = DateTime.now().millisecondsSinceEpoch.toString();
+          snapshotStats = SnapshotStats.create(snapshotId, settings.host, settings.login, settings.pwd);
+          lineStatsQueue.clear();
+        }
 
         yield CurrentSamplingEvent.temporizing(DateTime.now(), samplingInterval);
         AppLogger.debug(name: 'Sampling stream', 'Temporizing');

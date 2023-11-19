@@ -22,7 +22,7 @@ class DB extends _$DB {
       });
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration {
@@ -33,10 +33,10 @@ class DB extends _$DB {
       },
       onUpgrade: (migrator, from, to) async {
         AppLogger.debug('drift onUpgrade: $from -> $to');
-        if (from < 3) {
-          // lastStatusText added
-          await migrator.addColumn(snapshotStatsTable, snapshotStatsTable.lastStatusText);
-        }
+        // if (from < 3) {
+        //   // lastStatusText added
+        //   await migrator.addColumn(snapshotStatsTable, snapshotStatsTable.lastStatusText);
+        // }
       },
       beforeOpen: (openingDetails) async {
         AppLogger.debug('drift beforeOpen ${openingDetails.versionNow}');

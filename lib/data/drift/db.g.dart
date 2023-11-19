@@ -1116,6 +1116,18 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
   late final GeneratedColumn<int> downRateMax = GeneratedColumn<int>(
       'down_rate_max', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _downRateSumMeta =
+      const VerificationMeta('downRateSum');
+  @override
+  late final GeneratedColumn<int> downRateSum = GeneratedColumn<int>(
+      'down_rate_sum', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _downRateCountMeta =
+      const VerificationMeta('downRateCount');
+  @override
+  late final GeneratedColumn<int> downRateCount = GeneratedColumn<int>(
+      'down_rate_count', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _downRateAvgMeta =
       const VerificationMeta('downRateAvg');
   @override
@@ -1140,6 +1152,18 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
   late final GeneratedColumn<int> downAttainableRateMax = GeneratedColumn<int>(
       'down_attainable_rate_max', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _downAttainableRateSumMeta =
+      const VerificationMeta('downAttainableRateSum');
+  @override
+  late final GeneratedColumn<int> downAttainableRateSum = GeneratedColumn<int>(
+      'down_attainable_rate_sum', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _downAttainableRateCountMeta =
+      const VerificationMeta('downAttainableRateCount');
+  @override
+  late final GeneratedColumn<int> downAttainableRateCount =
+      GeneratedColumn<int>('down_attainable_rate_count', aliasedName, true,
+          type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _downAttainableRateAvgMeta =
       const VerificationMeta('downAttainableRateAvg');
   @override
@@ -1163,6 +1187,18 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
   @override
   late final GeneratedColumn<int> upRateMax = GeneratedColumn<int>(
       'up_rate_max', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _upRateSumMeta =
+      const VerificationMeta('upRateSum');
+  @override
+  late final GeneratedColumn<int> upRateSum = GeneratedColumn<int>(
+      'up_rate_sum', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _upRateCountMeta =
+      const VerificationMeta('upRateCount');
+  @override
+  late final GeneratedColumn<int> upRateCount = GeneratedColumn<int>(
+      'up_rate_count', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _upRateAvgMeta =
       const VerificationMeta('upRateAvg');
@@ -1188,6 +1224,18 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
   late final GeneratedColumn<int> upAttainableRateMax = GeneratedColumn<int>(
       'up_attainable_rate_max', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _upAttainableRateSumMeta =
+      const VerificationMeta('upAttainableRateSum');
+  @override
+  late final GeneratedColumn<int> upAttainableRateSum = GeneratedColumn<int>(
+      'up_attainable_rate_sum', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _upAttainableRateCountMeta =
+      const VerificationMeta('upAttainableRateCount');
+  @override
+  late final GeneratedColumn<int> upAttainableRateCount = GeneratedColumn<int>(
+      'up_attainable_rate_count', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _upAttainableRateAvgMeta =
       const VerificationMeta('upAttainableRateAvg');
   @override
@@ -1211,6 +1259,18 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
   @override
   late final GeneratedColumn<int> downSNRmMax = GeneratedColumn<int>(
       'down_s_n_rm_max', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _downSNRmSumMeta =
+      const VerificationMeta('downSNRmSum');
+  @override
+  late final GeneratedColumn<int> downSNRmSum = GeneratedColumn<int>(
+      'down_s_n_rm_sum', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _downSNRmCountMeta =
+      const VerificationMeta('downSNRmCount');
+  @override
+  late final GeneratedColumn<int> downSNRmCount = GeneratedColumn<int>(
+      'down_s_n_rm_count', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _downSNRmAvgMeta =
       const VerificationMeta('downSNRmAvg');
@@ -1236,6 +1296,18 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
   late final GeneratedColumn<int> upSNRmMax = GeneratedColumn<int>(
       'up_s_n_rm_max', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _upSNRmSumMeta =
+      const VerificationMeta('upSNRmSum');
+  @override
+  late final GeneratedColumn<int> upSNRmSum = GeneratedColumn<int>(
+      'up_s_n_rm_sum', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _upSNRmCountMeta =
+      const VerificationMeta('upSNRmCount');
+  @override
+  late final GeneratedColumn<int> upSNRmCount = GeneratedColumn<int>(
+      'up_s_n_rm_count', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _upSNRmAvgMeta =
       const VerificationMeta('upSNRmAvg');
   @override
@@ -1260,6 +1332,18 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
   late final GeneratedColumn<int> downAttenuationMax = GeneratedColumn<int>(
       'down_attenuation_max', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _downAttenuationSumMeta =
+      const VerificationMeta('downAttenuationSum');
+  @override
+  late final GeneratedColumn<int> downAttenuationSum = GeneratedColumn<int>(
+      'down_attenuation_sum', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _downAttenuationCountMeta =
+      const VerificationMeta('downAttenuationCount');
+  @override
+  late final GeneratedColumn<int> downAttenuationCount = GeneratedColumn<int>(
+      'down_attenuation_count', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _downAttenuationAvgMeta =
       const VerificationMeta('downAttenuationAvg');
   @override
@@ -1283,6 +1367,18 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
   @override
   late final GeneratedColumn<int> upAttenuationMax = GeneratedColumn<int>(
       'up_attenuation_max', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _upAttenuationSumMeta =
+      const VerificationMeta('upAttenuationSum');
+  @override
+  late final GeneratedColumn<int> upAttenuationSum = GeneratedColumn<int>(
+      'up_attenuation_sum', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _upAttenuationCountMeta =
+      const VerificationMeta('upAttenuationCount');
+  @override
+  late final GeneratedColumn<int> upAttenuationCount = GeneratedColumn<int>(
+      'up_attenuation_count', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _upAttenuationAvgMeta =
       const VerificationMeta('upAttenuationAvg');
@@ -1357,34 +1453,50 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
         downRateLast,
         downRateMin,
         downRateMax,
+        downRateSum,
+        downRateCount,
         downRateAvg,
         downAttainableRateLast,
         downAttainableRateMin,
         downAttainableRateMax,
+        downAttainableRateSum,
+        downAttainableRateCount,
         downAttainableRateAvg,
         upRateLast,
         upRateMin,
         upRateMax,
+        upRateSum,
+        upRateCount,
         upRateAvg,
         upAttainableRateLast,
         upAttainableRateMin,
         upAttainableRateMax,
+        upAttainableRateSum,
+        upAttainableRateCount,
         upAttainableRateAvg,
         downSNRmLast,
         downSNRmMin,
         downSNRmMax,
+        downSNRmSum,
+        downSNRmCount,
         downSNRmAvg,
         upSNRmLast,
         upSNRmMin,
         upSNRmMax,
+        upSNRmSum,
+        upSNRmCount,
         upSNRmAvg,
         downAttenuationLast,
         downAttenuationMin,
         downAttenuationMax,
+        downAttenuationSum,
+        downAttenuationCount,
         downAttenuationAvg,
         upAttenuationLast,
         upAttenuationMin,
         upAttenuationMax,
+        upAttenuationSum,
+        upAttenuationCount,
         upAttenuationAvg,
         downFecLast,
         downFecTotal,
@@ -1512,6 +1624,18 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
           downRateMax.isAcceptableOrUnknown(
               data['down_rate_max']!, _downRateMaxMeta));
     }
+    if (data.containsKey('down_rate_sum')) {
+      context.handle(
+          _downRateSumMeta,
+          downRateSum.isAcceptableOrUnknown(
+              data['down_rate_sum']!, _downRateSumMeta));
+    }
+    if (data.containsKey('down_rate_count')) {
+      context.handle(
+          _downRateCountMeta,
+          downRateCount.isAcceptableOrUnknown(
+              data['down_rate_count']!, _downRateCountMeta));
+    }
     if (data.containsKey('down_rate_avg')) {
       context.handle(
           _downRateAvgMeta,
@@ -1535,6 +1659,19 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
           _downAttainableRateMaxMeta,
           downAttainableRateMax.isAcceptableOrUnknown(
               data['down_attainable_rate_max']!, _downAttainableRateMaxMeta));
+    }
+    if (data.containsKey('down_attainable_rate_sum')) {
+      context.handle(
+          _downAttainableRateSumMeta,
+          downAttainableRateSum.isAcceptableOrUnknown(
+              data['down_attainable_rate_sum']!, _downAttainableRateSumMeta));
+    }
+    if (data.containsKey('down_attainable_rate_count')) {
+      context.handle(
+          _downAttainableRateCountMeta,
+          downAttainableRateCount.isAcceptableOrUnknown(
+              data['down_attainable_rate_count']!,
+              _downAttainableRateCountMeta));
     }
     if (data.containsKey('down_attainable_rate_avg')) {
       context.handle(
@@ -1560,6 +1697,18 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
           upRateMax.isAcceptableOrUnknown(
               data['up_rate_max']!, _upRateMaxMeta));
     }
+    if (data.containsKey('up_rate_sum')) {
+      context.handle(
+          _upRateSumMeta,
+          upRateSum.isAcceptableOrUnknown(
+              data['up_rate_sum']!, _upRateSumMeta));
+    }
+    if (data.containsKey('up_rate_count')) {
+      context.handle(
+          _upRateCountMeta,
+          upRateCount.isAcceptableOrUnknown(
+              data['up_rate_count']!, _upRateCountMeta));
+    }
     if (data.containsKey('up_rate_avg')) {
       context.handle(
           _upRateAvgMeta,
@@ -1583,6 +1732,18 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
           _upAttainableRateMaxMeta,
           upAttainableRateMax.isAcceptableOrUnknown(
               data['up_attainable_rate_max']!, _upAttainableRateMaxMeta));
+    }
+    if (data.containsKey('up_attainable_rate_sum')) {
+      context.handle(
+          _upAttainableRateSumMeta,
+          upAttainableRateSum.isAcceptableOrUnknown(
+              data['up_attainable_rate_sum']!, _upAttainableRateSumMeta));
+    }
+    if (data.containsKey('up_attainable_rate_count')) {
+      context.handle(
+          _upAttainableRateCountMeta,
+          upAttainableRateCount.isAcceptableOrUnknown(
+              data['up_attainable_rate_count']!, _upAttainableRateCountMeta));
     }
     if (data.containsKey('up_attainable_rate_avg')) {
       context.handle(
@@ -1608,6 +1769,18 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
           downSNRmMax.isAcceptableOrUnknown(
               data['down_s_n_rm_max']!, _downSNRmMaxMeta));
     }
+    if (data.containsKey('down_s_n_rm_sum')) {
+      context.handle(
+          _downSNRmSumMeta,
+          downSNRmSum.isAcceptableOrUnknown(
+              data['down_s_n_rm_sum']!, _downSNRmSumMeta));
+    }
+    if (data.containsKey('down_s_n_rm_count')) {
+      context.handle(
+          _downSNRmCountMeta,
+          downSNRmCount.isAcceptableOrUnknown(
+              data['down_s_n_rm_count']!, _downSNRmCountMeta));
+    }
     if (data.containsKey('down_s_n_rm_avg')) {
       context.handle(
           _downSNRmAvgMeta,
@@ -1631,6 +1804,18 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
           _upSNRmMaxMeta,
           upSNRmMax.isAcceptableOrUnknown(
               data['up_s_n_rm_max']!, _upSNRmMaxMeta));
+    }
+    if (data.containsKey('up_s_n_rm_sum')) {
+      context.handle(
+          _upSNRmSumMeta,
+          upSNRmSum.isAcceptableOrUnknown(
+              data['up_s_n_rm_sum']!, _upSNRmSumMeta));
+    }
+    if (data.containsKey('up_s_n_rm_count')) {
+      context.handle(
+          _upSNRmCountMeta,
+          upSNRmCount.isAcceptableOrUnknown(
+              data['up_s_n_rm_count']!, _upSNRmCountMeta));
     }
     if (data.containsKey('up_s_n_rm_avg')) {
       context.handle(
@@ -1656,6 +1841,18 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
           downAttenuationMax.isAcceptableOrUnknown(
               data['down_attenuation_max']!, _downAttenuationMaxMeta));
     }
+    if (data.containsKey('down_attenuation_sum')) {
+      context.handle(
+          _downAttenuationSumMeta,
+          downAttenuationSum.isAcceptableOrUnknown(
+              data['down_attenuation_sum']!, _downAttenuationSumMeta));
+    }
+    if (data.containsKey('down_attenuation_count')) {
+      context.handle(
+          _downAttenuationCountMeta,
+          downAttenuationCount.isAcceptableOrUnknown(
+              data['down_attenuation_count']!, _downAttenuationCountMeta));
+    }
     if (data.containsKey('down_attenuation_avg')) {
       context.handle(
           _downAttenuationAvgMeta,
@@ -1679,6 +1876,18 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
           _upAttenuationMaxMeta,
           upAttenuationMax.isAcceptableOrUnknown(
               data['up_attenuation_max']!, _upAttenuationMaxMeta));
+    }
+    if (data.containsKey('up_attenuation_sum')) {
+      context.handle(
+          _upAttenuationSumMeta,
+          upAttenuationSum.isAcceptableOrUnknown(
+              data['up_attenuation_sum']!, _upAttenuationSumMeta));
+    }
+    if (data.containsKey('up_attenuation_count')) {
+      context.handle(
+          _upAttenuationCountMeta,
+          upAttenuationCount.isAcceptableOrUnknown(
+              data['up_attenuation_count']!, _upAttenuationCountMeta));
     }
     if (data.containsKey('up_attenuation_avg')) {
       context.handle(
@@ -1778,6 +1987,10 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
           .read(DriftSqlType.int, data['${effectivePrefix}down_rate_min']),
       downRateMax: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}down_rate_max']),
+      downRateSum: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}down_rate_sum']),
+      downRateCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}down_rate_count']),
       downRateAvg: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}down_rate_avg']),
       downAttainableRateLast: attachedDatabase.typeMapping.read(
@@ -1787,6 +2000,11 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
           DriftSqlType.int, data['${effectivePrefix}down_attainable_rate_min']),
       downAttainableRateMax: attachedDatabase.typeMapping.read(
           DriftSqlType.int, data['${effectivePrefix}down_attainable_rate_max']),
+      downAttainableRateSum: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}down_attainable_rate_sum']),
+      downAttainableRateCount: attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}down_attainable_rate_count']),
       downAttainableRateAvg: attachedDatabase.typeMapping.read(
           DriftSqlType.int, data['${effectivePrefix}down_attainable_rate_avg']),
       upRateLast: attachedDatabase.typeMapping
@@ -1795,6 +2013,10 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
           .read(DriftSqlType.int, data['${effectivePrefix}up_rate_min']),
       upRateMax: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}up_rate_max']),
+      upRateSum: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}up_rate_sum']),
+      upRateCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}up_rate_count']),
       upRateAvg: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}up_rate_avg']),
       upAttainableRateLast: attachedDatabase.typeMapping.read(
@@ -1803,6 +2025,10 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
           DriftSqlType.int, data['${effectivePrefix}up_attainable_rate_min']),
       upAttainableRateMax: attachedDatabase.typeMapping.read(
           DriftSqlType.int, data['${effectivePrefix}up_attainable_rate_max']),
+      upAttainableRateSum: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}up_attainable_rate_sum']),
+      upAttainableRateCount: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}up_attainable_rate_count']),
       upAttainableRateAvg: attachedDatabase.typeMapping.read(
           DriftSqlType.int, data['${effectivePrefix}up_attainable_rate_avg']),
       downSNRmLast: attachedDatabase.typeMapping
@@ -1811,6 +2037,10 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
           .read(DriftSqlType.int, data['${effectivePrefix}down_s_n_rm_min']),
       downSNRmMax: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}down_s_n_rm_max']),
+      downSNRmSum: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}down_s_n_rm_sum']),
+      downSNRmCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}down_s_n_rm_count']),
       downSNRmAvg: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}down_s_n_rm_avg']),
       upSNRmLast: attachedDatabase.typeMapping
@@ -1819,6 +2049,10 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
           .read(DriftSqlType.int, data['${effectivePrefix}up_s_n_rm_min']),
       upSNRmMax: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}up_s_n_rm_max']),
+      upSNRmSum: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}up_s_n_rm_sum']),
+      upSNRmCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}up_s_n_rm_count']),
       upSNRmAvg: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}up_s_n_rm_avg']),
       downAttenuationLast: attachedDatabase.typeMapping.read(
@@ -1827,6 +2061,10 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
           DriftSqlType.int, data['${effectivePrefix}down_attenuation_min']),
       downAttenuationMax: attachedDatabase.typeMapping.read(
           DriftSqlType.int, data['${effectivePrefix}down_attenuation_max']),
+      downAttenuationSum: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}down_attenuation_sum']),
+      downAttenuationCount: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}down_attenuation_count']),
       downAttenuationAvg: attachedDatabase.typeMapping.read(
           DriftSqlType.int, data['${effectivePrefix}down_attenuation_avg']),
       upAttenuationLast: attachedDatabase.typeMapping.read(
@@ -1835,6 +2073,10 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
           .read(DriftSqlType.int, data['${effectivePrefix}up_attenuation_min']),
       upAttenuationMax: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}up_attenuation_max']),
+      upAttenuationSum: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}up_attenuation_sum']),
+      upAttenuationCount: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}up_attenuation_count']),
       upAttenuationAvg: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}up_attenuation_avg']),
       downFecLast: attachedDatabase.typeMapping
@@ -1888,34 +2130,50 @@ class DriftSnapshotStats extends DataClass
   final int? downRateLast;
   final int? downRateMin;
   final int? downRateMax;
+  final int? downRateSum;
+  final int? downRateCount;
   final int? downRateAvg;
   final int? downAttainableRateLast;
   final int? downAttainableRateMin;
   final int? downAttainableRateMax;
+  final int? downAttainableRateSum;
+  final int? downAttainableRateCount;
   final int? downAttainableRateAvg;
   final int? upRateLast;
   final int? upRateMin;
   final int? upRateMax;
+  final int? upRateSum;
+  final int? upRateCount;
   final int? upRateAvg;
   final int? upAttainableRateLast;
   final int? upAttainableRateMin;
   final int? upAttainableRateMax;
+  final int? upAttainableRateSum;
+  final int? upAttainableRateCount;
   final int? upAttainableRateAvg;
   final int? downSNRmLast;
   final int? downSNRmMin;
   final int? downSNRmMax;
+  final int? downSNRmSum;
+  final int? downSNRmCount;
   final int? downSNRmAvg;
   final int? upSNRmLast;
   final int? upSNRmMin;
   final int? upSNRmMax;
+  final int? upSNRmSum;
+  final int? upSNRmCount;
   final int? upSNRmAvg;
   final int? downAttenuationLast;
   final int? downAttenuationMin;
   final int? downAttenuationMax;
+  final int? downAttenuationSum;
+  final int? downAttenuationCount;
   final int? downAttenuationAvg;
   final int? upAttenuationLast;
   final int? upAttenuationMin;
   final int? upAttenuationMax;
+  final int? upAttenuationSum;
+  final int? upAttenuationCount;
   final int? upAttenuationAvg;
   final int? downFecLast;
   final int? downFecTotal;
@@ -1943,34 +2201,50 @@ class DriftSnapshotStats extends DataClass
       this.downRateLast,
       this.downRateMin,
       this.downRateMax,
+      this.downRateSum,
+      this.downRateCount,
       this.downRateAvg,
       this.downAttainableRateLast,
       this.downAttainableRateMin,
       this.downAttainableRateMax,
+      this.downAttainableRateSum,
+      this.downAttainableRateCount,
       this.downAttainableRateAvg,
       this.upRateLast,
       this.upRateMin,
       this.upRateMax,
+      this.upRateSum,
+      this.upRateCount,
       this.upRateAvg,
       this.upAttainableRateLast,
       this.upAttainableRateMin,
       this.upAttainableRateMax,
+      this.upAttainableRateSum,
+      this.upAttainableRateCount,
       this.upAttainableRateAvg,
       this.downSNRmLast,
       this.downSNRmMin,
       this.downSNRmMax,
+      this.downSNRmSum,
+      this.downSNRmCount,
       this.downSNRmAvg,
       this.upSNRmLast,
       this.upSNRmMin,
       this.upSNRmMax,
+      this.upSNRmSum,
+      this.upSNRmCount,
       this.upSNRmAvg,
       this.downAttenuationLast,
       this.downAttenuationMin,
       this.downAttenuationMax,
+      this.downAttenuationSum,
+      this.downAttenuationCount,
       this.downAttenuationAvg,
       this.upAttenuationLast,
       this.upAttenuationMin,
       this.upAttenuationMax,
+      this.upAttenuationSum,
+      this.upAttenuationCount,
       this.upAttenuationAvg,
       this.downFecLast,
       this.downFecTotal,
@@ -2016,6 +2290,12 @@ class DriftSnapshotStats extends DataClass
     if (!nullToAbsent || downRateMax != null) {
       map['down_rate_max'] = Variable<int>(downRateMax);
     }
+    if (!nullToAbsent || downRateSum != null) {
+      map['down_rate_sum'] = Variable<int>(downRateSum);
+    }
+    if (!nullToAbsent || downRateCount != null) {
+      map['down_rate_count'] = Variable<int>(downRateCount);
+    }
     if (!nullToAbsent || downRateAvg != null) {
       map['down_rate_avg'] = Variable<int>(downRateAvg);
     }
@@ -2027,6 +2307,13 @@ class DriftSnapshotStats extends DataClass
     }
     if (!nullToAbsent || downAttainableRateMax != null) {
       map['down_attainable_rate_max'] = Variable<int>(downAttainableRateMax);
+    }
+    if (!nullToAbsent || downAttainableRateSum != null) {
+      map['down_attainable_rate_sum'] = Variable<int>(downAttainableRateSum);
+    }
+    if (!nullToAbsent || downAttainableRateCount != null) {
+      map['down_attainable_rate_count'] =
+          Variable<int>(downAttainableRateCount);
     }
     if (!nullToAbsent || downAttainableRateAvg != null) {
       map['down_attainable_rate_avg'] = Variable<int>(downAttainableRateAvg);
@@ -2040,6 +2327,12 @@ class DriftSnapshotStats extends DataClass
     if (!nullToAbsent || upRateMax != null) {
       map['up_rate_max'] = Variable<int>(upRateMax);
     }
+    if (!nullToAbsent || upRateSum != null) {
+      map['up_rate_sum'] = Variable<int>(upRateSum);
+    }
+    if (!nullToAbsent || upRateCount != null) {
+      map['up_rate_count'] = Variable<int>(upRateCount);
+    }
     if (!nullToAbsent || upRateAvg != null) {
       map['up_rate_avg'] = Variable<int>(upRateAvg);
     }
@@ -2051,6 +2344,12 @@ class DriftSnapshotStats extends DataClass
     }
     if (!nullToAbsent || upAttainableRateMax != null) {
       map['up_attainable_rate_max'] = Variable<int>(upAttainableRateMax);
+    }
+    if (!nullToAbsent || upAttainableRateSum != null) {
+      map['up_attainable_rate_sum'] = Variable<int>(upAttainableRateSum);
+    }
+    if (!nullToAbsent || upAttainableRateCount != null) {
+      map['up_attainable_rate_count'] = Variable<int>(upAttainableRateCount);
     }
     if (!nullToAbsent || upAttainableRateAvg != null) {
       map['up_attainable_rate_avg'] = Variable<int>(upAttainableRateAvg);
@@ -2064,6 +2363,12 @@ class DriftSnapshotStats extends DataClass
     if (!nullToAbsent || downSNRmMax != null) {
       map['down_s_n_rm_max'] = Variable<int>(downSNRmMax);
     }
+    if (!nullToAbsent || downSNRmSum != null) {
+      map['down_s_n_rm_sum'] = Variable<int>(downSNRmSum);
+    }
+    if (!nullToAbsent || downSNRmCount != null) {
+      map['down_s_n_rm_count'] = Variable<int>(downSNRmCount);
+    }
     if (!nullToAbsent || downSNRmAvg != null) {
       map['down_s_n_rm_avg'] = Variable<int>(downSNRmAvg);
     }
@@ -2075,6 +2380,12 @@ class DriftSnapshotStats extends DataClass
     }
     if (!nullToAbsent || upSNRmMax != null) {
       map['up_s_n_rm_max'] = Variable<int>(upSNRmMax);
+    }
+    if (!nullToAbsent || upSNRmSum != null) {
+      map['up_s_n_rm_sum'] = Variable<int>(upSNRmSum);
+    }
+    if (!nullToAbsent || upSNRmCount != null) {
+      map['up_s_n_rm_count'] = Variable<int>(upSNRmCount);
     }
     if (!nullToAbsent || upSNRmAvg != null) {
       map['up_s_n_rm_avg'] = Variable<int>(upSNRmAvg);
@@ -2088,6 +2399,12 @@ class DriftSnapshotStats extends DataClass
     if (!nullToAbsent || downAttenuationMax != null) {
       map['down_attenuation_max'] = Variable<int>(downAttenuationMax);
     }
+    if (!nullToAbsent || downAttenuationSum != null) {
+      map['down_attenuation_sum'] = Variable<int>(downAttenuationSum);
+    }
+    if (!nullToAbsent || downAttenuationCount != null) {
+      map['down_attenuation_count'] = Variable<int>(downAttenuationCount);
+    }
     if (!nullToAbsent || downAttenuationAvg != null) {
       map['down_attenuation_avg'] = Variable<int>(downAttenuationAvg);
     }
@@ -2099,6 +2416,12 @@ class DriftSnapshotStats extends DataClass
     }
     if (!nullToAbsent || upAttenuationMax != null) {
       map['up_attenuation_max'] = Variable<int>(upAttenuationMax);
+    }
+    if (!nullToAbsent || upAttenuationSum != null) {
+      map['up_attenuation_sum'] = Variable<int>(upAttenuationSum);
+    }
+    if (!nullToAbsent || upAttenuationCount != null) {
+      map['up_attenuation_count'] = Variable<int>(upAttenuationCount);
     }
     if (!nullToAbsent || upAttenuationAvg != null) {
       map['up_attenuation_avg'] = Variable<int>(upAttenuationAvg);
@@ -2163,6 +2486,12 @@ class DriftSnapshotStats extends DataClass
       downRateMax: downRateMax == null && nullToAbsent
           ? const Value.absent()
           : Value(downRateMax),
+      downRateSum: downRateSum == null && nullToAbsent
+          ? const Value.absent()
+          : Value(downRateSum),
+      downRateCount: downRateCount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(downRateCount),
       downRateAvg: downRateAvg == null && nullToAbsent
           ? const Value.absent()
           : Value(downRateAvg),
@@ -2175,6 +2504,12 @@ class DriftSnapshotStats extends DataClass
       downAttainableRateMax: downAttainableRateMax == null && nullToAbsent
           ? const Value.absent()
           : Value(downAttainableRateMax),
+      downAttainableRateSum: downAttainableRateSum == null && nullToAbsent
+          ? const Value.absent()
+          : Value(downAttainableRateSum),
+      downAttainableRateCount: downAttainableRateCount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(downAttainableRateCount),
       downAttainableRateAvg: downAttainableRateAvg == null && nullToAbsent
           ? const Value.absent()
           : Value(downAttainableRateAvg),
@@ -2187,6 +2522,12 @@ class DriftSnapshotStats extends DataClass
       upRateMax: upRateMax == null && nullToAbsent
           ? const Value.absent()
           : Value(upRateMax),
+      upRateSum: upRateSum == null && nullToAbsent
+          ? const Value.absent()
+          : Value(upRateSum),
+      upRateCount: upRateCount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(upRateCount),
       upRateAvg: upRateAvg == null && nullToAbsent
           ? const Value.absent()
           : Value(upRateAvg),
@@ -2199,6 +2540,12 @@ class DriftSnapshotStats extends DataClass
       upAttainableRateMax: upAttainableRateMax == null && nullToAbsent
           ? const Value.absent()
           : Value(upAttainableRateMax),
+      upAttainableRateSum: upAttainableRateSum == null && nullToAbsent
+          ? const Value.absent()
+          : Value(upAttainableRateSum),
+      upAttainableRateCount: upAttainableRateCount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(upAttainableRateCount),
       upAttainableRateAvg: upAttainableRateAvg == null && nullToAbsent
           ? const Value.absent()
           : Value(upAttainableRateAvg),
@@ -2211,6 +2558,12 @@ class DriftSnapshotStats extends DataClass
       downSNRmMax: downSNRmMax == null && nullToAbsent
           ? const Value.absent()
           : Value(downSNRmMax),
+      downSNRmSum: downSNRmSum == null && nullToAbsent
+          ? const Value.absent()
+          : Value(downSNRmSum),
+      downSNRmCount: downSNRmCount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(downSNRmCount),
       downSNRmAvg: downSNRmAvg == null && nullToAbsent
           ? const Value.absent()
           : Value(downSNRmAvg),
@@ -2223,6 +2576,12 @@ class DriftSnapshotStats extends DataClass
       upSNRmMax: upSNRmMax == null && nullToAbsent
           ? const Value.absent()
           : Value(upSNRmMax),
+      upSNRmSum: upSNRmSum == null && nullToAbsent
+          ? const Value.absent()
+          : Value(upSNRmSum),
+      upSNRmCount: upSNRmCount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(upSNRmCount),
       upSNRmAvg: upSNRmAvg == null && nullToAbsent
           ? const Value.absent()
           : Value(upSNRmAvg),
@@ -2235,6 +2594,12 @@ class DriftSnapshotStats extends DataClass
       downAttenuationMax: downAttenuationMax == null && nullToAbsent
           ? const Value.absent()
           : Value(downAttenuationMax),
+      downAttenuationSum: downAttenuationSum == null && nullToAbsent
+          ? const Value.absent()
+          : Value(downAttenuationSum),
+      downAttenuationCount: downAttenuationCount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(downAttenuationCount),
       downAttenuationAvg: downAttenuationAvg == null && nullToAbsent
           ? const Value.absent()
           : Value(downAttenuationAvg),
@@ -2247,6 +2612,12 @@ class DriftSnapshotStats extends DataClass
       upAttenuationMax: upAttenuationMax == null && nullToAbsent
           ? const Value.absent()
           : Value(upAttenuationMax),
+      upAttenuationSum: upAttenuationSum == null && nullToAbsent
+          ? const Value.absent()
+          : Value(upAttenuationSum),
+      upAttenuationCount: upAttenuationCount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(upAttenuationCount),
       upAttenuationAvg: upAttenuationAvg == null && nullToAbsent
           ? const Value.absent()
           : Value(upAttenuationAvg),
@@ -2300,6 +2671,8 @@ class DriftSnapshotStats extends DataClass
       downRateLast: serializer.fromJson<int?>(json['downRateLast']),
       downRateMin: serializer.fromJson<int?>(json['downRateMin']),
       downRateMax: serializer.fromJson<int?>(json['downRateMax']),
+      downRateSum: serializer.fromJson<int?>(json['downRateSum']),
+      downRateCount: serializer.fromJson<int?>(json['downRateCount']),
       downRateAvg: serializer.fromJson<int?>(json['downRateAvg']),
       downAttainableRateLast:
           serializer.fromJson<int?>(json['downAttainableRateLast']),
@@ -2307,11 +2680,17 @@ class DriftSnapshotStats extends DataClass
           serializer.fromJson<int?>(json['downAttainableRateMin']),
       downAttainableRateMax:
           serializer.fromJson<int?>(json['downAttainableRateMax']),
+      downAttainableRateSum:
+          serializer.fromJson<int?>(json['downAttainableRateSum']),
+      downAttainableRateCount:
+          serializer.fromJson<int?>(json['downAttainableRateCount']),
       downAttainableRateAvg:
           serializer.fromJson<int?>(json['downAttainableRateAvg']),
       upRateLast: serializer.fromJson<int?>(json['upRateLast']),
       upRateMin: serializer.fromJson<int?>(json['upRateMin']),
       upRateMax: serializer.fromJson<int?>(json['upRateMax']),
+      upRateSum: serializer.fromJson<int?>(json['upRateSum']),
+      upRateCount: serializer.fromJson<int?>(json['upRateCount']),
       upRateAvg: serializer.fromJson<int?>(json['upRateAvg']),
       upAttainableRateLast:
           serializer.fromJson<int?>(json['upAttainableRateLast']),
@@ -2319,24 +2698,37 @@ class DriftSnapshotStats extends DataClass
           serializer.fromJson<int?>(json['upAttainableRateMin']),
       upAttainableRateMax:
           serializer.fromJson<int?>(json['upAttainableRateMax']),
+      upAttainableRateSum:
+          serializer.fromJson<int?>(json['upAttainableRateSum']),
+      upAttainableRateCount:
+          serializer.fromJson<int?>(json['upAttainableRateCount']),
       upAttainableRateAvg:
           serializer.fromJson<int?>(json['upAttainableRateAvg']),
       downSNRmLast: serializer.fromJson<int?>(json['downSNRmLast']),
       downSNRmMin: serializer.fromJson<int?>(json['downSNRmMin']),
       downSNRmMax: serializer.fromJson<int?>(json['downSNRmMax']),
+      downSNRmSum: serializer.fromJson<int?>(json['downSNRmSum']),
+      downSNRmCount: serializer.fromJson<int?>(json['downSNRmCount']),
       downSNRmAvg: serializer.fromJson<int?>(json['downSNRmAvg']),
       upSNRmLast: serializer.fromJson<int?>(json['upSNRmLast']),
       upSNRmMin: serializer.fromJson<int?>(json['upSNRmMin']),
       upSNRmMax: serializer.fromJson<int?>(json['upSNRmMax']),
+      upSNRmSum: serializer.fromJson<int?>(json['upSNRmSum']),
+      upSNRmCount: serializer.fromJson<int?>(json['upSNRmCount']),
       upSNRmAvg: serializer.fromJson<int?>(json['upSNRmAvg']),
       downAttenuationLast:
           serializer.fromJson<int?>(json['downAttenuationLast']),
       downAttenuationMin: serializer.fromJson<int?>(json['downAttenuationMin']),
       downAttenuationMax: serializer.fromJson<int?>(json['downAttenuationMax']),
+      downAttenuationSum: serializer.fromJson<int?>(json['downAttenuationSum']),
+      downAttenuationCount:
+          serializer.fromJson<int?>(json['downAttenuationCount']),
       downAttenuationAvg: serializer.fromJson<int?>(json['downAttenuationAvg']),
       upAttenuationLast: serializer.fromJson<int?>(json['upAttenuationLast']),
       upAttenuationMin: serializer.fromJson<int?>(json['upAttenuationMin']),
       upAttenuationMax: serializer.fromJson<int?>(json['upAttenuationMax']),
+      upAttenuationSum: serializer.fromJson<int?>(json['upAttenuationSum']),
+      upAttenuationCount: serializer.fromJson<int?>(json['upAttenuationCount']),
       upAttenuationAvg: serializer.fromJson<int?>(json['upAttenuationAvg']),
       downFecLast: serializer.fromJson<int?>(json['downFecLast']),
       downFecTotal: serializer.fromJson<int?>(json['downFecTotal']),
@@ -2371,34 +2763,51 @@ class DriftSnapshotStats extends DataClass
       'downRateLast': serializer.toJson<int?>(downRateLast),
       'downRateMin': serializer.toJson<int?>(downRateMin),
       'downRateMax': serializer.toJson<int?>(downRateMax),
+      'downRateSum': serializer.toJson<int?>(downRateSum),
+      'downRateCount': serializer.toJson<int?>(downRateCount),
       'downRateAvg': serializer.toJson<int?>(downRateAvg),
       'downAttainableRateLast': serializer.toJson<int?>(downAttainableRateLast),
       'downAttainableRateMin': serializer.toJson<int?>(downAttainableRateMin),
       'downAttainableRateMax': serializer.toJson<int?>(downAttainableRateMax),
+      'downAttainableRateSum': serializer.toJson<int?>(downAttainableRateSum),
+      'downAttainableRateCount':
+          serializer.toJson<int?>(downAttainableRateCount),
       'downAttainableRateAvg': serializer.toJson<int?>(downAttainableRateAvg),
       'upRateLast': serializer.toJson<int?>(upRateLast),
       'upRateMin': serializer.toJson<int?>(upRateMin),
       'upRateMax': serializer.toJson<int?>(upRateMax),
+      'upRateSum': serializer.toJson<int?>(upRateSum),
+      'upRateCount': serializer.toJson<int?>(upRateCount),
       'upRateAvg': serializer.toJson<int?>(upRateAvg),
       'upAttainableRateLast': serializer.toJson<int?>(upAttainableRateLast),
       'upAttainableRateMin': serializer.toJson<int?>(upAttainableRateMin),
       'upAttainableRateMax': serializer.toJson<int?>(upAttainableRateMax),
+      'upAttainableRateSum': serializer.toJson<int?>(upAttainableRateSum),
+      'upAttainableRateCount': serializer.toJson<int?>(upAttainableRateCount),
       'upAttainableRateAvg': serializer.toJson<int?>(upAttainableRateAvg),
       'downSNRmLast': serializer.toJson<int?>(downSNRmLast),
       'downSNRmMin': serializer.toJson<int?>(downSNRmMin),
       'downSNRmMax': serializer.toJson<int?>(downSNRmMax),
+      'downSNRmSum': serializer.toJson<int?>(downSNRmSum),
+      'downSNRmCount': serializer.toJson<int?>(downSNRmCount),
       'downSNRmAvg': serializer.toJson<int?>(downSNRmAvg),
       'upSNRmLast': serializer.toJson<int?>(upSNRmLast),
       'upSNRmMin': serializer.toJson<int?>(upSNRmMin),
       'upSNRmMax': serializer.toJson<int?>(upSNRmMax),
+      'upSNRmSum': serializer.toJson<int?>(upSNRmSum),
+      'upSNRmCount': serializer.toJson<int?>(upSNRmCount),
       'upSNRmAvg': serializer.toJson<int?>(upSNRmAvg),
       'downAttenuationLast': serializer.toJson<int?>(downAttenuationLast),
       'downAttenuationMin': serializer.toJson<int?>(downAttenuationMin),
       'downAttenuationMax': serializer.toJson<int?>(downAttenuationMax),
+      'downAttenuationSum': serializer.toJson<int?>(downAttenuationSum),
+      'downAttenuationCount': serializer.toJson<int?>(downAttenuationCount),
       'downAttenuationAvg': serializer.toJson<int?>(downAttenuationAvg),
       'upAttenuationLast': serializer.toJson<int?>(upAttenuationLast),
       'upAttenuationMin': serializer.toJson<int?>(upAttenuationMin),
       'upAttenuationMax': serializer.toJson<int?>(upAttenuationMax),
+      'upAttenuationSum': serializer.toJson<int?>(upAttenuationSum),
+      'upAttenuationCount': serializer.toJson<int?>(upAttenuationCount),
       'upAttenuationAvg': serializer.toJson<int?>(upAttenuationAvg),
       'downFecLast': serializer.toJson<int?>(downFecLast),
       'downFecTotal': serializer.toJson<int?>(downFecTotal),
@@ -2429,34 +2838,50 @@ class DriftSnapshotStats extends DataClass
           Value<int?> downRateLast = const Value.absent(),
           Value<int?> downRateMin = const Value.absent(),
           Value<int?> downRateMax = const Value.absent(),
+          Value<int?> downRateSum = const Value.absent(),
+          Value<int?> downRateCount = const Value.absent(),
           Value<int?> downRateAvg = const Value.absent(),
           Value<int?> downAttainableRateLast = const Value.absent(),
           Value<int?> downAttainableRateMin = const Value.absent(),
           Value<int?> downAttainableRateMax = const Value.absent(),
+          Value<int?> downAttainableRateSum = const Value.absent(),
+          Value<int?> downAttainableRateCount = const Value.absent(),
           Value<int?> downAttainableRateAvg = const Value.absent(),
           Value<int?> upRateLast = const Value.absent(),
           Value<int?> upRateMin = const Value.absent(),
           Value<int?> upRateMax = const Value.absent(),
+          Value<int?> upRateSum = const Value.absent(),
+          Value<int?> upRateCount = const Value.absent(),
           Value<int?> upRateAvg = const Value.absent(),
           Value<int?> upAttainableRateLast = const Value.absent(),
           Value<int?> upAttainableRateMin = const Value.absent(),
           Value<int?> upAttainableRateMax = const Value.absent(),
+          Value<int?> upAttainableRateSum = const Value.absent(),
+          Value<int?> upAttainableRateCount = const Value.absent(),
           Value<int?> upAttainableRateAvg = const Value.absent(),
           Value<int?> downSNRmLast = const Value.absent(),
           Value<int?> downSNRmMin = const Value.absent(),
           Value<int?> downSNRmMax = const Value.absent(),
+          Value<int?> downSNRmSum = const Value.absent(),
+          Value<int?> downSNRmCount = const Value.absent(),
           Value<int?> downSNRmAvg = const Value.absent(),
           Value<int?> upSNRmLast = const Value.absent(),
           Value<int?> upSNRmMin = const Value.absent(),
           Value<int?> upSNRmMax = const Value.absent(),
+          Value<int?> upSNRmSum = const Value.absent(),
+          Value<int?> upSNRmCount = const Value.absent(),
           Value<int?> upSNRmAvg = const Value.absent(),
           Value<int?> downAttenuationLast = const Value.absent(),
           Value<int?> downAttenuationMin = const Value.absent(),
           Value<int?> downAttenuationMax = const Value.absent(),
+          Value<int?> downAttenuationSum = const Value.absent(),
+          Value<int?> downAttenuationCount = const Value.absent(),
           Value<int?> downAttenuationAvg = const Value.absent(),
           Value<int?> upAttenuationLast = const Value.absent(),
           Value<int?> upAttenuationMin = const Value.absent(),
           Value<int?> upAttenuationMax = const Value.absent(),
+          Value<int?> upAttenuationSum = const Value.absent(),
+          Value<int?> upAttenuationCount = const Value.absent(),
           Value<int?> upAttenuationAvg = const Value.absent(),
           Value<int?> downFecLast = const Value.absent(),
           Value<int?> downFecTotal = const Value.absent(),
@@ -2491,6 +2916,9 @@ class DriftSnapshotStats extends DataClass
             downRateLast.present ? downRateLast.value : this.downRateLast,
         downRateMin: downRateMin.present ? downRateMin.value : this.downRateMin,
         downRateMax: downRateMax.present ? downRateMax.value : this.downRateMax,
+        downRateSum: downRateSum.present ? downRateSum.value : this.downRateSum,
+        downRateCount:
+            downRateCount.present ? downRateCount.value : this.downRateCount,
         downRateAvg: downRateAvg.present ? downRateAvg.value : this.downRateAvg,
         downAttainableRateLast: downAttainableRateLast.present
             ? downAttainableRateLast.value
@@ -2501,12 +2929,20 @@ class DriftSnapshotStats extends DataClass
         downAttainableRateMax: downAttainableRateMax.present
             ? downAttainableRateMax.value
             : this.downAttainableRateMax,
+        downAttainableRateSum: downAttainableRateSum.present
+            ? downAttainableRateSum.value
+            : this.downAttainableRateSum,
+        downAttainableRateCount: downAttainableRateCount.present
+            ? downAttainableRateCount.value
+            : this.downAttainableRateCount,
         downAttainableRateAvg: downAttainableRateAvg.present
             ? downAttainableRateAvg.value
             : this.downAttainableRateAvg,
         upRateLast: upRateLast.present ? upRateLast.value : this.upRateLast,
         upRateMin: upRateMin.present ? upRateMin.value : this.upRateMin,
         upRateMax: upRateMax.present ? upRateMax.value : this.upRateMax,
+        upRateSum: upRateSum.present ? upRateSum.value : this.upRateSum,
+        upRateCount: upRateCount.present ? upRateCount.value : this.upRateCount,
         upRateAvg: upRateAvg.present ? upRateAvg.value : this.upRateAvg,
         upAttainableRateLast: upAttainableRateLast.present
             ? upAttainableRateLast.value
@@ -2517,6 +2953,12 @@ class DriftSnapshotStats extends DataClass
         upAttainableRateMax: upAttainableRateMax.present
             ? upAttainableRateMax.value
             : this.upAttainableRateMax,
+        upAttainableRateSum: upAttainableRateSum.present
+            ? upAttainableRateSum.value
+            : this.upAttainableRateSum,
+        upAttainableRateCount: upAttainableRateCount.present
+            ? upAttainableRateCount.value
+            : this.upAttainableRateCount,
         upAttainableRateAvg: upAttainableRateAvg.present
             ? upAttainableRateAvg.value
             : this.upAttainableRateAvg,
@@ -2524,10 +2966,15 @@ class DriftSnapshotStats extends DataClass
             downSNRmLast.present ? downSNRmLast.value : this.downSNRmLast,
         downSNRmMin: downSNRmMin.present ? downSNRmMin.value : this.downSNRmMin,
         downSNRmMax: downSNRmMax.present ? downSNRmMax.value : this.downSNRmMax,
+        downSNRmSum: downSNRmSum.present ? downSNRmSum.value : this.downSNRmSum,
+        downSNRmCount:
+            downSNRmCount.present ? downSNRmCount.value : this.downSNRmCount,
         downSNRmAvg: downSNRmAvg.present ? downSNRmAvg.value : this.downSNRmAvg,
         upSNRmLast: upSNRmLast.present ? upSNRmLast.value : this.upSNRmLast,
         upSNRmMin: upSNRmMin.present ? upSNRmMin.value : this.upSNRmMin,
         upSNRmMax: upSNRmMax.present ? upSNRmMax.value : this.upSNRmMax,
+        upSNRmSum: upSNRmSum.present ? upSNRmSum.value : this.upSNRmSum,
+        upSNRmCount: upSNRmCount.present ? upSNRmCount.value : this.upSNRmCount,
         upSNRmAvg: upSNRmAvg.present ? upSNRmAvg.value : this.upSNRmAvg,
         downAttenuationLast: downAttenuationLast.present
             ? downAttenuationLast.value
@@ -2538,6 +2985,12 @@ class DriftSnapshotStats extends DataClass
         downAttenuationMax: downAttenuationMax.present
             ? downAttenuationMax.value
             : this.downAttenuationMax,
+        downAttenuationSum: downAttenuationSum.present
+            ? downAttenuationSum.value
+            : this.downAttenuationSum,
+        downAttenuationCount: downAttenuationCount.present
+            ? downAttenuationCount.value
+            : this.downAttenuationCount,
         downAttenuationAvg: downAttenuationAvg.present
             ? downAttenuationAvg.value
             : this.downAttenuationAvg,
@@ -2550,6 +3003,12 @@ class DriftSnapshotStats extends DataClass
         upAttenuationMax: upAttenuationMax.present
             ? upAttenuationMax.value
             : this.upAttenuationMax,
+        upAttenuationSum: upAttenuationSum.present
+            ? upAttenuationSum.value
+            : this.upAttenuationSum,
+        upAttenuationCount: upAttenuationCount.present
+            ? upAttenuationCount.value
+            : this.upAttenuationCount,
         upAttenuationAvg: upAttenuationAvg.present
             ? upAttenuationAvg.value
             : this.upAttenuationAvg,
@@ -2584,34 +3043,50 @@ class DriftSnapshotStats extends DataClass
           ..write('downRateLast: $downRateLast, ')
           ..write('downRateMin: $downRateMin, ')
           ..write('downRateMax: $downRateMax, ')
+          ..write('downRateSum: $downRateSum, ')
+          ..write('downRateCount: $downRateCount, ')
           ..write('downRateAvg: $downRateAvg, ')
           ..write('downAttainableRateLast: $downAttainableRateLast, ')
           ..write('downAttainableRateMin: $downAttainableRateMin, ')
           ..write('downAttainableRateMax: $downAttainableRateMax, ')
+          ..write('downAttainableRateSum: $downAttainableRateSum, ')
+          ..write('downAttainableRateCount: $downAttainableRateCount, ')
           ..write('downAttainableRateAvg: $downAttainableRateAvg, ')
           ..write('upRateLast: $upRateLast, ')
           ..write('upRateMin: $upRateMin, ')
           ..write('upRateMax: $upRateMax, ')
+          ..write('upRateSum: $upRateSum, ')
+          ..write('upRateCount: $upRateCount, ')
           ..write('upRateAvg: $upRateAvg, ')
           ..write('upAttainableRateLast: $upAttainableRateLast, ')
           ..write('upAttainableRateMin: $upAttainableRateMin, ')
           ..write('upAttainableRateMax: $upAttainableRateMax, ')
+          ..write('upAttainableRateSum: $upAttainableRateSum, ')
+          ..write('upAttainableRateCount: $upAttainableRateCount, ')
           ..write('upAttainableRateAvg: $upAttainableRateAvg, ')
           ..write('downSNRmLast: $downSNRmLast, ')
           ..write('downSNRmMin: $downSNRmMin, ')
           ..write('downSNRmMax: $downSNRmMax, ')
+          ..write('downSNRmSum: $downSNRmSum, ')
+          ..write('downSNRmCount: $downSNRmCount, ')
           ..write('downSNRmAvg: $downSNRmAvg, ')
           ..write('upSNRmLast: $upSNRmLast, ')
           ..write('upSNRmMin: $upSNRmMin, ')
           ..write('upSNRmMax: $upSNRmMax, ')
+          ..write('upSNRmSum: $upSNRmSum, ')
+          ..write('upSNRmCount: $upSNRmCount, ')
           ..write('upSNRmAvg: $upSNRmAvg, ')
           ..write('downAttenuationLast: $downAttenuationLast, ')
           ..write('downAttenuationMin: $downAttenuationMin, ')
           ..write('downAttenuationMax: $downAttenuationMax, ')
+          ..write('downAttenuationSum: $downAttenuationSum, ')
+          ..write('downAttenuationCount: $downAttenuationCount, ')
           ..write('downAttenuationAvg: $downAttenuationAvg, ')
           ..write('upAttenuationLast: $upAttenuationLast, ')
           ..write('upAttenuationMin: $upAttenuationMin, ')
           ..write('upAttenuationMax: $upAttenuationMax, ')
+          ..write('upAttenuationSum: $upAttenuationSum, ')
+          ..write('upAttenuationCount: $upAttenuationCount, ')
           ..write('upAttenuationAvg: $upAttenuationAvg, ')
           ..write('downFecLast: $downFecLast, ')
           ..write('downFecTotal: $downFecTotal, ')
@@ -2644,34 +3119,50 @@ class DriftSnapshotStats extends DataClass
         downRateLast,
         downRateMin,
         downRateMax,
+        downRateSum,
+        downRateCount,
         downRateAvg,
         downAttainableRateLast,
         downAttainableRateMin,
         downAttainableRateMax,
+        downAttainableRateSum,
+        downAttainableRateCount,
         downAttainableRateAvg,
         upRateLast,
         upRateMin,
         upRateMax,
+        upRateSum,
+        upRateCount,
         upRateAvg,
         upAttainableRateLast,
         upAttainableRateMin,
         upAttainableRateMax,
+        upAttainableRateSum,
+        upAttainableRateCount,
         upAttainableRateAvg,
         downSNRmLast,
         downSNRmMin,
         downSNRmMax,
+        downSNRmSum,
+        downSNRmCount,
         downSNRmAvg,
         upSNRmLast,
         upSNRmMin,
         upSNRmMax,
+        upSNRmSum,
+        upSNRmCount,
         upSNRmAvg,
         downAttenuationLast,
         downAttenuationMin,
         downAttenuationMax,
+        downAttenuationSum,
+        downAttenuationCount,
         downAttenuationAvg,
         upAttenuationLast,
         upAttenuationMin,
         upAttenuationMax,
+        upAttenuationSum,
+        upAttenuationCount,
         upAttenuationAvg,
         downFecLast,
         downFecTotal,
@@ -2703,34 +3194,50 @@ class DriftSnapshotStats extends DataClass
           other.downRateLast == this.downRateLast &&
           other.downRateMin == this.downRateMin &&
           other.downRateMax == this.downRateMax &&
+          other.downRateSum == this.downRateSum &&
+          other.downRateCount == this.downRateCount &&
           other.downRateAvg == this.downRateAvg &&
           other.downAttainableRateLast == this.downAttainableRateLast &&
           other.downAttainableRateMin == this.downAttainableRateMin &&
           other.downAttainableRateMax == this.downAttainableRateMax &&
+          other.downAttainableRateSum == this.downAttainableRateSum &&
+          other.downAttainableRateCount == this.downAttainableRateCount &&
           other.downAttainableRateAvg == this.downAttainableRateAvg &&
           other.upRateLast == this.upRateLast &&
           other.upRateMin == this.upRateMin &&
           other.upRateMax == this.upRateMax &&
+          other.upRateSum == this.upRateSum &&
+          other.upRateCount == this.upRateCount &&
           other.upRateAvg == this.upRateAvg &&
           other.upAttainableRateLast == this.upAttainableRateLast &&
           other.upAttainableRateMin == this.upAttainableRateMin &&
           other.upAttainableRateMax == this.upAttainableRateMax &&
+          other.upAttainableRateSum == this.upAttainableRateSum &&
+          other.upAttainableRateCount == this.upAttainableRateCount &&
           other.upAttainableRateAvg == this.upAttainableRateAvg &&
           other.downSNRmLast == this.downSNRmLast &&
           other.downSNRmMin == this.downSNRmMin &&
           other.downSNRmMax == this.downSNRmMax &&
+          other.downSNRmSum == this.downSNRmSum &&
+          other.downSNRmCount == this.downSNRmCount &&
           other.downSNRmAvg == this.downSNRmAvg &&
           other.upSNRmLast == this.upSNRmLast &&
           other.upSNRmMin == this.upSNRmMin &&
           other.upSNRmMax == this.upSNRmMax &&
+          other.upSNRmSum == this.upSNRmSum &&
+          other.upSNRmCount == this.upSNRmCount &&
           other.upSNRmAvg == this.upSNRmAvg &&
           other.downAttenuationLast == this.downAttenuationLast &&
           other.downAttenuationMin == this.downAttenuationMin &&
           other.downAttenuationMax == this.downAttenuationMax &&
+          other.downAttenuationSum == this.downAttenuationSum &&
+          other.downAttenuationCount == this.downAttenuationCount &&
           other.downAttenuationAvg == this.downAttenuationAvg &&
           other.upAttenuationLast == this.upAttenuationLast &&
           other.upAttenuationMin == this.upAttenuationMin &&
           other.upAttenuationMax == this.upAttenuationMax &&
+          other.upAttenuationSum == this.upAttenuationSum &&
+          other.upAttenuationCount == this.upAttenuationCount &&
           other.upAttenuationAvg == this.upAttenuationAvg &&
           other.downFecLast == this.downFecLast &&
           other.downFecTotal == this.downFecTotal &&
@@ -2760,34 +3267,50 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
   final Value<int?> downRateLast;
   final Value<int?> downRateMin;
   final Value<int?> downRateMax;
+  final Value<int?> downRateSum;
+  final Value<int?> downRateCount;
   final Value<int?> downRateAvg;
   final Value<int?> downAttainableRateLast;
   final Value<int?> downAttainableRateMin;
   final Value<int?> downAttainableRateMax;
+  final Value<int?> downAttainableRateSum;
+  final Value<int?> downAttainableRateCount;
   final Value<int?> downAttainableRateAvg;
   final Value<int?> upRateLast;
   final Value<int?> upRateMin;
   final Value<int?> upRateMax;
+  final Value<int?> upRateSum;
+  final Value<int?> upRateCount;
   final Value<int?> upRateAvg;
   final Value<int?> upAttainableRateLast;
   final Value<int?> upAttainableRateMin;
   final Value<int?> upAttainableRateMax;
+  final Value<int?> upAttainableRateSum;
+  final Value<int?> upAttainableRateCount;
   final Value<int?> upAttainableRateAvg;
   final Value<int?> downSNRmLast;
   final Value<int?> downSNRmMin;
   final Value<int?> downSNRmMax;
+  final Value<int?> downSNRmSum;
+  final Value<int?> downSNRmCount;
   final Value<int?> downSNRmAvg;
   final Value<int?> upSNRmLast;
   final Value<int?> upSNRmMin;
   final Value<int?> upSNRmMax;
+  final Value<int?> upSNRmSum;
+  final Value<int?> upSNRmCount;
   final Value<int?> upSNRmAvg;
   final Value<int?> downAttenuationLast;
   final Value<int?> downAttenuationMin;
   final Value<int?> downAttenuationMax;
+  final Value<int?> downAttenuationSum;
+  final Value<int?> downAttenuationCount;
   final Value<int?> downAttenuationAvg;
   final Value<int?> upAttenuationLast;
   final Value<int?> upAttenuationMin;
   final Value<int?> upAttenuationMax;
+  final Value<int?> upAttenuationSum;
+  final Value<int?> upAttenuationCount;
   final Value<int?> upAttenuationAvg;
   final Value<int?> downFecLast;
   final Value<int?> downFecTotal;
@@ -2816,34 +3339,50 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
     this.downRateLast = const Value.absent(),
     this.downRateMin = const Value.absent(),
     this.downRateMax = const Value.absent(),
+    this.downRateSum = const Value.absent(),
+    this.downRateCount = const Value.absent(),
     this.downRateAvg = const Value.absent(),
     this.downAttainableRateLast = const Value.absent(),
     this.downAttainableRateMin = const Value.absent(),
     this.downAttainableRateMax = const Value.absent(),
+    this.downAttainableRateSum = const Value.absent(),
+    this.downAttainableRateCount = const Value.absent(),
     this.downAttainableRateAvg = const Value.absent(),
     this.upRateLast = const Value.absent(),
     this.upRateMin = const Value.absent(),
     this.upRateMax = const Value.absent(),
+    this.upRateSum = const Value.absent(),
+    this.upRateCount = const Value.absent(),
     this.upRateAvg = const Value.absent(),
     this.upAttainableRateLast = const Value.absent(),
     this.upAttainableRateMin = const Value.absent(),
     this.upAttainableRateMax = const Value.absent(),
+    this.upAttainableRateSum = const Value.absent(),
+    this.upAttainableRateCount = const Value.absent(),
     this.upAttainableRateAvg = const Value.absent(),
     this.downSNRmLast = const Value.absent(),
     this.downSNRmMin = const Value.absent(),
     this.downSNRmMax = const Value.absent(),
+    this.downSNRmSum = const Value.absent(),
+    this.downSNRmCount = const Value.absent(),
     this.downSNRmAvg = const Value.absent(),
     this.upSNRmLast = const Value.absent(),
     this.upSNRmMin = const Value.absent(),
     this.upSNRmMax = const Value.absent(),
+    this.upSNRmSum = const Value.absent(),
+    this.upSNRmCount = const Value.absent(),
     this.upSNRmAvg = const Value.absent(),
     this.downAttenuationLast = const Value.absent(),
     this.downAttenuationMin = const Value.absent(),
     this.downAttenuationMax = const Value.absent(),
+    this.downAttenuationSum = const Value.absent(),
+    this.downAttenuationCount = const Value.absent(),
     this.downAttenuationAvg = const Value.absent(),
     this.upAttenuationLast = const Value.absent(),
     this.upAttenuationMin = const Value.absent(),
     this.upAttenuationMax = const Value.absent(),
+    this.upAttenuationSum = const Value.absent(),
+    this.upAttenuationCount = const Value.absent(),
     this.upAttenuationAvg = const Value.absent(),
     this.downFecLast = const Value.absent(),
     this.downFecTotal = const Value.absent(),
@@ -2873,34 +3412,50 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
     this.downRateLast = const Value.absent(),
     this.downRateMin = const Value.absent(),
     this.downRateMax = const Value.absent(),
+    this.downRateSum = const Value.absent(),
+    this.downRateCount = const Value.absent(),
     this.downRateAvg = const Value.absent(),
     this.downAttainableRateLast = const Value.absent(),
     this.downAttainableRateMin = const Value.absent(),
     this.downAttainableRateMax = const Value.absent(),
+    this.downAttainableRateSum = const Value.absent(),
+    this.downAttainableRateCount = const Value.absent(),
     this.downAttainableRateAvg = const Value.absent(),
     this.upRateLast = const Value.absent(),
     this.upRateMin = const Value.absent(),
     this.upRateMax = const Value.absent(),
+    this.upRateSum = const Value.absent(),
+    this.upRateCount = const Value.absent(),
     this.upRateAvg = const Value.absent(),
     this.upAttainableRateLast = const Value.absent(),
     this.upAttainableRateMin = const Value.absent(),
     this.upAttainableRateMax = const Value.absent(),
+    this.upAttainableRateSum = const Value.absent(),
+    this.upAttainableRateCount = const Value.absent(),
     this.upAttainableRateAvg = const Value.absent(),
     this.downSNRmLast = const Value.absent(),
     this.downSNRmMin = const Value.absent(),
     this.downSNRmMax = const Value.absent(),
+    this.downSNRmSum = const Value.absent(),
+    this.downSNRmCount = const Value.absent(),
     this.downSNRmAvg = const Value.absent(),
     this.upSNRmLast = const Value.absent(),
     this.upSNRmMin = const Value.absent(),
     this.upSNRmMax = const Value.absent(),
+    this.upSNRmSum = const Value.absent(),
+    this.upSNRmCount = const Value.absent(),
     this.upSNRmAvg = const Value.absent(),
     this.downAttenuationLast = const Value.absent(),
     this.downAttenuationMin = const Value.absent(),
     this.downAttenuationMax = const Value.absent(),
+    this.downAttenuationSum = const Value.absent(),
+    this.downAttenuationCount = const Value.absent(),
     this.downAttenuationAvg = const Value.absent(),
     this.upAttenuationLast = const Value.absent(),
     this.upAttenuationMin = const Value.absent(),
     this.upAttenuationMax = const Value.absent(),
+    this.upAttenuationSum = const Value.absent(),
+    this.upAttenuationCount = const Value.absent(),
     this.upAttenuationAvg = const Value.absent(),
     this.downFecLast = const Value.absent(),
     this.downFecTotal = const Value.absent(),
@@ -2939,34 +3494,50 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
     Expression<int>? downRateLast,
     Expression<int>? downRateMin,
     Expression<int>? downRateMax,
+    Expression<int>? downRateSum,
+    Expression<int>? downRateCount,
     Expression<int>? downRateAvg,
     Expression<int>? downAttainableRateLast,
     Expression<int>? downAttainableRateMin,
     Expression<int>? downAttainableRateMax,
+    Expression<int>? downAttainableRateSum,
+    Expression<int>? downAttainableRateCount,
     Expression<int>? downAttainableRateAvg,
     Expression<int>? upRateLast,
     Expression<int>? upRateMin,
     Expression<int>? upRateMax,
+    Expression<int>? upRateSum,
+    Expression<int>? upRateCount,
     Expression<int>? upRateAvg,
     Expression<int>? upAttainableRateLast,
     Expression<int>? upAttainableRateMin,
     Expression<int>? upAttainableRateMax,
+    Expression<int>? upAttainableRateSum,
+    Expression<int>? upAttainableRateCount,
     Expression<int>? upAttainableRateAvg,
     Expression<int>? downSNRmLast,
     Expression<int>? downSNRmMin,
     Expression<int>? downSNRmMax,
+    Expression<int>? downSNRmSum,
+    Expression<int>? downSNRmCount,
     Expression<int>? downSNRmAvg,
     Expression<int>? upSNRmLast,
     Expression<int>? upSNRmMin,
     Expression<int>? upSNRmMax,
+    Expression<int>? upSNRmSum,
+    Expression<int>? upSNRmCount,
     Expression<int>? upSNRmAvg,
     Expression<int>? downAttenuationLast,
     Expression<int>? downAttenuationMin,
     Expression<int>? downAttenuationMax,
+    Expression<int>? downAttenuationSum,
+    Expression<int>? downAttenuationCount,
     Expression<int>? downAttenuationAvg,
     Expression<int>? upAttenuationLast,
     Expression<int>? upAttenuationMin,
     Expression<int>? upAttenuationMax,
+    Expression<int>? upAttenuationSum,
+    Expression<int>? upAttenuationCount,
     Expression<int>? upAttenuationAvg,
     Expression<int>? downFecLast,
     Expression<int>? downFecTotal,
@@ -2997,6 +3568,8 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
       if (downRateLast != null) 'down_rate_last': downRateLast,
       if (downRateMin != null) 'down_rate_min': downRateMin,
       if (downRateMax != null) 'down_rate_max': downRateMax,
+      if (downRateSum != null) 'down_rate_sum': downRateSum,
+      if (downRateCount != null) 'down_rate_count': downRateCount,
       if (downRateAvg != null) 'down_rate_avg': downRateAvg,
       if (downAttainableRateLast != null)
         'down_attainable_rate_last': downAttainableRateLast,
@@ -3004,11 +3577,17 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
         'down_attainable_rate_min': downAttainableRateMin,
       if (downAttainableRateMax != null)
         'down_attainable_rate_max': downAttainableRateMax,
+      if (downAttainableRateSum != null)
+        'down_attainable_rate_sum': downAttainableRateSum,
+      if (downAttainableRateCount != null)
+        'down_attainable_rate_count': downAttainableRateCount,
       if (downAttainableRateAvg != null)
         'down_attainable_rate_avg': downAttainableRateAvg,
       if (upRateLast != null) 'up_rate_last': upRateLast,
       if (upRateMin != null) 'up_rate_min': upRateMin,
       if (upRateMax != null) 'up_rate_max': upRateMax,
+      if (upRateSum != null) 'up_rate_sum': upRateSum,
+      if (upRateCount != null) 'up_rate_count': upRateCount,
       if (upRateAvg != null) 'up_rate_avg': upRateAvg,
       if (upAttainableRateLast != null)
         'up_attainable_rate_last': upAttainableRateLast,
@@ -3016,15 +3595,23 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
         'up_attainable_rate_min': upAttainableRateMin,
       if (upAttainableRateMax != null)
         'up_attainable_rate_max': upAttainableRateMax,
+      if (upAttainableRateSum != null)
+        'up_attainable_rate_sum': upAttainableRateSum,
+      if (upAttainableRateCount != null)
+        'up_attainable_rate_count': upAttainableRateCount,
       if (upAttainableRateAvg != null)
         'up_attainable_rate_avg': upAttainableRateAvg,
       if (downSNRmLast != null) 'down_s_n_rm_last': downSNRmLast,
       if (downSNRmMin != null) 'down_s_n_rm_min': downSNRmMin,
       if (downSNRmMax != null) 'down_s_n_rm_max': downSNRmMax,
+      if (downSNRmSum != null) 'down_s_n_rm_sum': downSNRmSum,
+      if (downSNRmCount != null) 'down_s_n_rm_count': downSNRmCount,
       if (downSNRmAvg != null) 'down_s_n_rm_avg': downSNRmAvg,
       if (upSNRmLast != null) 'up_s_n_rm_last': upSNRmLast,
       if (upSNRmMin != null) 'up_s_n_rm_min': upSNRmMin,
       if (upSNRmMax != null) 'up_s_n_rm_max': upSNRmMax,
+      if (upSNRmSum != null) 'up_s_n_rm_sum': upSNRmSum,
+      if (upSNRmCount != null) 'up_s_n_rm_count': upSNRmCount,
       if (upSNRmAvg != null) 'up_s_n_rm_avg': upSNRmAvg,
       if (downAttenuationLast != null)
         'down_attenuation_last': downAttenuationLast,
@@ -3032,11 +3619,18 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
         'down_attenuation_min': downAttenuationMin,
       if (downAttenuationMax != null)
         'down_attenuation_max': downAttenuationMax,
+      if (downAttenuationSum != null)
+        'down_attenuation_sum': downAttenuationSum,
+      if (downAttenuationCount != null)
+        'down_attenuation_count': downAttenuationCount,
       if (downAttenuationAvg != null)
         'down_attenuation_avg': downAttenuationAvg,
       if (upAttenuationLast != null) 'up_attenuation_last': upAttenuationLast,
       if (upAttenuationMin != null) 'up_attenuation_min': upAttenuationMin,
       if (upAttenuationMax != null) 'up_attenuation_max': upAttenuationMax,
+      if (upAttenuationSum != null) 'up_attenuation_sum': upAttenuationSum,
+      if (upAttenuationCount != null)
+        'up_attenuation_count': upAttenuationCount,
       if (upAttenuationAvg != null) 'up_attenuation_avg': upAttenuationAvg,
       if (downFecLast != null) 'down_fec_last': downFecLast,
       if (downFecTotal != null) 'down_fec_total': downFecTotal,
@@ -3068,34 +3662,50 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
       Value<int?>? downRateLast,
       Value<int?>? downRateMin,
       Value<int?>? downRateMax,
+      Value<int?>? downRateSum,
+      Value<int?>? downRateCount,
       Value<int?>? downRateAvg,
       Value<int?>? downAttainableRateLast,
       Value<int?>? downAttainableRateMin,
       Value<int?>? downAttainableRateMax,
+      Value<int?>? downAttainableRateSum,
+      Value<int?>? downAttainableRateCount,
       Value<int?>? downAttainableRateAvg,
       Value<int?>? upRateLast,
       Value<int?>? upRateMin,
       Value<int?>? upRateMax,
+      Value<int?>? upRateSum,
+      Value<int?>? upRateCount,
       Value<int?>? upRateAvg,
       Value<int?>? upAttainableRateLast,
       Value<int?>? upAttainableRateMin,
       Value<int?>? upAttainableRateMax,
+      Value<int?>? upAttainableRateSum,
+      Value<int?>? upAttainableRateCount,
       Value<int?>? upAttainableRateAvg,
       Value<int?>? downSNRmLast,
       Value<int?>? downSNRmMin,
       Value<int?>? downSNRmMax,
+      Value<int?>? downSNRmSum,
+      Value<int?>? downSNRmCount,
       Value<int?>? downSNRmAvg,
       Value<int?>? upSNRmLast,
       Value<int?>? upSNRmMin,
       Value<int?>? upSNRmMax,
+      Value<int?>? upSNRmSum,
+      Value<int?>? upSNRmCount,
       Value<int?>? upSNRmAvg,
       Value<int?>? downAttenuationLast,
       Value<int?>? downAttenuationMin,
       Value<int?>? downAttenuationMax,
+      Value<int?>? downAttenuationSum,
+      Value<int?>? downAttenuationCount,
       Value<int?>? downAttenuationAvg,
       Value<int?>? upAttenuationLast,
       Value<int?>? upAttenuationMin,
       Value<int?>? upAttenuationMax,
+      Value<int?>? upAttenuationSum,
+      Value<int?>? upAttenuationCount,
       Value<int?>? upAttenuationAvg,
       Value<int?>? downFecLast,
       Value<int?>? downFecTotal,
@@ -3124,6 +3734,8 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
       downRateLast: downRateLast ?? this.downRateLast,
       downRateMin: downRateMin ?? this.downRateMin,
       downRateMax: downRateMax ?? this.downRateMax,
+      downRateSum: downRateSum ?? this.downRateSum,
+      downRateCount: downRateCount ?? this.downRateCount,
       downRateAvg: downRateAvg ?? this.downRateAvg,
       downAttainableRateLast:
           downAttainableRateLast ?? this.downAttainableRateLast,
@@ -3131,31 +3743,48 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
           downAttainableRateMin ?? this.downAttainableRateMin,
       downAttainableRateMax:
           downAttainableRateMax ?? this.downAttainableRateMax,
+      downAttainableRateSum:
+          downAttainableRateSum ?? this.downAttainableRateSum,
+      downAttainableRateCount:
+          downAttainableRateCount ?? this.downAttainableRateCount,
       downAttainableRateAvg:
           downAttainableRateAvg ?? this.downAttainableRateAvg,
       upRateLast: upRateLast ?? this.upRateLast,
       upRateMin: upRateMin ?? this.upRateMin,
       upRateMax: upRateMax ?? this.upRateMax,
+      upRateSum: upRateSum ?? this.upRateSum,
+      upRateCount: upRateCount ?? this.upRateCount,
       upRateAvg: upRateAvg ?? this.upRateAvg,
       upAttainableRateLast: upAttainableRateLast ?? this.upAttainableRateLast,
       upAttainableRateMin: upAttainableRateMin ?? this.upAttainableRateMin,
       upAttainableRateMax: upAttainableRateMax ?? this.upAttainableRateMax,
+      upAttainableRateSum: upAttainableRateSum ?? this.upAttainableRateSum,
+      upAttainableRateCount:
+          upAttainableRateCount ?? this.upAttainableRateCount,
       upAttainableRateAvg: upAttainableRateAvg ?? this.upAttainableRateAvg,
       downSNRmLast: downSNRmLast ?? this.downSNRmLast,
       downSNRmMin: downSNRmMin ?? this.downSNRmMin,
       downSNRmMax: downSNRmMax ?? this.downSNRmMax,
+      downSNRmSum: downSNRmSum ?? this.downSNRmSum,
+      downSNRmCount: downSNRmCount ?? this.downSNRmCount,
       downSNRmAvg: downSNRmAvg ?? this.downSNRmAvg,
       upSNRmLast: upSNRmLast ?? this.upSNRmLast,
       upSNRmMin: upSNRmMin ?? this.upSNRmMin,
       upSNRmMax: upSNRmMax ?? this.upSNRmMax,
+      upSNRmSum: upSNRmSum ?? this.upSNRmSum,
+      upSNRmCount: upSNRmCount ?? this.upSNRmCount,
       upSNRmAvg: upSNRmAvg ?? this.upSNRmAvg,
       downAttenuationLast: downAttenuationLast ?? this.downAttenuationLast,
       downAttenuationMin: downAttenuationMin ?? this.downAttenuationMin,
       downAttenuationMax: downAttenuationMax ?? this.downAttenuationMax,
+      downAttenuationSum: downAttenuationSum ?? this.downAttenuationSum,
+      downAttenuationCount: downAttenuationCount ?? this.downAttenuationCount,
       downAttenuationAvg: downAttenuationAvg ?? this.downAttenuationAvg,
       upAttenuationLast: upAttenuationLast ?? this.upAttenuationLast,
       upAttenuationMin: upAttenuationMin ?? this.upAttenuationMin,
       upAttenuationMax: upAttenuationMax ?? this.upAttenuationMax,
+      upAttenuationSum: upAttenuationSum ?? this.upAttenuationSum,
+      upAttenuationCount: upAttenuationCount ?? this.upAttenuationCount,
       upAttenuationAvg: upAttenuationAvg ?? this.upAttenuationAvg,
       downFecLast: downFecLast ?? this.downFecLast,
       downFecTotal: downFecTotal ?? this.downFecTotal,
@@ -3226,6 +3855,12 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
     if (downRateMax.present) {
       map['down_rate_max'] = Variable<int>(downRateMax.value);
     }
+    if (downRateSum.present) {
+      map['down_rate_sum'] = Variable<int>(downRateSum.value);
+    }
+    if (downRateCount.present) {
+      map['down_rate_count'] = Variable<int>(downRateCount.value);
+    }
     if (downRateAvg.present) {
       map['down_rate_avg'] = Variable<int>(downRateAvg.value);
     }
@@ -3241,6 +3876,14 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
       map['down_attainable_rate_max'] =
           Variable<int>(downAttainableRateMax.value);
     }
+    if (downAttainableRateSum.present) {
+      map['down_attainable_rate_sum'] =
+          Variable<int>(downAttainableRateSum.value);
+    }
+    if (downAttainableRateCount.present) {
+      map['down_attainable_rate_count'] =
+          Variable<int>(downAttainableRateCount.value);
+    }
     if (downAttainableRateAvg.present) {
       map['down_attainable_rate_avg'] =
           Variable<int>(downAttainableRateAvg.value);
@@ -3253,6 +3896,12 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
     }
     if (upRateMax.present) {
       map['up_rate_max'] = Variable<int>(upRateMax.value);
+    }
+    if (upRateSum.present) {
+      map['up_rate_sum'] = Variable<int>(upRateSum.value);
+    }
+    if (upRateCount.present) {
+      map['up_rate_count'] = Variable<int>(upRateCount.value);
     }
     if (upRateAvg.present) {
       map['up_rate_avg'] = Variable<int>(upRateAvg.value);
@@ -3267,6 +3916,13 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
     if (upAttainableRateMax.present) {
       map['up_attainable_rate_max'] = Variable<int>(upAttainableRateMax.value);
     }
+    if (upAttainableRateSum.present) {
+      map['up_attainable_rate_sum'] = Variable<int>(upAttainableRateSum.value);
+    }
+    if (upAttainableRateCount.present) {
+      map['up_attainable_rate_count'] =
+          Variable<int>(upAttainableRateCount.value);
+    }
     if (upAttainableRateAvg.present) {
       map['up_attainable_rate_avg'] = Variable<int>(upAttainableRateAvg.value);
     }
@@ -3278,6 +3934,12 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
     }
     if (downSNRmMax.present) {
       map['down_s_n_rm_max'] = Variable<int>(downSNRmMax.value);
+    }
+    if (downSNRmSum.present) {
+      map['down_s_n_rm_sum'] = Variable<int>(downSNRmSum.value);
+    }
+    if (downSNRmCount.present) {
+      map['down_s_n_rm_count'] = Variable<int>(downSNRmCount.value);
     }
     if (downSNRmAvg.present) {
       map['down_s_n_rm_avg'] = Variable<int>(downSNRmAvg.value);
@@ -3291,6 +3953,12 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
     if (upSNRmMax.present) {
       map['up_s_n_rm_max'] = Variable<int>(upSNRmMax.value);
     }
+    if (upSNRmSum.present) {
+      map['up_s_n_rm_sum'] = Variable<int>(upSNRmSum.value);
+    }
+    if (upSNRmCount.present) {
+      map['up_s_n_rm_count'] = Variable<int>(upSNRmCount.value);
+    }
     if (upSNRmAvg.present) {
       map['up_s_n_rm_avg'] = Variable<int>(upSNRmAvg.value);
     }
@@ -3303,6 +3971,12 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
     if (downAttenuationMax.present) {
       map['down_attenuation_max'] = Variable<int>(downAttenuationMax.value);
     }
+    if (downAttenuationSum.present) {
+      map['down_attenuation_sum'] = Variable<int>(downAttenuationSum.value);
+    }
+    if (downAttenuationCount.present) {
+      map['down_attenuation_count'] = Variable<int>(downAttenuationCount.value);
+    }
     if (downAttenuationAvg.present) {
       map['down_attenuation_avg'] = Variable<int>(downAttenuationAvg.value);
     }
@@ -3314,6 +3988,12 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
     }
     if (upAttenuationMax.present) {
       map['up_attenuation_max'] = Variable<int>(upAttenuationMax.value);
+    }
+    if (upAttenuationSum.present) {
+      map['up_attenuation_sum'] = Variable<int>(upAttenuationSum.value);
+    }
+    if (upAttenuationCount.present) {
+      map['up_attenuation_count'] = Variable<int>(upAttenuationCount.value);
     }
     if (upAttenuationAvg.present) {
       map['up_attenuation_avg'] = Variable<int>(upAttenuationAvg.value);
@@ -3368,34 +4048,50 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
           ..write('downRateLast: $downRateLast, ')
           ..write('downRateMin: $downRateMin, ')
           ..write('downRateMax: $downRateMax, ')
+          ..write('downRateSum: $downRateSum, ')
+          ..write('downRateCount: $downRateCount, ')
           ..write('downRateAvg: $downRateAvg, ')
           ..write('downAttainableRateLast: $downAttainableRateLast, ')
           ..write('downAttainableRateMin: $downAttainableRateMin, ')
           ..write('downAttainableRateMax: $downAttainableRateMax, ')
+          ..write('downAttainableRateSum: $downAttainableRateSum, ')
+          ..write('downAttainableRateCount: $downAttainableRateCount, ')
           ..write('downAttainableRateAvg: $downAttainableRateAvg, ')
           ..write('upRateLast: $upRateLast, ')
           ..write('upRateMin: $upRateMin, ')
           ..write('upRateMax: $upRateMax, ')
+          ..write('upRateSum: $upRateSum, ')
+          ..write('upRateCount: $upRateCount, ')
           ..write('upRateAvg: $upRateAvg, ')
           ..write('upAttainableRateLast: $upAttainableRateLast, ')
           ..write('upAttainableRateMin: $upAttainableRateMin, ')
           ..write('upAttainableRateMax: $upAttainableRateMax, ')
+          ..write('upAttainableRateSum: $upAttainableRateSum, ')
+          ..write('upAttainableRateCount: $upAttainableRateCount, ')
           ..write('upAttainableRateAvg: $upAttainableRateAvg, ')
           ..write('downSNRmLast: $downSNRmLast, ')
           ..write('downSNRmMin: $downSNRmMin, ')
           ..write('downSNRmMax: $downSNRmMax, ')
+          ..write('downSNRmSum: $downSNRmSum, ')
+          ..write('downSNRmCount: $downSNRmCount, ')
           ..write('downSNRmAvg: $downSNRmAvg, ')
           ..write('upSNRmLast: $upSNRmLast, ')
           ..write('upSNRmMin: $upSNRmMin, ')
           ..write('upSNRmMax: $upSNRmMax, ')
+          ..write('upSNRmSum: $upSNRmSum, ')
+          ..write('upSNRmCount: $upSNRmCount, ')
           ..write('upSNRmAvg: $upSNRmAvg, ')
           ..write('downAttenuationLast: $downAttenuationLast, ')
           ..write('downAttenuationMin: $downAttenuationMin, ')
           ..write('downAttenuationMax: $downAttenuationMax, ')
+          ..write('downAttenuationSum: $downAttenuationSum, ')
+          ..write('downAttenuationCount: $downAttenuationCount, ')
           ..write('downAttenuationAvg: $downAttenuationAvg, ')
           ..write('upAttenuationLast: $upAttenuationLast, ')
           ..write('upAttenuationMin: $upAttenuationMin, ')
           ..write('upAttenuationMax: $upAttenuationMax, ')
+          ..write('upAttenuationSum: $upAttenuationSum, ')
+          ..write('upAttenuationCount: $upAttenuationCount, ')
           ..write('upAttenuationAvg: $upAttenuationAvg, ')
           ..write('downFecLast: $downFecLast, ')
           ..write('downFecTotal: $downFecTotal, ')

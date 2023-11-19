@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 
 /// Alias for a time-value pair
-typedef TimeValue = ({int t, int v});
+typedef TimeValue = ({int t, int? v});
 
 /// Alias for a time-status pair
 typedef TimeStatus = ({int t, SampleStatus s});
@@ -57,7 +57,7 @@ abstract class PathFactory {
         final xNext = eNext.t - tStart;
         final yNext = eNext.v;
 
-        if (y == 0 || yNext == 0) continue;
+        if (y == null || yNext == null) continue;
 
         path.moveTo(x.toDouble(), 0 - y.toDouble());
         path.lineTo(xNext.toDouble(), 0 - yNext.toDouble());
@@ -99,6 +99,8 @@ abstract class PathFactory {
       final e = data.elementAt(i);
       final x = e.t - tStart;
       final y = e.v;
+
+      if (y == null) continue;
 
       path.moveTo(x.toDouble(), 0 - y / 2);
       path.lineTo(x.toDouble(), 0 + y / 2);

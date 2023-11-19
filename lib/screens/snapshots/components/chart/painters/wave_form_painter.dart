@@ -4,7 +4,7 @@ import 'package:xdslmt/core/colors.dart';
 import 'package:xdslmt/core/text_styles.dart';
 
 class WaveFormPainter extends CustomPainter {
-  final Iterable<({int t, int v})> data;
+  final Iterable<({int t, int? v})> data;
   final double scale;
   final double offset;
   final String key;

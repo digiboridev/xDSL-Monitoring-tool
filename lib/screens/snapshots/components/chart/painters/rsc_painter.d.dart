@@ -45,8 +45,11 @@ class RSCPainter extends CustomPainter {
     int maxH = 1000;
     for (int i = 0; i < data.length - 1; i++) {
       final val = data.elementAt(i);
+
+      if (val.v == null) continue;
+
       final double x = (val.t - startStamp) * widthInTime + scaledOffset;
-      final double y = (val.v / maxH).clamp(0, 1) * size.height;
+      final double y = (val.v! / maxH).clamp(0, 1) * size.height;
 
       // skip offscreen points render
       if (x < 0) continue;

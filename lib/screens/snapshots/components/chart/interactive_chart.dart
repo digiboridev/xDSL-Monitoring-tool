@@ -267,7 +267,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                   width: double.infinity,
                   child: Row(
                     children: [
-                      Text('Timeline', style: TextStyles.f16w6.cyan100),
+                      Text('Timeline', style: TextStyles.f14w6.cyan100),
                       const Spacer(),
                       IconButton(
                         onPressed: () => backward(width),
@@ -310,7 +310,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                   width: double.infinity,
                   child: Row(
                     children: [
-                      Text('Status events', style: TextStyles.f16w6.cyan100),
+                      Text('Status events', style: TextStyles.f14w6.cyan100),
                       const Spacer(),
                       Container(width: 16, height: 8, color: Colors.cyan),
                       const SizedBox(width: 4),
@@ -347,7 +347,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     onTap: () => setState(() => downRate = !downRate),
                     child: Row(
                       children: [
-                        Text('Downstream Rate', style: TextStyles.f16w6.cyan100),
+                        Text('Downstream Rate', style: TextStyles.f14w6.cyan100),
                         Icon(downRate ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('MIN: ${widget.snapshotStats.downRateMin ?? 0}', style: TextStyles.f8hc100),
@@ -366,7 +366,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: RepaintBoundary(
                       child: CustomPaint(
                         painter: LinePathPainter(
-                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downRate ?? 0)),
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downRate)),
                           scale: scale,
                           offset: offset,
                           key: 'downRate${widget.statsList.last.time.millisecondsSinceEpoch}',
@@ -382,7 +382,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     onTap: () => setState(() => upRate = !upRate),
                     child: Row(
                       children: [
-                        Text('Upstream Rate', style: TextStyles.f16w6.cyan100),
+                        Text('Upstream Rate', style: TextStyles.f14w6.cyan100),
                         Icon(upRate ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('MIN: ${widget.snapshotStats.upRateMin ?? 0}', style: TextStyles.f8hc100),
@@ -401,7 +401,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: RepaintBoundary(
                       child: CustomPaint(
                         painter: LinePathPainter(
-                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upRate ?? 0)),
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upRate)),
                           scale: scale,
                           offset: offset,
                           key: 'upRate${widget.statsList.last.time.millisecondsSinceEpoch}',
@@ -417,7 +417,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     onTap: () => setState(() => downAttainableRate = !downAttainableRate),
                     child: Row(
                       children: [
-                        Text('Down Attainable Rate', style: TextStyles.f16w6.cyan100),
+                        Text('Down Attainable Rate', style: TextStyles.f14w6.cyan100),
                         Icon(downAttainableRate ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('MIN: ${widget.snapshotStats.downAttainableRateMin ?? 0}', style: TextStyles.f8hc100),
@@ -436,7 +436,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: RepaintBoundary(
                       child: CustomPaint(
                         painter: LinePathPainter(
-                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downAttainableRate ?? 0)),
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downAttainableRate)),
                           scale: scale,
                           offset: offset,
                           key: 'downAttainableRate${widget.statsList.last.time.millisecondsSinceEpoch}',
@@ -452,7 +452,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     onTap: () => setState(() => upAttainableRate = !upAttainableRate),
                     child: Row(
                       children: [
-                        Text('Up Attainable Rate', style: TextStyles.f16w6.cyan100),
+                        Text('Up Attainable Rate', style: TextStyles.f14w6.cyan100),
                         Icon(upAttainableRate ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('MIN: ${widget.snapshotStats.upAttainableRateMin ?? 0}', style: TextStyles.f8hc100),
@@ -471,7 +471,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: RepaintBoundary(
                       child: CustomPaint(
                         painter: LinePathPainter(
-                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upAttainableRate ?? 0)), // TODO remove 0
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upAttainableRate)),
                           scale: scale,
                           offset: offset,
                           key: 'upAttainableRate${widget.statsList.last.time.millisecondsSinceEpoch}',
@@ -487,7 +487,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     onTap: () => setState(() => downFec = !downFec),
                     child: Row(
                       children: [
-                        Text('Downstream FEC', style: TextStyles.f16w6.cyan100),
+                        Text('Downstream FEC INCR', style: TextStyles.f14w6.cyan100),
                         Icon(downFec ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('TOTAL: ${widget.snapshotStats.downFecTotal}', style: TextStyles.f8hc100),
@@ -502,7 +502,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: RepaintBoundary(
                       child: CustomPaint(
                         painter: WaveFormPainter(
-                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downFECIncr ?? 0)), // TODO remove 0
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downFECIncr)),
                           scale: scale,
                           offset: offset,
                           key: 'downFECIncr${widget.statsList.last.time.millisecondsSinceEpoch}',
@@ -517,7 +517,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     onTap: () => setState(() => upFec = !upFec),
                     child: Row(
                       children: [
-                        Text('Upstream FEC', style: TextStyles.f16w6.cyan100),
+                        Text('Upstream FEC INCR', style: TextStyles.f14w6.cyan100),
                         Icon(upFec ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('TOTAL: ${widget.snapshotStats.upFecTotal}', style: TextStyles.f8hc100),
@@ -532,7 +532,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: RepaintBoundary(
                       child: CustomPaint(
                         painter: WaveFormPainter(
-                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upFECIncr ?? 0)),
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upFECIncr)),
                           scale: scale,
                           offset: offset,
                           key: 'upFECIncr${widget.statsList.last.time.millisecondsSinceEpoch}',
@@ -547,7 +547,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     onTap: () => setState(() => downCrc = !downCrc),
                     child: Row(
                       children: [
-                        Text('Downstream CRC', style: TextStyles.f16w6.cyan100),
+                        Text('Downstream CRC INCR', style: TextStyles.f14w6.cyan100),
                         Icon(downCrc ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('TOTAL: ${widget.snapshotStats.downCrcTotal}', style: TextStyles.f8hc100),
@@ -562,7 +562,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: RepaintBoundary(
                       child: CustomPaint(
                         painter: WaveFormPainter(
-                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downCRCIncr ?? 0)),
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downCRCIncr)),
                           scale: scale,
                           offset: offset,
                           key: 'downCRCIncr${widget.statsList.last.time.millisecondsSinceEpoch}',
@@ -577,7 +577,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     onTap: () => setState(() => upCrc = !upCrc),
                     child: Row(
                       children: [
-                        Text('Upstream CRC', style: TextStyles.f16w6.cyan100),
+                        Text('Upstream CRC INCR', style: TextStyles.f14w6.cyan100),
                         Icon(upCrc ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('TOTAL: ${widget.snapshotStats.upCrcTotal}', style: TextStyles.f8hc100),
@@ -592,7 +592,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: RepaintBoundary(
                       child: CustomPaint(
                         painter: WaveFormPainter(
-                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upCRCIncr ?? 0)),
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upCRCIncr)),
                           scale: scale,
                           offset: offset,
                           key: 'upCRCIncr${widget.statsList.last.time.millisecondsSinceEpoch}',
@@ -607,7 +607,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     onTap: () => setState(() => downMargin = !downMargin),
                     child: Row(
                       children: [
-                        Text('Downstream SRNM', style: TextStyles.f16w6.cyan100),
+                        Text('Downstream SRNM', style: TextStyles.f14w6.cyan100),
                         Icon(downMargin ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('MIN: ${((widget.snapshotStats.downSNRmMin ?? 0) / 10).toStringAsFixed(1)}', style: TextStyles.f8hc100),
@@ -626,7 +626,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: RepaintBoundary(
                       child: CustomPaint(
                         painter: LinePathPainter(
-                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downMargin ?? 0)),
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downMargin)),
                           scale: scale,
                           offset: offset,
                           key: 'downMargin${widget.statsList.last.time.millisecondsSinceEpoch}',
@@ -642,7 +642,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     onTap: () => setState(() => upMargin = !upMargin),
                     child: Row(
                       children: [
-                        Text('Upstream SRNM', style: TextStyles.f16w6.cyan100),
+                        Text('Upstream SRNM', style: TextStyles.f14w6.cyan100),
                         Icon(upMargin ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('MIN: ${((widget.snapshotStats.upSNRmMin ?? 0) / 10).toStringAsFixed(1)}', style: TextStyles.f8hc100),
@@ -661,7 +661,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: RepaintBoundary(
                       child: CustomPaint(
                         painter: LinePathPainter(
-                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upMargin ?? 0)),
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upMargin)),
                           scale: scale,
                           offset: offset,
                           key: 'upMargin${widget.statsList.last.time.millisecondsSinceEpoch}',
@@ -677,7 +677,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     onTap: () => setState(() => downAttn = !downAttn),
                     child: Row(
                       children: [
-                        Text('Downstream ATTN', style: TextStyles.f16w6.cyan100),
+                        Text('Downstream ATTN', style: TextStyles.f14w6.cyan100),
                         Icon(downAttn ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('MIN: ${((widget.snapshotStats.downAttenuationMin ?? 0) / 10).toStringAsFixed(1)}', style: TextStyles.f8hc100),
@@ -696,7 +696,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: RepaintBoundary(
                       child: CustomPaint(
                         painter: LinePathPainter(
-                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downAttenuation ?? 0)),
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downAttenuation)),
                           scale: scale,
                           offset: offset,
                           key: 'downAttenuation${widget.statsList.last.time.millisecondsSinceEpoch}',
@@ -712,7 +712,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     onTap: () => setState(() => upAttn = !upAttn),
                     child: Row(
                       children: [
-                        Text('Upstream ATTN', style: TextStyles.f16w6.cyan100),
+                        Text('Upstream ATTN', style: TextStyles.f14w6.cyan100),
                         Icon(upAttn ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('MIN: ${((widget.snapshotStats.upAttenuationMin ?? 0) / 10).toStringAsFixed(1)}', style: TextStyles.f8hc100),
@@ -731,7 +731,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: RepaintBoundary(
                       child: CustomPaint(
                         painter: LinePathPainter(
-                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upAttenuation ?? 0)),
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upAttenuation)),
                           scale: scale,
                           offset: offset,
                           key: 'upAttenuation${widget.statsList.last.time.millisecondsSinceEpoch}',

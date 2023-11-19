@@ -1080,6 +1080,12 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
               type: DriftSqlType.string, requiredDuringInsert: false)
           .withConverter<SampleStatus?>(
               $SnapshotStatsTableTable.$converterlastSampleStatusn);
+  static const VerificationMeta _lastStatusTextMeta =
+      const VerificationMeta('lastStatusText');
+  @override
+  late final GeneratedColumn<String> lastStatusText = GeneratedColumn<String>(
+      'last_status_text', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _lastConnectionTypeMeta =
       const VerificationMeta('lastConnectionType');
   @override
@@ -1345,6 +1351,7 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
         samplingDuration,
         uplinkDuration,
         lastSampleStatus,
+        lastStatusText,
         lastConnectionType,
         lastSampleTime,
         downRateLast,
@@ -1469,6 +1476,12 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
       context.missing(_uplinkDurationMeta);
     }
     context.handle(_lastSampleStatusMeta, const VerificationResult.success());
+    if (data.containsKey('last_status_text')) {
+      context.handle(
+          _lastStatusTextMeta,
+          lastStatusText.isAcceptableOrUnknown(
+              data['last_status_text']!, _lastStatusTextMeta));
+    }
     if (data.containsKey('last_connection_type')) {
       context.handle(
           _lastConnectionTypeMeta,
@@ -1753,6 +1766,8 @@ class $SnapshotStatsTableTable extends SnapshotStatsTable
       lastSampleStatus: $SnapshotStatsTableTable.$converterlastSampleStatusn
           .fromSql(attachedDatabase.typeMapping.read(DriftSqlType.string,
               data['${effectivePrefix}last_sample_status'])),
+      lastStatusText: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}last_status_text']),
       lastConnectionType: attachedDatabase.typeMapping.read(
           DriftSqlType.string, data['${effectivePrefix}last_connection_type']),
       lastSampleTime: attachedDatabase.typeMapping.read(
@@ -1867,6 +1882,7 @@ class DriftSnapshotStats extends DataClass
   final int samplingDuration;
   final int uplinkDuration;
   final SampleStatus? lastSampleStatus;
+  final String? lastStatusText;
   final String? lastConnectionType;
   final DateTime? lastSampleTime;
   final int? downRateLast;
@@ -1921,6 +1937,7 @@ class DriftSnapshotStats extends DataClass
       required this.samplingDuration,
       required this.uplinkDuration,
       this.lastSampleStatus,
+      this.lastStatusText,
       this.lastConnectionType,
       this.lastSampleTime,
       this.downRateLast,
@@ -1980,6 +1997,9 @@ class DriftSnapshotStats extends DataClass
       final converter = $SnapshotStatsTableTable.$converterlastSampleStatusn;
       map['last_sample_status'] =
           Variable<String>(converter.toSql(lastSampleStatus));
+    }
+    if (!nullToAbsent || lastStatusText != null) {
+      map['last_status_text'] = Variable<String>(lastStatusText);
     }
     if (!nullToAbsent || lastConnectionType != null) {
       map['last_connection_type'] = Variable<String>(lastConnectionType);
@@ -2125,6 +2145,9 @@ class DriftSnapshotStats extends DataClass
       lastSampleStatus: lastSampleStatus == null && nullToAbsent
           ? const Value.absent()
           : Value(lastSampleStatus),
+      lastStatusText: lastStatusText == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastStatusText),
       lastConnectionType: lastConnectionType == null && nullToAbsent
           ? const Value.absent()
           : Value(lastConnectionType),
@@ -2270,6 +2293,7 @@ class DriftSnapshotStats extends DataClass
       uplinkDuration: serializer.fromJson<int>(json['uplinkDuration']),
       lastSampleStatus: $SnapshotStatsTableTable.$converterlastSampleStatusn
           .fromJson(serializer.fromJson<String?>(json['lastSampleStatus'])),
+      lastStatusText: serializer.fromJson<String?>(json['lastStatusText']),
       lastConnectionType:
           serializer.fromJson<String?>(json['lastConnectionType']),
       lastSampleTime: serializer.fromJson<DateTime?>(json['lastSampleTime']),
@@ -2341,6 +2365,7 @@ class DriftSnapshotStats extends DataClass
       'lastSampleStatus': serializer.toJson<String?>($SnapshotStatsTableTable
           .$converterlastSampleStatusn
           .toJson(lastSampleStatus)),
+      'lastStatusText': serializer.toJson<String?>(lastStatusText),
       'lastConnectionType': serializer.toJson<String?>(lastConnectionType),
       'lastSampleTime': serializer.toJson<DateTime?>(lastSampleTime),
       'downRateLast': serializer.toJson<int?>(downRateLast),
@@ -2398,6 +2423,7 @@ class DriftSnapshotStats extends DataClass
           int? samplingDuration,
           int? uplinkDuration,
           Value<SampleStatus?> lastSampleStatus = const Value.absent(),
+          Value<String?> lastStatusText = const Value.absent(),
           Value<String?> lastConnectionType = const Value.absent(),
           Value<DateTime?> lastSampleTime = const Value.absent(),
           Value<int?> downRateLast = const Value.absent(),
@@ -2454,6 +2480,8 @@ class DriftSnapshotStats extends DataClass
         lastSampleStatus: lastSampleStatus.present
             ? lastSampleStatus.value
             : this.lastSampleStatus,
+        lastStatusText:
+            lastStatusText.present ? lastStatusText.value : this.lastStatusText,
         lastConnectionType: lastConnectionType.present
             ? lastConnectionType.value
             : this.lastConnectionType,
@@ -2550,6 +2578,7 @@ class DriftSnapshotStats extends DataClass
           ..write('samplingDuration: $samplingDuration, ')
           ..write('uplinkDuration: $uplinkDuration, ')
           ..write('lastSampleStatus: $lastSampleStatus, ')
+          ..write('lastStatusText: $lastStatusText, ')
           ..write('lastConnectionType: $lastConnectionType, ')
           ..write('lastSampleTime: $lastSampleTime, ')
           ..write('downRateLast: $downRateLast, ')
@@ -2609,6 +2638,7 @@ class DriftSnapshotStats extends DataClass
         samplingDuration,
         uplinkDuration,
         lastSampleStatus,
+        lastStatusText,
         lastConnectionType,
         lastSampleTime,
         downRateLast,
@@ -2667,6 +2697,7 @@ class DriftSnapshotStats extends DataClass
           other.samplingDuration == this.samplingDuration &&
           other.uplinkDuration == this.uplinkDuration &&
           other.lastSampleStatus == this.lastSampleStatus &&
+          other.lastStatusText == this.lastStatusText &&
           other.lastConnectionType == this.lastConnectionType &&
           other.lastSampleTime == this.lastSampleTime &&
           other.downRateLast == this.downRateLast &&
@@ -2723,6 +2754,7 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
   final Value<int> samplingDuration;
   final Value<int> uplinkDuration;
   final Value<SampleStatus?> lastSampleStatus;
+  final Value<String?> lastStatusText;
   final Value<String?> lastConnectionType;
   final Value<DateTime?> lastSampleTime;
   final Value<int?> downRateLast;
@@ -2778,6 +2810,7 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
     this.samplingDuration = const Value.absent(),
     this.uplinkDuration = const Value.absent(),
     this.lastSampleStatus = const Value.absent(),
+    this.lastStatusText = const Value.absent(),
     this.lastConnectionType = const Value.absent(),
     this.lastSampleTime = const Value.absent(),
     this.downRateLast = const Value.absent(),
@@ -2834,6 +2867,7 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
     required int samplingDuration,
     required int uplinkDuration,
     this.lastSampleStatus = const Value.absent(),
+    this.lastStatusText = const Value.absent(),
     this.lastConnectionType = const Value.absent(),
     this.lastSampleTime = const Value.absent(),
     this.downRateLast = const Value.absent(),
@@ -2899,6 +2933,7 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
     Expression<int>? samplingDuration,
     Expression<int>? uplinkDuration,
     Expression<String>? lastSampleStatus,
+    Expression<String>? lastStatusText,
     Expression<String>? lastConnectionType,
     Expression<DateTime>? lastSampleTime,
     Expression<int>? downRateLast,
@@ -2955,6 +2990,7 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
       if (samplingDuration != null) 'sampling_duration': samplingDuration,
       if (uplinkDuration != null) 'uplink_duration': uplinkDuration,
       if (lastSampleStatus != null) 'last_sample_status': lastSampleStatus,
+      if (lastStatusText != null) 'last_status_text': lastStatusText,
       if (lastConnectionType != null)
         'last_connection_type': lastConnectionType,
       if (lastSampleTime != null) 'last_sample_time': lastSampleTime,
@@ -3026,6 +3062,7 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
       Value<int>? samplingDuration,
       Value<int>? uplinkDuration,
       Value<SampleStatus?>? lastSampleStatus,
+      Value<String?>? lastStatusText,
       Value<String?>? lastConnectionType,
       Value<DateTime?>? lastSampleTime,
       Value<int?>? downRateLast,
@@ -3081,6 +3118,7 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
       samplingDuration: samplingDuration ?? this.samplingDuration,
       uplinkDuration: uplinkDuration ?? this.uplinkDuration,
       lastSampleStatus: lastSampleStatus ?? this.lastSampleStatus,
+      lastStatusText: lastStatusText ?? this.lastStatusText,
       lastConnectionType: lastConnectionType ?? this.lastConnectionType,
       lastSampleTime: lastSampleTime ?? this.lastSampleTime,
       downRateLast: downRateLast ?? this.downRateLast,
@@ -3169,6 +3207,9 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
 
       map['last_sample_status'] =
           Variable<String>(converter.toSql(lastSampleStatus.value));
+    }
+    if (lastStatusText.present) {
+      map['last_status_text'] = Variable<String>(lastStatusText.value);
     }
     if (lastConnectionType.present) {
       map['last_connection_type'] = Variable<String>(lastConnectionType.value);
@@ -3321,6 +3362,7 @@ class SnapshotStatsTableCompanion extends UpdateCompanion<DriftSnapshotStats> {
           ..write('samplingDuration: $samplingDuration, ')
           ..write('uplinkDuration: $uplinkDuration, ')
           ..write('lastSampleStatus: $lastSampleStatus, ')
+          ..write('lastStatusText: $lastStatusText, ')
           ..write('lastConnectionType: $lastConnectionType, ')
           ..write('lastSampleTime: $lastSampleTime, ')
           ..write('downRateLast: $downRateLast, ')

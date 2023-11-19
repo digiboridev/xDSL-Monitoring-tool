@@ -74,6 +74,7 @@ class SnapshotStatsTable extends Table {
   IntColumn get samplingDuration => integer()();
   IntColumn get uplinkDuration => integer()();
   TextColumn get lastSampleStatus => textEnum<SampleStatus>().nullable()();
+  TextColumn get lastStatusText => text().nullable()();
   TextColumn get lastConnectionType => text().nullable()();
   DateTimeColumn get lastSampleTime => dateTime().nullable()();
   IntColumn get downRateLast => integer().nullable()();

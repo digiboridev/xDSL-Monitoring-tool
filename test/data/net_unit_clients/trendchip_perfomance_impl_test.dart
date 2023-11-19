@@ -50,7 +50,6 @@ void main() {
 
     final NetUnitClient client = TrendchipPerfomanceClientImpl(
       unitIp: '0.0.0.0',
-      snapshotId: 'test',
       login: 'qwe',
       password: 'asd',
     );

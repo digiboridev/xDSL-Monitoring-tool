@@ -8,6 +8,7 @@ import 'package:xdslmt/data/models/app_settings.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/models/recent_counters.dart';
 import 'package:xdslmt/data/models/snapshot_stats.dart';
+import 'package:xdslmt/data/models/raw_line_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 import 'package:xdslmt/data/repositories/current_sampling_repo.dart';
 import 'package:xdslmt/data/repositories/stats_repo.dart';
@@ -36,7 +37,7 @@ class StatsSamplingService {
     String snapshotId = DateTime.now().millisecondsSinceEpoch.toString();
 
     Duration samplingInterval = settings.samplingInterval;
-    NetUnitClient client = NetUnitClient.fromSettings(settings, snapshotId);
+    NetUnitClient client = NetUnitClient.fromSettings(settings);
     SnapshotStats snapshotStats = SnapshotStats.create(snapshotId, settings.host, settings.login, settings.pwd);
 
     Queue<LineStats> lineStatsQueue = Queue();
@@ -48,7 +49,8 @@ class StatsSamplingService {
         yield CurrentSamplingEvent.fetchPending(fetchStart, lastFetchDuration);
         AppLogger.debug(name: 'Sampling stream', 'Fetch pending');
 
-        LineStats lineStats = await client.fetchStats().catchError((_) => LineStats.errored(snapshotId: snapshotId, statusText: 'Sampling error'));
+        RawLineStats rawLineStats = await client.fetchStats();
+        LineStats lineStats = LineStats.fromRaw(snapshotId: snapshotId, rawLineStats: rawLineStats, prevStats: lineStatsQueue.firstOrNull);
         yield CurrentSamplingEvent.lineStatsArived(lineStats);
         AppLogger.debug(name: 'Sampling stream', 'Line stats arived');
         AppLogger.debug(name: 'Sampling stream', lineStats.toString());

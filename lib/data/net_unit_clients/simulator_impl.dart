@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:math';
 import 'package:xdslmt/data/models/line_stats.dart';
+import 'package:xdslmt/data/models/raw_line_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 
 /// This class represents a client simulator for a network unit.
@@ -10,11 +11,8 @@ import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 /// The [fetchStats] method simulates the network stats by introducing chances of fetch failure, connection down, downstream stats drift, and upstream stats drift.
 /// It returns a [LineStats] object with the simulated stats.
 final class SimulatorClientImpl implements NetUnitClient {
-  @override
-  final String snapshotId;
   final String protocol;
   SimulatorClientImpl({
-    required this.snapshotId,
     this.protocol = 'ADSL2+',
     int baseDownRate = 16000,
     int baseUpRate = 1500,
@@ -59,7 +57,7 @@ final class SimulatorClientImpl implements NetUnitClient {
   late int _crcU = 0;
   late int _crcD = 0;
 
-  LineStats? _prevStats;
+  RawLineStats? _prevStats;
 
   // Reduce stats to half of the current value, like if the line has impulse drops
   _reduceStatsHalfway() {
@@ -79,27 +77,20 @@ final class SimulatorClientImpl implements NetUnitClient {
 
   int get _rndChance => _rnd.nextInt(100);
 
-  int _incrDiff(int? prev, int? next) {
-    prev ??= 0;
-    if (next == null) return 0;
-    final diff = next - prev;
-    return diff > 0 ? diff : 0;
-  }
-
   @override
-  Future<LineStats> fetchStats() async {
+  Future<RawLineStats> fetchStats() async {
     await Future.delayed(Duration(milliseconds: _rnd.nextInt(1000)));
 
     // chance of connection recovery
     if (_prevStats?.status == SampleStatus.connectionDown && _rndChance <= 90) {
-      final newStats = LineStats.connectionDown(snapshotId: snapshotId, statusText: 'Initializing');
+      final newStats = RawLineStats.connectionDown(statusText: 'Initializing');
       _prevStats = newStats;
       return newStats;
     }
 
     // chance of fetch failure
     if (_rndChance <= 1) {
-      final newStats = LineStats.errored(snapshotId: snapshotId, statusText: 'Connection failed');
+      final newStats = RawLineStats.errored(statusText: 'Connection failed');
       _prevStats = newStats;
       return newStats;
     }
@@ -107,7 +98,7 @@ final class SimulatorClientImpl implements NetUnitClient {
     // chance of connection down
     if (_rndChance <= 1) {
       _reduceStatsHalfway();
-      final newStats = LineStats.connectionDown(snapshotId: snapshotId, statusText: 'Down');
+      final newStats = RawLineStats.connectionDown(statusText: 'Down');
       _prevStats = newStats;
       return newStats;
     }
@@ -139,26 +130,22 @@ final class SimulatorClientImpl implements NetUnitClient {
       _crcU += (unsigDrift + _rnd.nextInt(50).abs()) * 2;
     }
 
-    final nextStats = LineStats.connectionUp(
-      snapshotId: snapshotId,
+    final nextStats = RawLineStats(
       statusText: 'Up',
+      status: SampleStatus.connectionUp,
       connectionType: protocol,
       upAttainableRate: _upAttainableRate,
       downAttainableRate: _downAttainableRate,
       upRate: _upRate,
       downRate: _downRate,
-      upMargin: (_mrU * 10).truncate(),
-      downMargin: (_mrD * 10).truncate(),
-      upAttenuation: (_attU * 10).truncate(),
-      downAttenuation: (_attD * 10).truncate(),
+      upMargin: _mrU,
+      downMargin: _mrD,
+      upAttenuation: _attU,
+      downAttenuation: _attD,
       upCRC: _crcU,
       downCRC: _crcD,
       upFEC: _fecU,
       downFEC: _fecD,
-      upCRCIncr: _incrDiff(_prevStats?.upCRC, _crcU),
-      downCRCIncr: _incrDiff(_prevStats?.downCRC, _crcD),
-      upFECIncr: _incrDiff(_prevStats?.upFEC, _fecU),
-      downFECIncr: _incrDiff(_prevStats?.downFEC, _fecD),
     );
 
     _prevStats = nextStats;

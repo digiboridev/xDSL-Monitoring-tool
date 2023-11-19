@@ -56,7 +56,6 @@ class StatsRepositoryDriftImpl implements StatsRepository {
   Future<List<LineStats>> lineStatsBySnapshot(String snapshotId) async {
     final models = await _dao.lineStatsBySnapshot(snapshotId);
     List<LineStats> entities = await Isolate.run(() => models.map((e) => LineStats.fromMap(e.toJson())).toList());
-    // TODO metrics
     return entities;
   }
 

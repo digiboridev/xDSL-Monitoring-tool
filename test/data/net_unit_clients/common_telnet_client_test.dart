@@ -21,7 +21,6 @@ Future<void> main() async {
 
     final NetUnitClient client = CommonTelnetClient(
       unitIp: '0.0.0.0',
-      snapshotId: 'test',
       prepPrts: [
         (prompt: 'Login:', command: 'wronglogin'),
         (prompt: 'Password:', command: 'admin'),
@@ -52,7 +51,6 @@ Future<void> main() async {
 
     final NetUnitClient client = CommonTelnetClient(
       unitIp: '0.0.0.0',
-      snapshotId: 'test',
       prepPrts: [
         (prompt: 'Login:', command: 'admin'),
         (prompt: 'Password:', command: 'wrongpassword'),
@@ -81,7 +79,6 @@ Future<void> main() async {
 
     final NetUnitClient client = CommonTelnetClient(
       unitIp: '0.0.0.0',
-      snapshotId: 'test',
       prepPrts: [
         (prompt: 'Login:', command: 'admin'),
         (prompt: 'Password:', command: 'admin'),
@@ -110,7 +107,6 @@ Future<void> main() async {
 
     final NetUnitClient client = CommonTelnetClient(
       unitIp: '0.0.0.0',
-      snapshotId: 'test',
       prepPrts: [
         (prompt: 'Login:', command: 'admin'),
         (prompt: 'Password:', command: 'admin'),
@@ -139,7 +135,6 @@ Future<void> main() async {
 
     final NetUnitClient client = CommonTelnetClient(
       unitIp: '0.0.0.0',
-      snapshotId: 'test',
       prepPrts: [
         (prompt: 'Login:', command: 'admin'),
         (prompt: 'Password:', command: 'admin'),
@@ -168,7 +163,6 @@ Future<void> main() async {
 
     final NetUnitClient client = CommonTelnetClient(
       unitIp: '0.0.0.0',
-      snapshotId: 'test',
       prepPrts: [
         (prompt: 'Login:', command: 'admin'),
         (prompt: 'Password:', command: 'admin'),
@@ -197,7 +191,6 @@ Future<void> main() async {
 
     final NetUnitClient client = CommonTelnetClient(
       unitIp: '0.0.0.0',
-      snapshotId: 'test',
       prepPrts: [
         (prompt: 'Login:', command: 'admin'),
         (prompt: 'Password:', command: 'admin'),
@@ -226,7 +219,6 @@ Future<void> main() async {
 
     final NetUnitClient client = CommonTelnetClient(
       unitIp: '0.0.0.0',
-      snapshotId: 'test',
       prepPrts: [
         (prompt: 'Login:', command: 'admin'),
         (prompt: 'Password:', command: 'admin'),
@@ -251,10 +243,6 @@ Future<void> main() async {
     expect(stats.downCRC, 9);
     expect(stats.upFEC, 574);
     expect(stats.downFEC, 77);
-    expect(stats.upCRCIncr, 0);
-    expect(stats.downCRCIncr, 0);
-    expect(stats.upFECIncr, 0);
-    expect(stats.downFECIncr, 0);
     print(stats);
     await closeEmu();
   });
@@ -271,7 +259,6 @@ Future<void> main() async {
 
     final NetUnitClient client = CommonTelnetClient(
       unitIp: '0.0.0.0',
-      snapshotId: 'test',
       prepPrts: [
         (prompt: 'Login:', command: 'admin'),
         (prompt: 'Password:', command: 'admin'),
@@ -296,10 +283,7 @@ Future<void> main() async {
     expect(stats.downCRC, 3);
     expect(stats.upFEC, 10092);
     expect(stats.downFEC, 7242);
-    expect(stats.upCRCIncr, 0);
-    expect(stats.downCRCIncr, 0);
-    expect(stats.upFECIncr, 0);
-    expect(stats.downFECIncr, 0);
+
     print(stats);
     await closeEmu();
   });
@@ -316,7 +300,6 @@ Future<void> main() async {
 
     final NetUnitClient client = CommonTelnetClient(
       unitIp: '0.0.0.0',
-      snapshotId: 'test',
       prepPrts: [
         (prompt: 'Login:', command: 'admin'),
         (prompt: 'Password:', command: 'admin'),
@@ -341,10 +324,7 @@ Future<void> main() async {
     expect(stats.downCRC, 140410);
     expect(stats.upFEC, 273);
     expect(stats.downFEC, 4855931);
-    expect(stats.upCRCIncr, 0);
-    expect(stats.downCRCIncr, 0);
-    expect(stats.upFECIncr, 0);
-    expect(stats.downFECIncr, 0);
+
     print(stats);
     await closeEmu();
   });
@@ -361,7 +341,6 @@ Future<void> main() async {
 
     final NetUnitClient client = CommonTelnetClient(
       unitIp: '0.0.0.0',
-      snapshotId: 'test',
       prepPrts: [
         (prompt: 'Login:', command: 'admin'),
         (prompt: 'Password:', command: 'admin'),
@@ -386,10 +365,7 @@ Future<void> main() async {
     expect(stats.downCRC, 0);
     expect(stats.upFEC, 0);
     expect(stats.downFEC, 50716);
-    expect(stats.upCRCIncr, 0);
-    expect(stats.downCRCIncr, 0);
-    expect(stats.upFECIncr, 0);
-    expect(stats.downFECIncr, 0);
+
     print(stats);
     await closeEmu();
   });
@@ -406,7 +382,6 @@ Future<void> main() async {
 
     final NetUnitClient client = CommonTelnetClient(
       unitIp: '0.0.0.0',
-      snapshotId: 'test',
       prepPrts: [
         (prompt: 'Login:', command: 'admin'),
         (prompt: 'Password:', command: 'admin'),
@@ -431,10 +406,7 @@ Future<void> main() async {
     expect(stats.downCRC, 4096);
     expect(stats.upFEC, 1);
     expect(stats.downFEC, 316177384);
-    expect(stats.upCRCIncr, 0);
-    expect(stats.downCRCIncr, 0);
-    expect(stats.upFECIncr, 0);
-    expect(stats.downFECIncr, 0);
+
     print(stats);
     await closeEmu();
   });
@@ -452,7 +424,6 @@ Future<void> main() async {
 
     final NetUnitClient client = CommonTelnetClient(
       unitIp: '0.0.0.0',
-      snapshotId: 'test',
       prepPrts: [
         (prompt: 'Login:', command: 'admin'),
         (prompt: 'Password:', command: 'admin'),
@@ -483,7 +454,6 @@ Future<void> main() async {
 
     final NetUnitClient client = CommonTelnetClient(
       unitIp: '0.0.0.0',
-      snapshotId: 'test',
       prepPrts: [
         (prompt: 'Login:', command: 'admin'),
         (prompt: 'Password:', command: 'admin'),
@@ -515,7 +485,6 @@ Future<void> main() async {
 
     final NetUnitClient client = CommonTelnetClient(
       unitIp: '0.0.0.0',
-      snapshotId: 'test',
       prepPrts: [
         (prompt: 'Login:', command: 'admin'),
         (prompt: 'Password:', command: 'admin'),
@@ -540,10 +509,7 @@ Future<void> main() async {
     expect(stats.downCRC, 10);
     expect(stats.upFEC, 0);
     expect(stats.downFEC, 819);
-    expect(stats.upCRCIncr, 0);
-    expect(stats.downCRCIncr, 0);
-    expect(stats.upFECIncr, 0);
-    expect(stats.downFECIncr, 0);
+
     print(stats);
     await closeEmu();
   });
@@ -563,7 +529,6 @@ Future<void> main() async {
 
     final NetUnitClient client = CommonTelnetClient(
       unitIp: '0.0.0.0',
-      snapshotId: 'test',
       prepPrts: [
         (prompt: 'Login:', command: 'admin'),
         (prompt: 'Password:', command: 'admin'),
@@ -588,10 +553,7 @@ Future<void> main() async {
     expect(stats.downCRC, 0);
     expect(stats.upFEC, 0);
     expect(stats.downFEC, 87);
-    expect(stats.upCRCIncr, 0);
-    expect(stats.downCRCIncr, 0);
-    expect(stats.upFECIncr, 0);
-    expect(stats.downFECIncr, 0);
+
     print(stats);
     await closeEmu();
   });
@@ -611,7 +573,6 @@ Future<void> main() async {
 
     final NetUnitClient client = CommonTelnetClient(
       unitIp: '0.0.0.0',
-      snapshotId: 'test',
       prepPrts: [
         (prompt: 'Login:', command: 'admin'),
         (prompt: 'Password:', command: 'admin'),
@@ -636,10 +597,7 @@ Future<void> main() async {
     expect(stats.downCRC, 10);
     expect(stats.upFEC, 0);
     expect(stats.downFEC, 819);
-    expect(stats.upCRCIncr, 0);
-    expect(stats.downCRCIncr, 0);
-    expect(stats.upFECIncr, 0);
-    expect(stats.downFECIncr, 0);
+
     print(stats);
     await closeEmu();
   });
@@ -687,7 +645,6 @@ Future<void> main() async {
 
     final NetUnitClient client = CommonTelnetClient(
       unitIp: '0.0.0.0',
-      snapshotId: 'test',
       prepPrts: [
         (prompt: 'Login:', command: 'admin'),
         (prompt: 'Password:', command: 'admin'),
@@ -716,10 +673,7 @@ Future<void> main() async {
     expect(stats.downCRC, 120);
     expect(stats.upFEC, 12);
     expect(stats.downFEC, 8119);
-    expect(stats.upCRCIncr, 0);
-    expect(stats.downCRCIncr, 0);
-    expect(stats.upFECIncr, 0);
-    expect(stats.downFECIncr, 0);
+
     print(stats);
     await closeEmu();
   });
@@ -767,7 +721,6 @@ Future<void> main() async {
 
     final NetUnitClient client = CommonTelnetClient(
       unitIp: '0.0.0.0',
-      snapshotId: 'test',
       prepPrts: [
         (prompt: 'Login:', command: 'admin'),
         (prompt: 'Password:', command: 'admin'),
@@ -796,10 +749,7 @@ Future<void> main() async {
     expect(stats.downCRC, 94);
     expect(stats.upFEC, 5);
     expect(stats.downFEC, 52019);
-    expect(stats.upCRCIncr, 0);
-    expect(stats.downCRCIncr, 0);
-    expect(stats.upFECIncr, 0);
-    expect(stats.downFECIncr, 0);
+
     print(stats);
     await closeEmu();
   });
@@ -847,7 +797,6 @@ Future<void> main() async {
 
     final NetUnitClient client = CommonTelnetClient(
       unitIp: '0.0.0.0',
-      snapshotId: 'test',
       prepPrts: [
         (prompt: 'Login:', command: 'admin'),
         (prompt: 'Password:', command: 'admin'),
@@ -876,10 +825,7 @@ Future<void> main() async {
     expect(stats.downCRC, 94);
     expect(stats.upFEC, 5);
     expect(stats.downFEC, 52019);
-    expect(stats.upCRCIncr, 0);
-    expect(stats.downCRCIncr, 0);
-    expect(stats.upFECIncr, 0);
-    expect(stats.downFECIncr, 0);
+
     print(stats);
     await closeEmu();
   });

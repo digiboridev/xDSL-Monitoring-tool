@@ -1,6 +1,5 @@
 // ignore_for_file: constant_identifier_names
 import 'package:xdslmt/data/models/app_settings.dart';
-import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/broadcom_adsl_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/broadcom_adsl_sh_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/broadcom_adslcmd_impl.dart';
@@ -11,6 +10,7 @@ import 'package:xdslmt/data/net_unit_clients/broadcom_xdslcmd_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/broadcom_xdslcmd_sh_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/broadcom_xdslctl_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/broadcom_xdslctl_sh_impl.dart';
+import 'package:xdslmt/data/models/raw_line_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/huawei_hg532e_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/simulator_impl.dart';
 import 'package:xdslmt/data/net_unit_clients/trendchip_perfomance_impl.dart';
@@ -35,53 +35,50 @@ enum NetworkUnitType {
 }
 
 abstract class NetUnitClient {
-  /// Unique snapshot ID
-  String get snapshotId;
-
   /// Fetches line stats from the network unit
-  Future<LineStats> fetchStats();
+  Future<RawLineStats> fetchStats();
 
   /// Factory method for creating specific NetUnitClient implementation based on type
-  factory NetUnitClient.fromType(NetworkUnitType type, String snapshotId, String ip, String login, String password) {
+  factory NetUnitClient.fromType(NetworkUnitType type, String ip, String login, String password) {
     switch (type) {
       case NetworkUnitType.simulator_adsl:
-        return SimulatorClientImpl(snapshotId: snapshotId, baseDownRate: 16000, baseUpRate: 1500, protocol: 'ADSL2+');
+        return SimulatorClientImpl(baseDownRate: 16000, baseUpRate: 1500, protocol: 'ADSL2+');
       case NetworkUnitType.simulator_vdsl:
-        return SimulatorClientImpl(snapshotId: snapshotId, baseDownRate: 150000, baseUpRate: 55000, protocol: 'VDSL2');
+        return SimulatorClientImpl(baseDownRate: 150000, baseUpRate: 55000, protocol: 'VDSL2');
       case NetworkUnitType.broadcom_telnet_adsl:
-        return BroadcomAdslClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+        return BroadcomAdslClientImpl(unitIp: ip, login: login, password: password);
       case NetworkUnitType.broadcom_telnet_adslcmd:
-        return BroadcomAdslcmdClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+        return BroadcomAdslcmdClientImpl(unitIp: ip, login: login, password: password);
       case NetworkUnitType.broadcom_telnet_adslctl:
-        return BroadcomAdslctlClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+        return BroadcomAdslctlClientImpl(unitIp: ip, login: login, password: password);
       case NetworkUnitType.broadcom_telnet_xdslcmd:
-        return BroadcomXdslcmdClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+        return BroadcomXdslcmdClientImpl(unitIp: ip, login: login, password: password);
       case NetworkUnitType.broadcom_telnet_xdslctl:
-        return BroadcomXdslctlClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+        return BroadcomXdslctlClientImpl(unitIp: ip, login: login, password: password);
       case NetworkUnitType.broadcom_telnet_adsl_sh:
-        return BroadcomAdslShClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+        return BroadcomAdslShClientImpl(unitIp: ip, login: login, password: password);
       case NetworkUnitType.broadcom_telnet_adslcmd_sh:
-        return BroadcomAdslcmdShClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+        return BroadcomAdslcmdShClientImpl(unitIp: ip, login: login, password: password);
       case NetworkUnitType.broadcom_telnet_adslctl_sh:
-        return BroadcomAdslctlShClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+        return BroadcomAdslctlShClientImpl(unitIp: ip, login: login, password: password);
       case NetworkUnitType.broadcom_telnet_xdslcmd_sh:
-        return BroadcomXdslcmdShClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+        return BroadcomXdslcmdShClientImpl(unitIp: ip, login: login, password: password);
       case NetworkUnitType.broadcom_telnet_xdslctl_sh:
-        return BroadcomXdslctlShClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+        return BroadcomXdslctlShClientImpl(unitIp: ip, login: login, password: password);
       case NetworkUnitType.trendchip_telnet_status_diag:
-        return TrendchipStatusDiagClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+        return TrendchipStatusDiagClientImpl(unitIp: ip, login: login, password: password);
       case NetworkUnitType.trendchip_telnet_perfomance:
-        return TrendchipPerfomanceClientImpl(unitIp: ip, snapshotId: snapshotId, login: login, password: password);
+        return TrendchipPerfomanceClientImpl(unitIp: ip, login: login, password: password);
       case NetworkUnitType.hg532e_http:
-        return HG532eClientImpl(snapshotId: snapshotId, ip: ip, login: login, password: password);
+        return HG532eClientImpl(ip: ip, login: login, password: password);
       default:
         throw Exception('Unknown NetUnitClient type: $type');
     }
   }
 
   /// Factory method for creating specific NetUnitClient implementation based on app settings
-  factory NetUnitClient.fromSettings(AppSettings settings, String snapshotId) {
-    return NetUnitClient.fromType(settings.nuType, snapshotId, settings.host, settings.login, settings.pwd);
+  factory NetUnitClient.fromSettings(AppSettings settings) {
+    return NetUnitClient.fromType(settings.nuType, settings.host, settings.login, settings.pwd);
   }
 
   dispose();

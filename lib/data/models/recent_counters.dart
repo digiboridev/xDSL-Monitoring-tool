@@ -109,7 +109,7 @@ class RecentCounters with EquatableMixin {
     required this.attnMax,
   });
 
-  factory RecentCounters.fromLineStats(Iterable<LineStats> lineStats) {
+  factory RecentCounters.fromLineStats(Iterable<LineStats> lineStats, {int maxCount = 500}) {
     // Pay attention, line stats are in reverse order (newest first)
 
     // RS errors variables
@@ -167,7 +167,7 @@ class RecentCounters with EquatableMixin {
     int attnMin = 0;
     int attnMax = 0;
 
-    for (var i = 0; i < 500; i++) {
+    for (var i = 0; i < maxCount; i++) {
       final s = lineStats.elementAtOrNull(i);
 
       // RS errors

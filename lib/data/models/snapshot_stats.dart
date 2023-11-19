@@ -2,6 +2,8 @@
 import 'dart:convert';
 import 'package:xdslmt/data/models/line_stats.dart';
 
+// TODO true avg
+// TODO last status
 class SnapshotStats {
   final String snapshotId;
   final String host;

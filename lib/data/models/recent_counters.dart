@@ -354,4 +354,9 @@ class RecentCounters with EquatableMixin {
   String toString() {
     return 'RecentCounters( downFECRecent: $downFECRecent, downFECTotal: $downFECTotal, downFECLast: $downFECLast, upFECRecent: $upFECRecent, upFECTotal: $upFECTotal, upFECLast: $upFECLast, downCRCRecent: $downCRCRecent, downCRCTotal: $downCRCTotal, downCRCLast: $downCRCLast, upCRCRecent: $upCRCRecent, rsMax: $rsMax, downSNRRecent: $downSNRRecent, upSNRRecent: $upSNRRecent, downSNRCount: $downSNRCount, downSNRSum: $downSNRSum, downSNRMin: $downSNRMin, downSNRMax: $downSNRMax, downSNRAvg: $downSNRAvg, upSNRCount: $upSNRCount, upSNRSum: $upSNRSum, upSNRMin: $upSNRMin, upSNRMax: $upSNRMax, upSNRAvg: $upSNRAvg, snrMin: $snrMin, snrMax: $snrMax, downATTNRecent: $downATTNRecent, upATTNRecent: $upATTNRecent, downATTNCount: $downATTNCount, downATTNSum: $downATTNSum, downATTNMin: $downATTNMin, downATTNMax: $downATTNMax, downATTNAvg: $downATTNAvg, upATTNCount: $upATTNCount, upATTNSum: $upATTNSum, upATTNMin: $upATTNMin, upATTNMax: $upATTNMax, upATTNAvg: $upATTNAvg, attnMin: $attnMin, attnMax: $attnMax)';
   }
+
+  // Without lists only length and last value
+  String toStringMin() {
+    return 'RecentCounters( downFECTotal: $downFECTotal, downFECLast: $downFECLast, upFECTotal: $upFECTotal, upFECLast: $upFECLast, downCRCTotal: $downCRCTotal, downCRCLast: $downCRCLast, upCRCTotal: $upCRCTotal, upCRCLast: $upCRCLast, rsMax: $rsMax, downSNRCount: $downSNRCount, downSNRMax: $downSNRMax, downSNRAvg: $downSNRAvg, upSNRCount: $upSNRCount, upSNRMax: $upSNRMax, upSNRAvg: $upSNRAvg, snrMin: $snrMin, snrMax: $snrMax, downATTNCount: $downATTNCount, downATTNMax: $downATTNMax, downATTNAvg: $downATTNAvg, upATTNCount: $upATTNCount, upATTNMax: $upATTNMax, upATTNAvg: $upATTNAvg, attnMin: $attnMin, attnMax: $attnMax)';
+  }
 }

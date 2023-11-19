@@ -48,6 +48,7 @@ class SettingsScreenView extends StatelessWidget {
                 const NuPassword(),
                 const SamplingInterval(),
                 const SplitInterval(),
+                // TODO screen rms count
                 const AnimationSwitch(),
                 const OrientLockSwitch(),
                 const WakelockSwitch(),

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:xdslmt/data/models/raw_line_stats.dart';
+
 // Due to int representation of snr and attenuation values, we need to divide them by 10
 // So we add a getter to int to do that quickly
 extension OneFraction on int {
@@ -36,7 +38,7 @@ class LineStats {
   final int? upFECIncr;
   final int? downFECIncr;
 
-  LineStats({
+  LineStats._({
     DateTime? time,
     required this.snapshotId,
     required this.status,
@@ -60,64 +62,28 @@ class LineStats {
     this.downFECIncr,
   }) : time = time ?? DateTime.now();
 
-  factory LineStats.errored({required String snapshotId, required String statusText}) {
-    return LineStats(
+  factory LineStats.fromRaw({required String snapshotId, required RawLineStats rawLineStats, LineStats? prevStats}) {
+    return LineStats._(
       snapshotId: snapshotId,
-      status: SampleStatus.samplingError,
-      statusText: statusText,
-    );
-  }
-
-  factory LineStats.connectionDown({required String snapshotId, required String statusText}) {
-    return LineStats(
-      snapshotId: snapshotId,
-      status: SampleStatus.connectionDown,
-      statusText: statusText,
-    );
-  }
-
-  factory LineStats.connectionUp({
-    required String snapshotId,
-    required String statusText,
-    required String connectionType,
-    required int upAttainableRate,
-    required int downAttainableRate,
-    required int upRate,
-    required int downRate,
-    required int upMargin,
-    required int downMargin,
-    required int upAttenuation,
-    required int downAttenuation,
-    required int upCRC,
-    required int downCRC,
-    required int upFEC,
-    required int downFEC,
-    required int upCRCIncr,
-    required int downCRCIncr,
-    required int upFECIncr,
-    required int downFECIncr,
-  }) {
-    return LineStats(
-      snapshotId: snapshotId,
-      status: SampleStatus.connectionUp,
-      statusText: statusText,
-      connectionType: connectionType,
-      upAttainableRate: upAttainableRate,
-      downAttainableRate: downAttainableRate,
-      upRate: upRate,
-      downRate: downRate,
-      upMargin: upMargin,
-      downMargin: downMargin,
-      upAttenuation: upAttenuation,
-      downAttenuation: downAttenuation,
-      upCRC: upCRC,
-      downCRC: downCRC,
-      upFEC: upFEC,
-      downFEC: downFEC,
-      upCRCIncr: upCRCIncr,
-      downCRCIncr: downCRCIncr,
-      upFECIncr: upFECIncr,
-      downFECIncr: downFECIncr,
+      status: rawLineStats.status,
+      statusText: rawLineStats.statusText.trim(),
+      connectionType: rawLineStats.connectionType?.trim(),
+      upAttainableRate: rawLineStats.upAttainableRate,
+      downAttainableRate: rawLineStats.downAttainableRate,
+      upRate: rawLineStats.upRate,
+      downRate: rawLineStats.downRate,
+      upMargin: rawLineStats.upMargin != null ? (rawLineStats.upMargin! * 10).truncate() : null,
+      downMargin: rawLineStats.downMargin != null ? (rawLineStats.downMargin! * 10).truncate() : null,
+      upAttenuation: rawLineStats.upAttenuation != null ? (rawLineStats.upAttenuation! * 10).truncate() : null,
+      downAttenuation: rawLineStats.downAttenuation != null ? (rawLineStats.downAttenuation! * 10).truncate() : null,
+      upCRC: rawLineStats.upCRC,
+      downCRC: rawLineStats.downCRC,
+      upFEC: rawLineStats.upFEC,
+      downFEC: rawLineStats.downFEC,
+      upCRCIncr: _incrDiff(prevStats?.upCRC, rawLineStats.upCRC),
+      downCRCIncr: _incrDiff(prevStats?.downCRC, rawLineStats.downCRC),
+      upFECIncr: _incrDiff(prevStats?.upFEC, rawLineStats.upFEC),
+      downFECIncr: _incrDiff(prevStats?.downFEC, rawLineStats.downFEC),
     );
   }
 
@@ -205,7 +171,7 @@ class LineStats {
   }
 
   factory LineStats.fromMap(Map<String, dynamic> map) {
-    return LineStats(
+    return LineStats._(
       time: DateTime.fromMillisecondsSinceEpoch(map['time'] as int),
       snapshotId: map['snapshotId'] as String,
       status: SampleStatus.values.byName(map['status'] as String),
@@ -233,4 +199,11 @@ class LineStats {
   String toJson() => json.encode(toMap());
 
   factory LineStats.fromJson(String source) => LineStats.fromMap(json.decode(source) as Map<String, dynamic>);
+}
+
+int _incrDiff(int? prev, int? next) {
+  prev ??= 0;
+  if (next == null) return 0;
+  final diff = next - prev;
+  return diff > 0 ? diff : 0;
 }

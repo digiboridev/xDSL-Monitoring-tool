@@ -4,18 +4,24 @@ import 'package:xdslmt/data/repositories/stats_repo.dart';
 import 'package:xdslmt/screens/snapshots/state.dart';
 
 class SnapshotsScreenViewModel extends ValueNotifier<SnapshotsScreenState> {
-  final StatsRepository statsRepository;
-  SnapshotsScreenViewModel(this.statsRepository) : super(SnapshotsScreenState.loading()) {
+  final StatsRepository _statsRepository;
+  SnapshotsScreenViewModel(this._statsRepository) : super(SnapshotsScreenState.loading()) {
     _init();
   }
 
   _init() async {
-    value = SnapshotsScreenState.loaded(await statsRepository.snapshotIds());
+    value = SnapshotsScreenState.loaded(await _statsRepository.snapshotIds());
     AppLogger.debug(name: 'SnapshotsScreenViewModel', 'init complete');
   }
 
+  @override
+  void dispose() {
+    AppLogger.debug(name: 'SnapshotsScreenViewModel', 'dispose');
+    super.dispose();
+  }
+
   refresh() async {
-    value = SnapshotsScreenState.loaded(await statsRepository.snapshotIds());
+    value = SnapshotsScreenState.loaded(await _statsRepository.snapshotIds());
     AppLogger.debug(name: 'SnapshotsScreenViewModel', 'refresh complete');
   }
 

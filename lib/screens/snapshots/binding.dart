@@ -9,7 +9,7 @@ class SnapshotsScreenBinding extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListenableProvider<SnapshotsScreenViewModel>(
+    return ChangeNotifierProvider<SnapshotsScreenViewModel>(
       create: (_) => SnapshotsScreenViewModel(context.read<StatsRepository>()),
 
       // VM loading guard

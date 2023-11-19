@@ -26,7 +26,6 @@ void main() {
 
     final NetUnitClient client = TrendchipStatusDiagClientImpl(
       unitIp: '0.0.0.0',
-      snapshotId: 'test',
       login: 'qwe',
       password: 'asd',
     );

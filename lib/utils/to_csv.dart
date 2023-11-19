@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:csv/csv.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:xdslmt/core/app_logger.dart';
 
-toCSV(String name, List<String> headerRow, List<List<String>> listOfListOfStrings, {bool sharing = false}) async {
+Future<String> toCSV(String name, List<String> headerRow, List<List<String>> listOfListOfStrings, {bool sharing = false}) async {
   AppLogger.debug(name: 'toCSV', 'toCSV start');
 
   List<List<String>> headerAndDataList = [];
@@ -18,15 +17,13 @@ toCSV(String name, List<String> headerRow, List<List<String>> listOfListOfString
   final csv = const ListToCsvConverter().convert(headerAndDataList);
   final bytes = utf8.encode(csv);
 
-  final p = await Permission.storage.request();
-  if (p.isGranted) {
-    String filename = '/storage/emulated/0/Download/xdslmt_$name.csv';
-    final File file = File(filename);
-    await file.writeAsBytes(bytes, flush: true);
-    AppLogger.info(name: 'toCSV', 'toCSV saved: $filename');
-    AppLogger.info(name: 'toCSV', 'toCSV size: ${bytes.length} bytes');
-    launchUrl(Uri.parse('content://$filename'));
-  } else {
-    throw Exception('Permission not granted');
-  }
+  Directory? downloadsDir = await getDownloadsDirectory();
+  downloadsDir ??= await getApplicationDocumentsDirectory();
+
+  String filename = '${downloadsDir.path}/xdslmt_$name.csv';
+  final File file = File(filename);
+  await file.writeAsBytes(bytes, flush: true);
+  AppLogger.info(name: 'toCSV', 'toCSV saved: $filename');
+  AppLogger.info(name: 'toCSV', 'toCSV size: ${bytes.length} bytes');
+  return filename;
 }

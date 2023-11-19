@@ -44,5 +44,9 @@ abstract class AppLogger {
     _capture(msg, level: Level.error, name: name, error: error, stack: stack);
   }
 
+  static void forward(LogEntity logEntity) {
+    _logController.add(logEntity);
+  }
+
   static Stream<LogEntity> get stream => _logController.stream;
 }

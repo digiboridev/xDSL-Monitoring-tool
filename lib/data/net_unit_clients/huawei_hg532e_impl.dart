@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:xdslmt/core/app_logger.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
+import 'package:xdslmt/data/models/raw_line_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 
 String ultraEncoder(text) {
@@ -13,15 +14,12 @@ String ultraEncoder(text) {
 }
 
 class HG532eClientImpl implements NetUnitClient {
-  @override
-  final String snapshotId;
   final String ip;
   final String login;
   final String password;
-  HG532eClientImpl({required this.snapshotId, required this.ip, required this.login, required this.password});
+  HG532eClientImpl({required this.ip, required this.login, required this.password});
 
   String? _cookie;
-  LineStats? _prevStats;
 
   Future<bool> get _loginRequest async {
     AppLogger.debug(name: 'HG532eClientImpl', 'login request');
@@ -52,7 +50,7 @@ class HG532eClientImpl implements NetUnitClient {
     return response;
   }
 
-  LineStats _parser(String res) {
+  RawLineStats _parser(String res) {
     AppLogger.debug(name: 'HG532eClientImpl', 'parser res: $res');
 
     final substr = res.substring(res.indexOf('"InternetGatewayDevice.WANDevice.1.WANDSLInterfaceConfig"'), res.indexOf('),null'));
@@ -61,8 +59,16 @@ class HG532eClientImpl implements NetUnitClient {
     final List<dynamic> decoded = jsonDecode('[' + substr + ']');
     AppLogger.debug(name: 'HG532eClientImpl', 'parser decoded: $decoded');
 
-    final stats = LineStats(
-      snapshotId: snapshotId,
+    num? upMargin = num.tryParse(decoded[7]);
+    if (upMargin != null) upMargin /= 10;
+    num? downMargin = num.tryParse(decoded[8]);
+    if (downMargin != null) downMargin /= 10;
+    num? upAttenuation = num.tryParse(decoded[12]);
+    if (upAttenuation != null) upAttenuation /= 10;
+    num? downAttenuation = num.tryParse(decoded[13]);
+    if (downAttenuation != null) downAttenuation /= 10;
+
+    final stats = RawLineStats(
       status: decoded[2] == 'Up' ? SampleStatus.connectionUp : SampleStatus.connectionDown,
       statusText: decoded[2],
       connectionType: decoded[1],
@@ -70,21 +76,16 @@ class HG532eClientImpl implements NetUnitClient {
       downAttainableRate: int.tryParse(decoded[4]),
       upRate: int.tryParse(decoded[5]),
       downRate: int.tryParse(decoded[6]),
-      upMargin: double.tryParse(decoded[7])?.toInt(),
-      downMargin: double.tryParse(decoded[8])?.toInt(),
-      upAttenuation: double.tryParse(decoded[12])?.toInt(),
-      downAttenuation: double.tryParse(decoded[13])?.toInt(),
+      upMargin: upMargin?.toDouble(),
+      downMargin: downMargin?.toDouble(),
+      upAttenuation: upAttenuation?.toDouble(),
+      downAttenuation: downAttenuation?.toDouble(),
       upCRC: int.tryParse(decoded[18]),
       downCRC: int.tryParse(decoded[17]),
       upFEC: int.tryParse(decoded[20]),
       downFEC: int.tryParse(decoded[19]),
-      upCRCIncr: _incrDiff(_prevStats?.upCRC, int.tryParse(decoded[18])),
-      downCRCIncr: _incrDiff(_prevStats?.downCRC, int.tryParse(decoded[17])),
-      upFECIncr: _incrDiff(_prevStats?.upFEC, int.tryParse(decoded[20])),
-      downFECIncr: _incrDiff(_prevStats?.downFEC, int.tryParse(decoded[19])),
     );
 
-    _prevStats = stats;
     return stats;
   }
 
@@ -92,7 +93,7 @@ class HG532eClientImpl implements NetUnitClient {
   dispose() {}
 
   @override
-  Future<LineStats> fetchStats() async {
+  Future<RawLineStats> fetchStats() async {
     try {
       // TODO: refactor dat shit
       http.Response response = await _dataRequest;
@@ -100,20 +101,13 @@ class HG532eClientImpl implements NetUnitClient {
         if (await _loginRequest) {
           response = await _dataRequest;
         } else {
-          return LineStats.errored(snapshotId: snapshotId, statusText: 'Failed to login');
+          return RawLineStats.errored(statusText: 'Failed to login');
         }
       }
       return _parser(response.body);
     } catch (e, s) {
       AppLogger.warning(name: 'HG532eClientImpl', 'Fetch error: $e', error: e, stack: s);
-      return LineStats.errored(snapshotId: snapshotId, statusText: 'Connection failed');
+      return RawLineStats.errored(statusText: 'Connection failed');
     }
-  }
-
-  // TODO extract
-  int _incrDiff(int? prev, int? next) {
-    if (prev == null || next == null) return 0;
-    final diff = next - prev;
-    return diff > 0 ? diff : 0;
   }
 }

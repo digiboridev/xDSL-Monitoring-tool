@@ -1,4 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:xdslmt/core/app_logger.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/models/snapshot_stats.dart';
@@ -468,7 +471,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: RepaintBoundary(
                       child: CustomPaint(
                         painter: LinePathPainter(
-                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upAttainableRate ?? 0)),
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.upAttainableRate ?? 0)), // TODO remove 0
                           scale: scale,
                           offset: offset,
                           key: 'upAttainableRate${widget.statsList.last.time.millisecondsSinceEpoch}',
@@ -484,7 +487,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     onTap: () => setState(() => downFec = !downFec),
                     child: Row(
                       children: [
-                        Text('Donwstream FEC', style: TextStyles.f16w6.cyan100),
+                        Text('Downstream FEC', style: TextStyles.f16w6.cyan100),
                         Icon(downFec ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('TOTAL: ${widget.snapshotStats.downFecTotal}', style: TextStyles.f8hc100),
@@ -499,7 +502,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     child: RepaintBoundary(
                       child: CustomPaint(
                         painter: WaveFormPainter(
-                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downFECIncr ?? 0)),
+                          data: widget.statsList.map((e) => (t: e.time.millisecondsSinceEpoch, v: e.downFECIncr ?? 0)), // TODO remove 0
                           scale: scale,
                           offset: offset,
                           key: 'downFECIncr${widget.statsList.last.time.millisecondsSinceEpoch}',
@@ -544,7 +547,7 @@ class _InteractiveChartState extends State<InteractiveChart> with TickerProvider
                     onTap: () => setState(() => downCrc = !downCrc),
                     child: Row(
                       children: [
-                        Text('Donwstream CRC', style: TextStyles.f16w6.cyan100),
+                        Text('Downstream CRC', style: TextStyles.f16w6.cyan100),
                         Icon(downCrc ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.cyan100),
                         const Spacer(),
                         Text('TOTAL: ${widget.snapshotStats.downCrcTotal}', style: TextStyles.f8hc100),
@@ -758,7 +761,8 @@ class CSVExportButton extends StatelessWidget {
 
   const CSVExportButton({super.key, required this.id, required this.statsList});
 
-  void export(BuildContext context) {
+  Future<void> export(BuildContext context) async {
+    // TODO check
     List<String> header = [
       'Time',
       'Status',
@@ -796,11 +800,27 @@ class CSVExportButton extends StatelessWidget {
     }
 
     try {
-      toCSV(id, header, listOfLists);
+      final filename = await toCSV(id, header, listOfLists);
+      ScaffoldMessenger.of(context).showMaterialBanner(
+        MaterialBanner(
+          content: Text('Saved to $filename'),
+          backgroundColor: AppColors.cyan400,
+          actions: [
+            TextButton(
+              onPressed: () => launchUrl(Uri.parse('content://$filename')),
+              child: const Text('Open'),
+            ),
+            TextButton(
+              onPressed: () => ScaffoldMessenger.of(context).hideCurrentMaterialBanner(),
+              child: const Text('Close'),
+            ),
+          ],
+        ),
+      );
     } catch (e, s) {
       debugPrint(e.toString());
       AppLogger.error('Error: $e', error: e, stack: s);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e'), backgroundColor: AppColors.blueGrey800));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
     }
   }
 

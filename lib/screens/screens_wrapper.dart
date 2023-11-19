@@ -2,9 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:xdslmt/data/repositories/settings_repo.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
-import 'package:xdslmt/screens/monitoring/current_screen.dart';
+import 'package:xdslmt/screens/monitoring/binding.dart';
+import 'package:xdslmt/screens/monitoring/screen.dart';
 import 'package:xdslmt/screens/settings/binding.dart';
 import 'package:xdslmt/screens/settings/view.dart';
 import 'package:xdslmt/screens/snapshots/binding.dart';
@@ -21,7 +21,7 @@ class ScreensWrapper extends StatefulWidget {
 
 class _ScreensWrapperState extends State<ScreensWrapper> {
   final Map screens = {
-    'Monitoring': const MonitoringScreen(),
+    'Monitoring': const MonitoringScreenBinding(child: MonitoringScreen()),
     'Snapshots': const SnapshotsScreenBinding(child: SnapshotsScreenView()),
     'Settings': const SettingsScreenBinding(child: SettingsScreenView()),
   };
@@ -143,34 +143,22 @@ class FloatButton extends StatefulWidget {
 }
 
 class _FloatButtonState extends State<FloatButton> {
+  late final samplingService = context.read<StatsSamplingService>();
   bool busy = false;
 
   void toogleSampling(BuildContext context) async {
     if (busy) return;
 
-    final samplingService = context.read<StatsSamplingService>();
-    final settingsRepo = context.read<SettingsRepository>();
-    final settings = await settingsRepo.getSettings;
-
-    if (samplingService.samplingActive) {
-      samplingService.stopSampling();
-      const MethodChannel('main').invokeMethod('stopForegroundService');
-      const MethodChannel('main').invokeMethod('stopWakeLock');
-    } else {
-      samplingService.runSampling();
-      if (settings.wakeLock) const MethodChannel('main').invokeMethod('startWakeLock');
-      if (settings.foregroundService) const MethodChannel('main').invokeMethod('startForegroundService');
-    }
+    samplingService.samplingActive ? samplingService.stopSampling() : samplingService.runSampling();
 
     setState(() => busy = true);
     await Future.delayed(const Duration(milliseconds: 1000));
     if (mounted) setState(() => busy = false);
   }
 
+  // Get proper icon depending on sampling state
   Icon get getIcon {
-    bool sampling = context.select<StatsSamplingService, bool>((value) => value.samplingActive);
-
-    if (sampling) {
+    if (samplingService.samplingActive) {
       return const Icon(Icons.stop, color: AppColors.cyan50, key: Key('stop'));
     } else {
       return const Icon(Icons.play_arrow, color: AppColors.cyan50, key: Key('play'));

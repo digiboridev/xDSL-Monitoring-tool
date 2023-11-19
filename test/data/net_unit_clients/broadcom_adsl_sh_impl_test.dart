@@ -20,7 +20,6 @@ void main() {
 
     final NetUnitClient client = BroadcomAdslShClientImpl(
       unitIp: '0.0.0.0',
-      snapshotId: 'test',
       login: 'admin',
       password: 'admin',
     );

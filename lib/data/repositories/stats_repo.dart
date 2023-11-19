@@ -18,7 +18,7 @@ abstract class StatsRepository {
 
 class StatsRepositoryDriftImpl implements StatsRepository {
   final StatsDao _dao;
-  final _snapshotStatsBus = StreamController<SnapshotStats>.broadcast();
+  final _statsBus = StreamController<dynamic>.broadcast();
   StatsRepositoryDriftImpl({required StatsDao dao}) : _dao = dao;
 
   @override
@@ -48,6 +48,8 @@ class StatsRepositoryDriftImpl implements StatsRepository {
         downFECIncr: Value(lineStats.downFECIncr),
       ),
     );
+
+    _statsBus.add(lineStats);
   }
 
   @override
@@ -65,7 +67,7 @@ class StatsRepositoryDriftImpl implements StatsRepository {
   @override
   Future upsertSnapshotStats(SnapshotStats snapshotStats) async {
     await _dao.upsertSnapshotStats(DriftSnapshotStats.fromJson(snapshotStats.toMap()));
-    _snapshotStatsBus.add(snapshotStats);
+    _statsBus.add(snapshotStats);
   }
 
   @override
@@ -77,7 +79,7 @@ class StatsRepositoryDriftImpl implements StatsRepository {
 
   @override
   Stream<SnapshotStats> snapshotStatsStreamById(String snapshotId) {
-    return _snapshotStatsBus.stream.where((snapshotStats) => snapshotStats.snapshotId == snapshotId);
+    return _statsBus.stream.where((e) => e is SnapshotStats && e.snapshotId == snapshotId).cast();
   }
 
   @override

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xdslmt/data/models/snapshot_stats.dart';
-import 'package:xdslmt/data/services/stats_sampling_service.dart';
 import 'package:xdslmt/core/formatters.dart';
 import 'package:xdslmt/core/text_styles.dart';
+import 'package:xdslmt/screens/monitoring/vm.dart';
 
 class Summary extends StatelessWidget {
   const Summary({super.key});
 
   @override
   Widget build(BuildContext context) {
-    SnapshotStats? stats = context.watch<StatsSamplingService>().snapshotStats;
+    SnapshotStats? stats = context.watch<MonitoringScreenViewModel>().lastSnapshotStats;
     return SizedBox(
       width: double.infinity,
       child: Row(

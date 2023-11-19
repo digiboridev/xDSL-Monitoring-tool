@@ -1,10 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:xdslmt/data/services/stats_sampling_service.dart';
+import 'package:xdslmt/data/models/recent_counters.dart';
 import 'package:xdslmt/screens/monitoring/components/painters/timeless_waveform_painter.dart';
 import 'package:xdslmt/core/colors.dart';
 import 'package:xdslmt/core/text_styles.dart';
+import 'package:xdslmt/screens/monitoring/vm.dart';
 
 class RSCBar extends StatelessWidget {
   const RSCBar({super.key});
@@ -20,82 +21,94 @@ class RSCBar extends StatelessWidget {
   }
 
   Widget bars() {
-    return RepaintBoundary(
-      child: Builder(
-        builder: (context) {
-          final v = context.watch<StatsSamplingService>().lastSamples;
-          List<int> dfec = [];
-          List<int> ufec = [];
-          List<int> dcrc = [];
-          List<int> ucrc = [];
-
-          for (final s in v) {
-            dfec.add(s.downFECIncr ?? 0);
-            ufec.add(s.upFECIncr ?? 0);
-            dcrc.add(s.downCRCIncr ?? 0);
-            ucrc.add(s.upCRCIncr ?? 0);
-          }
-
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Container(
-                width: 75,
-                height: 50,
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.blueGrey100),
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                  child: CustomPaint(painter: WaveFormTimelessPainter(max: 1000, increasedData: dfec)),
-                ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Container(
+          width: 75,
+          height: 50,
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.blueGrey100),
+              borderRadius: BorderRadius.circular(3),
+            ),
+            child: RepaintBoundary(
+              child: Builder(
+                builder: (context) {
+                  final recentCounters = context.select<MonitoringScreenViewModel, RecentCounters?>((s) => s.recentCounters);
+                  final vs = recentCounters?.downFECRecent ?? [];
+                  final max = recentCounters?.rsMax ?? 0;
+                  return CustomPaint(painter: WaveFormTimelessPainter(max: max, increasedData: vs));
+                },
               ),
-              Container(
-                width: 75,
-                height: 50,
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.blueGrey100),
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                  child: CustomPaint(
-                    painter: WaveFormTimelessPainter(
-                      max: 1000,
-                      increasedData: dcrc,
-                    ),
-                  ),
-                ),
+            ),
+          ),
+        ),
+        Container(
+          width: 75,
+          height: 50,
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.blueGrey100),
+              borderRadius: BorderRadius.circular(3),
+            ),
+            child: RepaintBoundary(
+              child: Builder(
+                builder: (context) {
+                  final recentCounters = context.select<MonitoringScreenViewModel, RecentCounters?>((s) => s.recentCounters);
+                  final vs = recentCounters?.downCRCRecent ?? [];
+                  final max = recentCounters?.rsMax ?? 0;
+                  return CustomPaint(painter: WaveFormTimelessPainter(max: max, increasedData: vs));
+                },
               ),
-              Container(
-                width: 75,
-                height: 50,
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.blueGrey100),
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                  child: CustomPaint(painter: WaveFormTimelessPainter(max: 1000, increasedData: ufec)),
-                ),
+            ),
+          ),
+        ),
+        Container(
+          width: 75,
+          height: 50,
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.blueGrey100),
+              borderRadius: BorderRadius.circular(3),
+            ),
+            child: RepaintBoundary(
+              child: Builder(
+                builder: (context) {
+                  final recentCounters = context.select<MonitoringScreenViewModel, RecentCounters?>((s) => s.recentCounters);
+                  final vs = recentCounters?.upFECRecent ?? [];
+                  final max = recentCounters?.rsMax ?? 0;
+                  return CustomPaint(painter: WaveFormTimelessPainter(max: max, increasedData: vs));
+                },
               ),
-              Container(
-                width: 75,
-                height: 50,
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.blueGrey100),
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                  child: CustomPaint(painter: WaveFormTimelessPainter(max: 1000, increasedData: ucrc)),
-                ),
+            ),
+          ),
+        ),
+        Container(
+          width: 75,
+          height: 50,
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.blueGrey100),
+              borderRadius: BorderRadius.circular(3),
+            ),
+            child: RepaintBoundary(
+              child: Builder(
+                builder: (context) {
+                  final recentCounters = context.select<MonitoringScreenViewModel, RecentCounters?>((s) => s.recentCounters);
+                  final vs = recentCounters?.upCRCRecent ?? [];
+                  final max = recentCounters?.rsMax ?? 0;
+                  return CustomPaint(painter: WaveFormTimelessPainter(max: max, increasedData: vs));
+                },
               ),
-            ],
-          );
-        },
-      ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -108,8 +121,8 @@ class RSCBar extends StatelessWidget {
           child: RepaintBoundary(
             child: Builder(
               builder: (context) {
-                final downFecLast = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downFecLast);
-                final downFecTotal = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downFecTotal);
+                final downFecLast = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.downFECLast);
+                final downFecTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.downFECTotal);
                 final downFecTotalExp = downFecTotal?.toStringAsPrecision(3);
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -130,8 +143,8 @@ class RSCBar extends StatelessWidget {
           child: RepaintBoundary(
             child: Builder(
               builder: (context) {
-                final downCrcLast = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downCrcLast);
-                final downCrcTotal = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.downCrcTotal);
+                final downCrcLast = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.downCRCLast);
+                final downCrcTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.downCRCTotal);
                 final downCrcTotalExp = downCrcTotal?.toStringAsPrecision(3);
 
                 return Column(
@@ -153,8 +166,8 @@ class RSCBar extends StatelessWidget {
           child: RepaintBoundary(
             child: Builder(
               builder: (context) {
-                final upFecLast = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upFecLast);
-                final upFecTotal = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upFecTotal);
+                final upFecLast = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.upFECLast);
+                final upFecTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.upFECTotal);
                 final upFecTotalExp = upFecTotal?.toStringAsPrecision(3);
 
                 return Column(
@@ -176,8 +189,8 @@ class RSCBar extends StatelessWidget {
           child: RepaintBoundary(
             child: Builder(
               builder: (context) {
-                final upCrcLast = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upCrcLast);
-                final upCrcTotal = context.select<StatsSamplingService, int?>((s) => s.snapshotStats?.upCrcTotal);
+                final upCrcLast = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.upCRCLast);
+                final upCrcTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.upCRCTotal);
                 final upCrcTotalExp = upCrcTotal?.toStringAsPrecision(3);
 
                 return Column(

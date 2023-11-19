@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:xdslmt/core/app_logger.dart';
-import 'package:xdslmt/data/models/line_stats.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
-import 'package:xdslmt/data/net_unit_clients/components/stats_parser/raw_line_stats.dart';
+import 'package:xdslmt/data/models/raw_line_stats.dart';
 import 'package:xdslmt/utils/debouncebuffer.dart';
 
 /// Alias for function that responds to specific prompt with command
@@ -19,15 +18,12 @@ typedef Cmd2Stats = ({String command, RawLineStats? Function(String) tryParse});
 class CommonTelnetClient implements NetUnitClient {
   CommonTelnetClient({
     required this.unitIp,
-    required this.snapshotId,
     required this.prepPrts,
     required this.errorPrts,
     required this.readyPrt,
     required this.cmd2Stats,
   });
 
-  @override
-  final String snapshotId;
   final String unitIp;
 
   /// Prompts for auth and shell preparation
@@ -45,10 +41,9 @@ class CommonTelnetClient implements NetUnitClient {
   Stream<String>? _socketStream;
   bool get _isConnected => _socket != null && _socketStream != null;
   bool _disposed = false;
-  LineStats? _prevStats;
 
   @override
-  Future<LineStats> fetchStats() async {
+  Future<RawLineStats> fetchStats() async {
     try {
       if (!_isConnected) await _connect();
       final lineStats = await _getStats();
@@ -56,7 +51,7 @@ class CommonTelnetClient implements NetUnitClient {
     } catch (e, s) {
       AppLogger.warning(name: 'CommonTelnetClient', 'Fetch error: $e', error: e, stack: s);
       _wipeSocket();
-      return LineStats.errored(snapshotId: snapshotId, statusText: e.toString());
+      return RawLineStats.errored(statusText: e.toString());
     }
   }
 
@@ -150,8 +145,8 @@ class CommonTelnetClient implements NetUnitClient {
     return completer.future;
   }
 
-  Future<LineStats> _getStats() {
-    final completer = Completer<LineStats>();
+  Future<RawLineStats> _getStats() {
+    final completer = Completer<RawLineStats>();
 
     AppLogger.debug(name: 'CommonTelnetClient', 'Get stats start');
 
@@ -165,32 +160,8 @@ class CommonTelnetClient implements NetUnitClient {
         if (maybeStats != null && !completer.isCompleted) {
           AppLogger.debug(name: 'CommonTelnetClient', 'Get stats parsed');
 
-          final stats = LineStats(
-            snapshotId: snapshotId,
-            status: maybeStats.status,
-            statusText: maybeStats.statusText.trim(),
-            connectionType: maybeStats.connectionType?.trim(),
-            upAttainableRate: maybeStats.upAttainableRate,
-            downAttainableRate: maybeStats.downAttainableRate,
-            upRate: maybeStats.upRate,
-            downRate: maybeStats.downRate,
-            upMargin: maybeStats.upMargin != null ? (maybeStats.upMargin! * 10).truncate() : null,
-            downMargin: maybeStats.downMargin != null ? (maybeStats.downMargin! * 10).truncate() : null,
-            upAttenuation: maybeStats.upAttenuation != null ? (maybeStats.upAttenuation! * 10).truncate() : null,
-            downAttenuation: maybeStats.downAttenuation != null ? (maybeStats.downAttenuation! * 10).truncate() : null,
-            upCRC: maybeStats.upCRC,
-            downCRC: maybeStats.downCRC,
-            upFEC: maybeStats.upFEC,
-            downFEC: maybeStats.downFEC,
-            upCRCIncr: _incrDiff(_prevStats?.upCRC, maybeStats.upCRC),
-            downCRCIncr: _incrDiff(_prevStats?.downCRC, maybeStats.downCRC),
-            upFECIncr: _incrDiff(_prevStats?.upFEC, maybeStats.upFEC),
-            downFECIncr: _incrDiff(_prevStats?.downFEC, maybeStats.downFEC),
-          );
-
-          _prevStats = stats;
           tempSub.cancel();
-          completer.complete(stats);
+          completer.complete(maybeStats);
         }
       },
       onError: (e, s) {
@@ -216,11 +187,5 @@ class CommonTelnetClient implements NetUnitClient {
     });
 
     return completer.future;
-  }
-
-  int _incrDiff(int? prev, int? next) {
-    if (prev == null || next == null) return 0;
-    final diff = next - prev;
-    return diff > 0 ? diff : 0;
   }
 }

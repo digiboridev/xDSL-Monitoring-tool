@@ -1,10 +1,12 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+// import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:xdslmt/core/app_logger.dart';
 import 'package:xdslmt/core/sl.dart';
+import 'package:xdslmt/data/repositories/current_sampling_repo.dart';
 import 'package:xdslmt/data/repositories/stats_repo.dart';
 import 'package:xdslmt/data/repositories/settings_repo.dart';
 import 'package:xdslmt/data/services/stats_sampling_service.dart';
@@ -38,6 +40,8 @@ Future<void> main() async {
     },
     appRunner: () => runApp(const App()),
   );
+
+  // debugRepaintRainbowEnabled = true;
 }
 
 class App extends StatelessWidget {
@@ -74,9 +78,10 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        Provider<CurrentSamplingRepository>(create: (_) => SL.currentSamplingRepository),
         Provider<SettingsRepository>(create: (_) => SL.settingsRepository),
         Provider<StatsRepository>(create: (_) => SL.statsRepository),
-        ChangeNotifierProvider<StatsSamplingService>.value(value: SL.statsSamplingService),
+        Provider<StatsSamplingService>.value(value: SL.statsSamplingService),
       ],
       builder: (context, child) {
         bindOrientLock(context.read<SettingsRepository>());

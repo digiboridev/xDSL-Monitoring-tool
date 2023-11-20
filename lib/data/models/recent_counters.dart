@@ -3,6 +3,8 @@ import 'package:equatable/equatable.dart';
 import 'package:xdslmt/data/models/line_stats.dart';
 
 class RecentCounters with EquatableMixin {
+  final bool maxCountReached;
+
   // RS error variables
 
   final List<int?> downFECRecent;
@@ -61,6 +63,7 @@ class RecentCounters with EquatableMixin {
   final int attnMax;
 
   RecentCounters({
+    required this.maxCountReached,
     // RS errors variables
     required this.downFECRecent,
     required this.downFECTotal,
@@ -256,6 +259,7 @@ class RecentCounters with EquatableMixin {
     attnMax = downATTNMax > upATTNMax ? downATTNMax : upATTNMax;
 
     return RecentCounters(
+      maxCountReached: lineStats.length >= maxCount,
       // RS errors variables
       downFECRecent: downFECRecent,
       downFECTotal: downFECTotal,

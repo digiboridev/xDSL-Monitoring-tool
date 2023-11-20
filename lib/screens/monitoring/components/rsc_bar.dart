@@ -121,15 +121,22 @@ class RSCBar extends StatelessWidget {
           child: RepaintBoundary(
             child: Builder(
               builder: (context) {
-                final downFecLast = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.downFECLast);
-                final downFecTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.downFECTotal);
+                final downFecLast = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.downFecLast);
+                final downFecTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.downFecTotal);
                 final downFecTotalExp = downFecTotal?.toStringAsPrecision(3);
+
+                final showRecent = context.select<MonitoringScreenViewModel, bool>((s) => s.recentCounters?.maxCountReached ?? false);
+                final downFecTotalRecent = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.downFECTotal);
+                final downFecTotalRecentExp = downFecTotalRecent?.toStringAsPrecision(3);
+
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const Text('FEC D', style: TextStyles.f12w6),
                     const Text('Total', style: TextStyles.f10),
                     Text(downFecTotalExp ?? 'n/a', style: TextStyles.f12w3),
+                    if (showRecent) const Text('Recent', style: TextStyles.f10),
+                    if (showRecent) Text(downFecTotalRecentExp ?? 'n/a', style: TextStyles.f12w3),
                     const Text('Impulse', style: TextStyles.f10),
                     Text('${downFecLast ?? 'n/a'}', style: TextStyles.f12w3),
                   ],
@@ -143,9 +150,13 @@ class RSCBar extends StatelessWidget {
           child: RepaintBoundary(
             child: Builder(
               builder: (context) {
-                final downCrcLast = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.downCRCLast);
-                final downCrcTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.downCRCTotal);
+                final downCrcLast = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.downCrcLast);
+                final downCrcTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.downCrcTotal);
                 final downCrcTotalExp = downCrcTotal?.toStringAsPrecision(3);
+
+                final showRecent = context.select<MonitoringScreenViewModel, bool>((s) => s.recentCounters?.maxCountReached ?? false);
+                final downCrcTotalRecent = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.downCRCTotal);
+                final downCrcTotalExpRecent = downCrcTotalRecent?.toStringAsPrecision(3);
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -153,6 +164,8 @@ class RSCBar extends StatelessWidget {
                     const Text('CRC D', style: TextStyles.f12w6),
                     const Text('Total', style: TextStyles.f10),
                     Text(downCrcTotalExp ?? 'n/a', style: TextStyles.f12w3),
+                    if (showRecent) const Text('Recent', style: TextStyles.f10),
+                    if (showRecent) Text(downCrcTotalExpRecent ?? 'n/a', style: TextStyles.f12w3),
                     const Text('Impulse', style: TextStyles.f10),
                     Text('${downCrcLast ?? 'n/a'}', style: TextStyles.f12w3),
                   ],
@@ -166,9 +179,13 @@ class RSCBar extends StatelessWidget {
           child: RepaintBoundary(
             child: Builder(
               builder: (context) {
-                final upFecLast = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.upFECLast);
-                final upFecTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.upFECTotal);
+                final upFecLast = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.upFecLast);
+                final upFecTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.upFecTotal);
                 final upFecTotalExp = upFecTotal?.toStringAsPrecision(3);
+
+                final showRecent = context.select<MonitoringScreenViewModel, bool>((s) => s.recentCounters?.maxCountReached ?? false);
+                final upFecTotalRecent = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.upFECTotal);
+                final upFecTotalExpRecent = upFecTotalRecent?.toStringAsPrecision(3);
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -176,6 +193,8 @@ class RSCBar extends StatelessWidget {
                     const Text('FEC U', style: TextStyles.f12w6),
                     const Text('Total', style: TextStyles.f10),
                     Text(upFecTotalExp ?? 'n/a', style: TextStyles.f12w3),
+                    if (showRecent) const Text('Recent', style: TextStyles.f10),
+                    if (showRecent) Text(upFecTotalExpRecent ?? 'n/a', style: TextStyles.f12w3),
                     const Text('Impulse', style: TextStyles.f10),
                     Text('${upFecLast ?? 'n/a'}', style: TextStyles.f12w3),
                   ],
@@ -189,9 +208,13 @@ class RSCBar extends StatelessWidget {
           child: RepaintBoundary(
             child: Builder(
               builder: (context) {
-                final upCrcLast = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.upCRCLast);
-                final upCrcTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.upCRCTotal);
+                final upCrcLast = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.upCrcLast);
+                final upCrcTotal = context.select<MonitoringScreenViewModel, int?>((s) => s.lastSnapshotStats?.upCrcTotal);
                 final upCrcTotalExp = upCrcTotal?.toStringAsPrecision(3);
+
+                final showRecent = context.select<MonitoringScreenViewModel, bool>((s) => s.recentCounters?.maxCountReached ?? false);
+                final upCrcTotalRecent = context.select<MonitoringScreenViewModel, int?>((s) => s.recentCounters?.upCRCTotal);
+                final upCrcTotalExpRecent = upCrcTotalRecent?.toStringAsPrecision(3);
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -199,6 +222,8 @@ class RSCBar extends StatelessWidget {
                     const Text('CRC U', style: TextStyles.f12w6),
                     const Text('Total', style: TextStyles.f10),
                     Text(upCrcTotalExp ?? 'n/a', style: TextStyles.f12w3),
+                    if (showRecent) const Text('Recent', style: TextStyles.f10),
+                    if (showRecent) Text(upCrcTotalExpRecent ?? 'n/a', style: TextStyles.f12w3),
                     const Text('Impulse', style: TextStyles.f10),
                     Text('${upCrcLast ?? 'n/a'}', style: TextStyles.f12w3),
                   ],

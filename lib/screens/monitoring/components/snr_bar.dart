@@ -247,7 +247,7 @@ class MinMaxAvgRow extends StatelessWidget {
   final int? min;
   final int? max;
   final int? avg;
-  const MinMaxAvgRow({Key? key, this.min, this.max, this.avg}) : super(key: key);
+  const MinMaxAvgRow({super.key, this.min, this.max, this.avg});
 
   @override
   Widget build(BuildContext context) {

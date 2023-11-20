@@ -5,7 +5,7 @@ import 'package:xdslmt/screens/monitoring/vm.dart';
 
 class MonitoringScreenBinding extends StatelessWidget {
   final Widget child;
-  const MonitoringScreenBinding({Key? key, required this.child}) : super(key: key);
+  const MonitoringScreenBinding({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {

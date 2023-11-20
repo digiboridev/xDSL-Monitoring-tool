@@ -2,10 +2,7 @@
 import 'package:flutter/material.dart';
 
 class FillableScrollableWrapper extends StatelessWidget {
-  const FillableScrollableWrapper({
-    Key? key,
-    required this.child,
-  }) : super(key: key);
+  const FillableScrollableWrapper({super.key, required this.child});
 
   final Widget child;
 

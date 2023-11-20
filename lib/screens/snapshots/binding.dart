@@ -5,7 +5,7 @@ import 'package:xdslmt/screens/snapshots/vm.dart';
 
 class SnapshotsScreenBinding extends StatelessWidget {
   final Widget child;
-  const SnapshotsScreenBinding({Key? key, required this.child}) : super(key: key);
+  const SnapshotsScreenBinding({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {

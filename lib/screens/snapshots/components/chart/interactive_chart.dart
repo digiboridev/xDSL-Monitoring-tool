@@ -18,7 +18,7 @@ class InteractiveChart extends StatefulWidget {
   final List<LineStats> statsList;
   final SnapshotStats snapshotStats;
 
-  const InteractiveChart({Key? key, required this.statsList, required this.snapshotStats}) : super(key: key);
+  const InteractiveChart({super.key, required this.statsList, required this.snapshotStats});
 
   @override
   State<InteractiveChart> createState() => _InteractiveChartState();

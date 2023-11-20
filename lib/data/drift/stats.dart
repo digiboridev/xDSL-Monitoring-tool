@@ -6,7 +6,7 @@ part 'stats.g.dart';
 
 @DriftAccessor(tables: [LineStatsTable, SnapshotStatsTable])
 class StatsDao extends DatabaseAccessor<DB> with _$StatsDaoMixin {
-  StatsDao(DB db) : super(db);
+  StatsDao(super.db);
 
   Future insertLineStats(LineStatsTableCompanion entry) => into(lineStatsTable).insert(entry);
 

@@ -5,7 +5,7 @@ import 'package:xdslmt/screens/settings/vm.dart';
 
 class SettingsScreenBinding extends StatelessWidget {
   final Widget child;
-  const SettingsScreenBinding({Key? key, required this.child}) : super(key: key);
+  const SettingsScreenBinding({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {

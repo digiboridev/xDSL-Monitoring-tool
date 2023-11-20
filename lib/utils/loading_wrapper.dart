@@ -2,11 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class LoadingWrapper extends StatelessWidget {
-  const LoadingWrapper({
-    Key? key,
-    required this.child,
-    required this.busy,
-  }) : super(key: key);
+  const LoadingWrapper({super.key, required this.child, required this.busy});
 
   final Widget child;
   final bool busy;

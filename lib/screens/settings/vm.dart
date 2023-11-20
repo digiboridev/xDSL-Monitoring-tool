@@ -6,6 +6,7 @@ import 'package:xdslmt/data/models/app_settings.dart';
 import 'package:xdslmt/data/net_unit_clients/net_unit_client.dart';
 import 'package:xdslmt/data/repositories/settings_repo.dart';
 import 'package:xdslmt/screens/settings/state.dart';
+import 'package:xdslmt/utils/debouncer.dart';
 import 'package:xdslmt/utils/streambang.dart';
 
 class SettingsScreenViewModel extends ValueNotifier<SettingsScreenState> with StreamBang {
@@ -14,11 +15,11 @@ class SettingsScreenViewModel extends ValueNotifier<SettingsScreenState> with St
   SettingsScreenViewModel(this._settingsRepository) : super(SettingsScreenState.loading()) {
     _init();
   }
+  final _debouncer = Debouncer(delay: const Duration(milliseconds: 500));
 
   _init() async {
     value = SettingsScreenState.loaded(await _settingsRepository.getSettings);
     AppLogger.debug(name: 'SettingsScreenViewModel', 'init complete');
-
     var sub = _settingsRepository.updatesStream.listen((update) => value = SettingsScreenState.loaded(update));
     insert(sub);
   }
@@ -31,8 +32,7 @@ class SettingsScreenViewModel extends ValueNotifier<SettingsScreenState> with St
   }
 
   Future<void> _setSettings(AppSettings settings) {
-    AppLogger.debug(name: 'SettingsScreenViewModel', 'setSettings: $settings');
-
+    _debouncer.call(() => AppLogger.debug(name: 'SettingsScreenViewModel', 'setSettings: $settings'));
     return _settingsRepository.setSettings(settings);
   }
 

@@ -36,7 +36,7 @@ class AppSettings {
       host: '192.168.1.1',
       login: 'admin',
       pwd: 'admin',
-      samplingInterval: const Duration(seconds: 5),
+      samplingInterval: const Duration(seconds: 1),
       splitInterval: const Duration(minutes: 360),
       recentSize: 1000,
       animations: true,

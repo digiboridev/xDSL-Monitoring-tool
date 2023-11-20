@@ -45,7 +45,7 @@ class SamplingInterval extends StatelessWidget {
               value: _watchSamplingInterval(context).inSeconds.toDouble(),
               min: 1,
               max: 60,
-              divisions: 12,
+              divisions: 24,
               label: _watchSamplingInterval(context).inSeconds.toString(),
               onChanged: (double value) => _getVm(context).setSamplingInterval = Duration(seconds: value.toInt()),
             ),

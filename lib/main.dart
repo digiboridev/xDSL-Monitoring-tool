@@ -33,10 +33,10 @@ Future<void> main() async {
       options.tracesSampleRate = 1.0;
       options.enablePrintBreadcrumbs = false;
       options.enableAutoPerformanceTracing = true;
-      options.beforeSendTransaction = (transaction) async {
-        debugPrint('tr send: ${transaction.eventId} ${DateTime.now()}');
-        return transaction;
-      };
+      // options.beforeSendTransaction = (transaction) async {
+      //   debugPrint('tr send: ${transaction.eventId} ${DateTime.now()}');
+      //   return transaction;
+      // };
     },
     appRunner: () => runApp(const App()),
   );

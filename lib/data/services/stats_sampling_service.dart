@@ -38,6 +38,7 @@ class StatsSamplingService {
 
     Duration samplingInterval = settings.samplingInterval;
     Duration splitInterval = settings.splitInterval;
+    int recentSize = settings.recentSize;
     NetUnitClient client = NetUnitClient.fromSettings(settings);
     SnapshotStats snapshotStats = SnapshotStats.create(snapshotId, settings.host, settings.login, settings.pwd);
 
@@ -59,14 +60,14 @@ class StatsSamplingService {
         final fetchEnd = DateTime.now();
         lastFetchDuration = fetchEnd.difference(fetchStart);
         lineStatsQueue.addFirst(lineStats);
-        if (lineStatsQueue.length > 500) lineStatsQueue.removeLast();
+        if (lineStatsQueue.length > recentSize) lineStatsQueue.removeLast();
 
         snapshotStats = snapshotStats.copyWithLineStats(lineStats);
         yield CurrentSamplingEvent.snapshotStatsArived(snapshotStats);
         AppLogger.debug(name: 'Sampling stream', 'Snapshot stats arived');
         AppLogger.debug(name: 'Sampling stream', snapshotStats.toString());
 
-        final recentCounters = RecentCounters.fromLineStats(lineStatsQueue);
+        final recentCounters = RecentCounters.fromLineStats(lineStatsQueue, maxCount: recentSize);
         yield CurrentSamplingEvent.recentCountersArived(recentCounters);
         AppLogger.debug(name: 'Sampling stream', 'Recent counters arived');
         AppLogger.debug(name: 'Sampling stream', recentCounters.toStringMin());

@@ -9,10 +9,12 @@ class AppSettings {
   final String pwd;
   final Duration samplingInterval;
   final Duration splitInterval;
+  final int recentSize;
   final bool animations;
   final bool orientLock;
   final bool wakeLock;
   final bool foregroundService;
+  final int v;
 
   AppSettings._({
     required this.nuType,
@@ -21,11 +23,12 @@ class AppSettings {
     required this.pwd,
     required this.samplingInterval,
     required this.splitInterval,
+    required this.recentSize,
     required this.animations,
     required this.orientLock,
     required this.wakeLock,
     required this.foregroundService,
-  });
+  }) : v = 2; // version
 
   factory AppSettings.base() {
     return AppSettings._(
@@ -35,6 +38,7 @@ class AppSettings {
       pwd: 'admin',
       samplingInterval: const Duration(seconds: 5),
       splitInterval: const Duration(minutes: 360),
+      recentSize: 1000,
       animations: true,
       orientLock: true,
       wakeLock: true,
@@ -49,6 +53,7 @@ class AppSettings {
     String? pwd,
     Duration? samplingInterval,
     Duration? splitInterval,
+    int? recentSize,
     bool? animations,
     bool? orientLock,
     bool? wakeLock,
@@ -61,6 +66,7 @@ class AppSettings {
       pwd: pwd ?? this.pwd,
       samplingInterval: samplingInterval ?? this.samplingInterval,
       splitInterval: splitInterval ?? this.splitInterval,
+      recentSize: recentSize ?? this.recentSize,
       animations: animations ?? this.animations,
       orientLock: orientLock ?? this.orientLock,
       wakeLock: wakeLock ?? this.wakeLock,
@@ -76,14 +82,22 @@ class AppSettings {
       'pwd': pwd,
       'samplingInterval': samplingInterval.inMilliseconds,
       'splitInterval': splitInterval.inMilliseconds,
+      'recentSize': recentSize,
       'animations': animations,
       'orientLock': orientLock,
       'wakeLock': wakeLock,
       'foregroundService': foregroundService,
+      'v': v,
     };
   }
 
   factory AppSettings.fromMap(Map<String, dynamic> map) {
+    // Migrations
+    int v = map['v'] as int;
+    if (v < 2) {
+      map['recentSize'] = 1000;
+    }
+
     return AppSettings._(
       nuType: NetworkUnitType.values.byName(map['nuType'] as String),
       host: map['host'] as String,
@@ -91,6 +105,7 @@ class AppSettings {
       pwd: map['pwd'] as String,
       samplingInterval: Duration(milliseconds: (map['samplingInterval'] as num).toInt()),
       splitInterval: Duration(milliseconds: (map['splitInterval'] as num).toInt()),
+      recentSize: map['recentSize'] as int,
       animations: map['animations'] as bool,
       orientLock: map['orientLock'] as bool,
       wakeLock: map['wakeLock'] as bool,
@@ -104,7 +119,7 @@ class AppSettings {
 
   @override
   String toString() {
-    return 'AppSettings(nuType: $nuType, host: $host, login: $login, pwd: $pwd, samplingInterval: $samplingInterval, splitInterval: $splitInterval, animations: $animations, orientLock: $orientLock), wakeLock: $wakeLock, foregroundService: $foregroundService';
+    return 'AppSettings(nuType: $nuType, host: $host, login: $login, pwd: $pwd, samplingInterval: $samplingInterval, splitInterval: $splitInterval, recentSize: $recentSize, animations: $animations, orientLock: $orientLock, wakeLock: $wakeLock, foregroundService: $foregroundService, v: $v)';
   }
 
   @override
@@ -117,10 +132,12 @@ class AppSettings {
         other.pwd == pwd &&
         other.samplingInterval == samplingInterval &&
         other.splitInterval == splitInterval &&
+        other.recentSize == recentSize &&
         other.animations == animations &&
         other.orientLock == orientLock &&
         other.wakeLock == wakeLock &&
-        other.foregroundService == foregroundService;
+        other.foregroundService == foregroundService &&
+        other.v == v;
   }
 
   @override
@@ -131,9 +148,11 @@ class AppSettings {
         pwd.hashCode ^
         samplingInterval.hashCode ^
         splitInterval.hashCode ^
+        recentSize.hashCode ^
         animations.hashCode ^
         orientLock.hashCode ^
         wakeLock.hashCode ^
-        foregroundService.hashCode;
+        foregroundService.hashCode ^
+        v.hashCode;
   }
 }

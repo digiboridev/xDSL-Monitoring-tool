@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:xdslmt/screens/settings/components/animation_switch.dart';
 import 'package:xdslmt/screens/settings/components/foreground_switch.dart';
+import 'package:xdslmt/screens/settings/components/recent_size.dart';
 import 'package:xdslmt/screens/settings/components/split_interval.dart';
 import 'package:xdslmt/screens/settings/components/nu_host.dart';
 import 'package:xdslmt/screens/settings/components/nu_login.dart';
@@ -48,7 +49,7 @@ class SettingsScreenView extends StatelessWidget {
                 const NuPassword(),
                 const SamplingInterval(),
                 const SplitInterval(),
-                // TODO screen rms count
+                const RecentSize(),
                 const AnimationSwitch(),
                 const OrientLockSwitch(),
                 const WakelockSwitch(),

@@ -48,6 +48,7 @@ class SettingsScreenViewModel extends ValueNotifier<SettingsScreenState> with St
   String get pwd => _expSettings.pwd;
   Duration get samplingInterval => _expSettings.samplingInterval;
   Duration get splitInterval => _expSettings.splitInterval;
+  int get recentSize => _expSettings.recentSize;
   bool get animations => _expSettings.animations;
   bool get orientLock => _expSettings.orientLock;
   bool get wakeLock => _expSettings.wakeLock;
@@ -59,6 +60,7 @@ class SettingsScreenViewModel extends ValueNotifier<SettingsScreenState> with St
   set setPwd(String v) => _setSettings(_expSettings.copyWith(pwd: v));
   set setSamplingInterval(Duration v) => _setSettings(_expSettings.copyWith(samplingInterval: v));
   set setSplitInterval(Duration v) => _setSettings(_expSettings.copyWith(splitInterval: v));
+  set setRecentSize(int v) => _setSettings(_expSettings.copyWith(recentSize: v));
   set setAnimations(bool v) => _setSettings(_expSettings.copyWith(animations: v));
   set setOrientLock(bool v) => _setSettings(_expSettings.copyWith(orientLock: v));
   set setWakelock(bool v) => _setSettings(_expSettings.copyWith(wakeLock: v));

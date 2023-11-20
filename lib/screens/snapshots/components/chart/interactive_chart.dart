@@ -762,40 +762,51 @@ class CSVExportButton extends StatelessWidget {
   const CSVExportButton({super.key, required this.id, required this.statsList});
 
   Future<void> export(BuildContext context) async {
-    // TODO check
     List<String> header = [
       'Time',
-      'Status',
+      'Sample status',
+      'Status Text',
+      'Connection Type',
       'Downstream Rate',
       'Upstream Rate',
       'Downstream Attainable Rate',
       'Upstream Attainable Rate',
-      'Downstream FEC',
-      'Upstream FEC',
-      'Downstream CRC',
-      'Upstream CRC',
       'Downstream SNRm',
       'Upstream SNRm',
       'Downstream Attenuation',
       'Upstream Attenuation',
+      'Downstream FEC',
+      'Upstream FEC',
+      'Downstream CRC',
+      'Upstream CRC',
+      'Downstream FEC Incr',
+      'Upstream FEC Incr',
+      'Downstream CRC Incr',
+      'Upstream CRC Incr',
     ];
     List<List<String>> listOfLists = [];
     for (var stat in statsList) {
       listOfLists.add([
         stat.time.ymdhms,
-        stat.status.toString(),
+        stat.status.name,
+        stat.statusText,
+        stat.connectionType ?? 'N/A',
         stat.downRate.toString(),
         stat.upRate.toString(),
         stat.downAttainableRate.toString(),
         stat.upAttainableRate.toString(),
-        stat.downFECIncr.toString(),
-        stat.upFECIncr.toString(),
-        stat.downCRCIncr.toString(),
-        stat.upCRCIncr.toString(),
         stat.downMargin.toString(),
         stat.upMargin.toString(),
         stat.downAttenuation.toString(),
         stat.upAttenuation.toString(),
+        stat.downFEC.toString(),
+        stat.upFEC.toString(),
+        stat.downCRC.toString(),
+        stat.upCRC.toString(),
+        stat.downFECIncr.toString(),
+        stat.upFECIncr.toString(),
+        stat.downCRCIncr.toString(),
+        stat.upCRCIncr.toString(),
       ]);
     }
 

@@ -1,7 +1,24 @@
 
+<p align="center">
+  <img width="300" src="media/app_icon/app_icon_bordered.png"/>
+</p>
 
-# xDSL Monitoring tool
+<h1 align="center">
+  xDSL Monitoring tool
+</h1>
+<h6 align="center">
+  Portable G.DMT/ADSL/VDSL network monitoring software
+</h6>
 
+
+<p align="center">
+  <img width="1024" src="media/preview/preview_1.png"/>
+</p>
+<p align="center">
+  <img width="1024" src="media/preview/preview_2.png"/>
+</p>
+
+### About
 xDSL Monitoring tool is an mobile app for realtime and background monitoring of G.DMT/ADSL/VDSL networks. It is designed to work with most popular Broadcom and Trendchip network units that support telnet or http interface. Data is displayed in detailed graphical form and can be used to perform line analysis on the go, or as standalone tool for ISPs to perform monitoring on client-end.
 
 
@@ -15,7 +32,7 @@ xDSL Monitoring tool is an mobile app for realtime and background monitoring of 
   - Exporting collected data-sets to csv
 
   
-![screenshot](https://github.com/digiboridev/xDSL-Monitoring-tool/blob/main/md/bg.jpg)
+
 
 ### Platform
   - Android 8+
@@ -53,9 +70,9 @@ If you want to add new device support you can simply send me a dump of your devi
 
 ### Contacts: 
   - Telegram: t.me/vladislavdev
-  - Email: digiborimusik@gmail.com
+  - Email: digiborideveloper@gmail.com
 
-### Planned features
+### Roadmap
   - SNR per tone, Bit table support
   - HLog, QLN support
   - Cloud sync for remote data sharing

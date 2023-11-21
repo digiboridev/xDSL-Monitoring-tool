@@ -99,7 +99,9 @@ class App extends StatelessWidget {
   }
 }
 
-// TODO md
-// TODO about
-// TODO pp link
-// TODO release
+// TODO: md
+// TODO: pp link
+// TODO: release
+
+// TODO: static/impulse noise separation
+

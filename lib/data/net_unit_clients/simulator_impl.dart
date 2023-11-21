@@ -75,59 +75,58 @@ final class SimulatorClientImpl implements NetUnitClient {
     _crcD = 0;
   }
 
-  int get _rndChance => _rnd.nextInt(100);
+  int _rndSign(int max) => _rnd.nextInt(max * 2) - max;
+  int _rndUnsign(int max) => _rnd.nextInt(max);
 
   @override
   Future<RawLineStats> fetchStats() async {
-    await Future.delayed(Duration(milliseconds: _rnd.nextInt(1000)));
+    await Future.delayed(Duration(milliseconds: _rndUnsign(1000)));
 
     // chance of connection recovery
-    if (_prevStats?.status == SampleStatus.connectionDown && _rndChance <= 90) {
+    if (_prevStats?.status == SampleStatus.connectionDown && _rndUnsign(100) <= 90) {
       final newStats = RawLineStats.connectionDown(statusText: 'Initializing');
       _prevStats = newStats;
       return newStats;
     }
 
     // chance of fetch failure
-    if (_rndChance <= 1) {
+    if (_rndUnsign(200) <= 1) {
       final newStats = RawLineStats.errored(statusText: 'Connection failed');
       _prevStats = newStats;
       return newStats;
     }
 
     // chance of connection down
-    if (_rndChance <= 1) {
+    if (_rndUnsign(200) <= 1) {
       _reduceStatsHalfway();
       final newStats = RawLineStats.connectionDown(statusText: 'Down');
       _prevStats = newStats;
       return newStats;
     }
 
-    // common stats drift
-    // to simulate an ustable but sincronized stats drift
-    int sigDrift = _rnd.nextInt(200) - 100;
-    int unsigDrift = sigDrift.abs();
+    // chance of stats drift
+    if (_rndUnsign(100) <= 5) {
+      int syncDrift = _rndSign(100); // needs to simulate same tendency to drift for all parameters
 
-    // chance of donwstream stats drift
-    if (_rndChance <= 10) {
-      _downRate = (_downRate + ((sigDrift + _rnd.nextInt(50)) * 10)).clamp(2000, _bdownRateLimit);
-      _downAttainableRate = (_downAttainableRate + ((sigDrift + _rnd.nextInt(50)) * 10)).clamp(3000, _bdownRateLimit);
+      // Downstream
+      _downRate = (_downRate + ((syncDrift + _rndSign(100)) * 8)).clamp(2000, _bdownRateLimit);
+      _downAttainableRate = (_downAttainableRate + ((syncDrift + _rndSign(100)) * 8)).clamp(3000, _bdownRateLimit);
 
-      _mrD = (_mrD + ((sigDrift + _rnd.nextInt(100)) / 100)).clamp(0, 30);
-      _attD = (_attD + ((sigDrift + _rnd.nextInt(100)) / 100)).clamp(0, 100);
-      _fecD += (unsigDrift + _rnd.nextInt(50).abs()) * 8;
-      _crcD += (unsigDrift + _rnd.nextInt(50).abs()) * 4;
-    }
+      _mrD = (_mrD + ((syncDrift + _rndSign(100)) / 100)).clamp(2, 30);
+      _attD = (_attD - ((syncDrift + _rndSign(100)) / 100)).clamp(2, 80);
 
-    // chance of upstream stats drift
-    if (_rndChance <= 10) {
-      _upRate = (_upRate + ((sigDrift + _rnd.nextInt(50)) * 5)).clamp(250, _bupRateLimit);
-      _upAttainableRate = (_upAttainableRate + ((sigDrift + _rnd.nextInt(50)) * 5)).clamp(500, _bupRateLimit);
+      _fecD += (syncDrift + _rndSign(100)).abs();
+      _crcD += (syncDrift + _rndSign(100)).abs();
 
-      _mrU = (_mrU + ((sigDrift + _rnd.nextInt(100)) / 100)).clamp(0, 30);
-      _attU = (_attU + ((sigDrift + _rnd.nextInt(100)) / 100)).clamp(0, 100);
-      _fecU += (unsigDrift + _rnd.nextInt(50).abs()) * 4;
-      _crcU += (unsigDrift + _rnd.nextInt(50).abs()) * 2;
+      // Upstream
+      _upRate = (_upRate + ((syncDrift + _rndSign(100)) * 2)).clamp(250, _bupRateLimit);
+      _upAttainableRate = (_upAttainableRate + ((syncDrift + _rndSign(100)) * 2)).clamp(500, _bupRateLimit);
+
+      _mrU = (_mrU + ((syncDrift + _rndSign(100)) / 100)).clamp(2, 30);
+      _attU = (_attU - ((syncDrift + _rndSign(100)) / 100)).clamp(2, 80);
+
+      _fecU += (syncDrift + _rndSign(100)).abs();
+      _crcU += (syncDrift + _rndSign(100)).abs();
     }
 
     final nextStats = RawLineStats(

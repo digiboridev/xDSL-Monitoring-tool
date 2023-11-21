@@ -7,12 +7,12 @@ xDSL Monitoring tool is an mobile app for realtime and background monitoring of 
 
 ### Features
   - Fast and modern UI
-  - Wide range of supported devices
-  - Realtime stats monitoring
-  - Background monitoring
-  - Robust connection using raw TCP Socket implementation
-  - Detailed histograms with pan and zoom
-  - Exporting data to csv
+  - Wide range of supported network devices
+  - Real-time stats monitoring on the go
+  - Background monitoring with foreground service
+  - Direct TCP connection without OS shell underlying
+  - Interactive histograms for detailed analysis
+  - Exporting collected data-sets to csv
 
   
 ![screenshot](https://github.com/digiboridev/xDSL-Monitoring-tool/blob/main/md/bg.jpg)
@@ -60,4 +60,4 @@ If you want to add new device support you can simply send me a dump of your devi
   - HLog, QLN support
   - Cloud sync for remote data sharing
   - Multi-device monitoring
-  - Desktop version
+  - IOS/Desktop version

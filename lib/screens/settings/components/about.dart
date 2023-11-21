@@ -41,7 +41,7 @@ class _AppAboutDialogState extends State<AppAboutDialog> {
               applicationName: 'xDSL MT',
               applicationVersion: (snapshot.data as PackageInfo).version,
               applicationIcon: Image.asset(
-                'assets/app_icon/app_icon_512.png',
+                'assets/app_icon_512.png',
                 width: width / 4,
                 height: width / 4,
               ),

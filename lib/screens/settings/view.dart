@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:xdslmt/screens/settings/components/about.dart';
 import 'package:xdslmt/screens/settings/components/animation_switch.dart';
 import 'package:xdslmt/screens/settings/components/foreground_switch.dart';
 import 'package:xdslmt/screens/settings/components/recent_size.dart';
@@ -14,8 +15,6 @@ import 'package:xdslmt/core/colors.dart';
 import 'package:xdslmt/screens/settings/components/wakelock_switch.dart';
 import 'package:xdslmt/utils/fillable_scrollable_wrapper.dart';
 import 'package:xdslmt/utils/min_spacer.dart';
-import 'package:xdslmt/core/text_styles.dart';
-import 'package:xdslmt/utils/version.dart';
 
 class SettingsScreenView extends StatelessWidget {
   const SettingsScreenView({
@@ -37,25 +36,34 @@ class SettingsScreenView extends StatelessWidget {
             ],
           ),
         ),
-        child: FillableScrollableWrapper(
+        child: const FillableScrollableWrapper(
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const NuType(),
-                const NuHost(),
-                const NuLogin(),
-                const NuPassword(),
-                const SamplingInterval(),
-                const SplitInterval(),
-                const RecentSize(),
-                const AnimationSwitch(),
-                const OrientLockSwitch(),
-                const WakelockSwitch(),
-                const ForegroundSwitch(),
-                const MinSpacer(minHeight: 50),
-                version(),
+                NuType(),
+                NuHost(),
+                NuLogin(),
+                NuPassword(),
+                SizedBox(height: 4),
+                Divider(),
+                SizedBox(height: 4),
+                SamplingInterval(),
+                SplitInterval(),
+                RecentSize(),
+                SizedBox(height: 4),
+                Divider(),
+                SizedBox(height: 4),
+                AnimationSwitch(),
+                OrientLockSwitch(),
+                WakelockSwitch(),
+                ForegroundSwitch(),
+                SizedBox(height: 4),
+                Divider(),
+                SizedBox(height: 4),
+                About(),
+                MinSpacer(minHeight: 8),
               ],
             ),
           ),
@@ -63,12 +71,4 @@ class SettingsScreenView extends StatelessWidget {
       ),
     );
   }
-
-  Widget version() => Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text('Build: ', style: TextStyles.f12.blueGrey600),
-          AppVersion(textStyle: TextStyles.f12.blueGrey600),
-        ],
-      );
 }

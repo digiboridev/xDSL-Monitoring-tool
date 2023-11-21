@@ -42,7 +42,7 @@ class ForegroundService : Service() {
             // Create the notification
             val notification = NotificationCompat.Builder(this, notificationChannelId)
                 .setOngoing(true)
-                .setSmallIcon(R.mipmap.ic_launcher_adaptive_fore)
+                .setSmallIcon(R.mipmap.ic_launcher_foreground)
                 .setContentTitle("xDSL monitoring tool")
                 .setContentText("Sampling service is running")
                 .setContentIntent(pendingIntent)

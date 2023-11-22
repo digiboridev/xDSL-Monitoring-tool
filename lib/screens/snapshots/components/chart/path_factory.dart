@@ -75,11 +75,7 @@ abstract class PathFactory {
 
     final ClampedPath clampedPath = (
       path: path.transform(clampMatrix.storage),
-      metadata: (
-        tStart: tStart,
-        tDiff: tDiff,
-        vMax: vMax,
-      ),
+      metadata: (tStart: tStart, tDiff: tDiff, vMax: vMax),
     );
     return clampedPath;
   }
@@ -116,11 +112,7 @@ abstract class PathFactory {
     clampMatrix.translate(1.0, vMax / 2);
     final ClampedPath clampedPath = (
       path: path.transform(clampMatrix.storage),
-      metadata: (
-        tStart: tStart,
-        tDiff: tDiff,
-        vMax: vMax,
-      ),
+      metadata: (tStart: tStart, tDiff: tDiff, vMax: vMax),
     );
 
     return clampedPath;

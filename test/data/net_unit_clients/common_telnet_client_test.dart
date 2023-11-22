@@ -316,10 +316,10 @@ Future<void> main() async {
     expect(stats.downAttainableRate, 32148);
     expect(stats.upRate, 5795);
     expect(stats.downRate, 29624);
-    expect(stats.upMargin, 57);
-    expect(stats.downMargin, 41);
-    expect(stats.upAttenuation, 32);
-    expect(stats.downAttenuation, 51);
+    expect(stats.upMargin, 5.7);
+    expect(stats.downMargin, 4.1);
+    expect(stats.upAttenuation, 3.2);
+    expect(stats.downAttenuation, 5.1);
     expect(stats.upCRC, 1);
     expect(stats.downCRC, 140410);
     expect(stats.upFEC, 273);

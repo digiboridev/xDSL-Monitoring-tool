@@ -138,7 +138,7 @@ class CommonTelnetClient implements NetUnitClient {
       if (!completer.isCompleted) {
         tempSub.cancel();
         socket.destroy();
-        completer.completeError(TimeoutException('Connect timeout'));
+        completer.completeError(TimeoutException('Hasnt connected to unit in time'));
       }
     });
 
@@ -182,7 +182,7 @@ class CommonTelnetClient implements NetUnitClient {
       AppLogger.debug(name: 'CommonTelnetClient', 'Completed: ${completer.isCompleted}');
       if (!completer.isCompleted) {
         tempSub.cancel();
-        completer.completeError(TimeoutException('Connect timeout'));
+        completer.completeError(TimeoutException('Hasnt received stats in time'));
       }
     });
 

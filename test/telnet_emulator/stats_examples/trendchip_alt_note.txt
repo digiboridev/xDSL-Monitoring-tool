@@ -1,0 +1,107 @@
+tc> wan adsl chandata
+near-end interleaved channel bit rate: 4032 kbps
+near-end fast channel bit rate: 0 kbps
+far-end interleaved channel bit rate: 448 kbps
+far-end fast channel bit rate: 0 kbps
+
+tc> wan adsl linedata
+far             near                                             
+
+tc> wan adsl perfdata
+near-end FEC error fast: 0
+near-end FEC error interleaved: 52019
+near-end CRC error fast: 0
+near-end CRC error interleaved: 94
+near-end HEC error fast: 0
+near-end HEC error interleaved: 377
+far-end FEC error fast: 0
+far-end FEC error interleaved: 5
+far-end CRC error fast: 0
+far-end CRC error interleaved: 4
+far-end HEC error fast: 0
+far-end HEC error interleaved: 11
+Error second in 15min           : 1
+Error second in 24hr            : 7
+Error second after power-up     : 7
+ADSL uptime     1:36:39
+
+tc> wan adsl status
+current modem status: up
+
+tc> wan adsl rateadap
+on              off                                               
+
+tc> wan adsl noisemargin
+Usage: noisemargin_value
+
+tc> wan adsl txgain
+usage: gain value should be >= 0x0c or <= 0x00 (-12~0dB)
+current value:80
+
+tc> wan adsl txtones
+usage: <start tone> <end tone> tone=0x6~0x1F
+current value: start_tone=6 end_tone=1f
+
+tc> wan adsl watchdog
+adsl dsp watchdog: 1
+
+tc> wan adsl annex
+ADSL ANNEX[HW] : A
+
+tc> wan adsl defbitmap
+current near-end defects bitmaps:
+    Los              :0
+    Lof              :0
+    Lop              :0
+    LcdNonInterleaved:0
+    LcdInterleaved   :0
+    Lom              :0
+current far-end defects bitmaps:
+    Los              :0
+    Lof              :0
+    Lop              :0
+    LcdNonInterleaved:0
+    LcdInterleaved   :0
+    Lom              :0
+current near-end defects bitmaps changed:
+    Los              :0
+    Lof              :0
+    Lop              :0
+    LcdNonInterleaved:0
+    LcdInterleaved   :0
+    Lom              :0
+current far-end defects bitmaps changed:
+    Los              :0
+    Lof              :0
+    Lop              :0
+    LcdNonInterleaved:0
+    LcdInterleaved   :0
+    Lom              :0
+
+tc> wan adsl opmode
+operational mode: ITU G.992.1(G.DMT)
+
+
+tc> wan adsl version
+near-end version: 1
+far-end version: 0
+
+tc> wan adsl farituid
+far end itu identification: b5 0 54 53 54 43 5 10
+
+tc> wan adsl dumpcondition
+on              off                                               
+
+tc> wan adsl persisttime
+Usage: time_sec
+
+tc> wan adsl targetnoise
+usage: gain value should be snr margin(dB) * 512
+current value:0
+
+tc> wan adsl snroffset
+usage: set snr offset (offset(db)*512)
+current value:0
+
+tc> wan adsl fwversion
+DMT FwVer: 3.22.2.0_A60394 HwVer: T14F7_12.0

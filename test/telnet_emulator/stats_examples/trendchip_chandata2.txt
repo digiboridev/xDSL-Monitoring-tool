@@ -1,0 +1,4 @@
+near-end interleaved channel bit rate: 0 kbps
+near-end fast channel bit rate: 18123 kbps
+far-end interleaved channel bit rate: 0 kbps
+far-end fast channel bit rate: 2323 kbps

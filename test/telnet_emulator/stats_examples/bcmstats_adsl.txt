@@ -1,0 +1,194 @@
+ADSL driver and PHY status
+Status: Showtime
+Last Retrain Reason:    1
+Last initialization procedure status:   0
+Max:    Upstream rate = 2123 Kbps, Downstream rate = 18123 Kbps
+Bearer: 0, Upstream rate = 1123 Kbps, Downstream rate = 15123 Kbps
+Bearer: 1, Upstream rate = 0 Kbps, Downstream rate = 0 Kbps
+Link Power State:       L0
+Mode:                   ADSL2+ Annex A
+TPS-TC:                 PTM Mode(0x0)
+Trellis:                U:ON /D:ON
+Line Status:            No Defect
+Training Status:        Showtime
+                Down            Up
+SNR (dB):        10.7            15.2
+Attn(dB):        11.7            2.0
+Pwr(dBm):        13.9           -2.2
+
+                        VDSL2 framing
+                        Bearer 0
+MSGc:           -6              26
+B:              130             237
+M:              1               1
+T:              0               42
+R:              8               16
+S:              0.0518          0.3781
+L:              21468           5374
+D:              16              1
+I:              139             127
+N:              139             254
+Q:              16              0
+V:              14              0
+RxQueue:                60              0
+TxQueue:                20              0
+G.INP Framing:          18              0
+G.INP lookback:         20              0
+RRC bits:               0               24
+                        Bearer 1
+MSGc:           186             -6
+B:              0               0
+M:              2               0
+T:              2               0
+R:              16              0
+S:              5.3333          0.0000
+L:              48              0
+D:              3               0
+I:              32              0
+N:              32              0
+Q:              0               0
+V:              0               0
+RxQueue:                0               0
+TxQueue:                0               0
+G.INP Framing:          0               0
+G.INP lookback:         0               0
+RRC bits:               0               0
+
+                        Counters
+                        Bearer 0
+OHF:            0               23736840
+OHFErr:         0               69
+RS:             2951443936              996506678
+RSCorr:         77              574
+RSUnCorr:       9               9
+                        Bearer 1
+OHF:            5864902         0
+OHFErr:         0               0
+RS:             70378086                0
+RSCorr:         123               123
+RSUnCorr:       123               123
+
+                        Retransmit Counters
+rtx_tx:         39              0
+rtx_c:          13              0
+rtx_uc:         0               0
+
+                        G.INP Counters
+LEFTRS:         1               0
+minEFTR:        79999           0
+errFreeBits:    338353162               0
+
+                        Bearer 0
+HEC:            0               0
+OCD:            0               0
+LCD:            0               0
+Total Cells:    1608072637              0
+Data Cells:     95498540                0
+Drop Cells:     0
+Bit Errors:     0               0
+
+                        Bearer 1
+HEC:            0               0
+OCD:            0               0
+LCD:            0               0
+Total Cells:    0               0
+Data Cells:     0               0
+Drop Cells:     0
+Bit Errors:     0               0
+
+ES:             10              62
+SES:            10              8
+UAS:            48              38
+AS:             94207
+
+                        Bearer 0
+INP:            48.00           0.00
+INPRein:        0.00            0.00
+delay:          0               0
+PER:            0.00            3.98
+OR:             0.01            64.22
+AgR:            80614.82        20063.54
+
+                        Bearer 1
+INP:            4.00            0.00
+INPRein:        4.00            0.00
+delay:          3               0
+PER:            16.06           0.01
+OR:             95.62           0.01
+AgR:            95.62   0.01
+
+Bitswap:        28/28           25/25
+
+Total time = 3 days 5 hours 2 min 38 sec
+FEC:            2537            2827
+CRC:            546             69
+ES:             10              62
+SES:            10              8
+UAS:            48              38
+LOS:            1               0
+LOF:            8               0
+LOM:            0               0
+Retr:           1
+FailedRetr:     0
+FailedFastRetr: 0
+Latest 15 minutes time = 2 min 38 sec
+FEC:            0               4
+CRC:            0               1
+ES:             0               1
+SES:            0               0
+UAS:            0               0
+LOS:            0               0
+LOF:            0               0
+LOM:            0               0
+Retr:           0
+FailedRetr:     0
+FailedFastRetr: 0
+Previous 15 minutes time = 15 min 0 sec
+FEC:            4               2
+CRC:            0               1
+ES:             0               1
+SES:            0               0
+UAS:            0               0
+LOS:            0               0
+LOF:            0               0
+LOM:            0               0
+Retr:           N/A
+FailedRetr:     N/A
+FailedFastRetr: N/A
+Latest 1 day time = 5 hours 2 min 38 sec
+FEC:            16              71
+CRC:            0               14
+ES:             0               12
+SES:            0               0
+UAS:            0               0
+LOS:            0               0
+LOF:            0               0
+LOM:            0               0
+Retr:           0
+FailedRetr:     0
+FailedFastRetr: 0
+Previous 1 day time = 24 hours 0 sec
+FEC:            2430            659
+CRC:            546             55
+ES:             10              50
+SES:            10              8
+UAS:            28              18
+LOS:            1               0
+LOF:            8               0
+LOM:            0               0
+Retr:           1
+FailedRetr:     0
+FailedFastRetr: 0
+Since Link time = 1 days 2 hours 10 min 5 sec
+FEC:            77              574
+CRC:            0               69
+ES:             0               62
+SES:            0               8
+UAS:            0               0
+LOS:            0               0
+LOF:            0               0
+LOM:            0               0
+Retr:           0
+FailedRetr:     0
+FailedFastRetr: 0
+NTR: mipsCntAtNtr=0 ncoCntAtNtr=0

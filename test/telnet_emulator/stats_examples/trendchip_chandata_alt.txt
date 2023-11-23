@@ -1,0 +1,2 @@
+near-end bit rate: 11000 kbps
+far-end bit rate: 831 kbps

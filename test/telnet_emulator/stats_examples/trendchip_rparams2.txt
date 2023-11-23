@@ -1,0 +1,26 @@
+**********************
+R-PARAMS
+**********************
+PMD Parameters:
+---------------
+LATNds = 196 dB
+SATNds = 144 dB
+SNRMds = 190 dB
+ATTNDRds = 18488 kbps
+ACTATPds = 59 dBm
+TRELLISds = 1
+Reserved1 = 0(Should be 0)
+
+%%%Check Table 7-19 Constraint
+Valid M[0]=1
+Valid T[0]=1
+Valid R[0]=14
+Valid D[0]=1
+Valid L[0]= 2176
+Valid S[0]= 0.93
+Valid OR[0]= 34.13 kbits/sec
+Valid Delay[0]= 0.25
+Valid msg[0]= 31.16 kbits/sec
+Invalid net_data_rate[0]= 2048.00 bits/sym(min=8, max=1024)
+Valid Per[0]= 16.17 ms
+Valid INP[0]= 0.02

@@ -1,0 +1,16 @@
+near-end FEC error fast: 52019
+near-end FEC error interleaved: 0
+near-end CRC error fast: 94
+near-end CRC error interleaved: 0
+near-end HEC error fast: 377
+near-end HEC error interleaved: 0
+far-end FEC error fast: 5
+far-end FEC error interleaved: 0
+far-end CRC error fast: 4
+far-end CRC error interleaved: 0
+far-end HEC error fast: 11
+far-end HEC error interleaved: 0
+Error second in 15min           : 1
+Error second in 24hr            : 7
+Error second after power-up     : 7
+ADSL uptime     1:36:39

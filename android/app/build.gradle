@@ -67,12 +67,6 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.main
-            setProperty("archivesBaseName", "xdslmt." + flutterVersionName)
-            applicationVariants.all { variant ->
-                variant.outputs.all {
-                    outputFileName = "xdslmt." + flutterVersionName + ".apk"
-                }
-            }
         }
         profile {
             signingConfig signingConfigs.main

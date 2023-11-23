@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
-import androidx.annotation.RequiresApi
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
@@ -25,7 +24,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         println("CREATE")
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         val method = call.method
         println("Method call: $method")
@@ -44,7 +42,11 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         }
         if (method == "startForegroundService") {
             val intent = Intent(this, ForegroundService::class.java)
-            startForegroundService(intent)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                this.startForegroundService(intent)
+            } else {
+                this.startService(intent)
+            }
             result.success("started")
         }
         if (method == "stopForegroundService") {

@@ -29,7 +29,7 @@
   - Exporting collected data-sets to csv
 
 ### Platform
-  - Android 8+
+  - Android 4.4+
 
 ### Supported network units
   - `Broadcom 63xx based devices through telnet`

@@ -29,12 +29,13 @@ class ForegroundService : Service() {
         println("FOREGROUND SERVICE DESTROYED")
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         println("FOREGROUND SERVICE STARTED")
         try {
             // Create the notification channel
-            this.createNotificationChannel()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                this.createNotificationChannel()
+            }
 
             // Create intent for return to MainActivity
             val pendingIntent = this.createPendingIntent()
@@ -46,6 +47,7 @@ class ForegroundService : Service() {
                 .setContentTitle("xDSL monitoring tool")
                 .setContentText("Sampling service is running")
                 .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .build()
 
             // To foreground

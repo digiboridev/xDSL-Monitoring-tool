@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img width="300" src="media/app_icon/app_icon_bordered.png"/>
+  <img width="200" src="media/app_icon/app_icon_bordered.png"/>
 </p>
 
 <h1 align="center">
@@ -45,7 +45,7 @@
     - stats adress 'html/status/dslinfo.asp'
     - login adress 'index/login.cgi'
 
-> If you want to add new device support you can simply send me a dump of your device's terminal session. It is important to have example commands and responses for successful and unsuccessful attempts to log in, request data, and respond to data in several different states such as idle, connected, initializing, etc.
+>If you want to add new device support you can simply send me a dump of your device's terminal session. It is important to have example commands and responses for successful and unsuccessful attempts to log in, request data, and respond to data in several different states such as idle, connected, initializing, etc.
 
 ### Installation
 1. [Download](https://github.com/digiboridev/xDSL-Monitoring-tool/releases/) last version.
